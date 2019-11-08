@@ -6,34 +6,30 @@
 # @todo:
 #################################################
 
-SESSION_NAME="multi_robo"
+SESSION_NAME="benchmark"
+PKG_NAME="benchmark"
 NUM=0
 
 # source
 source ~/.bashrc
 source ~/git/DrivingSwarm/devel/setup.bash
-source ~/git/DrivingSwarm//setup.bash
+
 # start tmux
 tmux new-session -s $SESSION_NAME -d
 
 # open world
 tmux rename-window -t $SESSION_NAME "world"
-tmux send-keys -t $SESSION_NAME:$NUM "roslaunch multi_robot simulation.launch" C-m
+tmux send-keys -t $SESSION_NAME:$NUM "roslaunch ${PGK_NAME} simulation.launch" C-m
 
 # amcl
 NUM=$((++NUM))
 tmux new-window -t $SESSION_NAME -n "amcl"
-tmux send-keys -t $SESSION_NAME:$NUM "roslaunch multi_robot amcl.launch" C-m
+tmux send-keys -t $SESSION_NAME:$NUM "roslaunch ${PGK_NAME} amcl.launch" C-m
 
-# leader
+# robots
 NUM=$((++NUM))
 tmux new-window -t $SESSION_NAME -n "leader"
-tmux send-keys -t $SESSION_NAME:$NUM "roslaunch multi_robot leader.launch" C-m
-
-# follower
-NUM=$((++NUM))
-tmux new-window -t $SESSION_NAME -n "follower"
-tmux send-keys -t $SESSION_NAME:$NUM "roslaunch multi_robot follower.launch" C-m
+tmux send-keys -t $SESSION_NAME:$NUM "roslaunch ${PGK_NAME} leader.launch" C-m
 
 # rviz
 NUM=$((++NUM))
