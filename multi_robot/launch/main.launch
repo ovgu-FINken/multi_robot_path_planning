@@ -9,5 +9,17 @@
   <!-- <node name="gazebo_gui" pkg="gazebo" type="gui" respawn="false" output="screen"/> -->
 
   <!-- include our robots -->
-  <include file="$(find multi_robot)/launch/robots.launch"/>
+  <include file="$(find benchmark)/launch/leader.launch"/>
+  <include file="$(find benchmark)/launch/follower.launch"/>
+
+  <!-- start move base -->
+  <include file="$(find tracking_uncertainty_grid)/launch/move_base.launch"
+    <arg name="robot_name" value="tb3_0" />
+  <include/>
+  <include file="$(find tracking_uncertainty_grid)/launch/move_base.launch"
+    <arg name="robot_name" value="tb3_1" />
+  <include/>
+  <include file="$(find tracking_uncertainty_grid)/launch/move_base.launch"
+    <arg name="robot_name" value="tb3_2" />
+  <include/>
 </launch>

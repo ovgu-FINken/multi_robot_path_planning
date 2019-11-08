@@ -23,17 +23,12 @@ tmux send-keys -t $SESSION_NAME:$NUM "roslaunch multi_robot simulation.launch" C
 # amcl
 NUM=$((++NUM))
 tmux new-window -t $SESSION_NAME -n "amcl"
-tmux send-keys -t $SESSION_NAME:$NUM "roslaunch multi_robot amcl.launch" C-m
+tmux send-keys -t $SESSION_NAME:$NUM "roslaunch tracking_uncertainty_grid amcl.launch" C-m
 
-# leader
+# main
 NUM=$((++NUM))
-tmux new-window -t $SESSION_NAME -n "leader"
-tmux send-keys -t $SESSION_NAME:$NUM "roslaunch multi_robot leader.launch" C-m
-
-# follower
-NUM=$((++NUM))
-tmux new-window -t $SESSION_NAME -n "follower"
-tmux send-keys -t $SESSION_NAME:$NUM "roslaunch multi_robot follower.launch" C-m
+tmux new-window -t $SESSION_NAME -n "main"
+tmux send-keys -t $SESSION_NAME:$NUM "roslaunch multi_robot main.launch" C-m
 
 # rviz
 NUM=$((++NUM))
