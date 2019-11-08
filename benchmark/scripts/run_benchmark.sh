@@ -28,8 +28,8 @@ tmux send-keys -t $SESSION_NAME:$NUM "roslaunch ${PGK_NAME} amcl.launch" C-m
 
 # robots
 NUM=$((++NUM))
-tmux new-window -t $SESSION_NAME -n "leader"
-tmux send-keys -t $SESSION_NAME:$NUM "roslaunch ${PGK_NAME} leader.launch" C-m
+tmux new-window -t $SESSION_NAME -n "robots"
+tmux send-keys -t $SESSION_NAME:$NUM "roslaunch ${PGK_NAME} main.launch" C-m
 
 # rviz
 NUM=$((++NUM))
