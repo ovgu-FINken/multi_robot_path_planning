@@ -1,6 +1,6 @@
 <launch>
   <group ns="tb3_0">
-    <node name="global_map_broadcaster" pkg="multi_robot" type="global_map_broadcaster.py" args="" >
-    <node name="follower" pkg="multi_robot" type="follower.py" args="" >
+    <node name="global_map_broadcaster" pkg="multi_robot" type="global_map_broadcaster.py" args="" />
+    <node name="follower" pkg="multi_robot" type="follower.py" args="" />
   </group>
 </launch>

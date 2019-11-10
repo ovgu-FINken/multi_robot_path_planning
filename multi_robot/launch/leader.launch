@@ -5,7 +5,7 @@
 
     <param name="cmd_vel_topic_name" value="$(arg cmd_vel)"/>
 
-    <node name="global_map_broadcaster" pkg="multi_robot" type="global_map_broadcaster.py" args="" >
+    <node name="global_map_broadcaster" pkg="multi_robot" type="global_map_broadcaster.py" args="" />
     <node name="$(arg name)_drive" pkg="turtlebot3_gazebo" type="turtlebot3_drive" required="true" output="screen"/>
   </group>
 </launch>
