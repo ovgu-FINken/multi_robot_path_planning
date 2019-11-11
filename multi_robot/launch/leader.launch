@@ -1,14 +1,15 @@
+<!--
+Movement setup for the leader robot.
+-->
+
 <launch>
   <group ns="tb3_1">
-    <arg name="cmd_vel" default="/cmd_vel"/>
-    <arg name="name" default="turtlebot3"/>
-
-    <param name="cmd_vel_topic_name" value="$(arg cmd_vel)"/>
-
     <include file="$(find multi_robot)/launch/move_base.launch">
         <arg name="robot_name" value="tb3_1"/>
     </include>
-    <node name="global_map_broadcaster" pkg="multi_robot" type="global_map_broadcaster.py" args="" />
+    <node name="global_map_broadcaster" pkg="multi_robot" type="global_map_broadcaster.py" args="">
+        <param name="turtlebot" value="tb3_1"/>
+    </node>
     <node name="$(arg name)_drive" pkg="turtlebot3_gazebo" type="turtlebot3_drive" required="true" output="screen"/>
   </group>
 </launch>
