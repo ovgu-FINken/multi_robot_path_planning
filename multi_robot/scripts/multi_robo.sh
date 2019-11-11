@@ -23,15 +23,31 @@ tmux rename-window -t $SESSION_NAME "world"
 tmux send-keys -t $SESSION_NAME:$NUM "roslaunch multi_robot simulation.launch world:=turtlebot3_world.world" C-m
 read -t 3
 
-# navigation
-#NUM=$((++NUM))
-#tmux new-window -t turtlebots -n "navigation"
-#tmux send-keys -t turtlebots:$NUM "roslaunch multi_robot tracking_simulation.launch" C-m
-
-# main
+# mapping 0
 NUM=$((++NUM))
-tmux new-window -t $SESSION_NAME -n "main"
-tmux send-keys -t $SESSION_NAME:$NUM "roslaunch multi_robot main.launch" C-m
+tmux new-window -t $SESSION_NAME -n "mapping 0"
+tmux send-keys -t $SESSION_NAME:$NUM "roslaunch multi_robot $MAPPING.launch robot_name:=tb3_0" C-m
+
+# mapping 1
+NUM=$((++NUM))
+tmux new-window -t $SESSION_NAME -n "mapping 1"
+tmux send-keys -t $SESSION_NAME:$NUM "roslaunch multi_robot $MAPPING.launch robot_name:=tb3_1" C-m
+
+# mapping 2
+NUM=$((++NUM))
+tmux new-window -t $SESSION_NAME -n "mapping 2"
+tmux send-keys -t $SESSION_NAME:$NUM "roslaunch multi_robot $MAPPING.launch robot_name:=tb3_2" C-m
+read -t 3
+
+# follower
+NUM=$((++NUM))
+tmux new-window -t $SESSION_NAME -n "follower"
+tmux send-keys -t $SESSION_NAME:$NUM "roslaunch multi_robot follower.launch" C-m
+
+# leader
+NUM=$((++NUM))
+tmux new-window -t $SESSION_NAME -n "leader"
+tmux send-keys -t $SESSION_NAME:$NUM "roslaunch multi_robot leader.launch" C-m
 
 
 # rviz
