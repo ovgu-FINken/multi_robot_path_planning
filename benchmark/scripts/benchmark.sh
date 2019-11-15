@@ -6,49 +6,26 @@
 # @todo:
 #################################################
 
-SESSION_NAME="multi_robo"
+SESSION_NAME="benchmark"
 MAPPING=${MAPPING:=amcl}
 NUM=0
 TERMINAL="gnome-terminal"
 
 # source
 source ~/.bashrc
-#source ~/git/DrivingSwarm/devel/local_setup.bash
 
 # start tmux
 tmux new-session -s $SESSION_NAME -d
 
 # open world
 tmux rename-window -t $SESSION_NAME "world"
-tmux send-keys -t $SESSION_NAME:$NUM "roslaunch multi_robot simulation.launch world:=turtlebot3_world.world" C-m
+tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark world.launch world:=turtlebot3_world.world" C-m
 read -t 3
 
-# mapping 0
+# spawner
 NUM=$((++NUM))
-tmux new-window -t $SESSION_NAME -n "mapping 0"
-tmux send-keys -t $SESSION_NAME:$NUM "roslaunch multi_robot $MAPPING.launch robot_name:=tb3_0" C-m
-
-# mapping 1
-NUM=$((++NUM))
-tmux new-window -t $SESSION_NAME -n "mapping 1"
-tmux send-keys -t $SESSION_NAME:$NUM "roslaunch multi_robot $MAPPING.launch robot_name:=tb3_1" C-m
-
-# mapping 2
-NUM=$((++NUM))
-tmux new-window -t $SESSION_NAME -n "mapping 2"
-tmux send-keys -t $SESSION_NAME:$NUM "roslaunch multi_robot $MAPPING.launch robot_name:=tb3_2" C-m
-read -t 3
-
-# follower
-NUM=$((++NUM))
-tmux new-window -t $SESSION_NAME -n "follower"
-tmux send-keys -t $SESSION_NAME:$NUM "roslaunch multi_robot follower.launch" C-m
-
-# leader
-NUM=$((++NUM))
-tmux new-window -t $SESSION_NAME -n "leader"
-tmux send-keys -t $SESSION_NAME:$NUM "roslaunch multi_robot leader.launch" C-m
-
+tmux new-window -t $SESSION_NAME -n "spawner"
+tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark spawner.launch" C-m
 
 # rviz
 NUM=$((++NUM))
