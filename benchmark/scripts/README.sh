@@ -1,4 +1,4 @@
 # MULTI ROBO
 
-- Start script via: ´bash multi_robo.sh´.
+- Start script via: ´bash benchmark.sh´.
 - Close session: ´bash kill.sh´
