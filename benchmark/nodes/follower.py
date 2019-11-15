@@ -28,7 +28,7 @@ def euler_to_quaternion(yaw, pitch, roll):  # yaw (Z), pitch (Y), roll (X)
     return q
 
 
-class Follower: 
+class Follower:
     def walk(self):
         client = actionlib.SimpleActionClient("move_base", MoveBaseAction)
         client.wait_for_server()
@@ -47,9 +47,8 @@ class Follower:
         rospy.loginfo(goal)
         if goal is None:
             return
-        client.send_goal_and_wait(goal,
-                                      execute_timeout=rospy.Duration.
-                                      from_sec(execute_timeout))
+        client.send_goal_and_wait(
+            goal, execute_timeout=rospy.Duration. from_sec(execute_timeout))
 
 if __name__ == '__main__':
 

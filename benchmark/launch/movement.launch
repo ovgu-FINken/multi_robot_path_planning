@@ -1,0 +1,13 @@
+<!--
+Starts the move base and movement related files for all robots.
+-->
+
+<launch>
+
+    <!-- Follower -->
+    <include file="$(find multi_robot)/launch/follower.launch"/>
+
+    <!-- Leader -->
+    <include file="$(find multi_robot)/launch/leader.launch"/>
+
+</launch> 

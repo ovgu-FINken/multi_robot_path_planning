@@ -1,4 +1,4 @@
-#!/usr/bin/env python  
+#!/usr/bin/env python
 import rospy
 
 # Because of transformations
@@ -13,7 +13,7 @@ def handle_turtle_pose(botname):
 
     t.header.stamp = rospy.Time.now()
     t.header.frame_id = "world"
-    t.child_frame_id = botname
+    t.child_frame_id = botname + "/map"
     t.transform.translation.x = 0
     t.transform.translation.y = 0
     t.transform.translation.z = 0.0
