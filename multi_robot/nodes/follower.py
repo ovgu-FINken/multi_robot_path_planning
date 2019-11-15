@@ -35,8 +35,8 @@ class Follower:
 
         goal = MoveBaseGoal()
 
-        goal.target_pose.header.frame_id = "tb3_0/base_footprint"
-        goal.target_pose.header.stamp = rospy.Time.now()
+        goal.target_pose.header.frame_id = "tb3_1/base_footprint"
+        goal.target_pose.header.stamp = rospy.Time.now()-rospy.Duration(0.1)
 
         goal.target_pose.pose.position.x = 0
         goal.target_pose.pose.position.y = 0

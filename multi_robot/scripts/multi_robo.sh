@@ -45,9 +45,14 @@ tmux new-window -t $SESSION_NAME -n "follower"
 tmux send-keys -t $SESSION_NAME:$NUM "roslaunch multi_robot follower.launch" C-m
 
 # leader
+#NUM=$((++NUM))
+#tmux new-window -t $SESSION_NAME -n "leader"
+#tmux send-keys -t $SESSION_NAME:$NUM "roslaunch multi_robot leader.launch" C-m
+
+# leader teleop
 NUM=$((++NUM))
-tmux new-window -t $SESSION_NAME -n "leader"
-tmux send-keys -t $SESSION_NAME:$NUM "roslaunch multi_robot leader.launch" C-m
+tmux new-window -t $SESSION_NAME -n "leader teleop"
+tmux send-keys -t $SESSION_NAME:$NUM "roslaunch multi_robot teleop_key.launch" C-m
 
 
 # rviz
