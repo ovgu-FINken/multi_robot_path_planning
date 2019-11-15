@@ -1,0 +1,14 @@
+<!--
+@author:    Johann Schmidt
+@date:      November 2019
+@brief:     Script used to spawn a turtlebots.
+@todo:
+-->
+
+<launch>
+    <node pkg="benchmark" type="spawn_robot" name="spawn_robot" output="screen">
+        <param name="model_type" type="string" value="burger" />
+        <param name="number_of_robots" type="int" value="5" />
+        <param name="namespace" type="string" value="tb3_" />
+    </node>
+</launch>
