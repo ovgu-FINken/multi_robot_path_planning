@@ -22,6 +22,7 @@ DEFAULT_MODEL_NAME = "turtlebot3"
 DEFAULT_MODEL_TYPE = "burger"
 DEFAULT_NUMBER_OF_ROBOTS = 3
 DEFAULT_POSITION = [0, 0, 0]
+DEFAULT_ORIENTATION = [0, 0, 0]
 DEFAULT_NAME = "0"
 DEFAULT_NAMESPACE = "tb3_"
 
@@ -162,12 +163,13 @@ if __name__ == "__main__":
     number_of_robots = rospy.get_param('~number_of_robots', DEFAULT_NUMBER_OF_ROBOTS)
     namespace = rospy.get_param('~namespace', DEFAULT_NAMESPACE)
     position = rospy.get_param('~position', DEFAULT_POSITION)
+    orientation = rospy.get_param('~position', DEFAULT_ORIENTATION)
 
     for i in range(number_of_robots):
         spawn_robot(
             model_name=model_name,
             model_type=model_type, namespace=namespace,
-            position=position, orientation=[0, 0, 0],
+            position=position, orientation=orientation,
             name=str(i), update_if_exist=False)
     loop()
 
