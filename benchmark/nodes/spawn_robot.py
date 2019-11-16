@@ -128,10 +128,6 @@ def spawn_robot(name, model_name, namespace, model_type,
     :param orientation:
     :param update_if_exist:
     """
-    rospy.init_node(NODE_NAME)
-    rospy.sleep(5)
-    rospy.wait_for_service("/gazebo/spawn_urdf_model")
-
     pose = get_obj_pose(position, orientation)
     file_path = get_file_location(model_name, model_type)
     srv_spawn_model, xml_string = load_model(file_path)
@@ -140,6 +136,15 @@ def spawn_robot(name, model_name, namespace, model_type,
         delete_robot(name)
 
     spawn_model(xml_string, name, namespace, srv_spawn_model, pose, world="world")
+
+
+def create_node(name=NODE_NAME):
+    """ Creates a node.
+    :param name:
+    """
+    rospy.init_node(name, anonymous=True)
+    rospy.sleep(5)
+    rospy.wait_for_service("/gazebo/spawn_urdf_model")
 
 
 def loop():
@@ -165,6 +170,7 @@ if __name__ == "__main__":
     position = rospy.get_param('~position', DEFAULT_POSITION)
     orientation = rospy.get_param('~position', DEFAULT_ORIENTATION)
 
+    create_node()
     for i in range(number_of_robots):
         spawn_robot(
             model_name=model_name,

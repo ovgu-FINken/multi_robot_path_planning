@@ -6,9 +6,9 @@
 -->
 
 <launch>
-    <node pkg="benchmark" type="spawn_robot.py" name="spawn_robot" output="screen">
-        <param name="model_type" type="string" value="burger" />
-        <param name="number_of_robots" type="int" value="5" />
-        <param name="namespace" type="string" value="tb3_" />
+    <node pkg="benchmark" type="spawn_robot.py" name="spawn_robot" output="screen" clear_params="true">
+        <param name="model_type" type="str" value="burger" />
+        <param name="number_of_robots" type="int" value="1" />
+        <param name="namespace" type="str" value="tb3_" />
     </node>
 </launch>
