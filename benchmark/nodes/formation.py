@@ -69,13 +69,13 @@ class FormationHandler:
             row_pos = row * self._distance
             for col in range(block_dimension):
                 col_pos = col * self._distance
-                self._position.append([row_pos, col_pos, 0])
+                self._position.append([row_pos + self._center_point[0], col_pos + self._center_point[1], 0])
                 self._orientation.append([0, 0, 0])
         for num in range(block_rest):
             row_pos += row_pos + self._distance
             for col in range(block_dimension):
                 col_pos = col * self._distance
-                self._position.append([row_pos, col_pos, 0])
+                self._position.append([row_pos + self._center_point[0], col_pos + self._center_point[1], 0])
                 self._orientation.append([0, 0, 0])
 
     def _estimate_at_way_points(self):
