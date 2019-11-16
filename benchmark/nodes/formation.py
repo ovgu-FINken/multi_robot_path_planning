@@ -13,7 +13,7 @@ import rospy
 import math
 
 
-DEFAULT_DISTANCE = 5
+DEFAULT_DISTANCE = 0.2
 
 
 class Formation(Enum):
@@ -62,21 +62,18 @@ class FormationHandler:
         """ Runs the computation process for a dense block formation
         and returns the positions and orientations.
         """
-        row_pos = 0
         block_dimension = int(math.sqrt(self._number_of_robots))
         block_rest = self._number_of_robots - 2 * block_dimension
-        for row in range(block_dimension):
+        num_rows = block_dimension + (0 if block_rest == 0 else 1)
+        for row in range(num_rows):
             row_pos = row * self._distance
-            for col in range(block_dimension):
+            num_col = block_dimension if row < block_dimension else block_rest
+            for col in range(num_col):
                 col_pos = col * self._distance
-                self._position.append([row_pos + self._center_point[0], col_pos + self._center_point[1], 0])
-                self._orientation.append([0, 0, 0])
-        for num in range(block_rest):
-            row_pos += row_pos + self._distance
-            for col in range(block_dimension):
-                col_pos = col * self._distance
-                self._position.append([row_pos + self._center_point[0], col_pos + self._center_point[1], 0])
-                self._orientation.append([0, 0, 0])
+                self._position.append([
+                    row_pos + self._center_point[0],
+                    col_pos + self._center_point[1], 0.0])
+                self._orientation.append([0.0, 0.0, 0.0])
 
     def _estimate_at_way_points(self):
         """ Runs the computation process for a at way points formation
