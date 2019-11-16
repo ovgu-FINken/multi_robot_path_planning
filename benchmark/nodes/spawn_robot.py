@@ -10,8 +10,6 @@
 import sys
 import roslib
 from gazebo_msgs.srv import SpawnModel, DeleteModel, DeleteModelRequest, SpawnModelRequest
-
-roslib.load_manifest('cob_bringup_sim')
 import rospy
 import os
 from geometry_msgs.msg import *
@@ -20,6 +18,7 @@ from std_msgs.msg import Empty as EmptyMsg
 
 
 NODE_NAME = "spawn_robot"
+DEFAULT_MODEL_NAME = "turtlebot3"
 DEFAULT_MODEL_TYPE = "burger"
 DEFAULT_NUMBER_OF_ROBOTS = 3
 DEFAULT_POSITION = [0, 0, 0]
@@ -53,33 +52,35 @@ def get_file_location(model, model_type):
     """
     try:
         file_location = roslib.packages.get_pkg_dir(
-            'cob_gazebo_objects') + '/objects/' + model + '.' + model_type
+            'turtlebot3_gazebo') + '/models/' + model + '_' + model_type
     except:
-        raise FileNotFoundError("File not found: cob_gazebo_objects"
-                                + "/objects/" + model + "." + model_type)
+        rospy.logerr("File not found: turtlebot3_gazebo" + "/models/" + model + "_" + model_type)
+        return None
     return file_location
 
 
-def get_model(file_path):
+def load_model(file_path, model_format="sdf"):
     """ Call gazebo service to spawn model (see http://ros.org/wiki/gazebo).
     :param file_path:
+    :param model_format:
     :return: srv_model, xml_string
     """
-    if model_type == "urdf":
+    srv_spawn_model, xml_string = None, None
+    if model_format == "urdf":
         srv_spawn_model = rospy.ServiceProxy('/gazebo/spawn_urdf_model', SpawnModel)
         file_xml = open(file_path)
         xml_string = file_xml.read()
-    elif model_type == "urdf.xacro":
+    elif model_format == "urdf.xacro":
         p = os.popen("rosrun xacro xacro.py " + file_path)
         xml_string = p.read()
         p.close()
         srv_spawn_model = rospy.ServiceProxy('/gazebo/spawn_urdf_model', SpawnModel)
-    elif model_type == "model":
+    elif model_format == "sdf":
         srv_spawn_model = rospy.ServiceProxy('/gazebo/spawn_gazebo_model', SpawnModel)
-        file_xml = open(file_path)
+        file_xml = open(os.path.join(file_path, "model.sdf"))
         xml_string = file_xml.read()
     else:
-        raise ValueError('Model type not know. model_type = ' + model_type)
+        rospy.logerr('Model type not know. model_type = ' + model_format)
     return srv_spawn_model, xml_string
 
 
@@ -102,7 +103,7 @@ def delete_robot(name):
     return req
 
 
-def spawn_model(name, namespace, model, pose, world):
+def spawn_model(xml_string, name, namespace, model, pose, world):
     """ Spawns a model in a simulation world.
     :param name:
     :param namespace:
@@ -112,15 +113,15 @@ def spawn_model(name, namespace, model, pose, world):
     """
     rospy.wait_for_service('gazebo/spawn_sdf_model')
     spawn_model_prox = rospy.ServiceProxy('gazebo/spawn_sdf_model', SpawnModel)
-    spawn_model_prox(name, model, namespace, pose, world)
+    spawn_model_prox(name, xml_string, namespace, pose, world)
 
 
-def spawn_robot(name, namespace, model_type,
+def spawn_robot(name, model_name, namespace, model_type,
                 position, orientation, update_if_exist=False):
     """ Spawns a robot.
     :param name:
+    :param model_name:
     :param namespace:
-    :param model:
     :param model_type:
     :param position:
     :param orientation:
@@ -131,13 +132,13 @@ def spawn_robot(name, namespace, model_type,
     rospy.wait_for_service("/gazebo/spawn_urdf_model")
 
     pose = get_obj_pose(position, orientation)
-    file_path = get_file_location(name, model_type)
-    srv_spawn_model, xml_string = get_model(file_path)
+    file_path = get_file_location(model_name, model_type)
+    srv_spawn_model, xml_string = load_model(file_path)
 
     if update_if_exist:
         delete_robot(name)
 
-    spawn_model(name, namespace, srv_spawn_model, pose, world="world")
+    spawn_model(xml_string, name, namespace, srv_spawn_model, pose, world="world")
 
 
 def loop():
@@ -156,6 +157,7 @@ def loop():
 if __name__ == "__main__":
     """ Main method.
     """
+    model_name = rospy.get_param('~model_name', DEFAULT_MODEL_NAME)
     model_type = rospy.get_param('~model_type', DEFAULT_MODEL_TYPE)
     number_of_robots = rospy.get_param('~number_of_robots', DEFAULT_NUMBER_OF_ROBOTS)
     namespace = rospy.get_param('~namespace', DEFAULT_NAMESPACE)
@@ -163,6 +165,7 @@ if __name__ == "__main__":
 
     for i in range(number_of_robots):
         spawn_robot(
+            model_name=model_name,
             model_type=model_type, namespace=namespace,
             position=position, orientation=[0, 0, 0],
             name=str(i), update_if_exist=False)
