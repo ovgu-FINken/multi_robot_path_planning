@@ -1,4 +1,4 @@
-#!../venv/bin/python
+#!/usr/bin/env python
 
 """ --------------------------------------------------------------
 @author:    Johann Schmidt
@@ -10,12 +10,12 @@
 import rospy
 import os
 import sys
-import rclpy
-from ament_index_python.packages import get_package_share_directory
-from gazebo_msgs.srv import SpawnEntity
+#import rclpy
+#from ament_index_python.packages import get_package_share_directory
+#from gazebo_msgs.srv import SpawnEntity
 
 
-NODE_NAME = "entity_spawner"
+NODE_NAME = "spawn_robot"
 DEFAULT_MODEL_TYPE = "burger"
 DEFAULT_NUMBER_OF_ROBOTS = 3
 DEFAULT_POSITION = [0, 0, 0]
