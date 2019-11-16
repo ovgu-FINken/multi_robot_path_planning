@@ -163,6 +163,7 @@ def loop():
 if __name__ == "__main__":
     """ Main method.
     """
+    create_node()
     model_name = rospy.get_param('~model_name', DEFAULT_MODEL_NAME)
     model_type = rospy.get_param('~model_type', DEFAULT_MODEL_TYPE)
     number_of_robots = rospy.get_param('~number_of_robots', DEFAULT_NUMBER_OF_ROBOTS)
@@ -170,7 +171,6 @@ if __name__ == "__main__":
     position = rospy.get_param('~position', DEFAULT_POSITION)
     orientation = rospy.get_param('~position', DEFAULT_ORIENTATION)
 
-    create_node()
     for i in range(number_of_robots):
         spawn_robot(
             model_name=model_name,
