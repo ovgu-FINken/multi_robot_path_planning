@@ -54,6 +54,10 @@ NUM=$((++NUM))
 tmux new-window -t $SESSION_NAME -n "leader teleop"
 tmux send-keys -t $SESSION_NAME:$NUM "roslaunch multi_robot teleop_key.launch" C-m
 
+# random walk
+NUM=$((++NUM))
+tmux new-window -t $SESSION_NAME -n "random"
+tmux send-keys -t $SESSION_NAME:$NUM "roslaunch multi_robot random.launch" C-m
 
 # rviz
 NUM=$((++NUM))
