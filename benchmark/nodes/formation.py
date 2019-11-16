@@ -19,8 +19,8 @@ DEFAULT_DISTANCE = 5
 class Formation(Enum):
     """ Enum of supported robot formations.
     """
-    DENSE_BLOCK = 0
-    AT_WAY_POINTS = 1
+    DENSE_BLOCK = "dense_block"
+    AT_WAY_POINTS = "at_way_point"
 
 
 class FormationHandler:

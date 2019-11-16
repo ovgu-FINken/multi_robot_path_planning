@@ -15,6 +15,7 @@ import os
 from geometry_msgs.msg import *
 import tf.transformations as tft
 from std_msgs.msg import Empty as EmptyMsg
+import formation
 
 
 NODE_NAME = "spawn_robot"
@@ -25,6 +26,7 @@ DEFAULT_POSITION = [0, 0, 0]
 DEFAULT_ORIENTATION = [0, 0, 0]
 DEFAULT_NAME = "0"
 DEFAULT_NAMESPACE = "tb3_"
+DEFAULT_FORMATION = formation.Formation.DENSE_BLOCK
 
 
 def get_obj_pose(position, orientation):
@@ -169,9 +171,16 @@ if __name__ == "__main__":
     number_of_robots = rospy.get_param('~number_of_robots', DEFAULT_NUMBER_OF_ROBOTS)
     namespace = rospy.get_param('~namespace', DEFAULT_NAMESPACE)
     position = rospy.get_param('~position', DEFAULT_POSITION)
-    orientation = rospy.get_param('~position', DEFAULT_ORIENTATION)
+    orientation = rospy.get_param('~orientation', DEFAULT_ORIENTATION)
+    formation = rospy.get_param('~formation', DEFAULT_FORMATION)
 
+    formationHandler = formation.FormationHandler(
+        number_of_robots=number_of_robots, center_point=position,
+        formation=formation, distance=5)
+    positions, orientations = formationHandler.run()
     for i in range(number_of_robots):
+        position = positions[i]
+        orientation = orientations[i]
         spawn_robot(
             model_name=model_name,
             model_type=model_type, namespace=namespace,
