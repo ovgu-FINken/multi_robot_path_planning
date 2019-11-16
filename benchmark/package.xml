@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>multi_robot</name>
+  <name>benchmark</name>
   <version>0.0.0</version>
-  <description>The multi_robot package</description>
+  <description>The benchmark package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
   <!-- <maintainer email="jane.doe@example.com">Jane Doe</maintainer> -->
-  <maintainer email="johschm@todo.todo">johschm</maintainer>
+  <maintainer email="johann.schmidt@st.ovgu.de">johschm</maintainer>
 
 
   <!-- One license tag required, multiple allowed, one license per tag -->
