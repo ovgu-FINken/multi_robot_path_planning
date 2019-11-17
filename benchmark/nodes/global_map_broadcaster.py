@@ -28,7 +28,7 @@ def handle_turtle_pose(botname):
 if __name__ == '__main__':
     rospy.init_node('global_map_broadcaster')
     botname = rospy.get_param('~turtlebot')
-    rate = rospy.Rate(1)
+    rate = rospy.Rate(100)
     while not rospy.is_shutdown():
     	handle_turtle_pose(botname)
     	rate.sleep()

@@ -12,6 +12,7 @@ import rospy
 import spawner as sp
 import waypoint as wp
 import formation as form
+from std_msgs.msg import Int16MultiArray, Empty as EmptyMsg
 
 
 DEFAULT_MODEL_NAME = "turtlebot3"
@@ -46,4 +47,16 @@ for i in range(number_of_robots):
         model_type=model_type, namespace=namespace,
         position=position, orientation=orientation,
         name=str(i), update_if_exist=False)
-spawner.update()
+
+#robot_names = Int16MultiArray(data=[[j for j in range(number_of_robots)]])
+#pub = rospy.Publisher('robot_names', Int16MultiArray, queue_size=10)
+#pub.publish(robot_names)
+
+sim = rospy.get_param('/use_sim_time')
+if sim is True:
+    rospy.loginfo('Running in simulation, publishing to /sim_spawned topic')
+    pub = rospy.Publisher('/sim_spawned', EmptyMsg, latch=True)
+    pub.publish(EmptyMsg())
+    pub.publish(EmptyMsg())
+    pub.publish(EmptyMsg())
+    rospy.spin()

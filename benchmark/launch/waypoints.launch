@@ -1,0 +1,13 @@
+<!--
+@author:    Johann Schmidt
+@date:      November 2019
+@brief:     Script used to handle the waypoints on the map.
+@todo:
+-->
+
+<launch>
+    <node pkg="benchmark" type="waypoints_controller.py" name="waypoints_controller" output="screen" clear_params="true">
+        <param name="model_type" type="str" value="burger" />
+        <param name="namespace" type="str" value="tb3_" />
+    </node>
+</launch>

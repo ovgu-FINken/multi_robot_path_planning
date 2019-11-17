@@ -8,6 +8,7 @@ Starts the map server.
   <arg name="open_rviz" default="false"/>
   <arg name="move_forward_only" default="false"/>
   <arg name="robot_name" default="tb3_0"/>
+
   <group ns="/$(arg robot_name)">
     <node name="map_server" pkg="map_server" type="map_server" args="$(find tracking_certainty_grid)/maps/world.yaml">
         <remap from="/map" to="/$(arg robot_name)/map"/>

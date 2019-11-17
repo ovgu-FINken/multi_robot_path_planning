@@ -20,7 +20,7 @@ import math
 import ros_utils
 
 
-NODE_NAME = "spawn_robot"
+NODE_NAME = "spawning_controller"
 
 
 class RobotSpawner:
@@ -134,15 +134,3 @@ class RobotSpawner:
         rospy.sleep(5)
         rospy.wait_for_service("/gazebo/spawn_urdf_model")
 
-    @staticmethod
-    def _loop():
-        """ Loop until shutdown.
-        """
-        sim = rospy.get_param('/use_sim_time')
-        if sim is True:
-            rospy.loginfo('Running in simulation, publishing to /sim_spawned topic')
-            pub = rospy.Publisher('/sim_spawned', EmptyMsg, latch=True)
-            pub.publish(EmptyMsg())
-            pub.publish(EmptyMsg())
-            pub.publish(EmptyMsg())
-            rospy.spin()

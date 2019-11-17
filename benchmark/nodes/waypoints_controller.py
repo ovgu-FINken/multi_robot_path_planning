@@ -9,24 +9,17 @@
 
 
 import rospy
-import spawner as sp
 import waypoint as wp
-import formation as form
+from std_msgs.msg import Int16MultiArray
 
-
-DEFAULT_MODEL_NAME = "turtlebot3"
-DEFAULT_MODEL_TYPE = "burger"
-DEFAULT_NUMBER_OF_ROBOTS = 3
-DEFAULT_POSITION = [0, 0, 0]
-DEFAULT_ORIENTATION = [0, 0, 0]
-DEFAULT_NAME = "0"
 DEFAULT_NAMESPACE = "tb3_"
-DEFAULT_FORMATION = form.Formation.DENSE_BLOCK
 
+
+#def callback(data):
+#    rospy.loginfo(rospy.get_caller_id() + "I heard %s", data.data)
+#rospy.Subscriber("robot_names", Int16MultiArray, callback)
 
 wp.setup_node()
-
 namespace = rospy.get_param('~namespace', DEFAULT_NAMESPACE)
-
-wp_manager = wp.WayPointManager(namespace=namespace)
-
+wp_manager = wp.WayPointManager(namespace=namespace, robot_names=["0", "1", "2", "3"])  # @HACK
+wp_manager.run()

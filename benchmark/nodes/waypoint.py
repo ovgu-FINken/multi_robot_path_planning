@@ -37,6 +37,13 @@ class WayPointMap(Enum):
     ]
 
 
+def setup_node():
+    """ Setup method for the way point node.
+    Here the current way point is published.
+    """
+    rospy.init_node(NODE_NAME, anonymous=True)
+
+
 class WayPointManager:
     """ Way point manager.
 
@@ -64,7 +71,6 @@ class WayPointManager:
         self._target_point = {}
         self._node_update_frequency = node_update_frequency
         self._publisher = {}
-        self._setup_node()
         self._setup_publisher()
 
     def run(self):
@@ -72,20 +78,14 @@ class WayPointManager:
         """
         self._loop()
 
-    @staticmethod
-    def _setup_node():
-        """ Setup method for the way point node.
-        Here the current way point is published.
-        """
-        rospy.init_node(NODE_NAME, anonymous=True)
-
     def _loop(self):
         """ Updates the node with the given frequency.
         """
         rate = rospy.Rate(self._node_update_frequency)
         while not rospy.is_shutdown():
             self._update_target_points()
-            self._publish_target_points()
+            #self._publish_target_points()
+            rospy.loginfo(self._target_point)
             rate.sleep()
 
     def _setup_publisher(self):
@@ -114,7 +114,7 @@ class WayPointManager:
                 self._target_point[robot_name] = self._waypoint_map[0]
 
             # restart round
-            elif self._target_point[robot_name] == self._waypoint_map[len(self._waypoint_map)]:
+            elif self._target_point[robot_name] == self._waypoint_map[len(self._waypoint_map) - 1]:
                 self._target_point[robot_name] = self._waypoint_map[0]
 
             # set next in round
