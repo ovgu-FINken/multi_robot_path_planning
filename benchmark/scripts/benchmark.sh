@@ -3,8 +3,18 @@
 #################################################
 # @author:  PathPlanners
 # @date:    2019
+# @brief:
 # @todo:
 #################################################
+#
+# USAGE RECOMMENDATION
+#
+# -> Create shortcuts like:
+# -> gnome-terminal -- bash <FULL_PATH>/benchmark.sh
+# -> gnome-terminal -- bash <FULL_PATH>/kill.sh
+#
+#################################################
+
 
 SESSION_NAME="benchmark"
 MAPPING=${MAPPING:=amcl}
@@ -26,6 +36,12 @@ read -t 3
 NUM=$((++NUM))
 tmux new-window -t $SESSION_NAME -n "spawner"
 tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark spawner.launch" C-m
+read -t 3
+
+# waypoint
+NUM=$((++NUM))
+tmux new-window -t $SESSION_NAME -n "waypoint"
+tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark waypoint.launch" C-m
 
 # rviz
 NUM=$((++NUM))
