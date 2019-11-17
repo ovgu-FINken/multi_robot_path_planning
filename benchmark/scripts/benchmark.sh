@@ -16,10 +16,12 @@
 #################################################
 
 
+ENABLE_RVIZ=False
+ENABLE_RQT=False
+
 SESSION_NAME="benchmark"
 MAPPING=${MAPPING:=amcl}
 NUM=0
-TERMINAL="gnome-terminal"
 
 # source
 source ~/.bashrc
@@ -38,20 +40,24 @@ tmux new-window -t $SESSION_NAME -n "spawner"
 tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark spawner.launch" C-m
 read -t 3
 
-# waypoint
+# waypoints
 NUM=$((++NUM))
-tmux new-window -t $SESSION_NAME -n "waypoint"
-tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark waypoint.launch" C-m
+tmux new-window -t $SESSION_NAME -n "waypoints"
+tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark waypoints.launch" C-m
 
 # rviz
-NUM=$((++NUM))
-tmux new-window -t $SESSION_NAME -n "rviz"
-tmux send-keys -t $SESSION_NAME:$NUM "roslaunch turtlebot3_gazebo turtlebot3_gazebo_rviz.launch" C-m
+if [ $ENABLE_RVIZ == True ] ; then
+  NUM=$((++NUM))
+  tmux new-window -t $SESSION_NAME -n "rviz"
+  tmux send-keys -t $SESSION_NAME:$NUM "roslaunch turtlebot3_gazebo turtlebot3_gazebo_rviz.launch" C-m
+fi
 
 # rqt
-NUM=$((++NUM))
-tmux new-window -t $SESSION_NAME -n "rqt"
-tmux send-keys -t $SESSION_NAME:$NUM "rqt" C-m
+if [ $ENABLE_RQT == True ] ; then
+  NUM=$((++NUM))
+  tmux new-window -t $SESSION_NAME -n "rqt"
+  tmux send-keys -t $SESSION_NAME:$NUM "rqt" C-m
+fi
 
 # attach to the tmux session
 tmux attach
