@@ -11,35 +11,39 @@
 from enum import Enum
 
 
-class World(Enum):
-    """ Enum of supported world maps.
+class WayPointMap(Enum):
+    """ Enum of supported way point maps.
     """
-    EMPTY = "empty_world"
-    TURTLEBOT3 = "turtlebot3_world"
+    EMPTY_WORLD = [
+        [0.0, 0.0, 0.0]
+    ]
+    EDGE_TB3_WORLD = [
+        [1.8, 0.0, 0.0],
+        [-1.8, 0.0, 0.0],
+        [0.0, 1.8, 0.0],
+        [0.0, -1.8, 0.0]
+    ]
 
 
 class WayPointManager:
     """ Way point manager.
     """
 
-    def __init__(self, world=World.EMPTY):
+    def __init__(self, way_points=WayPointMap.EMPTY_WORLD):
         """ Init. method.
-        :param world
+        :param way_points
         """
-        self._world = world
-        self._way_points = []
+        self._way_points = way_points
 
     def run(self):
         """ Starts the way point generating process.
-        :return: way point coordinates
         """
-        if self._world == World.EMPTY \
-                or self._world == World.EMPTY.value:
+        if self._way_points == WayPointMap.EMPTY_WORLD \
+                or self._way_points == WayPointMap.EMPTY_WORLD.value:
             self._set_way_points_empty_world()
-        elif self._world == World.TURTLEBOT3 \
-                or self._world == World.TURTLEBOT3.value:
+        elif self._way_points == WayPointMap.EDGE_TB3_WORLD \
+                or self._way_points == WayPointMap.EDGE_TB3_WORLD.value:
             self._set_way_points_tb3_world()
-        return self._way_points
 
     def _set_way_points_empty_world(self):
         """ Sets the way points for the empty world.
@@ -48,4 +52,5 @@ class WayPointManager:
     def _set_way_points_tb3_world(self):
         """ Sets the way points for the tb3 world.
         """
+
 
