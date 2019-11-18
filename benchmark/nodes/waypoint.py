@@ -85,7 +85,7 @@ class WayPointManager:
         while not rospy.is_shutdown():
             self._update_target_points()
             #self._publish_target_points()
-            rospy.loginfo(self._target_point)
+            #rospy.loginfo(self._target_point)
             rate.sleep()
 
     def _setup_publisher(self):

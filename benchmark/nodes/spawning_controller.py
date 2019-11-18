@@ -12,7 +12,8 @@ import rospy
 import spawner as sp
 import waypoint as wp
 import formation as form
-from std_msgs.msg import Int16MultiArray, Empty as EmptyMsg
+from std_msgs.msg import Int16MultiArray, MultiArrayLayout, MultiArrayDimension
+from std_msgs.msg import Empty as EmptyMsg
 
 
 DEFAULT_MODEL_NAME = "turtlebot3"
@@ -25,6 +26,7 @@ DEFAULT_NAMESPACE = "tb3_"
 DEFAULT_FORMATION = form.Formation.DENSE_BLOCK
 
 
+publ = rospy.Publisher('robot_names', Int16MultiArray, queue_size=10)
 spawner = sp.RobotSpawner(world="world")
 
 model_name = rospy.get_param('~model_name', DEFAULT_MODEL_NAME)
@@ -48,15 +50,22 @@ for i in range(number_of_robots):
         position=position, orientation=orientation,
         name=str(i), update_if_exist=False)
 
-#robot_names = Int16MultiArray(data=[[j for j in range(number_of_robots)]])
-#pub = rospy.Publisher('robot_names', Int16MultiArray, queue_size=10)
-#pub.publish(robot_names)
-
 sim = rospy.get_param('/use_sim_time')
 if sim is True:
     rospy.loginfo('Running in simulation, publishing to /sim_spawned topic')
-    pub = rospy.Publisher('/sim_spawned', EmptyMsg, latch=True)
+    pub = rospy.Publisher('/sim_spawned', EmptyMsg,
+                          latch=True, queue_size=10)
     pub.publish(EmptyMsg())
     pub.publish(EmptyMsg())
     pub.publish(EmptyMsg())
-    rospy.spin()
+#rospy.spin()
+
+while not rospy.is_shutdown():
+    try:
+        robot_names = Int16MultiArray()
+        for j in range(number_of_robots):
+            robot_names.data.append(j)
+        publ.publish(robot_names)
+    except rospy.ROSInterruptException:
+        pass
+    rospy.Rate(1).sleep()
