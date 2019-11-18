@@ -127,6 +127,19 @@ class RobotSpawner:
         self._spawn_model(xml_string=xml_string, name=name, namespace=namespace, pose=pose)
 
     @staticmethod
+    def _pub_sim_spawned():
+        """ Publishes an empty msg to sim_spawned if sim_time is used.
+        """
+        sim = rospy.get_param('/use_sim_time')
+        if sim is True:
+            rospy.loginfo('Running in simulation, publishing to /sim_spawned topic')
+            pub = rospy.Publisher('/sim_spawned', EmptyMsg,
+                                  latch=True, queue_size=10)
+            pub.publish(EmptyMsg())
+            pub.publish(EmptyMsg())
+            pub.publish(EmptyMsg())
+
+    @staticmethod
     def _create_node():
         """ Creates a node.
         """

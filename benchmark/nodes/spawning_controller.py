@@ -50,16 +50,6 @@ for i in range(number_of_robots):
         position=position, orientation=orientation,
         name=str(i), update_if_exist=False)
 
-sim = rospy.get_param('/use_sim_time')
-if sim is True:
-    rospy.loginfo('Running in simulation, publishing to /sim_spawned topic')
-    pub = rospy.Publisher('/sim_spawned', EmptyMsg,
-                          latch=True, queue_size=10)
-    pub.publish(EmptyMsg())
-    pub.publish(EmptyMsg())
-    pub.publish(EmptyMsg())
-#rospy.spin()
-
 while not rospy.is_shutdown():
     try:
         robot_names = Int16MultiArray()
