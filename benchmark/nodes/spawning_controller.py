@@ -14,7 +14,7 @@ import waypoint as wp
 import formation as form
 from std_msgs.msg import Int16MultiArray, MultiArrayLayout, MultiArrayDimension
 from std_msgs.msg import Empty as EmptyMsg
-
+import topic_handler
 
 DEFAULT_MODEL_NAME = "turtlebot3"
 DEFAULT_MODEL_TYPE = "burger"
@@ -26,7 +26,7 @@ DEFAULT_NAMESPACE = "tb3_"
 DEFAULT_FORMATION = form.Formation.DENSE_BLOCK
 
 
-publ = rospy.Publisher('robot_names', Int16MultiArray, queue_size=10)
+publ = topic_handler.TopicHandler('robot_names', Int16MultiArray, queue_size=10)
 spawner = sp.RobotSpawner(world="world")
 
 model_name = rospy.get_param('~model_name', DEFAULT_MODEL_NAME)
@@ -50,16 +50,5 @@ for i in range(number_of_robots):
         position=position, orientation=orientation,
         name=str(i), update_if_exist=False)
 
-robot_names = Int16MultiArray()
-for j in range(number_of_robots):
-    robot_names.data.append(j)
-publ.publish(robot_names)
-while not rospy.is_shutdown():
-    #try:
-    #    robot_names = Int16MultiArray()
-    #    for j in range(number_of_robots):
-    #        robot_names.data.append(j)
-    #    publ.publish(robot_names)
-    #except rospy.ROSInterruptException:
-    #    pass
-    rospy.Rate(1).sleep()
+publ.publish([j for j in range(number_of_robots)], quiet=False)
+rospy.spin()
