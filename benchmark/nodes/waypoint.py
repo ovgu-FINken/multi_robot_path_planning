@@ -16,6 +16,8 @@ import tf.transformations as tft
 import random
 import math
 from std_msgs.msg import Float32MultiArray
+from geometry_msgs.msg import Point
+import topic_handler
 
 
 TOPIC_NAME = "waypoint"
@@ -84,8 +86,7 @@ class WayPointManager:
         rate = rospy.Rate(self._node_update_frequency)
         while not rospy.is_shutdown():
             self._update_target_points()
-            #self._publish_target_points()
-            #rospy.loginfo(self._target_point)
+            self._publish_target_points()
             rate.sleep()
 
     def _setup_publisher(self):
@@ -93,7 +94,7 @@ class WayPointManager:
         """
         for robot_name in self._robot_names:
             topic_name = self._namespace + '_' + robot_name + '/' + TOPIC_NAME
-            pub = rospy.Publisher(topic_name, Float32MultiArray, queue_size=10)
+            pub = topic_handler.PublishingHandler(topic_name, Point, queue_size=10)
             self._publisher[robot_name] = pub
 
     def _publish_target_points(self):
