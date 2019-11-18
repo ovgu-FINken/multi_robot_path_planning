@@ -50,12 +50,16 @@ for i in range(number_of_robots):
         position=position, orientation=orientation,
         name=str(i), update_if_exist=False)
 
+robot_names = Int16MultiArray()
+for j in range(number_of_robots):
+    robot_names.data.append(j)
+publ.publish(robot_names)
 while not rospy.is_shutdown():
-    try:
-        robot_names = Int16MultiArray()
-        for j in range(number_of_robots):
-            robot_names.data.append(j)
-        publ.publish(robot_names)
-    except rospy.ROSInterruptException:
-        pass
+    #try:
+    #    robot_names = Int16MultiArray()
+    #    for j in range(number_of_robots):
+    #        robot_names.data.append(j)
+    #    publ.publish(robot_names)
+    #except rospy.ROSInterruptException:
+    #    pass
     rospy.Rate(1).sleep()
