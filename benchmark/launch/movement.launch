@@ -1,13 +1,11 @@
 <!--
-Starts the move base and movement related files for all robots.
+@author:    Johann Schmidt
+@date:      November 2019
+@brief:     Starts the movement controller for the robots.
+@todo:
 -->
 
 <launch>
-
-    <!-- Follower -->
-    <include file="$(find multi_robot)/launch/follower.launch"/>
-
-    <!-- Leader -->
-    <include file="$(find multi_robot)/launch/leader.launch"/>
-
+    <node pkg="benchmark" type="movement_controller.py" name="movement_controller" output="screen" clear_params="true">
+    </node>
 </launch> 
