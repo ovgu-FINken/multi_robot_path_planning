@@ -16,15 +16,22 @@ import rospy
 import tf2_ros
 from geometry_msgs.msg import Quaternion, PointStamped
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
+import rospy
+from geometry_msgs.msg import Twist
+from turtlesim.msg import Pose
+from math import pow, atan2, sqrt
+import tf.transformations as tft
 
 
 class MovementController:
     """ Movement controller.
     """
 
-    def __init__(self):
+    def __init__(self, robot_name):
         """ Init. method.
+        :param robot_name
         """
+        self._robot_name = robot_name
         self._client = None
         self._setup_action_client()
 
@@ -44,8 +51,13 @@ class MovementController:
                 False   goal is None
         """
         goal = MoveBaseGoal()
+        goal.target_pose.header.frame_id = self._robot_name + "/base_footprint"
+        goal.target_pose.header.stamp = rospy.Time.now()-rospy.Duration(0.1)
         goal.target_pose.pose.position.x = goal_pos[0]
         goal.target_pose.pose.position.y = goal_pos[1]
+        angle = random.uniform(-math.pi, math.pi)
+        rotation = tft.quaternion_from_euler(angle, 0, 0)
+        goal.target_pose.pose.orientation = rotation
         if not quiet:
             rospy.loginfo("Moving to goal {}.".format(goal))
         if goal is None:
