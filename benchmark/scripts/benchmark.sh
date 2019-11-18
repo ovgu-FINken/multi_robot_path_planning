@@ -45,6 +45,12 @@ NUM=$((++NUM))
 tmux new-window -t $SESSION_NAME -n "waypoints"
 tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark waypoints.launch" C-m
 
+# movement
+NUM=$((++NUM))
+tmux new-window -t $SESSION_NAME -n "movement"
+tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark movement.launch" C-m
+
+
 # rviz
 if [ $ENABLE_RVIZ == True ] ; then
   NUM=$((++NUM))
