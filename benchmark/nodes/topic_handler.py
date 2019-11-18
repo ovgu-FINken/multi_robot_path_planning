@@ -20,7 +20,7 @@ def subscriber_callback(data):
     return data.data
 
 
-class TopicHandler:
+class TopicHandler(object):
     """ ROS Topic Handler.
     """
 
@@ -43,7 +43,7 @@ class SubscribingHandler(TopicHandler):
         :param data_type: (eg: Int16MultiArray)
         :param callback: for data
         """
-        super().__init__(name, data_type)
+        super(SubscribingHandler, self).__init__(name, data_type)
         self._subscriber = rospy.Subscriber(self._name, self._data_type, callback)
 
 
@@ -57,7 +57,7 @@ class PublishingHandler(TopicHandler):
         :param data_type (eg: Int16MultiArray)
         :param queue_size
         """
-        super().__init__(name, data_type)
+        super(PublishingHandler, self).__init__(name, data_type)
         self._publisher = rospy.Publisher(self._name, self._data_type, queue_size=queue_size)
 
     def publish(self, data, frequency=0, quiet=True):

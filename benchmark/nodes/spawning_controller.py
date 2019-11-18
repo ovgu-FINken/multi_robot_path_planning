@@ -26,7 +26,7 @@ DEFAULT_NAMESPACE = "tb3_"
 DEFAULT_FORMATION = form.Formation.DENSE_BLOCK
 
 
-publ = topic_handler.TopicHandler('robot_names', Int16MultiArray, queue_size=10)
+publ = topic_handler.PublishingHandler('robot_names', Int16MultiArray, queue_size=10)
 spawner = sp.RobotSpawner(world="world")
 
 model_name = rospy.get_param('~model_name', DEFAULT_MODEL_NAME)

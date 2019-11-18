@@ -11,6 +11,8 @@
 import rospy
 import waypoint as wp
 from std_msgs.msg import Int16MultiArray, Int16
+import topic_handler
+
 
 DEFAULT_NAMESPACE = "tb3_"
 
@@ -20,7 +22,7 @@ def callback(data):
 
 
 wp.setup_node()
-rospy.Subscriber("robot_names", Int16MultiArray, callback)
+topic_handler.SubscribingHandler("robot_names", Int16MultiArray, callback)
 rospy.spin()
 
 namespace = rospy.get_param('~namespace', DEFAULT_NAMESPACE)
