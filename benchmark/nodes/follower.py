@@ -48,7 +48,7 @@ class Follower:
         if goal is None:
             return
         client.send_goal_and_wait(
-            goal, execute_timeout=rospy.Duration. from_sec(execute_timeout))
+            goal, execute_timeout=rospy.Duration.from_sec(execute_timeout))
 
 if __name__ == '__main__':
 
