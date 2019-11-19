@@ -9,6 +9,7 @@
 
 
 from std_msgs.msg import Int16MultiArray, Int16
+from geometry_msgs.msg import Point
 import rospy
 
 
@@ -79,7 +80,12 @@ class PublishingHandler(TopicHandler):
         :param quiet
         """
         pub_data = self._data_type()
-        pub_data.data = data
+        if isinstance(pub_data, Point):
+            pub_data.x = data[0]
+            pub_data.y = data[1]
+            pub_data.z = data[2]
+        else:
+            pub_data.data = data
         if not quiet:
             rospy.loginfo("Publishing {0} to Topic {1}.".format(pub_data, self._name))
         self._publisher.publish(pub_data)
