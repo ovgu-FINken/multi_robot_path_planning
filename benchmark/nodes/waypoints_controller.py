@@ -12,23 +12,42 @@ import rospy
 import waypoint as wp
 from std_msgs.msg import Int16MultiArray
 import topic_handler
+from geometry_msgs.msg import Point
 
 
 DEFAULT_NAMESPACE = "tb3_"
 
 
 robot_names = []
+publisher = {}
 
 
-def callback(data):
+def callback_names(data):
     rospy.loginfo(rospy.get_caller_id() + "I heard %s", data.data)
     global robot_names
     robot_names = [str(name) for name in data.data]
 
 
-wp.setup_node()
-topic_handler.SubscribingHandler("robot_names", Int16MultiArray, callback)
+def callback_targets(data):
+    global publisher
+    rospy.loginfo("Publishing: {}".format(data))
+    for target_point_key in data:
+        publisher[target_point_key].publish(data[target_point_key])
 
+
+rospy.init_node("waypoint_controller", anonymous=True)
 namespace = rospy.get_param('~namespace', DEFAULT_NAMESPACE)
-wp_manager = wp.WayPointManager(namespace=namespace, robot_names=robot_names)
+topic_handler.SubscribingHandler("robot_names", Int16MultiArray, callback_names)
+
+while len(robot_names) == 0:
+    rospy.loginfo("waiting")
+    rospy.Rate(1).sleep()
+
+for robot_name in robot_names:
+    topic_name = namespace + '_' + robot_name + '/' + "waypoint"
+    pub = topic_handler.PublishingHandler(topic_name, Point, queue_size=10)
+    publisher[robot_name] = pub
+
+wp_manager = wp.WayPointManager(namespace=namespace, robot_names=robot_names,
+                                callback=callback_targets, waypoints=wp.WayPointMap.EDGE_TB3_WORLD)
 wp_manager.run()

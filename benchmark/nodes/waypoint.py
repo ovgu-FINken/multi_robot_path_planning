@@ -21,22 +21,34 @@ import topic_handler
 
 
 TOPIC_NAME = "waypoint"
-NODE_NAME = "waypoint_publisher"
+NODE_NAME = "waypoint_controller"
 DEFAULT_NODE_UPDATE_FREQUENCY = 3
 
 
 class WayPointMap(Enum):
     """ Enum of supported way point maps.
     """
-    EMPTY_WORLD = [
-        [0.0, 0.0, 0.0]
-    ]
-    EDGE_TB3_WORLD = [
-        [1.8, 0.0, 0.0],
-        [-1.8, 0.0, 0.0],
-        [0.0, 1.8, 0.0],
-        [0.0, -1.8, 0.0]
-    ]
+    EMPTY_WORLD = "empty_world"
+    EDGE_TB3_WORLD = "edge_tb3_world"
+
+
+def get_waypoint_map(waypoint_map_name):
+    """ Returns the corresponding waypoint array.
+    :param waypoint_map_name:
+    :return: array
+    """
+    if waypoint_map_name == WayPointMap.EMPTY_WORLD \
+            or waypoint_map_name == WayPointMap.EMPTY_WORLD.value:
+        return [[0.0, 0.0, 0.0]]
+    elif waypoint_map_name == WayPointMap.EDGE_TB3_WORLD \
+            or waypoint_map_name == WayPointMap.EDGE_TB3_WORLD.value:
+        return [[1.8, 0.0, 0.0],
+                [-1.8, 0.0, 0.0],
+                [0.0, 1.8, 0.0],
+                [0.0, -1.8, 0.0]]
+    else:
+        rospy.logerr("Unknown waypoint map name {}".format(waypoint_map_name))
+        return None
 
 
 def setup_node():
@@ -56,24 +68,24 @@ class WayPointManager:
 
     def __init__(self, namespace, robot_names,
                  waypoints=WayPointMap.EMPTY_WORLD,
-                 node_update_frequency=DEFAULT_NODE_UPDATE_FREQUENCY):
+                 node_update_frequency=DEFAULT_NODE_UPDATE_FREQUENCY,
+                 callback=None):
         """ Init. method.
         :param namespace
         :param robot_names
         :param waypoints
         :param node_update_frequency
+        :param callback: Use own callback method instead of local publisher.
         """
-        if type(waypoints) is WayPointMap:
-            self._waypoint_map = waypoints.value
-        else:
-            self._waypoint_map = waypoints
-
+        self._waypoint_map = get_waypoint_map(waypoints)
         self._namespace = namespace
         self._robot_names = robot_names
         self._target_point = {}
         self._node_update_frequency = node_update_frequency
         self._publisher = {}
-        self._setup_publisher()
+        self._callback = callback
+        if self._callback is None:
+            self._setup_publisher()
 
     def run(self):
         """ Starts the way point generating process.
@@ -86,7 +98,10 @@ class WayPointManager:
         rate = rospy.Rate(self._node_update_frequency)
         while not rospy.is_shutdown():
             self._update_target_points()
-            self._publish_target_points()
+            if self._callback is not None:
+                self._callback(self._target_point)
+            else:
+                self._publish_target_points()
             rate.sleep()
 
     def _setup_publisher(self):
@@ -108,6 +123,7 @@ class WayPointManager:
     def _update_target_points(self):
         """ Updates the target points for the robots.
         """
+        rospy.loginfo("Received robot names {}".format(self._robot_names))
         for robot_name in self._robot_names:
 
             # initial target point
