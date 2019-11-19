@@ -95,7 +95,7 @@ class WayPointManager:
         self._update_target_points(robot_name)
         next_wp = self._target_point[robot_name]
         if self._callback is not None:
-            self._callback(next_wp)
+            self._callback(robot_name, next_wp)
         else:
             self._publish_target_points(next_wp)
         return next_wp

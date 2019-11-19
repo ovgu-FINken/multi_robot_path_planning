@@ -28,11 +28,9 @@ def callback_names(data):
     robot_names = [str(name) for name in data.data]
 
 
-def callback_targets(data):
+def callback_target(name, point):
     global publisher
-    rospy.loginfo("Publishing: {}".format(data))
-    for target_point_key in data:
-        publisher[target_point_key].publish(data[target_point_key])
+    publisher[name].publish(point, quiet=True)
 
 
 rospy.init_node("waypoint_controller", anonymous=True)
@@ -49,5 +47,7 @@ for robot_name in robot_names:
     publisher[robot_name] = pub
 
 wp_manager = wp.WayPointManager(namespace=namespace, robot_names=robot_names,
-                                callback=callback_targets, waypoints=wp.WayPointMap.EDGE_TB3_WORLD)
-wp_manager.run()
+                                callback=callback_target, waypoints=wp.WayPointMap.EDGE_TB3_WORLD)
+while not rospy.is_shutdown():
+    wp_manager.next(robot_names[0])
+    rospy.Rate(1).sleep()
