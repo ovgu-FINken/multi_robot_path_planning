@@ -17,7 +17,7 @@
 
 
 ENABLE_RVIZ=False
-ENABLE_RQT=False
+ENABLE_RQT=True
 
 SESSION_NAME="benchmark"
 MAPPING=${MAPPING:=amcl}
@@ -34,6 +34,15 @@ tmux rename-window -t $SESSION_NAME "world"
 tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark world.launch world:=turtlebot3_world.world" C-m
 read -t 3
 
+# move base @HACK
+ROBOT_NAMES=(0 1 2 3)
+for i in "${ROBOT_NAMES[@]}"; do
+  NUM=$((++NUM))
+  tmux new-window -t $SESSION_NAME -n "movebase_tb3_${i}"
+  tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark move_base.launch robot_name:=tb3_${i}" C-m
+done
+read -t 3
+
 # mapping @HACK
 ROBOT_NAMES=(0 1 2 3)
 for i in "${ROBOT_NAMES[@]}"; do
@@ -41,6 +50,7 @@ for i in "${ROBOT_NAMES[@]}"; do
   tmux new-window -t $SESSION_NAME -n "mapping_tb3_${i}"
   tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark amcl.launch robot_name:=tb3_${i}" C-m
 done
+read -t 3
 
 # spawner
 NUM=$((++NUM))
@@ -58,6 +68,10 @@ NUM=$((++NUM))
 tmux new-window -t $SESSION_NAME -n "movement"
 tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark movement.launch" C-m
 
+# random walk
+NUM=$((++NUM))
+tmux new-window -t $SESSION_NAME -n "random"
+tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark random.launch" C-m
 
 # rviz
 if [ $ENABLE_RVIZ == True ] ; then
