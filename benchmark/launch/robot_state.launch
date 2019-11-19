@@ -1,0 +1,30 @@
+<!--
+HACK
+-->
+
+<launch>
+    <group ns="tb3_0">
+        <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
+            <param name="publish_frequency" type="double" value="50.0" />
+            <param name="tf_prefix" value="tb3_0" />
+        </node>
+    </group>
+    <group ns="tb3_1">
+        <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
+            <param name="publish_frequency" type="double" value="50.0" />
+            <param name="tf_prefix" value="tb3_1" />
+        </node>
+    </group>
+    <group ns="tb3_2">
+        <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
+            <param name="publish_frequency" type="double" value="50.0" />
+            <param name="tf_prefix" value="tb3_2" />
+        </node>
+    </group>
+    <group ns="tb3_3">
+        <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
+            <param name="publish_frequency" type="double" value="50.0" />
+            <param name="tf_prefix" value="tb3_3" />
+        </node>
+    </group>
+</launch>
