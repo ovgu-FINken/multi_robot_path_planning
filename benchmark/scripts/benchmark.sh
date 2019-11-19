@@ -17,7 +17,7 @@
 
 
 ENABLE_RVIZ=False
-ENABLE_RQT=False
+ENABLE_RQT=True
 
 SESSION_NAME="benchmark"
 MAPPING=${MAPPING:=amcl}
@@ -33,6 +33,14 @@ tmux new-session -s $SESSION_NAME -d
 tmux rename-window -t $SESSION_NAME "world"
 tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark world.launch world:=turtlebot3_world.world" C-m
 read -t 3
+
+# mapping @HACK
+ROBOT_NAMES=(0 1 2 3)
+for i in "${ROBOT_NAMES[@]}"; do
+  NUM=$((++NUM))
+  tmux new-window -t $SESSION_NAME -n "mapping_tb3_${i}"
+  tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark amcl.launch robot_name:=tb3_${i}" C-m
+done
 
 # spawner
 NUM=$((++NUM))
