@@ -87,22 +87,18 @@ class WayPointManager:
         if self._callback is None:
             self._setup_publisher()
 
-    def run(self):
-        """ Starts the way point generating process.
+    def next(self, robot_name):
+        """ Returns the next waypoint for a given robot.
+        :param robot_name:
+        :return: waypoint
         """
-        self._loop()
-
-    def _loop(self):
-        """ Updates the node with the given frequency.
-        """
-        rate = rospy.Rate(self._node_update_frequency)
-        while not rospy.is_shutdown():
-            self._update_target_points()
-            if self._callback is not None:
-                self._callback(self._target_point)
-            else:
-                self._publish_target_points()
-            rate.sleep()
+        self._update_target_points(robot_name)
+        next_wp = self._target_point[robot_name]
+        if self._callback is not None:
+            self._callback(next_wp)
+        else:
+            self._publish_target_points(next_wp)
+        return next_wp
 
     def _setup_publisher(self):
         """ Setup for the waypoint topics.
@@ -112,30 +108,31 @@ class WayPointManager:
             pub = topic_handler.PublishingHandler(topic_name, Point, queue_size=10)
             self._publisher[robot_name] = pub
 
-    def _publish_target_points(self):
+    def _publish_target_points(self, robot_name=None):
         """ Updates the target point for the robot
         by publishing the new waypoints to the topics.
+        :param robot_name: publish only for this robot
         """
-        for robot_name in self._robot_names:
-            target_point = self._target_point[robot_name]
-            self._publisher[robot_name].publish(target_point)
+        if robot_name is not None:
+            self._publisher[robot_name].publish(self._target_point[robot_name])
+        else:
+            for robot_name in self._robot_names:
+                target_point = self._target_point[robot_name]
+                self._publisher[robot_name].publish(target_point)
 
-    def _update_target_points(self):
-        """ Updates the target points for the robots.
+    def _update_target_points(self, robot_name):
+        """ Updates the target points for a robot.
         """
-        rospy.loginfo("Received robot names {}".format(self._robot_names))
-        for robot_name in self._robot_names:
+        # initial target point
+        if robot_name not in self._target_point:
+            self._target_point[robot_name] = self._waypoint_map[0]
 
-            # initial target point
-            if robot_name not in self._target_point:
-                self._target_point[robot_name] = self._waypoint_map[0]
+        # restart round
+        elif self._target_point[robot_name] == self._waypoint_map[len(self._waypoint_map) - 1]:
+            self._target_point[robot_name] = self._waypoint_map[0]
 
-            # restart round
-            elif self._target_point[robot_name] == self._waypoint_map[len(self._waypoint_map) - 1]:
-                self._target_point[robot_name] = self._waypoint_map[0]
-
-            # set next in round
-            else:
-                current_target_idx = self._waypoint_map.index(self._target_point[robot_name])
-                target_point = self._waypoint_map[current_target_idx + 1]
-                self._target_point[robot_name] = target_point
+        # set next in round
+        else:
+            current_target_idx = self._waypoint_map.index(self._target_point[robot_name])
+            target_point = self._waypoint_map[current_target_idx + 1]
+            self._target_point[robot_name] = target_point
