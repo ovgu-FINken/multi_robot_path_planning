@@ -38,14 +38,15 @@ class SubscribingHandler(TopicHandler):
     """ Subscribing Handler.
     """
 
-    def __init__(self, name, data_type, callback=subscriber_callback):
+    def __init__(self, name, data_type, callback=subscriber_callback, *args):
         """ Init. method
         :param name: name of the topic
         :param data_type: (eg: Int16MultiArray)
         :param callback: for data
         """
         super(SubscribingHandler, self).__init__(name, data_type)
-        self._subscriber = rospy.Subscriber(self._name, self._data_type, callback)
+        self._subscriber = rospy.Subscriber(
+            self._name, self._data_type, callback, callback_args=args)
 
 
 class PublishingHandler(TopicHandler):

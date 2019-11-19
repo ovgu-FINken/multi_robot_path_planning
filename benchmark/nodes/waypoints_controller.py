@@ -22,7 +22,7 @@ robot_names = []
 publisher = {}
 
 
-def callback_names(data):
+def callback_names(data, args):
     rospy.loginfo(rospy.get_caller_id() + "I heard %s", data.data)
     global robot_names
     robot_names = [str(name) for name in data.data]
@@ -30,7 +30,7 @@ def callback_names(data):
 
 def callback_target(name, point):
     global publisher
-    publisher[name].publish(point, quiet=True)
+    publisher[name].publish(point, quiet=False)
 
 
 rospy.init_node("waypoint_controller", anonymous=True)
@@ -42,7 +42,7 @@ while len(robot_names) == 0:
     rospy.Rate(1).sleep()
 
 for robot_name in robot_names:
-    topic_name = namespace + '_' + robot_name + '/' + "waypoint"
+    topic_name = namespace + robot_name + '/' + "waypoint"
     pub = topic_handler.PublishingHandler(topic_name, Point, queue_size=10)
     publisher[robot_name] = pub
 
