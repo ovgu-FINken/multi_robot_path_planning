@@ -33,13 +33,18 @@ class MovementController:
         """
         self._robot_name = robot_name
         self._client = None
-        self._setup_action_client()
+        self._setup_action_client(quiet=False)
 
-    def _setup_action_client(self):
+    def _setup_action_client(self, quiet=True):
         """ Setup for action client.
+        :param quiet
         """
+        if not quiet:
+            rospy.loginfo("Initializing move base action client ...")
         client = actionlib.SimpleActionClient("move_base", MoveBaseAction)
         client.wait_for_server()
+        if not quiet:
+            rospy.loginfo("Move base action client setup finished successfully!")
         self._client = client
 
     def linear_move_to(self, goal_pos, execute_timeout=5, quiet=True):

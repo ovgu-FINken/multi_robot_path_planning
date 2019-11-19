@@ -9,7 +9,7 @@ Movement setup for randomly walking robot.
   <group ns="/$(arg name)">
     <param name="cmd_vel_topic_name" value="$(arg cmd_vel)"/>
 
-    <node name="global_map_broadcaster" pkg="multi_robot" type="global_map_broadcaster.py" args="">
+    <node name="global_map_broadcaster" pkg="benchmark" type="global_map_broadcaster.py" args="">
         <param name="turtlebot" value="$(arg name)"/>
     </node>
 

@@ -48,6 +48,7 @@ for robot_name in robot_names:
 
 wp_manager = wp.WayPointManager(namespace=namespace, robot_names=robot_names,
                                 callback=callback_target, waypoints=wp.WayPointMap.EDGE_TB3_WORLD)
+# HACK
+wp = wp_manager.next(robot_names[0])
 while not rospy.is_shutdown():
-    wp_manager.next(robot_names[0])
     rospy.Rate(1).sleep()
