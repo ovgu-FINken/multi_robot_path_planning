@@ -8,14 +8,17 @@ import geometry_msgs.msg
 
 
 def handle_turtle_pose(botname):
-    br = tf2_ros.TransformBroadcaster()
+#    br = tf2_ros.TransformBroadcaster()
+# using static transformation because it remains the same for the whole simulation session and thus, only needs to be braodcasted once
+
+    br = tf2_ros.StaticTransformBroadcaster()
     t = geometry_msgs.msg.TransformStamped()
 
     t.header.stamp = rospy.Time.now()
     t.header.frame_id = "world"
     t.child_frame_id = botname + "/map"
-    t.transform.translation.x = 0
-    t.transform.translation.y = 0
+    t.transform.translation.x = 0.0
+    t.transform.translation.y = 0.0
     t.transform.translation.z = 0.0
     q = tf_conversions.transformations.quaternion_from_euler(0, 0, 0)
     t.transform.rotation.x = q[0]
@@ -28,7 +31,10 @@ def handle_turtle_pose(botname):
 if __name__ == '__main__':
     rospy.init_node('global_map_broadcaster')
     botname = rospy.get_param('~turtlebot')
-    rate = rospy.Rate(100)
-    while not rospy.is_shutdown():
-    	handle_turtle_pose(botname)
-    	rate.sleep()
+    handle_turtle_pose(botname)
+    rospy.spin()
+
+#    rate = rospy.Rate(10)
+#    while not rospy.is_shutdown():
+#    	handle_turtle_pose(botname)
+#    	rate.sleep()
