@@ -45,7 +45,7 @@ class RobotSpawner:
         package, package_dir, file_name = "", "", ""
         if model_format == "sdf":
             package = 'turtlebot3_gazebo'
-            file_name = '/models/' + model_name + '_' + model_type + "model.sdf"
+            file_name = '/models/' + model_name + '_' + model_type + "/model.sdf"
         elif model_format == "urdf.xacro":
             package = 'turtlebot3_description'
             file_name = '/urdf/' + model_name + "_" + model_type + ".urdf.xacro"
