@@ -35,20 +35,27 @@ class RobotSpawner:
         self._create_node()
 
     @staticmethod
-    def _get_file_location(model_name, model_type):
+    def _get_file_location(model_name, model_type, model_format="sdf"):
         """ Returns the file location path.
         :param model_name:
         :param model_type:
+        :param model_format:
         :return: path
         """
+        package, package_dir, file_name = "", "", ""
+        if model_format == "sdf":
+            package = 'turtlebot3_gazebo'
+            file_name = '/models/' + model_name + '_' + model_type + "model.sdf"
+        elif model_format == "urdf.xacro":
+            package = 'turtlebot3_description'
+            file_name = '/urdf/' + model_name + "_" + model_type + ".urdf.xacro"
+        else:
+            rospy.logerr("Model format " + model_format + " not supported!")
         try:
-            file_location = roslib.packages.get_pkg_dir(
-                'turtlebot3_gazebo') + '/models/' + model_name + '_' + model_type
+            package_dir = roslib.packages.get_pkg_dir(package)
         except:
-            rospy.logerr("File not found: turtlebot3_gazebo" +
-                         "/models/" + model_name + "_" + model_type)
-            return None
-        return file_location
+            rospy.logerr("Package ({}) not found!".format(package))
+        return package_dir + file_name
 
     @staticmethod
     def _load_model(file_path, model_format="sdf"):
@@ -63,13 +70,13 @@ class RobotSpawner:
             file_xml = open(file_path)
             xml_string = file_xml.read()
         elif model_format == "urdf.xacro":
-            p = os.popen("rosrun xacro xacro.py " + file_path)
+            p = os.popen("rosrun xacro --inorder " + file_path)
             xml_string = p.read()
             p.close()
             srv_spawn_model = rospy.ServiceProxy('/gazebo/spawn_urdf_model', SpawnModel)
         elif model_format == "sdf":
             srv_spawn_model = rospy.ServiceProxy('/gazebo/spawn_gazebo_model', SpawnModel)
-            file_xml = open(os.path.join(file_path, "model.sdf"))
+            file_xml = open(file_path)
             xml_string = file_xml.read()
         else:
             rospy.logerr('Model type not know. model_type = ' + model_format)
@@ -107,7 +114,8 @@ class RobotSpawner:
         spawn_model_prox(name, xml_string, namespace, pose, self._world)
 
     def spawn(self, name, model_name, namespace, model_type,
-              position, orientation, update_if_exist=False):
+              position, orientation, update_if_exist=False,
+              use_launch_file=False, model_format="sdf"):
         """ Spawns a robot.
         :param name:
         :param model_name:
@@ -116,15 +124,31 @@ class RobotSpawner:
         :param position:
         :param orientation:
         :param update_if_exist:
+        :param use_launch_file
+        :param model_format:
         """
-        pose = ros_utils.get_obj_pose(position, orientation)
-        file_path = self._get_file_location(model_name, model_type)
-        srv_spawn_model, xml_string = self._load_model(file_path)
+        if use_launch_file:
+            self._call_spawn_launch(name, position, 0.0)
+        else:
+            pose = ros_utils.get_obj_pose(position, orientation)
+            file_path = self._get_file_location(model_name, model_type, model_format)
+            srv_spawn_model, xml_string = self._load_model(file_path, model_format)
 
-        if update_if_exist:
-            self._delete_robot(name)
+            if update_if_exist:
+                self._delete_robot(name)
 
-        self._spawn_model(xml_string=xml_string, name=name, namespace=namespace, pose=pose)
+            self._spawn_model(xml_string=xml_string, name=name, namespace=namespace, pose=pose)
+            self._pub_sim_spawned()
+
+    @staticmethod
+    def _call_spawn_launch(name, position, yaw):
+        """ Spawns a robot using a spawning launch file.
+        """
+        os.system("roslaunch benchmark spawn.launch model:=burger name:=tb3_" + name
+                  + "pos_x:=" + str(position[0])
+                  + "pos_y:=" + str(position[1])
+                  + "pos_z:=" + str(position[2])
+                  + "yaw:=" + str(yaw))
 
     @staticmethod
     def _pub_sim_spawned():
