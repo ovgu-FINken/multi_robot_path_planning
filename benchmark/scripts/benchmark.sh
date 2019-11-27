@@ -34,34 +34,10 @@ tmux rename-window -t $SESSION_NAME "world"
 tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark world.launch world:=turtlebot3_world.world" C-m
 read -t 3
 
-# robot state @HACK
-NUM=$((++NUM))
-tmux new-window -t $SESSION_NAME -n "robot_state"
-tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark robot_state.launch" C-m
-read -t 3
-
-# move base @HACK
-ROBOT_NAMES=(0 1 2 3)
-for i in "${ROBOT_NAMES[@]}"; do
-  NUM=$((++NUM))
-  tmux new-window -t $SESSION_NAME -n "movebase_tb3_${i}"
-  tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark move_base.launch robot_name:=tb3_${i}" C-m
-done
-read -t 3
-
-# mapping @HACK
-ROBOT_NAMES=(0 1 2 3)
-for i in "${ROBOT_NAMES[@]}"; do
-  NUM=$((++NUM))
-  tmux new-window -t $SESSION_NAME -n "mapping_tb3_${i}"
-  tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark amcl.launch robot_name:=tb3_${i}" C-m
-done
-read -t 3
-
 # spawner
 NUM=$((++NUM))
 tmux new-window -t $SESSION_NAME -n "spawner"
-tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark spawner.launch" C-m
+tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark spawn.launch nr:=4" C-m
 read -t 3
 
 # waypoints

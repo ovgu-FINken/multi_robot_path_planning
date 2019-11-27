@@ -10,12 +10,13 @@
     <arg name="model"
 		default="$(env TURTLEBOT3_MODEL)"
 		doc="model type [burger, waffle, waffle_pi]"/>
-	<arg name="nr" default="1"/>
-	<arg name="robot_name" default="$(eval 'robot' + str(arg('nr')))"/>
+	<arg name="nr" default="4"/>
+	<arg name="robot_name" default="$(eval 'tb3_' + str(arg('nr')))"/>
 	<arg name="init_pose" default="-x 0.0 -y 0.0 -z 0.0"/>
     <arg name="simulate" default="True"/>
     <arg name="auto_drive" default="False"/>
-
+	<arg name="recurse" default="True"/>
+    
 	<group ns="$(arg robot_name)">
 
         <!-- description -->
@@ -49,12 +50,12 @@
 		</include>
 
 		<!-- Localization -->
-		<include file="$(find pheromone_map)/launch/amcl.launch">
+		<include file="$(find benchmark)/launch/amcl.launch">
 			<arg name="robot_name" value="$(arg robot_name)"/>
 		</include>
 
 		<!-- Navigation -->
-		<include file="$(find pheromone_map)/launch/move_base.launch">
+		<include file="$(find benchmark)/launch/move_base.launch">
 			<arg name="model" value="$(arg model)" />
 			<arg name="robot_name" value="$(arg robot_name)" />
 		</include>
