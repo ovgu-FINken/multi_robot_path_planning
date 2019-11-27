@@ -18,7 +18,9 @@ from geometry_msgs.msg import Point
 DEFAULT_NAMESPACE = "tb3_"
 
 
-robot_names = []
+# HACK: add arg to waypoint launch: number of robots
+# and based on this generate the names
+robot_names = ["1", "2", "3", "4"]
 publisher = {}
 
 
