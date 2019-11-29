@@ -62,7 +62,6 @@
   <exec_depend>rospy</exec_depend>
   <exec_depend>roscpp</exec_depend>
   <exec_depend>tf</exec_depend>
-  <run_depend>python-rospkg</run_depend>
   <exec_depend>python-rospkg</exec_depend>
   <!---exec_depend>message_runtime</exec_depend-->
 

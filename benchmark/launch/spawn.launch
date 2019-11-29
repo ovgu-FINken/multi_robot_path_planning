@@ -7,72 +7,71 @@
 
 <launch>
 
-    <arg name="model"
-		default="$(env TURTLEBOT3_MODEL)"
-		doc="model type [burger, waffle, waffle_pi]"/>
 	<arg name="nr" default="1"/>
-	<arg name="robot_name" default="$(eval 'tb3_' + str(arg('nr')))"/>
-	<arg name="init_pose" default="-x 0.0 -y 0.0 -z 0.0"/>
-    <arg name="simulate" default="True"/>
-    <arg name="auto_drive" default="False"/>
 	<arg name="recurse" default="True"/>
+	<arg name="param_file" default="$(find benchmark)/param/robot_dummy_params.yaml"/>
 
-	<group ns="$(arg robot_name)">
+	<rosparam command="load"
+			  file="$(find benchmark)/param/robot_$(arg nr)_params.yaml">
+	</rosparam>
+
+	<group ns="$(rosparam get namespace)$(arg nr)">
 
         <!-- description -->
         <param name="robot_description"
                command="$(find xacro)/xacro
                --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro"
-			    if="$(arg simulate)"/>
+			    if="$(rosparam get simulate)"/>
 
         <!-- spawn -->
 		<node name="spawn_urdf"
 			pkg="gazebo_ros"
 			type="spawn_model"
-			args="$(arg init_pose)
+			args="
+					-x $(rosparam get pose_x)
+					-y $(rosparam get pose_y)
+					-z $(rosparam get pose_z)
 					-urdf
 					-param robot_description
-					-model $(arg robot_name)"
+					-model $(rosparam get namespace)$(arg nr)"
 			respawn="false"
 			output="screen"
-			if="$(arg simulate)" />
+			if="$(rosparam get simulate)" />
 
         <!-- auto drive -->
-		<include file="$(find turtlebot3_gazebo)/launch/turtlebot3_simulation.launch"
-				if="$(arg auto_drive)">
-			<arg name="cmd_vel" value="/$(arg robot_name)/cmd_vel"/>
+		<include file="$(find turtlebot3_gazebo/launch/turtlebot3_simulation.launch"
+				if="$(rosparam get auto_drive)">
+			<arg name="cmd_vel" value="/$(rosparam get namespace)$(arg nr)/cmd_vel"/>
 		</include>
 
 		<!-- TurtleBot3 -->
-		<include file="$(find turtlebot3_bringup)/launch/turtlebot3_remote.launch">
-			<arg name="model" value="$(arg model)" />
-			<arg name="multi_robot_name" value="$(arg robot_name)"/>
+		<include file="$(find turtlebot3_bringup/launch/turtlebot3_remote.launch">
+			<arg name="model" value="$(rosparam get model)" />
+			<arg name="multi_robot_name" value="$(rosparam get namespace)$(arg nr)"/>
 		</include>
 
 		<!-- Localization -->
 		<include file="$(find benchmark)/launch/amcl.launch">
-			<arg name="robot_name" value="$(arg robot_name)"/>
+			<arg name="robot_name" value="$(rosparam get namespace)$(arg nr)"/>
 		</include>
 
 		<!-- Navigation -->
 		<include file="$(find benchmark)/launch/move_base.launch">
-			<arg name="model" value="$(arg model)" />
-			<arg name="robot_name" value="$(arg robot_name)" />
+			<arg name="model" value="$(rosparam get model)" />
+			<arg name="robot_name" value="$(rosparam get namespace)$(arg nr)" />
 		</include>
 
         <!-- static transform publisher -->
 		<node pkg="tf"
               type="static_transform_publisher"
-              name="world_to_$(arg robot_name)_tf_broadcaster"
-              args="0 0 0 0 0 0 /map /$(arg robot_name)/map 100"/>
+              name="world_to_$(rosparam get namespace)$(arg nr)_tf_broadcaster"
+              args="0 0 0 0 0 0 /map /$(rosparam get namespace)$(arg nr)/map 100"/>
 	</group>
 
     <!-- Recursively include this launch file until nr=1 -->
 	<include file="$(find benchmark)/launch/spawn.launch"
 		if="$(eval arg('nr') > 1 and arg('recurse'))">
-		<arg name="init_pose" value="$(arg init_pose)"/>
 		<arg name="nr" value="$(eval arg('nr') - 1)"/>
-        <arg name="auto_drive" value="$(arg auto_drive)"/>
     </include>
 
 </launch>

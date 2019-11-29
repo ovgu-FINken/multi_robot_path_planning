@@ -48,7 +48,8 @@ for i in range(number_of_robots):
         model_name=model_name,
         model_type=model_type, namespace=namespace,
         position=position, orientation=orientation,
-        name=str(i), update_if_exist=False)
-
+        name=str(i), update_if_exist=False,
+        use_launch_file=True)
+spawner.spawn_via_launch()
 publ.publish([j for j in range(number_of_robots)], quiet=False)
 rospy.spin()

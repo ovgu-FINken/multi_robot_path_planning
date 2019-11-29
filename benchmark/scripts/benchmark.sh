@@ -16,7 +16,7 @@
 #################################################
 
 
-ENABLE_RVIZ=False
+ENABLE_RVIZ=True
 ENABLE_RQT=True
 
 SESSION_NAME="benchmark"
@@ -37,7 +37,7 @@ read -t 3
 # spawner
 NUM=$((++NUM))
 tmux new-window -t $SESSION_NAME -n "spawner"
-tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark spawn.launch nr:=4" C-m
+tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark spawner.launch" C-m
 read -t 3
 
 # waypoints

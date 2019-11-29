@@ -18,6 +18,7 @@ from std_msgs.msg import Empty as EmptyMsg
 from geometry_msgs.msg import Quaternion
 import math
 import ros_utils
+import rospkg
 
 
 NODE_NAME = "spawning_controller"
@@ -33,6 +34,13 @@ class RobotSpawner:
         """
         self._world = world
         self._create_node()
+        self._name = None
+        self._model_type = None
+        self._model_format = None
+        self._namespace = None
+        self._position = None
+        self._orientation = None
+        self._param_file = None
 
     @staticmethod
     def _get_file_location(model_name, model_type, model_format="sdf"):
@@ -113,6 +121,31 @@ class RobotSpawner:
         spawn_model_prox = rospy.ServiceProxy('gazebo/spawn_sdf_model', SpawnModel)
         spawn_model_prox(name, xml_string, namespace, pose, self._world)
 
+    def _setup_param_file(self):
+        """ Creates a param file for the specific robot.
+        :return: param file name
+        """
+        rospack.get_path('rospy_tutorials')
+        file_name = os.path.join("$(find benchmark)", "robot_" + self._name + "_params.yaml")
+        file = open(file_name, "w")
+        file.write("model: " + self._model_type)
+        file.write("name: " + self._name)
+        file.write("namespace: " + self._namespace)
+        file.write("pose_x: " + str(self._position[0]))
+        file.write("pose_y: " + str(self._position[1]))
+        file.write("pose_z: " + str(self._position[2]))
+        file.write("simulate: " + "True")
+        file.write("auto_drive: " + "False")
+        file.close()
+        self._param_file = file_name
+        return file_name
+
+    def spawn_via_launch(self):
+        """ Spawns a robot using a spawning launch file.
+        """
+        os.system("roslaunch benchmark spawn.launch"
+                  + " nr:=" + str(4))
+
     def spawn(self, name, model_name, namespace, model_type,
               position, orientation, update_if_exist=False,
               use_launch_file=False, model_format="sdf"):
@@ -127,8 +160,16 @@ class RobotSpawner:
         :param use_launch_file
         :param model_format:
         """
+        self._name = name
+        self._model_type = model_type
+        self._model_format = model_format
+        self._namespace = namespace
+        self._position = position
+        self._orientation = orientation
+
         if use_launch_file:
-            self._call_spawn_launch(name, position, 0.0)
+            self._setup_param_file()
+            #self._spawn_via_launch()
         else:
             pose = ros_utils.get_obj_pose(position, orientation)
             file_path = self._get_file_location(model_name, model_type, model_format)
@@ -139,16 +180,6 @@ class RobotSpawner:
 
             self._spawn_model(xml_string=xml_string, name=name, namespace=namespace, pose=pose)
             self._pub_sim_spawned()
-
-    @staticmethod
-    def _call_spawn_launch(name, position, yaw):
-        """ Spawns a robot using a spawning launch file.
-        """
-        os.system("roslaunch benchmark spawn.launch model:=burger name:=tb3_" + name
-                  + "pos_x:=" + str(position[0])
-                  + "pos_y:=" + str(position[1])
-                  + "pos_z:=" + str(position[2])
-                  + "yaw:=" + str(yaw))
 
     @staticmethod
     def _pub_sim_spawned():
