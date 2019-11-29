@@ -16,8 +16,8 @@
 #################################################
 
 
-ENABLE_RVIZ=True
-ENABLE_RQT=True
+ENABLE_RVIZ=False
+ENABLE_RQT=False
 
 SESSION_NAME="benchmark"
 MAPPING=${MAPPING:=amcl}

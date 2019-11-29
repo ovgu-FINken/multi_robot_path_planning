@@ -19,6 +19,7 @@ from geometry_msgs.msg import Quaternion
 import math
 import ros_utils
 import rospkg
+import yaml
 
 
 NODE_NAME = "spawning_controller"
@@ -125,17 +126,23 @@ class RobotSpawner:
         """ Creates a param file for the specific robot.
         :return: param file name
         """
-        rospack.get_path('rospy_tutorials')
-        file_name = os.path.join("$(find benchmark)", "robot_" + self._name + "_params.yaml")
+        data = dict(
+            model=self._model_type,
+            name=self._name,
+            namespace=self._namespace,
+            pose_x=str(self._position[0]),
+            pose_y=str(self._position[1]),
+            pose_z=str(self._position[2]),
+            simulate="True",
+            auto_drive="False")
+
+        rospack = rospkg.RosPack()
+        directory = rospack.get_path('benchmark')
+        # HACK
+        directory = "/home/johschm/git/DrivingSwarm/src/pathplanning/benchmark/param"
+        file_name = os.path.join(directory, "robot_" + self._name + "_params.yaml")
         file = open(file_name, "w")
-        file.write("model: " + self._model_type)
-        file.write("name: " + self._name)
-        file.write("namespace: " + self._namespace)
-        file.write("pose_x: " + str(self._position[0]))
-        file.write("pose_y: " + str(self._position[1]))
-        file.write("pose_z: " + str(self._position[2]))
-        file.write("simulate: " + "True")
-        file.write("auto_drive: " + "False")
+        yaml.dump(data, file, default_flow_style=False)
         file.close()
         self._param_file = file_name
         return file_name
