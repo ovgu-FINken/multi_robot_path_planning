@@ -36,7 +36,7 @@ def callback_target(name, point):
 
 
 rospy.init_node("waypoint_controller", anonymous=True)
-namespace = rospy.get_param('~namespace', DEFAULT_NAMESPACE)
+namespace = rospy.get_param('namespace', DEFAULT_NAMESPACE)
 topic_handler.SubscribingHandler("robot_names", Int16MultiArray, callback_names)
 
 while len(robot_names) == 0:
@@ -51,6 +51,4 @@ for robot_name in robot_names:
 wp_manager = wp.WayPointManager(namespace=namespace, robot_names=robot_names,
                                 callback=callback_target, waypoints=wp.WayPointMap.EDGE_TB3_WORLD)
 # HACK
-wp = wp_manager.next(robot_names[0])
-while not rospy.is_shutdown():
-    rospy.Rate(1).sleep()
+wp_manager.update()

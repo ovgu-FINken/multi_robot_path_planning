@@ -27,11 +27,13 @@ class MovementController:
     """ Movement controller.
     """
 
-    def __init__(self, robot_name):
+    def __init__(self, robot_name, namespace):
         """ Init. method.
         :param robot_name
+        :param namespace
         """
         self._robot_name = robot_name
+        self._namespace = namespace
         self._client = None
         self._setup_action_client(quiet=False)
 
@@ -39,9 +41,11 @@ class MovementController:
         """ Setup for action client.
         :param quiet
         """
+        topic = self._namespace + self._robot_name + "/move_base"
         if not quiet:
             rospy.loginfo("Initializing move base action client ...")
-        client = actionlib.SimpleActionClient("move_base", MoveBaseAction)
+            rospy.loginfo("Client for topic " + topic)
+        client = actionlib.SimpleActionClient(topic, MoveBaseAction)
         client.wait_for_server()
         if not quiet:
             rospy.loginfo("Move base action client setup finished successfully!")
@@ -56,15 +60,21 @@ class MovementController:
                 False   goal is None
         """
         goal = MoveBaseGoal()
-        goal.target_pose.header.frame_id = self._robot_name + "/base_footprint"
-        goal.target_pose.header.stamp = rospy.Time.now()-rospy.Duration(0.1)
+        goal.target_pose.header.frame_id = "map"#self._namespace + self._robot_name + "/base_footprint"
+        goal.target_pose.header.stamp = rospy.Time.now()# - rospy.Duration(0.1)
         goal.target_pose.pose.position.x = goal_pos[0]
         goal.target_pose.pose.position.y = goal_pos[1]
+        goal.target_pose.pose.position.z = goal_pos[2]
         angle = random.uniform(-math.pi, math.pi)
         rotation = tft.quaternion_from_euler(angle, 0, 0)
-        goal.target_pose.pose.orientation = rotation
+        #goal.target_pose.pose.orientation = rotation
+        #goal.target_pose.pose.orientation.x = rotation[0]
+        #goal.target_pose.pose.orientation.y = rotation[1]
+        #goal.target_pose.pose.orientation.z = rotation[2]
+        goal.target_pose.pose.orientation.w = 1.0#rotation[3]
         if not quiet:
-            rospy.loginfo("Moving to goal {}.".format(goal))
+            rospy.loginfo("Moving Frame ID {}.".format(goal.target_pose.header.frame_id))
+            rospy.loginfo("Moving to goal position {}.".format(goal_pos))
         if goal is None:
             return False
         self._client.send_goal_and_wait(

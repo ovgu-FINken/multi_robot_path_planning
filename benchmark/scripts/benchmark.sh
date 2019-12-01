@@ -17,7 +17,7 @@
 
 
 ENABLE_RVIZ=False
-ENABLE_RQT=False
+ENABLE_RQT=True
 
 SESSION_NAME="benchmark"
 NUM=0
@@ -37,6 +37,7 @@ read -t 3
 NUM=$((++NUM))
 tmux new-window -t $SESSION_NAME -n "spawner_setup"
 tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark spawner.launch" C-m
+read -t 12
 
 # waypoints
 NUM=$((++NUM))
@@ -47,11 +48,6 @@ tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark waypoints.launch" C-m
 NUM=$((++NUM))
 tmux new-window -t $SESSION_NAME -n "movement"
 tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark movement.launch" C-m
-
-# random walk
-NUM=$((++NUM))
-tmux new-window -t $SESSION_NAME -n "random"
-tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark random.launch" C-m
 
 # rviz
 if [ $ENABLE_RVIZ == True ] ; then

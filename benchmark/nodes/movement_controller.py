@@ -16,7 +16,7 @@ from geometry_msgs.msg import Point
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 import actionlib
 
-robot_names = []
+robot_names = ['1', '2', '3', '4']
 robot_targets = {}
 
 
@@ -38,16 +38,17 @@ topic_handler.SubscribingHandler("robot_names", Int16MultiArray, callback_names)
 move_controller = {}
 
 while len(robot_names) == 0:
-    rospy.loginfo("waiting")
+    rospy.loginfo("waiting for robot names ...")
     rospy.Rate(1).sleep()
 
 for robot_name in robot_names:
     topic_name = "tb3_" + robot_name + '/' + "waypoint"
     topic_handler.SubscribingHandler(topic_name, Point, callback_target, robot_name)
-    move_controller[robot_name] = movement.MovementController('tb3_' + robot_name)
+    move_controller[robot_name] = movement.MovementController(
+        robot_name=robot_name, namespace="robot")
 
 while len(robot_targets) == 0:
-    rospy.loginfo("waiting")
+    rospy.loginfo("waiting for targets ...")
     rospy.Rate(1).sleep()
 
 while not rospy.is_shutdown():
@@ -56,4 +57,4 @@ while not rospy.is_shutdown():
             move_controller[robot_name].linear_move_to(robot_targets[robot_name], quiet=False)
         except KeyError:
             pass
-    rospy.Rate(1).sleep()
+    rospy.Rate(0.2).sleep()

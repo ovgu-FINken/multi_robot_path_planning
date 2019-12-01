@@ -87,6 +87,22 @@ class WayPointManager:
         if self._callback is None:
             self._setup_publisher()
 
+    def update(self, frequency=1):
+        """ Updates waypoints.
+        :param frequency
+        """
+        wps = []
+        for robot_name in self._robot_names:
+            self._update_target_points(robot_name)
+            wps.append(self._target_point[robot_name])
+        while not rospy.is_shutdown():
+            for r, robot_name in enumerate(self._robot_names):
+                if self._callback is not None:
+                    self._callback(robot_name, wps[r])
+                else:
+                    self._publish_target_points(wps[r])
+            rospy.Rate(frequency).sleep()
+
     def next(self, robot_name):
         """ Returns the next waypoint for a given robot.
         :param robot_name:
