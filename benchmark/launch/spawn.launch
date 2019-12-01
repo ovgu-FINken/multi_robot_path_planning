@@ -10,14 +10,17 @@
 	<arg name="model"
 		default="$(env TURTLEBOT3_MODEL)"
 		doc="model type [burger, waffle, waffle_pi]"/>
-	<arg name="nr" default="1"/>
+	<arg name="nr" default="2"/>
 	<arg name="robot_name" default="$(eval 'robot' + str(arg('nr')))"/>
-	<arg name="pose_x" default="0.0"/>
-	<arg name="pose_y" default="0.0"/>
+	<arg name="pose_x" default="0.0 0.0"/>
+	<arg name="pose_y" default="0.0 0.0"/>
 	<arg name="pose_z" default="0.0"/>
 	<arg name="simulate" default="True"/>
 	<arg name="auto_drive" default="False"/>
 	<arg name="recurse" default="True"/>
+
+	<arg name="current_pose_x" value="$(eval arg('pose_x').split()[int(arg('nr')) - 1])"/>
+	<arg name="current_pose_y" value="$(eval arg('pose_y').split()[int(arg('nr')) - 1])"/>
 
 	<group ns="$(arg robot_name)">
 
@@ -32,8 +35,8 @@
 			pkg="gazebo_ros"
 			type="spawn_model"
 			args="
-					-x $(arg pose_x)
-					-y $(arg pose_y)
+					-x $(arg current_pose_x)
+					-y $(arg current_pose_y)
 					-z $(arg pose_z)
 					-urdf
 					-param robot_description
@@ -43,13 +46,13 @@
 			if="$(arg simulate)" />
 
         <!-- auto drive -->
-		<include file="$(find turtlebot3_gazebo/launch/turtlebot3_simulation.launch"
+		<include file="$(find turtlebot3_gazebo)/launch/turtlebot3_simulation.launch"
 				if="$(arg auto_drive)">
 			<arg name="cmd_vel" value="/$(arg robot_name)/cmd_vel"/>
 		</include>
 
 		<!-- TurtleBot3 -->
-		<include file="$(find turtlebot3_bringup/launch/turtlebot3_remote.launch">
+		<include file="$(find turtlebot3_bringup)/launch/turtlebot3_remote.launch">
 			<arg name="model" value="$(arg model)" />
 			<arg name="multi_robot_name" value="$(arg robot_name)"/>
 		</include>
@@ -76,6 +79,8 @@
 	<include file="$(find benchmark)/launch/spawn.launch"
 		if="$(eval arg('nr') > 1 and arg('recurse'))">
 		<arg name="nr" value="$(eval arg('nr') - 1)"/>
+		<arg name="pose_x" value="$(arg pose_x)"/>
+		<arg name="pose_y" value="$(arg pose_y)"/>
     </include>
 
 </launch>

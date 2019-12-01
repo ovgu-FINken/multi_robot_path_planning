@@ -151,7 +151,9 @@ class RobotSpawner:
         """ Spawns a robot using a spawning launch file.
         """
         os.system("roslaunch benchmark spawn.launch"
-                  + " nr:=" + str(4))
+                  + " nr:=" + str(3)
+                  + " pose_x:=" + "'0.0 0.5 0.7 0.3'"
+                  + " pose_y:=" + "'0.7 0.3 0.5 0.0'")
 
     def spawn(self, name, model_name, namespace, model_type,
               position, orientation, update_if_exist=False,

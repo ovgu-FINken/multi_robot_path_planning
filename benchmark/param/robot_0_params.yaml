@@ -1,1 +1,0 @@
-model: burgername: 0namespace: tb3_pose_x: 1.5pose_y: 0.7pose_z: 0.0simulate: Trueauto_drive: False
