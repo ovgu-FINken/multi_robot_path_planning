@@ -20,12 +20,7 @@ ENABLE_RVIZ=False
 ENABLE_RQT=False
 
 SESSION_NAME="benchmark"
-MAPPING=${MAPPING:=amcl}
 NUM=0
-
-NUMBER_OF_ROBOTS=1
-#export ROBOT_POSE_X=0
-#export ROBOT_POSE_Y=0
 
 # source
 source ~/.bashrc
@@ -42,29 +37,6 @@ read -t 3
 NUM=$((++NUM))
 tmux new-window -t $SESSION_NAME -n "spawner_setup"
 tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark spawner.launch" C-m
-
-# spawner
-for i in ${NUMBER_OF_ROBOTS} ; do
-  NUM=$((++NUM))
-  tmux new-window -t $SESSION_NAME -n "spawner_robot_${i}"
-  #tmux send-keys -t $SESSION_NAME:$NUM "roscd benchmark" C-m
-  #read -t 3
-  #tmux send-keys -t $SESSION_NAME:$NUM "rosparam load param/robot_${i}_params.yaml" C-m
-  #read -t 3
-  #tmux send-keys -t $SESSION_NAME:$NUM "ROBOT_POSE_X=$(rosparam get pose_x)" C-m
-  #read -t 3
-  #tmux send-keys -t $SESSION_NAME:$NUM "ROBOT_POSE_Y=$(rosparam get pose_y)" C-m
-  #tmux send-keys -t $SESSION_NAME:$NUM "export ROBOT_POSE_X=${ROBOT_POSE_X:=$(rosparam get pose_x)}" C-m
-  #read -t 3
-  #export ROBOT_POSE_Y=${ROBOT_POSE_Y:=$(tmux send-keys -t $SESSION_NAME:$NUM "rosparam get pose_y" C-m)}
-  #read -t 3
-  #tmux setenv ROBOT_POSE_X "$POSE_X"
-  #tmux send-keys -t $SESSION_NAME:$NUM "export ROBOT_POSE_X=""$POSE_X" C-m
-  #read -t 3
-  #tmux send-keys -t $SESSION_NAME:$NUM "echo $ROBOT_POSE_X" C-m
-  #read -t 3
-  #tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark spawn.launch nr:=2 pose_x:='0.5 0.0' pose_y:='0.0 0.5'" C-m
-done
 
 # waypoints
 NUM=$((++NUM))
