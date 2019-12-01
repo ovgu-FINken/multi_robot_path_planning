@@ -50,6 +50,6 @@ for i in range(number_of_robots):
         position=position, orientation=orientation,
         name=str(i + 1), update_if_exist=False,
         use_launch_file=True)
-spawner.spawn_via_launch()
+spawner.spawn_via_launch(number_of_robots, positions)
 publ.publish([j for j in range(number_of_robots)], quiet=False)
 rospy.spin()

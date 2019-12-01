@@ -147,13 +147,19 @@ class RobotSpawner:
         self._param_file = file_name
         return file_name
 
-    def spawn_via_launch(self):
+    def spawn_via_launch(self, number, positions):
         """ Spawns a robot using a spawning launch file.
         """
+        str_pos = ["'", "'"]
+        for position in positions:
+            str_pos[0] += str(position[0]) + " "
+            str_pos[1] += str(position[1]) + " "
+        str_pos[0] = str_pos[0][:-1] + "'"
+        str_pos[1] = str_pos[1][:-1] + "'"
         os.system("roslaunch benchmark spawn.launch"
-                  + " nr:=" + str(3)
-                  + " pose_x:=" + "'0.0 0.5 0.7 0.3'"
-                  + " pose_y:=" + "'0.7 0.3 0.5 0.0'")
+                  + " nr:=" + str(number)
+                  + " pose_x:=" + str_pos[0]
+                  + " pose_y:=" + str_pos[1])
 
     def spawn(self, name, model_name, namespace, model_type,
               position, orientation, update_if_exist=False,
