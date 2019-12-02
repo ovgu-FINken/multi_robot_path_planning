@@ -60,7 +60,7 @@ class MovementController:
                 False   goal is None
         """
         goal = MoveBaseGoal()
-        goal.target_pose.header.frame_id = "map"#self._namespace + self._robot_name + "/base_footprint"
+        goal.target_pose.header.frame_id = self._namespace + self._robot_name + "/map"
         goal.target_pose.header.stamp = rospy.Time.now()# - rospy.Duration(0.1)
         goal.target_pose.pose.position.x = goal_pos[0]
         goal.target_pose.pose.position.y = goal_pos[1]
@@ -77,6 +77,6 @@ class MovementController:
             rospy.loginfo("Moving to goal position {}.".format(goal_pos))
         if goal is None:
             return False
-        self._client.send_goal_and_wait(
-            goal, execute_timeout=rospy.Duration.from_sec(execute_timeout))
+        self._client.send_goal(goal)
+        rospy.loginfo("Send goal successfully!")
         return True

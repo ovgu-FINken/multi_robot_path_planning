@@ -28,8 +28,8 @@ def callback_names(data, args):
 
 def callback_target(data, args):
     global robot_names
-    rospy.loginfo("Data: {}".format(data))
-    rospy.loginfo("Args: {}".format(args))
+    #rospy.loginfo("Data: {}".format(data))
+    #rospy.loginfo("Args: {}".format(args))
     robot_targets[args[0]] = [data.x, data.y, data.z]
 
 
