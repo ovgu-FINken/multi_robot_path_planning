@@ -87,21 +87,33 @@ class WayPointManager:
         if self._callback is None:
             self._setup_publisher()
 
-    def update(self, frequency=1):
+    def update(self, current_pos, frequency=1):
         """ Updates waypoints.
-        :param frequency
+        :param current_pos:
+        :param frequency:
         """
-        wps = []
-        for robot_name in self._robot_names:
-            self._update_target_points(robot_name)
-            wps.append(self._target_point[robot_name])
-        while not rospy.is_shutdown():
-            for r, robot_name in enumerate(self._robot_names):
-                if self._callback is not None:
-                    self._callback(robot_name, wps[r])
-                else:
-                    self._publish_target_points(wps[r])
-            rospy.Rate(frequency).sleep()
+        # @todo add init pos / wp
+        #for robot_name in self._robot_names:
+        #    self.next(robot_name)
+        #while not rospy.is_shutdown():
+        for r, robot_name in enumerate(self._robot_names):
+
+            # @todo add method
+            if self._callback is not None:
+                self._callback(robot_name, self._target_point[robot_name])
+            else:
+                self._publish_target_points(self._target_point[robot_name])
+
+            threshold = 0.2
+            if robot_name in current_pos:
+                rospy.loginfo("Robot {0}: Current Pos: {1} Target Pos: {2}".format(
+                    robot_name, [current_pos[robot_name].x, current_pos[robot_name].y],
+                    [self._target_point[robot_name][0], self._target_point[robot_name][1]]))
+                if (current_pos[robot_name].x - threshold) <= self._target_point[robot_name][0] <= (current_pos[robot_name].x + threshold) \
+                        and (current_pos[robot_name].y - threshold) <= self._target_point[robot_name][1] <= (current_pos[robot_name].y + threshold):
+                    self.next(robot_name)
+                    rospy.loginfo("UPDATE for " + robot_name + " to " + str(self._target_point[robot_name]))
+            #rospy.Rate(frequency).sleep()
 
     def next(self, robot_name):
         """ Returns the next waypoint for a given robot.
