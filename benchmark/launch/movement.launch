@@ -6,13 +6,10 @@
 -->
 
 <launch>
-    <arg name="cmd_vel" default="/cmd_vel"/>
-    <arg name="name" default="robot1"/>
-
-    <param name="cmd_vel_topic_name" value="$(arg cmd_vel)"/>
-
-    <node name="$(arg name)_drive" pkg="turtlebot3_gazebo" type="turtlebot3_drive" required="true" output="screen"/>
-
-    <node pkg="benchmark" type="movement_controller.py" name="movement_controller" output="screen" clear_params="true">
+    <node pkg="benchmark"
+          type="movement_controller.py"
+          name="movement_controller"
+          output="screen"
+          clear_params="true">
     </node>
 </launch> 
