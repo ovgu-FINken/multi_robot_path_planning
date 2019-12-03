@@ -139,7 +139,7 @@ class RobotSpawner:
         rospack = rospkg.RosPack()
         directory = rospack.get_path('benchmark')
         # HACK
-        directory = "/home/johschm/git/DrivingSwarm/src/pathplanning/benchmark/param"
+        directory = "/home/johschm/git/DrivingSwarm/src/pathplanning/benchmark/config"
         file_name = os.path.join(directory, "robot_" + self._name + "_params.yaml")
         file = open(file_name, "w")
         yaml.dump(data, file, default_flow_style=False)
