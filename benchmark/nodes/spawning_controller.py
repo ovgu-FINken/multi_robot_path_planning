@@ -15,26 +15,16 @@ from std_msgs.msg import Int16MultiArray
 import src.utils.topic_handler as topic_handler
 
 
-DEFAULT_MODEL_NAME = "turtlebot3"
-DEFAULT_MODEL_TYPE = "burger"
-DEFAULT_NUMBER_OF_ROBOTS = 3
-DEFAULT_POSITION = [0, 0, 0]
-DEFAULT_ORIENTATION = [0, 0, 0]
-DEFAULT_NAME = "0"
-DEFAULT_NAMESPACE = "tb3_"
-DEFAULT_FORMATION = form.Formation.DENSE_BLOCK
-
-
 publ = topic_handler.PublishingHandler('robot_names', Int16MultiArray, queue_size=10)
 spawner = sp.RobotSpawner(world="world")
 
-model_name = rospy.get_param('~model_name', DEFAULT_MODEL_NAME)
-model_type = rospy.get_param('~model_type', DEFAULT_MODEL_TYPE)
-number_of_robots = rospy.get_param('~number_of_robots', DEFAULT_NUMBER_OF_ROBOTS)
-namespace = rospy.get_param('~namespace', DEFAULT_NAMESPACE)
-position = rospy.get_param('~position', [1.5, 0.5, 0.5])#DEFAULT_POSITION)
-orientation = rospy.get_param('~orientation', DEFAULT_ORIENTATION)
-formation = rospy.get_param('~formation', DEFAULT_FORMATION)
+model_name = rospy.get_param('model_name')
+model_type = rospy.get_param('model_type')
+number_of_robots = rospy.get_param('number_of_robots')
+namespace = rospy.get_param('namespace')
+position = rospy.get_param('position')
+orientation = rospy.get_param('orientation')
+formation = rospy.get_param('formation')
 
 formationHandler = form.FormationHandler(
     number_of_robots=number_of_robots, center_point=position,

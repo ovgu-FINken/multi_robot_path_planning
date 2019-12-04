@@ -32,7 +32,7 @@ tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark world.launch world:=tu
 # spawner
 NUM=$((++NUM))
 tmux new-window -t $SESSION_NAME -n "spawner"
-tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark spawner.launch use_settings_file=$USE_SETTINGS_FILE" C-m
+tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark spawner.launch use_settings_file:=$USE_SETTINGS_FILE" C-m
 
 # waypoints
 NUM=$((++NUM))

@@ -9,10 +9,24 @@
     <arg name="model_type" default="burger"/>
     <arg name="number_of_robots" default="4"/>
     <arg name="namespace" default="tb3_"/>
+    <arg name="use_settings_file" default="False"/>
 
-    <node pkg="benchmark" type="spawning_controller.py" name="spawning_controller" output="screen" clear_params="true">
+    <node pkg="benchmark"
+          type="spawning_controller.py"
+          name="spawning_controller"
+          output="screen"
+          clear_params="true"
+          if="$(eval not arg('use_settings_file'))">
         <param name="model_type" type="str" value="$(arg model_type)" />
         <param name="number_of_robots" type="int" value="$(arg number_of_robots)" />
         <param name="namespace" type="str" value="$(arg namespace)" />
+    </node>
+
+    <node pkg="benchmark"
+          type="spawning_controller.py"
+          name="spawning_controller"
+          output="screen"
+          clear_params="true"
+          if="$(eval arg('use_settings_file'))">
     </node>
 </launch>
