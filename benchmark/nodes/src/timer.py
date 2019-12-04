@@ -44,3 +44,15 @@ class Timer:
             return 0.0
         time = rospy.get_rostime() - self._timer[robot_id]
         return time
+
+    def is_running(self, robot_id):
+        """ Checks whether the timer of a robot is running or not.
+        :param robot_id:
+        :return True:   is running
+                False:  is not running
+        """
+        if robot_id not in self._timer:
+            return False
+        if self._timer[robot_id] == 0.0 or self._timer[robot_id] is None:
+            return False
+        return True

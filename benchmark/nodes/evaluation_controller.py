@@ -21,6 +21,10 @@ def callback_target(data, args):
     :param args:
     """
     global timer
+    if timer.is_running(args[0]):
+        duration = timer.get_time(args[0])
+        print("Robot {0} reached WP ({1}) after {2}".format(
+            args[0], [data.x, data.y, data.z], duration))
     timer.start_timer(args[0])
 
 
