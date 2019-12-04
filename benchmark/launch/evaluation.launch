@@ -7,6 +7,7 @@
 
 <launch>
     <arg name="namespace" default="tb3_"/>
+    <arg name="number_of_robots" default="4"/>
     <arg name="use_settings_file" default="False"/>
 
     <node pkg="benchmark"
@@ -16,6 +17,7 @@
           clear_params="true"
           if="$(eval not arg('use_settings_file'))">
         <param name="namespace" type="str" value="$(arg namespace)" />
+        <param name="number_of_robots" type="str" value="$(arg number_of_robots)" />
     </node>
 
     <node pkg="benchmark"
