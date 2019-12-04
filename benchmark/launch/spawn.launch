@@ -11,7 +11,8 @@
 		default="$(env TURTLEBOT3_MODEL)"
 		doc="model type [burger, waffle, waffle_pi]"/>
 	<arg name="nr" default="2"/>
-	<arg name="robot_name" default="$(eval 'robot' + str(arg('nr')))"/>
+	<arg name="namespace" default="tb3_"/>
+	<arg name="robot_name" default="$(eval arg('namespace') + str(arg('nr')))"/>
 	<arg name="pose_x" default="0.0 0.0"/>
 	<arg name="pose_y" default="0.0 0.0"/>
 	<arg name="pose_z" default="0.0"/>

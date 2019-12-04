@@ -152,6 +152,7 @@ class RobotSpawner:
         str_pos[0] = str_pos[0][:-1] + "'"
         str_pos[1] = str_pos[1][:-1] + "'"
         os.system("roslaunch benchmark spawn.launch"
+                  + " namespace:=" + self._namespace
                   + " nr:=" + str(number)
                   + " pose_x:=" + str_pos[0]
                   + " pose_y:=" + str_pos[1])
