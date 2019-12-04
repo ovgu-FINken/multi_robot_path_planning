@@ -6,5 +6,6 @@
   "formation": "dense_block",
   "position": [1.5, 0.5, 0.5],
   "orientation": [0.0, 0.0, 0.0],
-  "wp_map": "edge_tb3_world"
+  "wp_map": "edge_tb3_world",
+  "wp_threshold": 0.2
 }

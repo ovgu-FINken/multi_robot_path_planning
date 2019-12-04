@@ -56,16 +56,19 @@ def setup_odometry_subscriber(_number_of_robots, _namespace):
         topic_handler.SubscribingHandler(odom_name, Odometry, callback_odometry, robot_id)
 
 
-def update_wps(_number_of_robots, _namespace, _wp_map, frequency=0.5):
+def update_wps(_number_of_robots, _namespace,
+               _wp_map, _wp_threshold, frequency=0.5):
     """ Updates the waypoints for the robots.
     :param _number_of_robots:
     :param _wp_map:
     :param _namespace:
     :param frequency:
+    :param _wp_threshold:
     """
     wp_manager = wp.WayPointManager(
         namespace=_namespace, number_of_robots=_number_of_robots,
-        callback=callback_target, waypoints=_wp_map)
+        callback=callback_target, waypoints=_wp_map,
+        threshold=wp_threshold)
     while not rospy.is_shutdown():
         wp_manager.update(robot_current_positions)
         rospy.Rate(frequency).sleep()
@@ -76,7 +79,8 @@ publisher = {}
 rospy.init_node("waypoint_controller", anonymous=True)
 namespace = rospy.get_param('namespace')
 wp_map = rospy.get_param('wp_map')
+wp_threshold = rospy.get_param('wp_threshold')
 number_of_robots = rospy.get_param('number_of_robots')
 setup_waypoint_publisher(publisher, number_of_robots, namespace)
 setup_odometry_subscriber(number_of_robots, namespace)
-update_wps(number_of_robots, namespace, wp_map)
+update_wps(number_of_robots, namespace, wp_map, wp_threshold)
