@@ -64,14 +64,11 @@ def update_wps(_number_of_robots, _namespace, _wp_map, frequency=0.5):
     :param frequency:
     """
     wp_manager = wp.WayPointManager(
-        namespace=_namespace, robot_names=robot_names,
+        namespace=_namespace, number_of_robots=_number_of_robots,
         callback=callback_target, waypoints=_wp_map)
-    # HACK
-    for robot_name in robot_names:
-        wp_manager.next(robot_name)
     while not rospy.is_shutdown():
-        wp_manager.update(robot_current_positions, frequency=0.2)
-        rospy.Rate(0.2).sleep()
+        wp_manager.update(robot_current_positions)
+        rospy.Rate(frequency).sleep()
 
 
 robot_current_positions = {}

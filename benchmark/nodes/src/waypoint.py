@@ -59,54 +59,75 @@ class WayPointManager:
     Therefore, each robot has its very own waypoint node.
     """
 
-    def __init__(self, namespace, robot_names,
+    def __init__(self, namespace, number_of_robots,
                  waypoints=WayPointMap.EMPTY_WORLD,
                  node_update_frequency=DEFAULT_NODE_UPDATE_FREQUENCY,
-                 callback=None):
+                 callback=None, threshold=0.2):
         """ Init. method.
         :param namespace
-        :param robot_names
+        :param threshold:
+        :param number_of_robots
         :param waypoints
         :param node_update_frequency
         :param callback: Use own callback method instead of local publisher.
         """
+        self._threshold = threshold
         self._waypoint_map = get_waypoint_map(waypoints)
         self._namespace = namespace
-        self._robot_names = robot_names
+        self._number_of_robots = number_of_robots
         self._target_point = {}
         self._node_update_frequency = node_update_frequency
         self._publisher = {}
         self._callback = callback
         if self._callback is None:
             self._setup_publisher()
+        self._init_wps()
 
-    def update(self, current_pos, frequency=1):
+    def update(self, current_pos, quiet=False):
         """ Updates waypoints.
         :param current_pos:
-        :param frequency:
+        :param quiet:
         """
-        # @todo add init pos / wp
-        #for robot_name in self._robot_names:
-        #    self.next(robot_name)
-        #while not rospy.is_shutdown():
-        for r, robot_name in enumerate(self._robot_names):
-
-            # @todo add method
-            if self._callback is not None:
-                self._callback(robot_name, self._target_point[robot_name])
-            else:
-                self._publish_target_points(self._target_point[robot_name])
-
-            threshold = 0.2
+        for robot_name in range(self._number_of_robots):
+            self._publish(robot_name)
             if robot_name in current_pos:
-                rospy.loginfo("Robot {0}: Current Pos: {1} Target Pos: {2}".format(
-                    robot_name, [current_pos[robot_name].x, current_pos[robot_name].y],
-                    [self._target_point[robot_name][0], self._target_point[robot_name][1]]))
-                if (current_pos[robot_name].x - threshold) <= self._target_point[robot_name][0] <= (current_pos[robot_name].x + threshold) \
-                        and (current_pos[robot_name].y - threshold) <= self._target_point[robot_name][1] <= (current_pos[robot_name].y + threshold):
+                if not quiet:
+                    rospy.loginfo("Robot {0}: Current Pos: {1} Target Pos: {2}".format(
+                        robot_name,
+                        [round(current_pos[robot_name].x, 3), round(current_pos[robot_name].y, 3)],
+                        [self._target_point[robot_name][0], self._target_point[robot_name][1]]))
+                if self._wp_reached(current_pos[robot_name], self._target_point[robot_name]):
                     self.next(robot_name)
-                    rospy.loginfo("UPDATE for " + robot_name + " to " + str(self._target_point[robot_name]))
-            #rospy.Rate(frequency).sleep()
+                    if not quiet:
+                        rospy.loginfo("UPDATE for {0} to {1}!".format(
+                            robot_name, self._target_point[robot_name]))
+
+    def _wp_reached(self, current_pos, target_point):
+        """ Checks whether the wp is reached within the threshold range or not.
+        :param current_pos:
+        :param target_point:
+        :return True:   reached
+                False:  not reached
+        """
+        if (current_pos.x - self._threshold) <= target_point[0] <= (current_pos.x + self._threshold) \
+                and (current_pos.y - self._threshold) <= target_point[1] <= (current_pos.y + self._threshold):
+            return True
+        return False
+
+    def _init_wps(self):
+        """ Sets the initial start wp for every robot.
+        """
+        for robot_name in range(self._number_of_robots):
+            self.next(robot_name)
+
+    def _publish(self, robot_name):
+        """ Publishes the target point for the robot.
+        :param robot_name:
+        """
+        if self._callback is not None:
+            self._callback(robot_name, self._target_point[robot_name])
+        else:
+            self._publish_target_points(self._target_point[robot_name])
 
     def next(self, robot_name):
         """ Returns the next waypoint for a given robot.
@@ -115,17 +136,14 @@ class WayPointManager:
         """
         self._update_target_points(robot_name)
         next_wp = self._target_point[robot_name]
-        if self._callback is not None:
-            self._callback(robot_name, next_wp)
-        else:
-            self._publish_target_points(next_wp)
+        self._publish(robot_name)
         return next_wp
 
     def _setup_publisher(self):
         """ Setup for the waypoint topics.
         """
-        for robot_name in self._robot_names:
-            topic_name = self._namespace + '_' + robot_name + '/' + TOPIC_NAME
+        for robot_name in range(self._number_of_robots):
+            topic_name = self._namespace + '_' + str(robot_name) + '/' + TOPIC_NAME
             pub = topic_handler.PublishingHandler(topic_name, Point, queue_size=10)
             self._publisher[robot_name] = pub
 
@@ -137,7 +155,7 @@ class WayPointManager:
         if robot_name is not None:
             self._publisher[robot_name].publish(self._target_point[robot_name])
         else:
-            for robot_name in self._robot_names:
+            for robot_name in range(self._number_of_robots):
                 target_point = self._target_point[robot_name]
                 self._publisher[robot_name].publish(target_point)
 
