@@ -46,7 +46,7 @@ tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark spawner.launch use_set
 # waypoints
 NUM=$((++NUM))
 tmux new-window -t $SESSION_NAME -n "waypoints"
-tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark waypoints.launch" C-m
+tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark waypoints.launch use_settings_file:=$USE_SETTINGS_FILE" C-m
 
 # movement
 NUM=$((++NUM))

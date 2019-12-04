@@ -16,9 +16,6 @@ import src.utils.topic_handler as topic_handler
 from geometry_msgs.msg import Point
 
 
-DEFAULT_NAMESPACE = "tb3_"
-
-
 # HACK: add arg to waypoint launch: number of robots
 # and based on this generate the names
 robot_names = ["1", "2", "3", "4"]
@@ -44,7 +41,7 @@ def callback_odometry(data, args):
 
 
 rospy.init_node("waypoint_controller", anonymous=True)
-namespace = rospy.get_param('namespace', DEFAULT_NAMESPACE)
+namespace = rospy.get_param('namespace')
 topic_handler.SubscribingHandler("robot_names", Int16MultiArray, callback_names)
 
 while len(robot_names) == 0:
