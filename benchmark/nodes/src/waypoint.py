@@ -7,17 +7,10 @@
 @todo:
 ------------------------------------------------------------- """
 
-
-import actionlib
 from enum import Enum
 import rospy
-from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
-import tf.transformations as tft
-import random
-import math
-from std_msgs.msg import Float32MultiArray
 from geometry_msgs.msg import Point
-import topic_handler
+import src.utils.topic_handler as topic_handler
 
 
 TOPIC_NAME = "waypoint"

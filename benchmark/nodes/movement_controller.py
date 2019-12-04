@@ -9,12 +9,11 @@
 
 
 import rospy
-import movement
-import topic_handler
+import src.movement as movement
+import src.utils.topic_handler as topic_handler
 from std_msgs.msg import Int16MultiArray
 from geometry_msgs.msg import Point
-from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
-import actionlib
+
 
 robot_names = ['1', '2', '3', '4']
 robot_targets = {}

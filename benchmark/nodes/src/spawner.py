@@ -7,17 +7,12 @@
 @todo:
 ------------------------------------------------------------- """
 
-import sys
 import roslib
-from gazebo_msgs.srv import SpawnModel, DeleteModel, DeleteModelRequest, SpawnModelRequest
+from gazebo_msgs.srv import SpawnModel, DeleteModel, DeleteModelRequest
 import rospy
 import os
-from geometry_msgs.msg import *
-import tf.transformations as tft
 from std_msgs.msg import Empty as EmptyMsg
-from geometry_msgs.msg import Quaternion
-import math
-import ros_utils
+import src.utils.ros_utils as ros_utils
 import rospkg
 import yaml
 

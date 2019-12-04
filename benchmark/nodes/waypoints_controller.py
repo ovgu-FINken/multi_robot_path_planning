@@ -9,10 +9,10 @@
 
 
 import rospy
-import waypoint as wp
+import src.waypoint as wp
 from std_msgs.msg import Int16MultiArray
 from nav_msgs.msg import Odometry
-import topic_handler
+import src.utils.topic_handler as topic_handler
 from geometry_msgs.msg import Point
 
 

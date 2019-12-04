@@ -9,12 +9,9 @@
 
 
 import rospy
-import spawner as sp
-import waypoint as wp
-import formation as form
-from std_msgs.msg import Int16MultiArray, MultiArrayLayout, MultiArrayDimension
-from std_msgs.msg import Empty as EmptyMsg
-import topic_handler
+import src.formation as form
+from std_msgs.msg import Int16MultiArray
+import src.utils.topic_handler as topic_handler
 
 
 DEFAULT_NUMBER_OF_ROBOTS = 3
