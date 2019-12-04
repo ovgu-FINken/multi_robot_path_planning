@@ -33,6 +33,7 @@ def callback_target(data, args):
 
 
 rospy.init_node('movement_controller', anonymous=True)
+namespace = rospy.get_param('namespace')
 topic_handler.SubscribingHandler("robot_names", Int16MultiArray, callback_names)
 move_controller = {}
 
@@ -41,7 +42,7 @@ while len(robot_names) == 0:
     rospy.Rate(1).sleep()
 
 for robot_name in robot_names:
-    topic_name = "tb3_" + robot_name + '/' + "waypoint"
+    topic_name = namespace + robot_name + '/' + "waypoint"
     topic_handler.SubscribingHandler(topic_name, Point, callback_target, robot_name)
     move_controller[robot_name] = movement.MovementController(
         robot_name=robot_name, namespace="robot")
