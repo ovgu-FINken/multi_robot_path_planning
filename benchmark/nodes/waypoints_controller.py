@@ -16,51 +16,68 @@ import src.utils.topic_handler as topic_handler
 from geometry_msgs.msg import Point
 
 
-# HACK: add arg to waypoint launch: number of robots
-# and based on this generate the names
-robot_names = ["1", "2", "3", "4"]
-robot_current_positions = {}
-publisher = {}
-
-
-def callback_names(data, args):
-    rospy.loginfo(rospy.get_caller_id() + "I heard %s", data.data)
-    global robot_names
-    robot_names = [str(name) for name in data.data]
-
-
 def callback_target(name, point):
+    """ This callback method will publish the new target points.
+    :param name:
+    :param point:
+    """
     global publisher
     publisher[name].publish(point, quiet=True)
 
 
 def callback_odometry(data, args):
-    #rospy.loginfo("Odometry: {0} and {1}".format(data.pose.pose.position, args))
+    """ This callback method will save the current position of the robots.
+    :param data:
+    :param args:
+    """
     global robot_current_positions
     robot_current_positions[args[0]] = data.pose.pose.position
 
 
+def setup_waypoint_publisher(_publisher, _number_of_robots, _namespace):
+    """ Init for the waypoint publisher.
+    :param _publisher:
+    :param _number_of_robots:
+    :param _namespace:
+    """
+    for robot_id in range(_number_of_robots):
+        _topic_name = _namespace + str(robot_id) + "/waypoint"
+        _pub = topic_handler.PublishingHandler(_topic_name, Point, queue_size=10)
+        _publisher[robot_id] = _pub
+
+
+def setup_odometry_subscriber(_number_of_robots, _namespace):
+    """ Init for the waypoint publisher.
+    :param _number_of_robots:
+    :param _namespace:
+    """
+    for robot_id in range(_number_of_robots):
+        odom_name = _namespace + str(robot_id) + "/odom"
+        topic_handler.SubscribingHandler(odom_name, Odometry, callback_odometry, robot_id)
+
+
+def update_wps(_number_of_robots, _namespace, frequency=0.5):
+    """ Updates the waypoints for the robots.
+    :param _number_of_robots:
+    :param _namespace:
+    :param frequency:
+    """
+    wp_manager = wp.WayPointManager(
+        namespace=_namespace, robot_names=robot_names,
+        callback=callback_target, waypoints=wp.WayPointMap.EDGE_TB3_WORLD)
+    # HACK
+    for robot_name in robot_names:
+        wp_manager.next(robot_name)
+    while not rospy.is_shutdown():
+        wp_manager.update(robot_current_positions, frequency=0.2)
+        rospy.Rate(0.2).sleep()
+
+
+robot_current_positions = {}
+publisher = {}
 rospy.init_node("waypoint_controller", anonymous=True)
 namespace = rospy.get_param('namespace')
-topic_handler.SubscribingHandler("robot_names", Int16MultiArray, callback_names)
-
-while len(robot_names) == 0:
-    rospy.loginfo("waiting")
-    rospy.Rate(1).sleep()
-
-for robot_name in robot_names:
-    topic_name = namespace + robot_name + '/' + "waypoint"
-    pub = topic_handler.PublishingHandler(topic_name, Point, queue_size=10)
-    publisher[robot_name] = pub
-
-    odom_name = "robot" + robot_name + "/odom"
-    topic_handler.SubscribingHandler(odom_name, Odometry, callback_odometry, robot_name)
-
-wp_manager = wp.WayPointManager(namespace=namespace, robot_names=robot_names,
-                                callback=callback_target, waypoints=wp.WayPointMap.EDGE_TB3_WORLD)
-# HACK
-for robot_name in robot_names:
-    wp_manager.next(robot_name)
-while not rospy.is_shutdown():
-    wp_manager.update(robot_current_positions, frequency=0.2)
-    rospy.Rate(0.2).sleep()
+number_of_robots = rospy.get_param('number_of_robots')
+setup_waypoint_publisher(publisher, number_of_robots, namespace)
+setup_odometry_subscriber(number_of_robots, namespace)
+update_wps(number_of_robots, namespace)
