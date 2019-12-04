@@ -20,7 +20,8 @@ class Timer:
         :param number_of_robots:
         """
         self._number_of_robots = number_of_robots
-        self._timer = self._init_timer()
+        self._timer = {}
+        self._init_timer()
 
     def _init_timer(self):
         """ Init. timers.
