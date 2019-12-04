@@ -1,0 +1,8 @@
+{
+  "rviz": false,
+  "rqt": false,
+  "model_name": "turtlebot",
+  "model_type": "burger",
+  "namespace": "tb3_",
+  "number_of_robots": 4
+}
