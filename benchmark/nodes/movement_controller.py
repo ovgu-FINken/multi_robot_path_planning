@@ -11,50 +11,63 @@
 import rospy
 import src.movement as movement
 import src.utils.topic_handler as topic_handler
-from std_msgs.msg import Int16MultiArray
 from geometry_msgs.msg import Point
 
 
-robot_names = ['1', '2', '3', '4']
-robot_targets = {}
-
-
-def callback_names(data, args):
-    global robot_names
-    robot_names = [str(name) for name in data.data]
-    rospy.loginfo("Names: {}".format(robot_names))
-
-
 def callback_target(data, args):
-    global robot_names
-    #rospy.loginfo("Data: {}".format(data))
-    #rospy.loginfo("Args: {}".format(args))
+    """ Callback for robot target points to move to.
+    :param data:
+    :param args:
+    """
+    global robot_targets
     robot_targets[args[0]] = [data.x, data.y, data.z]
 
 
+def setup_move_controller(_namespace, _number_of_robots):
+    """ Init. all required movement controller.
+    :param _namespace:
+    :param _number_of_robots:
+    """
+    for robot_id in range(_number_of_robots):
+        topic_name = _namespace + str(robot_id) + "/waypoint"
+        topic_handler.SubscribingHandler(topic_name, Point, callback_target, robot_id)
+        move_controller[robot_id] = movement.MovementController(
+            robot_name=str(robot_id), namespace=_namespace)
+
+
+def wait_for_targets(quiet=False, frequency=1):
+    """ Waits until target points have been received.
+    :param quiet:
+    :param frequency:
+    :return True:   received
+            False:  waiting
+    """
+    while len(robot_targets) == 0:
+        if not quiet:
+            rospy.loginfo("Waiting for target points ...")
+        rospy.Rate(frequency).sleep()
+
+
+def update_movement(_number_of_robots, frequency=0.5):
+    """ Updates the movement to the target points.
+    :param _number_of_robots:
+    :param frequency:
+    """
+    while not rospy.is_shutdown():
+        for robot_id in range(_number_of_robots):
+            try:
+                move_controller[robot_id].linear_move_to(
+                    robot_targets[robot_id], quiet=False)
+            except KeyError:
+                pass
+        rospy.Rate(frequency).sleep()
+
+
+move_controller = {}
+robot_targets = {}
 rospy.init_node('movement_controller', anonymous=True)
 namespace = rospy.get_param('namespace')
-topic_handler.SubscribingHandler("robot_names", Int16MultiArray, callback_names)
-move_controller = {}
-
-while len(robot_names) == 0:
-    rospy.loginfo("waiting for robot names ...")
-    rospy.Rate(1).sleep()
-
-for robot_name in robot_names:
-    topic_name = namespace + robot_name + '/' + "waypoint"
-    topic_handler.SubscribingHandler(topic_name, Point, callback_target, robot_name)
-    move_controller[robot_name] = movement.MovementController(
-        robot_name=robot_name, namespace="robot")
-
-while len(robot_targets) == 0:
-    rospy.loginfo("waiting for targets ...")
-    rospy.Rate(1).sleep()
-
-while not rospy.is_shutdown():
-    for robot_name in robot_names:
-        try:
-            move_controller[robot_name].linear_move_to(robot_targets[robot_name], quiet=False)
-        except KeyError:
-            pass
-    rospy.Rate(0.2).sleep()
+number_of_robots = rospy.get_param('number_of_robots')
+setup_move_controller(namespace, number_of_robots)
+wait_for_targets()
+update_movement(number_of_robots)
