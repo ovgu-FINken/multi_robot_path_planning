@@ -6,9 +6,13 @@
 -->
 
 <launch>
+    <arg name="model_type" default="burger"/>
+    <arg name="number_of_robots" default="4"/>
+    <arg name="namespace" default="tb3_"/>
+
     <node pkg="benchmark" type="spawning_controller.py" name="spawning_controller" output="screen" clear_params="true">
-        <param name="model_type" type="str" value="burger" />
-        <param name="number_of_robots" type="int" value="4" />
-        <param name="namespace" type="str" value="tb3_" />
+        <param name="model_type" type="str" value="$(arg model_type)" />
+        <param name="number_of_robots" type="int" value="$(arg number_of_robots)" />
+        <param name="namespace" type="str" value="$(arg namespace)" />
     </node>
 </launch>

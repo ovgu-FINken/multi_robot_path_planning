@@ -8,11 +8,22 @@
 #################################################
 
 
+# user parameters
 ENABLE_RVIZ=False
 ENABLE_RQT=False
+NUMBER_OF_ROBOTS=4
+NAMESPACE="tb3_"
+MODEL="turtlebot"
+MODEL_TYPE="burger"
 
+# script parameters
 SESSION_NAME="benchmark"
 NUM=0
+
+# launch file parameters
+PARAM_NUMBER_OF_ROBOTS="number_of_robots:=$NUMBER_OF_ROBOTS"
+PARAM_NAMESPACE="namespace:=$NAMESPACE"
+PARAM_MODEL_TYPE="model_type:=$MODEL_TYPE"
 
 # source
 source ~/.bashrc
@@ -23,13 +34,12 @@ tmux new-session -s $SESSION_NAME -d
 # open world
 tmux rename-window -t $SESSION_NAME "world"
 tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark world.launch world:=turtlebot3_world.world" C-m
-read -t 3
 
-# spawner setup
+# spawner
 NUM=$((++NUM))
-tmux new-window -t $SESSION_NAME -n "spawner_setup"
-tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark spawner.launch" C-m
-read -t 12
+PARAMS="$PARAM_NUMBER_OF_ROBOTS $PARAM_NAMESPACE $PARAM_MODEL_TYPE"
+tmux new-window -t $SESSION_NAME -n "spawner"
+tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark spawner.launch $PARAMS" C-m
 
 # waypoints
 NUM=$((++NUM))
