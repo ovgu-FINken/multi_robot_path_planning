@@ -46,6 +46,11 @@ Furthermore, RQT and RVIZ can be started by enabling
 the `ÈNABLE_RQT` and `ENABLE_RVIZ` flags, respectively.
 These flags can be found in the `scripts/benchmark.sh` file.
 
+## Waypoint Maps
+
+The `edge_tb3_world` contains four waypoints located at the edges of the map:
+![alt text](res/imgs/wp_maps/edge_tb3_world.png "edge_tb3_world")
+
 ## Execution
 
 First, make sure you are in the benchmark package.
