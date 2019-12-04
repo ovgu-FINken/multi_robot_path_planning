@@ -32,7 +32,7 @@ def setup_move_controller(_namespace, _number_of_robots):
         topic_name = _namespace + str(robot_id) + "/waypoint"
         topic_handler.SubscribingHandler(topic_name, Point, callback_target, robot_id)
         move_controller[robot_id] = movement.MovementController(
-            robot_name=str(robot_id + 1), namespace=_namespace)
+            robot_name=str(robot_id), namespace=_namespace)
 
 
 def wait_for_targets(quiet=False, frequency=1):

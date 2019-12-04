@@ -78,7 +78,7 @@
 
     <!-- Recursively include this launch file until nr=1 -->
 	<include file="$(find benchmark)/launch/spawn.launch"
-		if="$(eval arg('nr') > 1 and arg('recurse'))">
+		if="$(eval arg('nr') > 0 and arg('recurse'))">
 		<arg name="nr" value="$(eval arg('nr') - 1)"/>
 		<arg name="pose_x" value="$(arg pose_x)"/>
 		<arg name="pose_y" value="$(arg pose_y)"/>

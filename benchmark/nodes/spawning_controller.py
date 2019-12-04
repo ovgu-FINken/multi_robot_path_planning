@@ -47,7 +47,7 @@ def spawn_robots(_positions, _orientations, _number_of_robots,
             model_name=_model_name,
             model_type=_model_type, namespace=_namespace,
             position=_position, orientation=_orientation,
-            name=str(i + 1), update_if_exist=False,
+            name=str(i), update_if_exist=False,
             use_launch_file=True)
     spawner.spawn_via_launch(_number_of_robots, _positions)
 
