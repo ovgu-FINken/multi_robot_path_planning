@@ -11,13 +11,48 @@
 import rospy
 import src.spawner as sp
 import src.formation as form
-from std_msgs.msg import Int16MultiArray
-import src.utils.topic_handler as topic_handler
 
 
-publ = topic_handler.PublishingHandler('robot_names', Int16MultiArray, queue_size=10)
+def run_formation(_number_of_robots, _position,
+                  _orientation, _formation, distance=0.2):
+    """ Starts the formation handler.
+    :param _number_of_robots:
+    :param _position:
+    :param _orientation:
+    :param distance:
+    :param _formation:
+    :return positions, orientations
+    """
+    handler = form.FormationHandler(
+        number_of_robots=_number_of_robots, center_point=_position,
+        formation=_formation, distance=distance)
+    _positions, _orientations = handler.run()
+    return _positions, _orientations
+
+
+def spawn_robots(_positions, _orientations, _number_of_robots,
+                 _model_name, _model_type, _namespace):
+    """ Spawns the robots via the spawning controller.
+    :param _number_of_robots:
+    :param _positions:
+    :param _orientations:
+    :param _model_name:
+    :param _model_type:
+    :param _namespace:
+    """
+    for i in range(_number_of_robots):
+        _position = _positions[i]
+        _orientation = _orientations[i]
+        spawner.spawn(
+            model_name=_model_name,
+            model_type=_model_type, namespace=_namespace,
+            position=_position, orientation=_orientation,
+            name=str(i + 1), update_if_exist=False,
+            use_launch_file=True)
+    spawner.spawn_via_launch(_number_of_robots, _positions)
+
+
 spawner = sp.RobotSpawner(world="world")
-
 model_name = rospy.get_param('model_name')
 model_type = rospy.get_param('model_type')
 number_of_robots = rospy.get_param('number_of_robots')
@@ -25,20 +60,9 @@ namespace = rospy.get_param('namespace')
 position = rospy.get_param('position')
 orientation = rospy.get_param('orientation')
 formation = rospy.get_param('formation')
-
-formationHandler = form.FormationHandler(
-    number_of_robots=number_of_robots, center_point=position,
-    formation=formation, distance=0.2)
-positions, orientations = formationHandler.run()
-for i in range(number_of_robots):
-    position = positions[i]
-    orientation = orientations[i]
-    spawner.spawn(
-        model_name=model_name,
-        model_type=model_type, namespace=namespace,
-        position=position, orientation=orientation,
-        name=str(i + 1), update_if_exist=False,
-        use_launch_file=True)
-spawner.spawn_via_launch(number_of_robots, positions)
-publ.publish([j for j in range(number_of_robots)], quiet=False)
+positions, orientations = run_formation(
+    number_of_robots, position, orientation, formation)
+spawn_robots(
+    positions, orientations, number_of_robots,
+    model_name, model_type, namespace)
 rospy.spin()

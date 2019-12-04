@@ -14,8 +14,6 @@ import rospy
 
 
 rospy.init_node("settings", anonymous=True)
-
-
 manager = settings.SettingsManager()
 manager.upload()
 rospy.loginfo("Settings uploaded to parameter server!")
