@@ -12,6 +12,7 @@
 import rospy
 import src.utils.topic_handler as topic_handler
 from geometry_msgs.msg import Point
+import src.timer as time
 
 
 def callback_target(data, args):
@@ -19,8 +20,8 @@ def callback_target(data, args):
     :param data:
     :param args:
     """
-    global wp_reached
-    wp_reached[args[0]] = True
+    global timer
+    timer.start_timer(args[0])
 
 
 def setup_subscriber(_number_of_robots, _namespace):
@@ -33,8 +34,8 @@ def setup_subscriber(_number_of_robots, _namespace):
         topic_handler.SubscribingHandler(topic_name, Point, callback_target, robot_id)
 
 
-wp_reached = {}
 rospy.init_node('evaluation_controller', anonymous=True)
 namespace = rospy.get_param('namespace')
 number_of_robots = rospy.get_param('number_of_robots')
+timer = time.Timer(number_of_robots)
 setup_subscriber(number_of_robots, namespace)

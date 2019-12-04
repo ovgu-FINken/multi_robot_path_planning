@@ -15,13 +15,11 @@ class Timer:
     """ Timer.
     """
 
-    def __init__(self, number_of_robots, namspace):
+    def __init__(self, number_of_robots):
         """ Init. method.
         :param number_of_robots:
-        :param namspace
         """
         self._number_of_robots = number_of_robots
-        self._namespace = namspace
         self._timer = self._init_timer()
 
     def _init_timer(self):
