@@ -23,13 +23,20 @@ USE_SETTINGS_FILE=True
 tmux new-session -s $SESSION_NAME -d
 
 # settings
-tmux rename-window -t $SESSION_NAME "settings"
-tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark settings.launch" C-m
+if [ $USE_SETTINGS_FILE == True ] ; then
+  tmux rename-window -t $SESSION_NAME "settings"
+  tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark settings.launch" C-m
+fi
 
 # world
-NUM=$((++NUM))
-tmux new-window -t $SESSION_NAME -n "world"
-tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark world.launch world:=turtlebot3_world.world" C-m
+if [ $USE_SETTINGS_FILE == True ] ; then
+  NUM=$((++NUM))
+  tmux new-window -t $SESSION_NAME -n "world"
+  tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark world.launch world:=turtlebot3_world.world" C-m
+else
+  tmux rename-window -t $SESSION_NAME "world"
+  tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark world.launch world:=turtlebot3_world.world" C-m
+fi
 
 # spawner
 NUM=$((++NUM))
