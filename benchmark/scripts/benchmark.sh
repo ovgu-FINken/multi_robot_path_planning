@@ -6,14 +6,6 @@
 # @brief:
 # @todo:
 #################################################
-#
-# USAGE RECOMMENDATION
-#
-# -> Create shortcuts like:
-# -> gnome-terminal -- bash <FULL_PATH>/benchmark.sh
-# -> gnome-terminal -- bash <FULL_PATH>/kill.sh
-#
-#################################################
 
 
 ENABLE_RVIZ=False
