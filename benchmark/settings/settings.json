@@ -8,5 +8,5 @@
   "orientation": [0.0, 0.0, 0.0],
   "wp_map": "edge_tb3_world",
   "wp_threshold": 0.2,
-  "world": "turtlebot3_world.world"
+  "world": "test.world"
 }
