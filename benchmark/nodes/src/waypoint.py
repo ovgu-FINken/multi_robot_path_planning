@@ -11,6 +11,8 @@ from enum import Enum
 import rospy
 from geometry_msgs.msg import Point
 import src.utils.topic_handler as topic_handler
+import json
+import os
 
 
 TOPIC_NAME = "waypoint"
@@ -21,8 +23,8 @@ DEFAULT_NODE_UPDATE_FREQUENCY = 3
 class WayPointMap(Enum):
     """ Enum of supported way point maps.
     """
-    EMPTY_WORLD = "empty_world"
-    EDGE_TB3_WORLD = "edge_tb3_world"
+    TB3_EDGE = "tb3_edge"
+    MAZE = "maze"
 
 
 def get_waypoint_map(waypoint_map_name):
@@ -30,18 +32,17 @@ def get_waypoint_map(waypoint_map_name):
     :param waypoint_map_name:
     :return: array
     """
-    if waypoint_map_name == WayPointMap.EMPTY_WORLD \
-            or waypoint_map_name == WayPointMap.EMPTY_WORLD.value:
-        return [[0.0, 0.0, 0.0]]
-    elif waypoint_map_name == WayPointMap.EDGE_TB3_WORLD \
-            or waypoint_map_name == WayPointMap.EDGE_TB3_WORLD.value:
-        return [[1.8, 0.0, 0.0],
-                [-1.8, 0.0, 0.0],
-                [0.0, 1.8, 0.0],
-                [0.0, -1.8, 0.0]]
-    else:
-        rospy.logerr("Unknown waypoint map name {}".format(waypoint_map_name))
-        return None
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    file_path = os.path.join(dir_path, '..', '..', 'config', 'waypoints.json')
+    file = open(file_path)
+    content = json.load(file)
+    if type(waypoint_map_name) is not str:
+        waypoint_map_name = waypoint_map_name.value
+    try:
+        wps = content.get(waypoint_map_name)
+    except KeyError:
+        wps = None
+    return wps
 
 
 def setup_node():
@@ -60,7 +61,7 @@ class WayPointManager:
     """
 
     def __init__(self, namespace, number_of_robots,
-                 waypoints=WayPointMap.EMPTY_WORLD,
+                 waypoints=WayPointMap.TB3_EDGE,
                  node_update_frequency=DEFAULT_NODE_UPDATE_FREQUENCY,
                  callback=None, threshold=0.2):
         """ Init. method.
