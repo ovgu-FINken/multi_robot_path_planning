@@ -25,11 +25,11 @@ def callback_target(data, args):
         previous_wps[args[0]] = data
         timer.start_timer(args[0])
     elif previous_wps[args[0]] != data:
-        print("changed")
         if timer.is_running(args[0]):
             duration = timer.get_time(args[0])
             print("Robot {0} reached WP ({1}) after {2}s".format(
                 args[0], [data.x, data.y, data.z], duration))
+        previous_wps[args[0]] = data
         timer.start_timer(args[0])
 
 
