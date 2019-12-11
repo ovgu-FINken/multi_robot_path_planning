@@ -23,12 +23,14 @@ def callback_target(data, args):
     global timer, previous_wps
     if args[0] not in previous_wps:
         previous_wps[args[0]] = data
+        timer.start_timer(args[0])
     elif previous_wps[args[0]] != data:
+        print("changed")
         if timer.is_running(args[0]):
             duration = timer.get_time(args[0])
-            print("Robot {0} reached WP ({1}) after {2}".format(
+            print("Robot {0} reached WP ({1}) after {2}s".format(
                 args[0], [data.x, data.y, data.z], duration))
-    timer.start_timer(args[0])
+        timer.start_timer(args[0])
 
 
 def setup_subscriber(_number_of_robots, _namespace):
