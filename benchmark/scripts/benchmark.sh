@@ -32,10 +32,10 @@ fi
 if [ $USE_SETTINGS_FILE == True ] ; then
   NUM=$((++NUM))
   tmux new-window -t $SESSION_NAME -n "world"
-  tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark world.launch world:=turtlebot3_world.world" C-m
+  tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark world.launch use_settings_file:=$USE_SETTINGS_FILE" C-m
 else
   tmux rename-window -t $SESSION_NAME "world"
-  tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark world.launch world:=turtlebot3_world.world" C-m
+  tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark world.launch use_settings_file:=$USE_SETTINGS_FILE" C-m
 fi
 
 # spawner
