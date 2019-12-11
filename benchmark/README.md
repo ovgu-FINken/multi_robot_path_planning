@@ -1,4 +1,8 @@
 # Path Planning Benchmark
+Welcome to the Path Planning Benchmark!
+1. [Settings](#settings)
+2. [Worlds](#worlds)
+3. [Execution](#execution)
 
 ## Settings
 
@@ -14,6 +18,7 @@ All adjustable parameter can be found in the settings file: `settings/settings.j
   "orientation": [0.0, 0.0, 0.0]
   "wp_map": "edge_tb3_world",
   "wp_threshold": 0.2
+  "world": "maze.world"
 }
 ```
 - The **Model Name** defines the robot model to be used.
@@ -37,19 +42,27 @@ This can be set to any valid position vector `[x, y, z]` in the map.
 similar to the position parameter and will only be used in the `dense_block`
 formation. This can be set to any valid orientation euler vector.
 - The **Waypoint Map** defines the set of waypoints to be used.
-This can be set to `empty_world` or `edge_tb3_world`.
+This can be set to `maze` or `tb3_edge`. CAUTION: These waypoint maps are 
+tailored to specific world files. Please, read the [world docs](doc).
 - The **Waypoint Threshold** defines the size of the waypoint.
 More specifically, it defines the radius of the waypoint.
 This can be set to any Float.
+- The **World** defines the gazebo world file, which will be loaded by 
+gazebo after the execution of the benchmark.
+This can be set to `maze.world`, `square.world`, `turtlebot3.world`, or
+`tworooms.world` (All world files are located in the [world folder](worlds).).
 
 Furthermore, RQT and RVIZ can be started by enabling
 the `ÈNABLE_RQT` and `ENABLE_RVIZ` flags, respectively.
 These flags can be found in the `scripts/benchmark.sh` file.
 
-## Waypoint Maps
+## Worlds
+The following world files are supported:
+* [TB3 World](doc/TB3_WORLD.md)
+* [Maze World](doc/MAZE_WORLD.md)
 
-The `edge_tb3_world` contains four waypoints located at the edges of the map:
-![alt text](res/imgs/wp_maps/edge_tb3_world.png "edge_tb3_world")
+Please, refer to these document files for more information, like how to 
+use these world maps and the corresponding waypoint maps.
 
 ## Execution
 
