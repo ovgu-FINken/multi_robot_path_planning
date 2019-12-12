@@ -13,6 +13,7 @@ import rospy
 import src.utils.topic_handler as topic_handler
 from geometry_msgs.msg import Point
 import src.timer as time
+import src.utils.log as log
 
 
 def callback_target(data, args):
@@ -20,13 +21,14 @@ def callback_target(data, args):
     :param data:
     :param args:
     """
-    global timer, previous_wps
+    global timer, previous_wps, logger
     if args[0] not in previous_wps:
         previous_wps[args[0]] = data
         timer.start_timer(args[0])
     elif previous_wps[args[0]] != data:
         if timer.is_running(args[0]):
             duration = timer.get_time(args[0])
+            logger.time(namespace + str(args[0]), previous_wps[args[0]], data, duration)
             print("Robot {0} reached WP ({1}) after {2}s".format(
                 args[0], [data.x, data.y, data.z], duration))
         previous_wps[args[0]] = data
@@ -43,6 +45,7 @@ def setup_subscriber(_number_of_robots, _namespace):
         topic_handler.SubscribingHandler(topic_name, Point, callback_target, robot_id)
 
 
+logger = log.Logger()
 previous_wps = {}
 rospy.init_node('evaluation_controller', anonymous=True)
 namespace = rospy.get_param('namespace')

@@ -49,7 +49,7 @@ class Logger:
         """
         if type(text) is not str:
             return
-        if not self._is_opened():
+        if self._log_file is None or not self._is_opened():
             self._open()
         if timestamp:
             text = "[" + str(datetime.datetime.now()) + "] " + text
