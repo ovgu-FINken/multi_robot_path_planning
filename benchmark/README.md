@@ -21,39 +21,60 @@ All adjustable parameter can be found in the settings file: `settings/settings.j
   "world": "maze.world"
 }
 ```
-- The **Model Name** defines the robot model to be used.
+
+#### World Name
+The **Model Name** defines the robot model to be used.
 This can be set to: `turltebot3`.
-- The **Model Type** defines the type of the robot model.
+
+#### Model Type
+The **Model Type** defines the type of the robot model.
 This can be set to: `burger`, `waffle`, or `waffle_pi`
 for the `turtlebot3` model.
-- The **Namespace** defines the String, which will be put in front
+
+#### Namespace
+The **Namespace** defines the String, which will be put in front
 of the robot name for all topics and so on.
 This can be set to every arbitrary String.
-- The **Number of Robots** defines the number of robots, which should
+
+#### Number of Robots
+The **Number of Robots** defines the number of robots, which should
 be spawned and used in the benchmark.
 This can be set to every Integer.
-- The **Formation** defines where the robots should be spawned.
+
+#### Formation
+The **Formation** defines where the robots should be spawned.
 This can be set to `dense_block` or `at_way_point`.
-- The **Position** defines the position in the map for the spawning.
+
+#### Position
+The **Position** defines the position in the map for the spawning.
 This is only be used, when the formation is set to `dense_block`, since
 for other formations the positions are automatically computed.
 This can be set to any valid position vector `[x, y, z]` in the map.
-- The **Orientation** defines the orientation of the formation. This is 
+
+#### Orientation
+The **Orientation** defines the orientation of the formation. This is 
 similar to the position parameter and will only be used in the `dense_block`
 formation. This can be set to any valid orientation euler vector.
-- The **Waypoint Map** defines the set of waypoints to be used.
+
+#### Waypoint Map
+The **Waypoint Map** defines the set of waypoints to be used.
 This can be set to `maze` or `tb3_edge`. CAUTION: These waypoint maps are 
 tailored to specific world files. Please, read the [world docs](doc).
-- The **Waypoint Threshold** defines the size of the waypoint.
+
+#### Waypoint Threshold
+The **Waypoint Threshold** defines the size of the waypoint.
 More specifically, it defines the radius of the waypoint.
 This can be set to any Float.
-- The **World** defines the gazebo world file, which will be loaded by 
+
+#### World Map
+The **World** defines the gazebo world file, which will be loaded by 
 gazebo after the execution of the benchmark.
 This can be set to `maze.world`, `square.world`, `turtlebot3.world`, or
 `tworooms.world` (All world files are located in the [world folder](worlds).).
 
+#### RQT & RVIZ
 Furthermore, RQT and RVIZ can be started by enabling
-the `ÈNABLE_RQT` and `ENABLE_RVIZ` flags, respectively.
+the `ENABLE_RQT` and `ENABLE_RVIZ` flags, respectively.
 These flags can be found in the `scripts/benchmark.sh` file.
 
 ## Worlds
