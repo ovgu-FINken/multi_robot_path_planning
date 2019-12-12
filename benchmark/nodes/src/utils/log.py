@@ -53,7 +53,7 @@ class Logger:
             self._open()
         if timestamp:
             text = "[" + str(datetime.datetime.now()) + "] " + text
-        self._log_file.write(text)
+        self._log_file.write(text + "\n")
         self._close()
 
     def info(self, text):
