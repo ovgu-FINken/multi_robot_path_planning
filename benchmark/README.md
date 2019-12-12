@@ -3,6 +3,7 @@ Welcome to the Path Planning Benchmark!
 1. [Settings](#settings)
 2. [Worlds](#worlds)
 3. [Execution](#execution)
+4. [Evaluation](#evaluation)
 
 ## Settings
 
@@ -101,3 +102,8 @@ This process can be highly accelerated by creating system keyboard shortcuts lik
 gnome-terminal -- bash <FULL_PATH>/benchmark.sh
 gnome-terminal -- bash <FULL_PATH>/kill.sh
 ```
+
+## Evaluation
+
+Whenever a robot is reaching a new waypoint the duration to reach this goal
+is tracked and printed into the console, as well as stored in an [eval log](log/eval_log.txt).
