@@ -46,6 +46,8 @@ def callback_rounds(data, args):
     """
     global logger, makespan
     if data:
+        print("Robot {0} finished in makespan of {1}s".format(
+            args[0], makespan[args[0]]))
         logger.makespan(args[0], makespan[args[0]])
 
 
