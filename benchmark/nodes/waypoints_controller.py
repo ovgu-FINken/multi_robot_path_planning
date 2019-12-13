@@ -25,13 +25,13 @@ def callback_target(name, point):
     target_publisher[name].publish(point, quiet=True)
 
 
-def callback_rounds(name, point):
+def callback_rounds(name, finished):
     """ This callback method will publish the new round status.
     :param name:
-    :param point:
+    :param finished:
     """
     global rounds_publisher
-    rounds_publisher[name].publish(point, quiet=True)
+    rounds_publisher[name].publish(finished, quiet=True)
 
 
 def callback_odometry(data, args):
@@ -63,7 +63,7 @@ def setup_rounds_publisher(_publisher, _number_of_robots, _namespace):
     """
     for robot_id in range(_number_of_robots):
         _topic_name = _namespace + str(robot_id) + "/rounds"
-        _pub = topic_handler.PublishingHandler(_topic_name, Point, queue_size=10)
+        _pub = topic_handler.PublishingHandler(_topic_name, bool, queue_size=10)
         _publisher[robot_id] = _pub
 
 

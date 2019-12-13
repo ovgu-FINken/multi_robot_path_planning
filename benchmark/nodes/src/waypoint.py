@@ -193,7 +193,7 @@ class WayPointManager:
             self._publisher[ROUNDS_TOPIC_NAME] = {}
             for robot_name in range(self._number_of_robots):
                 topic_name = self._namespace + '_' + str(robot_name) + '/' + ROUNDS_TOPIC_NAME
-                pub = topic_handler.PublishingHandler(topic_name, Point, queue_size=10)
+                pub = topic_handler.PublishingHandler(topic_name, bool, queue_size=10)
                 self._publisher[WP_TOPIC_NAME][robot_name] = pub
 
     def _publish_target_points(self, robot_name=None):
