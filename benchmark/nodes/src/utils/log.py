@@ -10,6 +10,7 @@
 
 import rospkg
 import datetime
+import src.settings as settings
 
 
 DEFAULT_LOG_DIRECTORY = rospkg.RosPack().get_path('benchmark') + "/log/eval_log.txt"
@@ -71,3 +72,21 @@ class Logger:
         """
         text = "[WP TIME] " + str(robot) + " from " + str(wp_1) + " to " + str(wp_2) + " in " + str(time)
         self._write(text)
+
+    def setup(self):
+        """ This will read the settings file and print
+        all necessary information into the log file.
+        """
+        sm = settings.SettingsManager()
+        text = "\n---##--- BENCHMARK ---##---\n" \
+               + "==> model_name: " + str(sm.read("model_name")) + "\n" \
+               + "==> model_type: " + str(sm.read("model_type")) + "\n" \
+               + "==> namespace: " + str(sm.read("namespace")) + "\n" \
+               + "==> number_of_robots: " + str(sm.read("number_of_robots")) + "\n" \
+               + "==> formation: " + str(sm.read("formation")) + "\n" \
+               + "==> position: " + str(sm.read("position")) + "\n" \
+               + "==> orientation: " + str(sm.read("orientation")) + "\n" \
+               + "==> wp_map: " + str(sm.read("wp_map")) + "\n" \
+               + "==> wp_threshold: " + str(sm.read("wp_threshold")) + "\n" \
+               + "==> world: " + str(sm.read("world"))
+        self._write(text, timestamp=False)
