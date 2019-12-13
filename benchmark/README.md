@@ -82,6 +82,7 @@ These flags can be found in the `scripts/benchmark.sh` file.
 The following world files are supported:
 * [TB3 World](doc/TB3_WORLD.md)
 * [Maze World](doc/MAZE_WORLD.md)
+* [Warehouse World](doc/WAREHOUSE_WORLD.md)
 
 Please, refer to these document files for more information, like how to 
 use these world maps and the corresponding waypoint maps.
