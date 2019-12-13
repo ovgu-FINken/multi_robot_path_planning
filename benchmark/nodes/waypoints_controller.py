@@ -21,8 +21,17 @@ def callback_target(name, point):
     :param name:
     :param point:
     """
-    global publisher
-    publisher[name].publish(point, quiet=True)
+    global target_publisher
+    target_publisher[name].publish(point, quiet=True)
+
+
+def callback_rounds(name, point):
+    """ This callback method will publish the new round status.
+    :param name:
+    :param point:
+    """
+    global rounds_publisher
+    rounds_publisher[name].publish(point, quiet=True)
 
 
 def callback_odometry(data, args):
@@ -42,6 +51,18 @@ def setup_waypoint_publisher(_publisher, _number_of_robots, _namespace):
     """
     for robot_id in range(_number_of_robots):
         _topic_name = _namespace + str(robot_id) + "/waypoint"
+        _pub = topic_handler.PublishingHandler(_topic_name, Point, queue_size=10)
+        _publisher[robot_id] = _pub
+
+
+def setup_rounds_publisher(_publisher, _number_of_robots, _namespace):
+    """ Init for the rounds publisher.
+    :param _publisher:
+    :param _number_of_robots:
+    :param _namespace:
+    """
+    for robot_id in range(_number_of_robots):
+        _topic_name = _namespace + str(robot_id) + "/rounds"
         _pub = topic_handler.PublishingHandler(_topic_name, Point, queue_size=10)
         _publisher[robot_id] = _pub
 
@@ -75,12 +96,14 @@ def update_wps(_number_of_robots, _namespace,
 
 
 robot_current_positions = {}
-publisher = {}
+target_publisher = {}
+rounds_publisher = {}
 rospy.init_node("waypoint_controller", anonymous=True)
 namespace = rospy.get_param('namespace')
 wp_map = rospy.get_param('wp_map')
 wp_threshold = rospy.get_param('wp_threshold')
 number_of_robots = rospy.get_param('number_of_robots')
-setup_waypoint_publisher(publisher, number_of_robots, namespace)
+setup_waypoint_publisher(target_publisher, number_of_robots, namespace)
+setup_rounds_publisher(rounds_publisher, number_of_robots, namespace)
 setup_odometry_subscriber(number_of_robots, namespace)
 update_wps(number_of_robots, namespace, wp_map, wp_threshold)
