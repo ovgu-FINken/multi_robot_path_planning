@@ -12,6 +12,7 @@ import rospy
 import src.spawner as sp
 import src.formation as form
 import src.utils.topic_handler as topic_handler
+from std_msgs.msg import Bool
 
 
 def callback_rounds(data, args):
@@ -70,7 +71,7 @@ def setup_subscriber(_number_of_robots, _namespace):
     """
     for robot_id in range(number_of_robots):
         topic_name = namespace + str(robot_id) + "/rounds"
-        topic_handler.SubscribingHandler(topic_name, bool, callback_rounds, robot_id)
+        topic_handler.SubscribingHandler(topic_name, Bool, callback_rounds, robot_id)
 
 
 spawner = sp.RobotSpawner(world="world")

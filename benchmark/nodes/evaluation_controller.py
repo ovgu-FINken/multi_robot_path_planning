@@ -12,6 +12,7 @@
 import rospy
 import src.utils.topic_handler as topic_handler
 from geometry_msgs.msg import Point
+from std_msgs.msg import Bool
 import src.timer as time
 import src.utils.log as log
 
@@ -60,7 +61,7 @@ def setup_subscriber(_number_of_robots, _namespace):
         topic_name = namespace + str(robot_id) + "/waypoint"
         topic_handler.SubscribingHandler(topic_name, Point, callback_target, robot_id)
         topic_name = namespace + str(robot_id) + "/rounds"
-        topic_handler.SubscribingHandler(topic_name, bool, callback_rounds, robot_id)
+        topic_handler.SubscribingHandler(topic_name, Bool, callback_rounds, robot_id)
 
 
 logger = log.Logger()

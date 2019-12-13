@@ -14,6 +14,7 @@ from std_msgs.msg import Int16MultiArray
 from nav_msgs.msg import Odometry
 import src.utils.topic_handler as topic_handler
 from geometry_msgs.msg import Point
+from std_msgs.msg import Bool
 
 
 def callback_target(name, point):
@@ -63,7 +64,7 @@ def setup_rounds_publisher(_publisher, _number_of_robots, _namespace):
     """
     for robot_id in range(_number_of_robots):
         _topic_name = _namespace + str(robot_id) + "/rounds"
-        _pub = topic_handler.PublishingHandler(_topic_name, bool, queue_size=10)
+        _pub = topic_handler.PublishingHandler(_topic_name, Bool, queue_size=10)
         _publisher[robot_id] = _pub
 
 

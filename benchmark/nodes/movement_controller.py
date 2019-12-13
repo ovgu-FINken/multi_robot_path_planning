@@ -12,6 +12,7 @@ import rospy
 import src.movement as movement
 import src.utils.topic_handler as topic_handler
 from geometry_msgs.msg import Point
+from std_msgs.msg import Bool
 
 
 def callback_target(data, args):
@@ -54,7 +55,7 @@ def setup_subscribers(_namespace, _number_of_robots):
         topic_name = _namespace + str(robot_id) + "/waypoint"
         topic_handler.SubscribingHandler(topic_name, Point, callback_target, robot_id)
         topic_name = _namespace + str(robot_id) + "/rounds"
-        topic_handler.SubscribingHandler(topic_name, bool, callback_rounds, robot_id)
+        topic_handler.SubscribingHandler(topic_name, Bool, callback_rounds, robot_id)
 
 
 def wait_for_targets(quiet=False, frequency=1):
