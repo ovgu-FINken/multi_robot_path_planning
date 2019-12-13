@@ -16,3 +16,13 @@ The Turtlebot3 worlds:
 This world is equipped with one waypoint map: `tb3_edge`.
 The `tb3_edge` map contains four waypoints located at the edges of the map:
 ![alt text](../res/imgs/wp_maps/tb3_edge.png "tb3_edge")
+
+All Waypoints (WP-IDs) and their corresponding positions
+[x,y,z] in the map are summarized in this table: 
+
+WP-ID | x | y | z
+--- | --- | --- | ---
+1 | 1.8 | 0.0 | 0.0
+2 | -1.8 | 0.0 | 0.0
+3 | 0.0 | 1.8 | 0.0
+4 | 0.0 | -1.8 | 0.0
