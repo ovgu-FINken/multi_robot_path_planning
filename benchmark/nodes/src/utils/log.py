@@ -78,6 +78,14 @@ class Logger:
         text = "[WP TIME] " + str(robot) + " from " + str(wp_1) + " to " + str(wp_2) + " in " + str(time)
         self._write(text)
 
+    def makespan(self, robot, makespan):
+        """ Logs the makespan for a robot.
+        :param robot:
+        :param makespan:
+        """
+        text = "[MAKESPAN] " + str(robot) + " finished with makespan of " + str(makespan) + "s <<< <<< <<<"
+        self._write(text)
+
     def setup(self):
         """ This will read the settings file and print
         all necessary information into the log file.
