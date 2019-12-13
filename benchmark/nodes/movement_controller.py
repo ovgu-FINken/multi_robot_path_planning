@@ -19,8 +19,18 @@ def callback_target(data, args):
     :param data:
     :param args:
     """
-    global robot_targets
-    robot_targets[args[0]] = [data.x, data.y, data.z]
+    global robot_targets, robot_rounds
+    if not robot_rounds[args[0]]:
+        robot_targets[args[0]] = [data.x, data.y, data.z]
+
+
+def callback_rounds(data, args):
+    """ Callback for rounds completed.
+    :param data:
+    :param args:
+    """
+    global robot_rounds
+    robot_rounds[args[0]] = data
 
 
 def setup_move_controller(_namespace, _number_of_robots):
@@ -29,10 +39,22 @@ def setup_move_controller(_namespace, _number_of_robots):
     :param _number_of_robots:
     """
     for robot_id in range(_number_of_robots):
-        topic_name = _namespace + str(robot_id) + "/waypoint"
-        topic_handler.SubscribingHandler(topic_name, Point, callback_target, robot_id)
         move_controller[robot_id] = movement.MovementController(
             robot_name=str(robot_id), namespace=_namespace)
+
+
+def setup_subscribers(_namespace, _number_of_robots):
+    """ Setup all subscribers.
+    :param _namespace:
+    :param _number_of_robots:
+    """
+    global robot_rounds
+    for robot_id in range(_number_of_robots):
+        robot_rounds[robot_id] = False
+        topic_name = _namespace + str(robot_id) + "/waypoint"
+        topic_handler.SubscribingHandler(topic_name, Point, callback_target, robot_id)
+        topic_name = _namespace + str(robot_id) + "/rounds"
+        topic_handler.SubscribingHandler(topic_name, bool, callback_rounds, robot_id)
 
 
 def wait_for_targets(quiet=False, frequency=1):
@@ -65,9 +87,11 @@ def update_movement(_number_of_robots, frequency=0.5):
 
 move_controller = {}
 robot_targets = {}
+robot_rounds = {}
 rospy.init_node('movement_controller', anonymous=True)
 namespace = rospy.get_param('namespace')
 number_of_robots = rospy.get_param('number_of_robots')
+setup_subscribers(namespace, number_of_robots)
 setup_move_controller(namespace, number_of_robots)
 wait_for_targets()
 update_movement(number_of_robots)
