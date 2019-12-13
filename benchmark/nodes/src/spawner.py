@@ -87,7 +87,7 @@ class RobotSpawner:
         return srv_spawn_model, xml_string
 
     @staticmethod
-    def _delete_robot(model_name):
+    def despawn_robot(model_name):
         """ Deletes the robot.
         :param model_name
         :return: request

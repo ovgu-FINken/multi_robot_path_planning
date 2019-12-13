@@ -11,6 +11,17 @@
 import rospy
 import src.spawner as sp
 import src.formation as form
+import src.utils.topic_handler as topic_handler
+
+
+def callback_rounds(data, args):
+    """ Callback when the rounds are fulfilled.
+    :param data:
+    :param args:
+    """
+    global spawner, namespace
+    if data:
+        spawner.despawn_robot(namespace + args[0])
 
 
 def run_formation(_number_of_robots, _position,
@@ -52,6 +63,16 @@ def spawn_robots(_positions, _orientations, _number_of_robots,
     spawner.spawn_via_launch(_number_of_robots, _positions)
 
 
+def setup_subscriber(_number_of_robots, _namespace):
+    """ Setup for subscriber.
+    :param _number_of_robots:
+    :param _namespace:
+    """
+    for robot_id in range(number_of_robots):
+        topic_name = namespace + str(robot_id) + "/rounds"
+        topic_handler.SubscribingHandler(topic_name, bool, callback_rounds, robot_id)
+
+
 spawner = sp.RobotSpawner(world="world")
 model_name = rospy.get_param('model_name')
 model_type = rospy.get_param('model_type')
@@ -60,6 +81,7 @@ namespace = rospy.get_param('namespace')
 position = rospy.get_param('position')
 orientation = rospy.get_param('orientation')
 formation = rospy.get_param('formation')
+setup_subscriber(number_of_robots, namespace)
 positions, orientations = run_formation(
     number_of_robots, position, orientation, formation)
 spawn_robots(

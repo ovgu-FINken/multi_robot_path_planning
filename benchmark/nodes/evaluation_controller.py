@@ -60,7 +60,7 @@ def setup_subscriber(_number_of_robots, _namespace):
         topic_name = namespace + str(robot_id) + "/waypoint"
         topic_handler.SubscribingHandler(topic_name, Point, callback_target, robot_id)
         topic_name = namespace + str(robot_id) + "/rounds"
-        topic_handler.SubscribingHandler(topic_name, bool, callback_target, robot_id)
+        topic_handler.SubscribingHandler(topic_name, bool, callback_rounds, robot_id)
 
 
 logger = log.Logger()
