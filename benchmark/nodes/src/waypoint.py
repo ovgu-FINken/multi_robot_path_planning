@@ -15,7 +15,8 @@ import json
 import os
 
 
-TOPIC_NAME = "waypoint"
+WP_TOPIC_NAME = "waypoint"
+ROUNDS_TOPIC_NAME = "rounds"
 NODE_NAME = "waypoint_controller"
 DEFAULT_NODE_UPDATE_FREQUENCY = 3
 
@@ -61,18 +62,22 @@ class WayPointManager:
     Therefore, each robot has its very own waypoint node.
     """
 
-    def __init__(self, namespace, number_of_robots,
+    def __init__(self, namespace, number_of_robots, rounds,
                  waypoints=WayPointMap.TB3_EDGE,
                  node_update_frequency=DEFAULT_NODE_UPDATE_FREQUENCY,
-                 callback=None, threshold=0.2):
+                 wp_callback=None, round_callback=None,
+                 threshold=0.2):
         """ Init. method.
+        :param rounds:
         :param namespace
         :param threshold:
         :param number_of_robots
         :param waypoints
         :param node_update_frequency
-        :param callback: Use own callback method instead of local publisher.
+        :param round_callback:
+        :param wp_callback: Use own wp_callback method instead of local publisher.
         """
+        self._rounds = rounds
         self._threshold = threshold
         self._waypoint_map = get_waypoint_map(waypoints)
         self._namespace = namespace
@@ -80,9 +85,10 @@ class WayPointManager:
         self._target_point = {}
         self._node_update_frequency = node_update_frequency
         self._publisher = {}
-        self._callback = callback
-        if self._callback is None:
-            self._setup_publisher()
+        self._wp_callback = wp_callback
+        self._round_callback = round_callback
+        self._rounds_completed = {}
+        self._setup_publisher()
         self._init_wps()
 
     def update(self, current_pos, quiet=False):
@@ -97,12 +103,43 @@ class WayPointManager:
                     rospy.loginfo("Robot {0}: Current Pos: {1} Target Pos: {2}".format(
                         robot_name,
                         [round(current_pos[robot_name].x, 3), round(current_pos[robot_name].y, 3)],
-                        [self._target_point[robot_name][0], self._target_point[robot_name][1]]))
-                if self._wp_reached(current_pos[robot_name], self._target_point[robot_name]):
+                        [self._get_target_point(robot_name)[0], self._get_target_point(robot_name)[1]]))
+                if self._wp_reached(current_pos[robot_name], self._get_target_point(robot_name)):
                     self.next(robot_name)
                     if not quiet:
                         rospy.loginfo("UPDATE for {0} to {1}!".format(
-                            robot_name, self._target_point[robot_name]))
+                            robot_name, self._get_target_point(robot_name)))
+
+    def _get_target_point(self, robot_name):
+        """ Returns the current target point for the robot.
+        :param robot_name:
+        :return target point
+        """
+        if robot_name not in self._target_point.keys():
+            return None
+        return self._target_point[robot_name][-1]
+
+    def _set_target_point(self, robot_name, target_point):
+        """ Sets the newest target point for a robot.
+        :param robot_name:
+        :param target_point:
+        """
+        if robot_name not in self._target_point.keys():
+            return
+        if target_point is None:
+            return
+        self._target_point[robot_name].append(target_point)
+
+    def _finished(self, robot_name):
+        """ Checks whether the robot has finished the benchmark.
+        :param robot_name
+        :return boolean
+        """
+        if robot_name not in range(self._number_of_robots):
+            return False
+        if self._target_point[robot_name].count(self._waypoint_map[0]) - 1 >= self._rounds:
+            return True
+        return False
 
     def _wp_reached(self, current_pos, target_point):
         """ Checks whether the wp is reached within the threshold range or not.
@@ -126,10 +163,12 @@ class WayPointManager:
         """ Publishes the target point for the robot.
         :param robot_name:
         """
-        if self._callback is not None:
-            self._callback(robot_name, self._target_point[robot_name])
+        if self._wp_callback is not None:
+            self._wp_callback(robot_name, self._get_target_point(robot_name))
+            self._round_callback(robot_name, self._finished(robot_name))
         else:
-            self._publish_target_points(self._target_point[robot_name])
+            self._publish_target_points(robot_name)
+            self._publish_rounds(robot_name)
 
     def next(self, robot_name):
         """ Returns the next waypoint for a given robot.
@@ -137,17 +176,25 @@ class WayPointManager:
         :return: waypoint
         """
         self._update_target_points(robot_name)
-        next_wp = self._target_point[robot_name]
+        next_wp = self._get_target_point(robot_name)
         self._publish(robot_name)
         return next_wp
 
     def _setup_publisher(self):
         """ Setup for the waypoint topics.
         """
-        for robot_name in range(self._number_of_robots):
-            topic_name = self._namespace + '_' + str(robot_name) + '/' + TOPIC_NAME
-            pub = topic_handler.PublishingHandler(topic_name, Point, queue_size=10)
-            self._publisher[robot_name] = pub
+        if self._wp_callback is not None:
+            self._publisher[WP_TOPIC_NAME] = {}
+            for robot_name in range(self._number_of_robots):
+                topic_name = self._namespace + '_' + str(robot_name) + '/' + WP_TOPIC_NAME
+                pub = topic_handler.PublishingHandler(topic_name, Point, queue_size=10)
+                self._publisher[WP_TOPIC_NAME][robot_name] = pub
+        if self._round_callback is not None:
+            self._publisher[ROUNDS_TOPIC_NAME] = {}
+            for robot_name in range(self._number_of_robots):
+                topic_name = self._namespace + '_' + str(robot_name) + '/' + ROUNDS_TOPIC_NAME
+                pub = topic_handler.PublishingHandler(topic_name, Point, queue_size=10)
+                self._publisher[WP_TOPIC_NAME][robot_name] = pub
 
     def _publish_target_points(self, robot_name=None):
         """ Updates the target point for the robot
@@ -155,25 +202,37 @@ class WayPointManager:
         :param robot_name: publish only for this robot
         """
         if robot_name is not None:
-            self._publisher[robot_name].publish(self._target_point[robot_name])
+            self._publisher[WP_TOPIC_NAME][robot_name].publish(self._get_target_point(robot_name))
         else:
             for robot_name in range(self._number_of_robots):
-                target_point = self._target_point[robot_name]
-                self._publisher[robot_name].publish(target_point)
+                target_point = self._get_target_point(robot_name)
+                self._publisher[WP_TOPIC_NAME][robot_name].publish(target_point)
+
+    def _publish_rounds(self, robot_name=None):
+        """ Updates the rounds for the robot
+        by publishing the boolean to the topics.
+        :param robot_name: publish only for this robot
+        """
+        if robot_name is not None:
+            self._publisher[ROUNDS_TOPIC_NAME][robot_name].publish(self._get_target_point(robot_name))
+        else:
+            for robot_name in range(self._number_of_robots):
+                target_point = self._get_target_point(robot_name)
+                self._publisher[ROUNDS_TOPIC_NAME][robot_name].publish(target_point)
 
     def _update_target_points(self, robot_name):
         """ Updates the target points for a robot.
         """
         # initial target point
         if robot_name not in self._target_point:
-            self._target_point[robot_name] = self._waypoint_map[0]
+            self._set_target_point(robot_name, self._waypoint_map[0])
 
         # restart round
         elif self._target_point[robot_name] == self._waypoint_map[len(self._waypoint_map) - 1]:
-            self._target_point[robot_name] = self._waypoint_map[0]
+            self._set_target_point(robot_name, self._waypoint_map[0])
 
         # set next in round
         else:
-            current_target_idx = self._waypoint_map.index(self._target_point[robot_name])
+            current_target_idx = self._waypoint_map.index(self._get_target_point(robot_name))
             target_point = self._waypoint_map[current_target_idx + 1]
-            self._target_point[robot_name] = target_point
+            self._set_target_point(robot_name, target_point)
