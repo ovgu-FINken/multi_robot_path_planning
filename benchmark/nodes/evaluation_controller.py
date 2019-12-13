@@ -21,10 +21,11 @@ def callback_target(data, args):
     :param data:
     :param args:
     """
-    global timer, previous_wps, logger
+    global timer, previous_wps, logger, makespan
     if args[0] not in previous_wps:
         previous_wps[args[0]] = data
         timer.start_timer(args[0])
+        makespan.start_timer(args[0])
     elif previous_wps[args[0]] != data:
         if timer.is_running(args[0]):
             duration = timer.get_time(args[0])
@@ -43,9 +44,9 @@ def callback_rounds(data, args):
     :param data:
     :param args:
     """
-    global logger
+    global logger, makespan
     if data:
-        logger.makespan(args[0], makespan)
+        logger.makespan(args[0], makespan[args[0]])
 
 
 def setup_subscriber(_number_of_robots, _namespace):
@@ -66,5 +67,6 @@ rospy.init_node('evaluation_controller', anonymous=True)
 namespace = rospy.get_param('namespace')
 number_of_robots = rospy.get_param('number_of_robots')
 timer = time.Timer(number_of_robots)
+makespan = time.Timer(number_of_robots)
 setup_subscriber(number_of_robots, namespace)
 rospy.spin()
