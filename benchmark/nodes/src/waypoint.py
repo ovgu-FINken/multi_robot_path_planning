@@ -25,6 +25,7 @@ class WayPointMap(Enum):
     """
     TB3_EDGE = "tb3_edge"
     MAZE = "maze"
+    WAREHOUSE = "warehouse"
 
 
 def get_waypoint_map(waypoint_map_name):
