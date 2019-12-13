@@ -11,6 +11,7 @@ from enum import Enum
 import rospy
 from geometry_msgs.msg import Point
 import src.utils.topic_handler as topic_handler
+from std_msgs.msg import Bool
 import json
 import os
 
@@ -183,17 +184,17 @@ class WayPointManager:
     def _setup_publisher(self):
         """ Setup for the waypoint topics.
         """
-        if self._wp_callback is not None:
+        if self._wp_callback is None:
             self._publisher[WP_TOPIC_NAME] = {}
             for robot_name in range(self._number_of_robots):
                 topic_name = self._namespace + '_' + str(robot_name) + '/' + WP_TOPIC_NAME
                 pub = topic_handler.PublishingHandler(topic_name, Point, queue_size=10)
                 self._publisher[WP_TOPIC_NAME][robot_name] = pub
-        if self._round_callback is not None:
+        if self._round_callback is None:
             self._publisher[ROUNDS_TOPIC_NAME] = {}
             for robot_name in range(self._number_of_robots):
                 topic_name = self._namespace + '_' + str(robot_name) + '/' + ROUNDS_TOPIC_NAME
-                pub = topic_handler.PublishingHandler(topic_name, bool, queue_size=10)
+                pub = topic_handler.PublishingHandler(topic_name, Bool, queue_size=10)
                 self._publisher[WP_TOPIC_NAME][robot_name] = pub
 
     def _publish_target_points(self, robot_name=None):
