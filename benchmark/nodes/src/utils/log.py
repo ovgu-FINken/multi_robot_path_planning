@@ -20,12 +20,15 @@ class Logger:
     """ Logger.
     """
 
-    def __init__(self, log_file=DEFAULT_LOG_DIRECTORY):
+    def __init__(self, log_file=DEFAULT_LOG_DIRECTORY, initial_setup_print=True):
         """ Init. method.
         :param log_file:
+        :param initial_setup_print:
         """
         self._log_file_path = log_file
         self._log_file = None
+        if initial_setup_print:
+            self.setup()
 
     def _open(self):
         """ Opens the log file.
