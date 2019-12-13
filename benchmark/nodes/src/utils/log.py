@@ -96,5 +96,6 @@ class Logger:
                + "==> wp_map: " + str(sm.read("wp_map")) + "\n" \
                + "==> wp_threshold: " + str(sm.read("wp_threshold")) + "\n" \
                + "==> world: " + str(sm.read("world")) + "\n" \
+               + "==> rounds: " + str(sm.read("rounds")) + "\n" \
                + "--------------------------------------------------------\n"
         self._write(text, timestamp=False)
