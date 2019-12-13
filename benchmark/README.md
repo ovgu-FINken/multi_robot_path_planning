@@ -20,6 +20,7 @@ All adjustable parameter can be found in the settings file: `settings/settings.j
   "wp_map": "edge_tb3_world",
   "wp_threshold": 0.2
   "world": "maze.world"
+  "rounds": 1
 }
 ```
 
@@ -72,6 +73,13 @@ The **World** defines the gazebo world file, which will be loaded by
 gazebo after the execution of the benchmark.
 This can be set to `maze.world`, `square.world`, `turtlebot3.world`, or
 `tworooms.world` (All world files are located in the [world folder](worlds).).
+
+#### Rounds
+The **Rounds** variable defines the number the benchmark should run. 
+Each waypoint map as a finite set of waypoints, once the initial waypoint 
+is reached again one round is fulfilled. When all rounds are accomplished,
+the benchmark finished.
+This can be set to any Integer.
 
 #### RQT & RVIZ
 Furthermore, RQT and RVIZ can be started by enabling

@@ -8,5 +8,6 @@
   "orientation": [0.0, 0.0, 0.0],
   "wp_map": "warehouse",
   "wp_threshold": 0.2,
-  "world": "warehouse.world"
+  "world": "warehouse.world",
+  "rounds": 1
 }
