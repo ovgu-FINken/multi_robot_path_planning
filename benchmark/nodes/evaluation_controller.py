@@ -38,6 +38,16 @@ def callback_target(data, args):
         timer.start_timer(args[0])
 
 
+def callback_rounds(data, args):
+    """ Callback when the rounds are fulfilled.
+    :param data:
+    :param args:
+    """
+    global logger
+    if data:
+        logger.makespan(args[0], makespan)
+
+
 def setup_subscriber(_number_of_robots, _namespace):
     """ Setup for subscriber.
     :param _number_of_robots:
@@ -46,6 +56,8 @@ def setup_subscriber(_number_of_robots, _namespace):
     for robot_id in range(number_of_robots):
         topic_name = namespace + str(robot_id) + "/waypoint"
         topic_handler.SubscribingHandler(topic_name, Point, callback_target, robot_id)
+        topic_name = namespace + str(robot_id) + "/rounds"
+        topic_handler.SubscribingHandler(topic_name, bool, callback_target, robot_id)
 
 
 logger = log.Logger()
