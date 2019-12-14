@@ -98,18 +98,28 @@ class WayPointManager:
         :param quiet:
         """
         for robot_name in range(self._number_of_robots):
-            self._publish(robot_name)
             if robot_name in current_pos:
                 if not quiet:
-                    rospy.loginfo("Robot {0}: Current Pos: {1} Target Pos: {2}".format(
-                        robot_name,
-                        [round(current_pos[robot_name].x, 3), round(current_pos[robot_name].y, 3)],
-                        [self._get_target_point(robot_name)[0], self._get_target_point(robot_name)[1]]))
+                    self._print_pos(robot_name, current_pos)
                 if self._wp_reached(current_pos[robot_name], self._get_target_point(robot_name)):
                     self.next(robot_name)
                     if not quiet:
                         rospy.loginfo("UPDATE for {0} to {1}!".format(
                             robot_name, self._get_target_point(robot_name)))
+            self._publish(robot_name)
+
+    def _print_pos(self, robot_name, current_pos):
+        """ prints the current position and the target position in the console.
+        :param robot_name:
+        :param current_pos:
+        """
+        target = self._get_target_point(robot_name)
+        if target is None or len(target) <= 0:
+            return
+        rospy.loginfo("Robot {0}: Current Pos: {1} Target Pos: {2}".format(
+            robot_name,
+            [round(current_pos[robot_name].x, 3), round(current_pos[robot_name].y, 3)],
+            [target[0], target[1]]))
 
     def _get_target_point(self, robot_name):
         """ Returns the current target point for the robot.
@@ -117,7 +127,7 @@ class WayPointManager:
         :return target point
         """
         if robot_name not in self._target_point.keys():
-            return None
+            return []
         return self._target_point[robot_name][-1]
 
     def _set_target_point(self, robot_name, target_point):
@@ -125,10 +135,8 @@ class WayPointManager:
         :param robot_name:
         :param target_point:
         """
-        if robot_name not in self._target_point.keys():
-            return
-        if target_point is None:
-            return
+        if robot_name not in self._target_point:
+            self._target_point[robot_name] = []
         self._target_point[robot_name].append(target_point)
 
     def _finished(self, robot_name):
@@ -137,6 +145,8 @@ class WayPointManager:
         :return boolean
         """
         if robot_name not in range(self._number_of_robots):
+            return False
+        if robot_name not in self._target_point.keys():
             return False
         if self._target_point[robot_name].count(self._waypoint_map[0]) - 1 >= self._rounds:
             return True

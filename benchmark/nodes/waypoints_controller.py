@@ -23,7 +23,8 @@ def callback_target(name, point):
     :param point:
     """
     global target_publisher
-    target_publisher[name].publish(point, quiet=True)
+    if point is not None and len(point) > 0:
+        target_publisher[name].publish(point, quiet=True)
 
 
 def callback_rounds(name, finished):
