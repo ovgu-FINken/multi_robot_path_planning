@@ -58,14 +58,15 @@ def setup_subscribers(_namespace, _number_of_robots):
         topic_handler.SubscribingHandler(topic_name, Bool, callback_rounds, robot_id)
 
 
-def wait_for_targets(quiet=False, frequency=1):
+def wait_for_targets(_number_of_robots, quiet=False, frequency=1):
     """ Waits until target points have been received.
+    :param _number_of_robots:
     :param quiet:
     :param frequency:
     :return True:   received
             False:  waiting
     """
-    while len(robot_targets) == 0:
+    while len(robot_targets) != _number_of_robots:
         if not quiet:
             rospy.loginfo("Waiting for target points ...")
         rospy.Rate(frequency).sleep()
@@ -78,11 +79,11 @@ def update_movement(_number_of_robots, frequency=0.5):
     """
     while not rospy.is_shutdown():
         for robot_id in range(_number_of_robots):
-            try:
+            if robot_id in robot_targets:
                 move_controller[robot_id].linear_move_to(
                     robot_targets[robot_id], quiet=False)
-            except KeyError:
-                pass
+            else:
+                rospy.loginfo("Robot {} not found".format(robot_id))
         rospy.Rate(frequency).sleep()
 
 
@@ -94,5 +95,5 @@ namespace = rospy.get_param('namespace')
 number_of_robots = rospy.get_param('number_of_robots')
 setup_subscribers(namespace, number_of_robots)
 setup_move_controller(namespace, number_of_robots)
-wait_for_targets()
+wait_for_targets(number_of_robots)
 update_movement(number_of_robots)
