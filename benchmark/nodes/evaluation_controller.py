@@ -48,8 +48,8 @@ def callback_rounds(data, args):
     global logger, makespan
     if data:
         print("Robot {0} finished in makespan of {1}s".format(
-            args[0], makespan[args[0]]))
-        logger.makespan(args[0], makespan[args[0]])
+            args[0], makespan.get_time(args[0])))
+        logger.makespan(args[0], makespan.get_time(args[0]))
 
 
 def setup_subscriber(_number_of_robots, _namespace):
