@@ -45,11 +45,12 @@ def callback_rounds(data, args):
     :param data:
     :param args:
     """
-    global logger, makespan
-    if data == Bool(True):
+    global logger, makespan, finished
+    if data == Bool(True) and args[0] not in finished:
         print("Robot {0} finished in makespan of {1}s".format(
             args[0], makespan.get_time(args[0])))
         logger.makespan(args[0], makespan.get_time(args[0]))
+        finished[args[0]] = True
 
 
 def setup_subscriber(_number_of_robots, _namespace):
@@ -66,6 +67,7 @@ def setup_subscriber(_number_of_robots, _namespace):
 
 logger = log.Logger()
 previous_wps = {}
+finished = {}
 rospy.init_node('evaluation_controller', anonymous=True)
 namespace = rospy.get_param('namespace')
 number_of_robots = rospy.get_param('number_of_robots')

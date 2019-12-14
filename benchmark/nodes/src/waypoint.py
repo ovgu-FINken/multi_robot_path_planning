@@ -148,7 +148,7 @@ class WayPointManager:
             return False
         if robot_name not in self._target_point.keys():
             return False
-        if self._target_point[robot_name].count(self._waypoint_map[0]) - 1 >= self._rounds:
+        if self._target_point[robot_name].count(self._waypoint_map[1]) - 1 >= self._rounds:
             return True
         return False
 
@@ -239,7 +239,7 @@ class WayPointManager:
             self._set_target_point(robot_name, self._waypoint_map[0])
 
         # restart round
-        elif self._target_point[robot_name] == self._waypoint_map[len(self._waypoint_map) - 1]:
+        elif self._get_target_point(robot_name) == self._waypoint_map[-1]:
             self._set_target_point(robot_name, self._waypoint_map[0])
 
         # set next in round
