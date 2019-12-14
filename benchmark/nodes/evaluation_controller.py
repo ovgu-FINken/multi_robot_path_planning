@@ -46,7 +46,7 @@ def callback_rounds(data, args):
     :param args:
     """
     global logger, makespan
-    if data:
+    if data == Bool(True):
         print("Robot {0} finished in makespan of {1}s".format(
             args[0], makespan.get_time(args[0])))
         logger.makespan(args[0], makespan.get_time(args[0]))

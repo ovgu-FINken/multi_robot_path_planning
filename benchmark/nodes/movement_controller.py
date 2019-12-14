@@ -31,7 +31,8 @@ def callback_rounds(data, args):
     :param args:
     """
     global robot_rounds
-    robot_rounds[args[0]] = data
+    if data == Bool(True):
+        robot_rounds[args[0]] = True
 
 
 def setup_move_controller(_namespace, _number_of_robots):

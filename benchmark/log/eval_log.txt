@@ -1,0 +1,69 @@
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2019-12-14 14:50:30.869098
+==> Benchmark ID: 1576331430
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+--------------------------------------------------------
+
+[2019-12-14 14:50:34.959820] [MAKESPAN] 0 finished with makespan of 0.002s <<< <<< <<<
+[2019-12-14 14:50:34.962130] [MAKESPAN] 1 finished with makespan of 0.006s <<< <<< <<<
+[2019-12-14 14:50:34.964890] [MAKESPAN] 2 finished with makespan of 0.012s <<< <<< <<<
+[2019-12-14 14:50:34.966781] [MAKESPAN] 3 finished with makespan of 0.012s <<< <<< <<<
+[2019-12-14 14:50:36.976136] [MAKESPAN] 0 finished with makespan of 2.012s <<< <<< <<<
+[2019-12-14 14:50:36.978149] [MAKESPAN] 1 finished with makespan of 2.014s <<< <<< <<<
+[2019-12-14 14:50:36.978525] [MAKESPAN] 2 finished with makespan of 2.016s <<< <<< <<<
+[2019-12-14 14:50:36.980373] [MAKESPAN] 3 finished with makespan of 2.016s <<< <<< <<<
+[2019-12-14 14:50:39.015548] [MAKESPAN] 0 finished with makespan of 4.008s <<< <<< <<<
+[2019-12-14 14:50:39.017905] [MAKESPAN] 1 finished with makespan of 4.014s <<< <<< <<<
+[2019-12-14 14:50:39.020316] [MAKESPAN] 3 finished with makespan of 4.016s <<< <<< <<<
+[2019-12-14 14:50:39.029239] [MAKESPAN] 2 finished with makespan of 4.024s <<< <<< <<<
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2019-12-14 14:53:02.919513
+==> Benchmark ID: 1576331582
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2019-12-14 14:54:18.808774
+==> Benchmark ID: 1576331658
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+--------------------------------------------------------
+
+[2019-12-14 14:55:47.632441] [WP TIME] tb3_0 from [1.8, 0.0, 0.0] to [-1.8, 0.0, 0.0] in 36.224s
+[2019-12-14 14:56:06.713329] [WP TIME] tb3_1 from [1.8, 0.0, 0.0] to [-1.8, 0.0, 0.0] in 40.24s
+[2019-12-14 14:56:25.499568] [WP TIME] tb3_3 from [1.8, 0.0, 0.0] to [-1.8, 0.0, 0.0] in 44.256s
