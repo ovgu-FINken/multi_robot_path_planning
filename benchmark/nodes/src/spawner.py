@@ -88,27 +88,23 @@ class RobotSpawner:
             rospy.logerr('Model type not know. model_type = ' + model_format)
         return srv_spawn_model, xml_string
 
-    def despawn_robot(self, model_name):
+    def despawn_robot(self, model_name, quiet=False):
         """ Deletes the robot.
         :param model_name
-        :return: request
+        :param quiet:
         """
         if not self._active[model_name]:
+            if not quiet:
+                rospy.loginfo("Robot {} not active".format(model_name))
             return
         rospy.loginfo("Despawning robot {}".format(model_name))
-        srv_delete_model = rospy.ServiceProxy('gazebo/delete_model', DeleteModel)
-        req = DeleteModelRequest()
-        req.model_name = model_name
-        exists = True
-        try:
-            res = srv_delete_model(model_name)
-        except rospy.ServiceException as e:
-            exists = False
-            rospy.logdebug("Model %s does not exist in gazebo.", model_name)
-        if exists:
-            rospy.loginfo("Model %s already exists in gazebo. Model will be updated.", model_name)
         self._activate(False, model_name)
-        return req
+        srv_delete_model = rospy.ServiceProxy('gazebo/delete_model', DeleteModel)
+        try:
+            srv_delete_model(model_name)
+        except rospy.ServiceException:
+            if not quiet:
+                rospy.logdebug("Model %s does not exist in gazebo.", model_name)
 
     def _spawn_model(self, xml_string, name, namespace, pose):
         """ Spawns a model in a simulation world.
@@ -177,7 +173,7 @@ class RobotSpawner:
             for robot_name in range(self._number_of_robots):
                 self._active[self._namespace + str(robot_name)] = activate
         else:
-            self._active[self._namespace + str(robot_name)] = activate
+            self._active[robot_name] = activate
 
     def spawn(self, name, model_name, namespace, model_type,
               position, orientation, update_if_exist=False,
