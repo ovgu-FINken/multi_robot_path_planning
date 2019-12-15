@@ -37,6 +37,8 @@ class RobotSpawner:
         self._position = None
         self._orientation = None
         self._param_file = None
+        self._active = {}
+        self._number_of_robots = 0
 
     @staticmethod
     def _get_file_location(model_name, model_type, model_format="sdf"):
@@ -86,12 +88,14 @@ class RobotSpawner:
             rospy.logerr('Model type not know. model_type = ' + model_format)
         return srv_spawn_model, xml_string
 
-    @staticmethod
-    def despawn_robot(model_name):
+    def despawn_robot(self, model_name):
         """ Deletes the robot.
         :param model_name
         :return: request
         """
+        if not self._active[model_name]:
+            return
+        rospy.loginfo("Despawning robot {}".format(model_name))
         srv_delete_model = rospy.ServiceProxy('gazebo/delete_model', DeleteModel)
         req = DeleteModelRequest()
         req.model_name = model_name
@@ -103,6 +107,7 @@ class RobotSpawner:
             rospy.logdebug("Model %s does not exist in gazebo.", model_name)
         if exists:
             rospy.loginfo("Model %s already exists in gazebo. Model will be updated.", model_name)
+        self._activate(False, model_name)
         return req
 
     def _spawn_model(self, xml_string, name, namespace, pose):
@@ -145,6 +150,9 @@ class RobotSpawner:
     def spawn_via_launch(self, number, positions):
         """ Spawns a robot using a spawning launch file.
         """
+        self._number_of_robots = number
+        self._activate(True)
+        rospy.loginfo(self._active)
         str_pos = ["'", "'"]
         for position in positions:
             str_pos[0] += str(position[0]) + " "
@@ -156,6 +164,20 @@ class RobotSpawner:
                   + " nr:=" + str(number - 1)
                   + " pose_x:=" + str_pos[0]
                   + " pose_y:=" + str_pos[1])
+
+    def _activate(self, activate, robot_name=None):
+        """ Sets the activate flag. This flag is utilized to verify if a certain robot is
+        active in the world (spawned) or not (despawned) to avoid redundant calls.
+        :param robot_name: if None: all robots are set to be active.
+        :param activate: activate flag
+        """
+        if robot_name is None:
+            if self._number_of_robots is None or self._number_of_robots <= 0:
+                return
+            for robot_name in range(self._number_of_robots):
+                self._active[self._namespace + str(robot_name)] = activate
+        else:
+            self._active[self._namespace + str(robot_name)] = activate
 
     def spawn(self, name, model_name, namespace, model_type,
               position, orientation, update_if_exist=False,

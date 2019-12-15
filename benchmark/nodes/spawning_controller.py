@@ -21,8 +21,8 @@ def callback_rounds(data, args):
     :param args:
     """
     global spawner, namespace
-    if data:
-        spawner.despawn_robot(namespace + args[0])
+    if data == Bool(True):
+        spawner.despawn_robot(str(namespace) + str(args[0]))
 
 
 def run_formation(_number_of_robots, _position,
