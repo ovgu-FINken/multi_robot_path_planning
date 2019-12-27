@@ -51,6 +51,12 @@ def callback_rounds(data, args):
             args[0], makespan.get_time(args[0])))
         logger.makespan(args[0], makespan.get_time(args[0]))
         finished[args[0]] = True
+        if all(item is True for item in finished):
+            print("All robots successfully finished the benchmark!")
+            makespan_list = [makespan.get_time(key) for key in range(number_of_robots)]
+            makespan_avg = sum(makespan_list) / len(makespan_list)
+            print("Average makespan: {}".format(makespan_avg))
+            logger.makespan_avg(makespan_avg)
 
 
 def setup_subscriber(_number_of_robots, _namespace):

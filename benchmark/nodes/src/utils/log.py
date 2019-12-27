@@ -83,7 +83,14 @@ class Logger:
         :param robot:
         :param makespan:
         """
-        text = "[MAKESPAN] " + str(robot) + " finished with makespan of " + str(makespan) + "s <<< <<< <<<"
+        text = "[MAKESPAN] " + str(robot) + " finished with makespan of " + str(makespan) + "s <<<"
+        self._write(text)
+
+    def makespan_avg(self, makespan):
+        """ Logs the makespan average for all robots.
+        :param makespan:
+        """
+        text = "[MAKESPAN AVG] Average makespan: " + str(makespan) + "s <<< <<< <<<"
         self._write(text)
 
     def setup(self):
