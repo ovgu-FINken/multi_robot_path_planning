@@ -116,3 +116,10 @@ gnome-terminal -- bash <FULL_PATH>/kill.sh
 
 Whenever a robot is reaching a new waypoint the duration to reach this goal
 is tracked and printed into the console, as well as stored in an [eval log](log/eval_log.txt).
+
+Furthermore, for purely simulation-based benchmarks, the following benchmark scenario can be used 
+to evaluate the performance for the path planner:
+"Each benchmark file has a list of start/goal locations.
+The intention is that one would add one agent at a time until
+an algorithm cannot solve a problem in a given time/memory limit."
+([Reference](https://movingai.com/benchmarks/mapf.html))
