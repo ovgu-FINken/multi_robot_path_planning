@@ -36,7 +36,7 @@ def callback_rounds(name, finished):
     rounds_publisher[name].publish(finished, quiet=True)
 
 
-def callback_odometry(data, args):
+def callback_position(data, args):
     """ This callback method will save the current position of the robots.
     :param data:
     :param args:
@@ -69,14 +69,14 @@ def setup_rounds_publisher(_publisher, _number_of_robots, _namespace):
         _publisher[robot_id] = _pub
 
 
-def setup_odometry_subscriber(_number_of_robots, _namespace):
-    """ Init for the waypoint publisher.
+def setup_position_subscriber(_number_of_robots, _namespace):
+    """ Init for the current position subscriber.
     :param _number_of_robots:
     :param _namespace:
     """
     for robot_id in range(_number_of_robots):
-        odom_name = _namespace + str(robot_id) + "/odom"
-        topic_handler.SubscribingHandler(odom_name, Odometry, callback_odometry, robot_id)
+        odom_name = _namespace + str(robot_id) + "/base_footprint"
+        topic_handler.SubscribingHandler(odom_name, Odometry, callback_position, robot_id)
 
 
 def update_wps(_number_of_robots, _namespace, _rounds,
@@ -109,5 +109,5 @@ number_of_robots = rospy.get_param('number_of_robots')
 rounds = rospy.get_param('rounds')
 setup_waypoint_publisher(target_publisher, number_of_robots, namespace)
 setup_rounds_publisher(rounds_publisher, number_of_robots, namespace)
-setup_odometry_subscriber(number_of_robots, namespace)
+setup_position_subscriber(number_of_robots, namespace)
 update_wps(number_of_robots, namespace, rounds, wp_map, wp_threshold)

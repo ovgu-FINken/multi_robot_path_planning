@@ -16,7 +16,7 @@ source ~/.bashrc
 SESSION_NAME="benchmark"
 NUM=0
 ENABLE_RVIZ=False
-ENABLE_RQT=False
+ENABLE_RQT=True
 USE_SETTINGS_FILE=True
 
 # start tmux
