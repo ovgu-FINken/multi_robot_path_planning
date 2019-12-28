@@ -78,9 +78,10 @@ def update_movement(_number_of_robots, frequency=0.5):
     :param _number_of_robots:
     :param frequency:
     """
+    global robot_rounds
     while not rospy.is_shutdown():
         for robot_id in range(_number_of_robots):
-            if robot_id in robot_targets:
+            if robot_id in robot_targets and not robot_rounds[robot_id]:
                 move_controller[robot_id].linear_move_to(
                     robot_targets[robot_id], quiet=False)
             else:

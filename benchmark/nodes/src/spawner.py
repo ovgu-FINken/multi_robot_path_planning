@@ -101,7 +101,7 @@ class RobotSpawner:
         self._activate(False, model_name)
         srv_delete_model = rospy.ServiceProxy('gazebo/delete_model', DeleteModel)
         try:
-            srv_delete_model(model_name)
+            srv_delete_model(str(model_name))
         except rospy.ServiceException:
             if not quiet:
                 rospy.logdebug("Model %s does not exist in gazebo.", model_name)
