@@ -22,7 +22,7 @@ def callback_rounds(data, args):
     :param args:
     """
     global spawner, namespace
-    if data == Bool(True):
+    if data == Bool(True) and end_procedure == 'despawn':
         spawner.despawn_robot(str(namespace) + str(args[0]))
 
 
@@ -93,6 +93,7 @@ namespace = rospy.get_param('namespace')
 position = rospy.get_param('position')
 orientation = rospy.get_param('orientation')
 formation = rospy.get_param('formation')
+end_procedure = rospy.get_param('end_procedure')
 setup_subscriber(number_of_robots, namespace)
 positions, orientations = run_formation(
     number_of_robots, position, orientation, formation)

@@ -15,6 +15,15 @@ from geometry_msgs.msg import Point
 from std_msgs.msg import Bool
 
 
+def callback_start_pos(data, args):
+    """ Callback for robot start positions.
+    :param data:
+    :param args:
+    """
+    global start_pos
+    start_pos[args[0]] = data
+
+
 def callback_target(data, args):
     """ Callback for robot target points to move to.
     :param data:
@@ -57,6 +66,8 @@ def setup_subscribers(_namespace, _number_of_robots):
         topic_handler.SubscribingHandler(topic_name, Point, callback_target, robot_id)
         topic_name = _namespace + str(robot_id) + "/rounds"
         topic_handler.SubscribingHandler(topic_name, Bool, callback_rounds, robot_id)
+        topic_name = _namespace + str(robot_id) + "/start_pos"
+        topic_handler.SubscribingHandler(topic_name, Point, callback_start_pos, robot_id)
 
 
 def wait_for_targets(_number_of_robots, quiet=False, frequency=1):
@@ -73,6 +84,25 @@ def wait_for_targets(_number_of_robots, quiet=False, frequency=1):
         rospy.Rate(frequency).sleep()
 
 
+def _apply_end_procedure(_robot_id):
+    """ Starts the end procedure.
+    :param _robot_id:
+    """
+    if end_procedure == 'despawn':
+        # is handled by spawning controller
+        pass
+    elif end_procedure == 'stay':
+        # do nothing
+        pass
+    elif end_procedure == 'idle':
+        # up to the user
+        pass
+    elif end_procedure == 'start':
+        rospy.loginfo("END: " + str(start_pos[_robot_id]))
+        move_controller[_robot_id].linear_move_to(
+            start_pos[_robot_id], quiet=False)
+
+
 def update_movement(_number_of_robots, frequency=0.5):
     """ Updates the movement to the target points.
     :param _number_of_robots:
@@ -81,20 +111,23 @@ def update_movement(_number_of_robots, frequency=0.5):
     global robot_rounds
     while not rospy.is_shutdown():
         for robot_id in range(_number_of_robots):
-            if robot_id in robot_targets and not robot_rounds[robot_id]:
-                move_controller[robot_id].linear_move_to(
-                    robot_targets[robot_id], quiet=False)
-            else:
-                rospy.loginfo("Robot {} not found".format(robot_id))
+            if robot_id in robot_targets:
+                if not robot_rounds[robot_id]:
+                    move_controller[robot_id].linear_move_to(
+                        robot_targets[robot_id], quiet=False)
+                else:
+                    _apply_end_procedure(robot_id)
         rospy.Rate(frequency).sleep()
 
 
 move_controller = {}
 robot_targets = {}
 robot_rounds = {}
+start_pos = {}
 rospy.init_node('movement_controller', anonymous=True)
 namespace = rospy.get_param('namespace')
 number_of_robots = rospy.get_param('number_of_robots')
+end_procedure = rospy.get_param('end_procedure')
 setup_subscribers(namespace, number_of_robots)
 setup_move_controller(namespace, number_of_robots)
 wait_for_targets(number_of_robots)
