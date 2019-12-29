@@ -10,8 +10,8 @@
 
 import rospy
 import src.waypoint as wp
-from std_msgs.msg import Int16MultiArray
 from nav_msgs.msg import Odometry
+from std_msgs.msg import Int16MultiArray
 import src.utils.topic_handler as topic_handler
 from geometry_msgs.msg import Point
 from std_msgs.msg import Bool
@@ -43,6 +43,9 @@ def callback_position(data, args):
     """
     global robot_current_positions
     robot_current_positions[args[0]] = data.pose.pose.position
+    rospy.loginfo("Current pos of {0}: {1} {2}".format(
+        args[0], robot_current_positions[args[0]].x,
+        robot_current_positions[args[0]].y))
 
 
 def setup_waypoint_publisher(_publisher, _number_of_robots, _namespace):
@@ -75,8 +78,8 @@ def setup_position_subscriber(_number_of_robots, _namespace):
     :param _namespace:
     """
     for robot_id in range(_number_of_robots):
-        odom_name = _namespace + str(robot_id) + "/base_footprint"
-        topic_handler.SubscribingHandler(odom_name, Odometry, callback_position, robot_id)
+        topic_name =  _namespace + str(robot_id) + "/odom"
+        topic_handler.SubscribingHandler(topic_name, Odometry, callback_position, robot_id)
 
 
 def update_wps(_number_of_robots, _namespace, _rounds,
