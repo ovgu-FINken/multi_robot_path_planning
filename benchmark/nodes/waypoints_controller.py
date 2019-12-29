@@ -43,9 +43,6 @@ def callback_position(data, args):
     """
     global robot_current_positions
     robot_current_positions[args[0]] = data.pose.pose.position
-    rospy.loginfo("Current pos of {0}: {1} {2}".format(
-        args[0], robot_current_positions[args[0]].x,
-        robot_current_positions[args[0]].y))
 
 
 def setup_waypoint_publisher(_publisher, _number_of_robots, _namespace):
@@ -78,7 +75,7 @@ def setup_position_subscriber(_number_of_robots, _namespace):
     :param _namespace:
     """
     for robot_id in range(_number_of_robots):
-        topic_name =  _namespace + str(robot_id) + "/odom"
+        topic_name = _namespace + str(robot_id) + "/odom"
         topic_handler.SubscribingHandler(topic_name, Odometry, callback_position, robot_id)
 
 

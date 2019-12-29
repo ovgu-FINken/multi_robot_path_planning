@@ -9,5 +9,6 @@
   "wp_map": "tb3_edge",
   "wp_threshold": 0.2,
   "world": "turtlebot3.world",
-  "rounds": 1
+  "rounds": 1,
+  "end_procedure": "despawn"
 }

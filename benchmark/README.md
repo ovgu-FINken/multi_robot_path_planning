@@ -16,11 +16,12 @@ All adjustable parameter can be found in the settings file: `settings/settings.j
   "number_of_robots": 4,
   "formation": "dense_block",
   "position": [1.5, 0.5, 0.5],
-  "orientation": [0.0, 0.0, 0.0]
-  "wp_map": "edge_tb3_world",
-  "wp_threshold": 0.2
-  "world": "maze.world"
-  "rounds": 1
+  "orientation": [0.0, 0.0, 0.0],
+  "wp_map": "tb3_edge",
+  "wp_threshold": 0.2,
+  "world": "turtlebot3.world",
+  "rounds": 1,
+  "end_procedure": "despawn"
 }
 ```
 
@@ -80,6 +81,17 @@ Each waypoint map as a finite set of waypoints, once the initial waypoint
 is reached again one round is fulfilled. When all rounds are accomplished,
 the benchmark finished.
 This can be set to any Integer.
+
+#### End Procedure
+The **End Procedure** defines how the robots will behave after they 
+successfully finished all rounds. Here, this can be set to `despawn`, which 
+simply deletes the robot model. This, however, is only applicable in
+simulation-based benchmarks. Alternatively, this variable can be set to 
+`stay`, which will freeze the robot at the last waypoint, whereas the value 
+`start_position` will send the start position as the next goal, such that 
+the robot will move to the start position after the last waypoint is reached.
+Ultimately, the `ìdle` state is a free state, where the robots might just move 
+randomly, which is up to the user.
 
 #### RQT & RVIZ
 Furthermore, RQT and RVIZ can be started by enabling
