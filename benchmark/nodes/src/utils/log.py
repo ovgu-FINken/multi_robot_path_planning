@@ -112,5 +112,6 @@ class Logger:
                + "==> wp_threshold: " + str(sm.read("wp_threshold")) + "\n" \
                + "==> world: " + str(sm.read("world")) + "\n" \
                + "==> rounds: " + str(sm.read("rounds")) + "\n" \
+               + "==> end_procedure: " + str(sm.read("end_procedure")) + "\n" \
                + "--------------------------------------------------------\n"
         self._write(text, timestamp=False)
