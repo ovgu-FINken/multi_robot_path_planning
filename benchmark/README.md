@@ -88,7 +88,7 @@ successfully finished all rounds. Here, this can be set to `despawn`, which
 simply deletes the robot model. This, however, is only applicable in
 simulation-based benchmarks. Alternatively, this variable can be set to 
 `stay`, which will freeze the robot at the last waypoint, whereas the value 
-`start_position` will send the start position as the next goal, such that 
+`start` will send the start position as the next goal, such that 
 the robot will move to the start position after the last waypoint is reached.
 Ultimately, the `ìdle` state is a free state, where the robots might just move 
 randomly, which is up to the user.

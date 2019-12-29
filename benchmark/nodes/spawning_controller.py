@@ -13,6 +13,7 @@ import src.spawner as sp
 import src.formation as form
 import src.utils.topic_handler as topic_handler
 from std_msgs.msg import Bool
+from geometry_msgs.msg import Point
 
 
 def callback_rounds(data, args):
@@ -61,6 +62,7 @@ def spawn_robots(_positions, _orientations, _number_of_robots,
             position=_position, orientation=_orientation,
             name=str(i), update_if_exist=False,
             use_launch_file=True)
+        publish_start_position(_namespace + str(i), _position)
     spawner.spawn_via_launch(_number_of_robots, _positions)
 
 
@@ -72,6 +74,15 @@ def setup_subscriber(_number_of_robots, _namespace):
     for robot_id in range(number_of_robots):
         topic_name = namespace + str(robot_id) + "/rounds"
         topic_handler.SubscribingHandler(topic_name, Bool, callback_rounds, robot_id)
+
+
+def publish_start_position(_robot_name, _position):
+    """ Publishes the start position of the robot.
+    :param _robot_name:
+    :param _position:
+    """
+    pub = topic_handler.PublishingHandler(_robot_name + "/start_pos", Point)
+    pub.publish(_position)
 
 
 spawner = sp.RobotSpawner(world="world")
