@@ -75,17 +75,15 @@ def setup_subscriber(_number_of_robots, _namespace):
         topic_handler.SubscribingHandler(topic_name, Bool, callback_rounds, robot_id)
 
 
-def publish_start_position(_namespace, _positions, frequency=3):
+def publish_start_position(_namespace, _positions):
     """ Publishes the start position of the robot.
     :param _namespace:
     :param _positions:
-    :param frequency:
     """
     for robot_id in range(number_of_robots):
         name = _namespace + str(robot_id) + "/start_pos"
         pub = topic_handler.PublishingHandler(name, Point)
-        pub.publish(_positions[robot_id], single_shot=True, quiet=False)
-        rospy.loginfo("FOUND!!!!!")
+        pub.publish(_positions[robot_id], single_shot=True)
 
 
 spawner = sp.RobotSpawner(world="world")

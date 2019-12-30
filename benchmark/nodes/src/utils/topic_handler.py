@@ -70,15 +70,18 @@ class PublishingHandler(TopicHandler):
         :param single_shot: This will wait for at least one subscriber to
                             avoid message loose.
         """
-        if frequency == 0:
-            self._publish_once(data, quiet)
-        elif single_shot:
-            while self._publisher.get_num_connections() == 0:
-                rospy.Rate(0.1).sleep()
-        else:
+        if frequency != 0:
             while not rospy.is_shutdown():
                 self._publish_once(data, quiet)
                 rospy.Rate(frequency).sleep()
+        elif single_shot:
+            while self._publisher.get_num_connections() < 1:
+                rospy.Rate(0.1).sleep()
+            if not quiet:
+                rospy.loginfo("Number of connectons: {}".format(self._publisher.get_num_connections()))
+            self._publish_once(data, quiet)
+        else:
+            self._publish_once(data, quiet)
 
     def _publish_once(self, data, quiet=True):
         """ Publishes data to the topic

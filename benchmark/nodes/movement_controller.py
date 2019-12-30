@@ -20,9 +20,10 @@ def callback_start_pos(data, args):
     :param data:
     :param args:
     """
-    global start_pos
+    global start_pos, pos_received_flag
     rospy.loginfo("GOT START POS: " + str(data))
-    start_pos[args[0]] = data
+    start_pos[args[0]] = [data.x, data.y, data.z]
+    pos_received_flag[args[0]] = True
 
 
 def callback_target(data, args):
@@ -60,8 +61,9 @@ def setup_subscribers(_namespace, _number_of_robots):
     :param _namespace:
     :param _number_of_robots:
     """
-    global robot_rounds
+    global robot_rounds, pos_received_flag
     for robot_id in range(_number_of_robots):
+        pos_received_flag[robot_id] = False
         robot_rounds[robot_id] = False
         topic_name = _namespace + str(robot_id) + "/waypoint"
         topic_handler.SubscribingHandler(topic_name, Point, callback_target, robot_id)
@@ -69,6 +71,7 @@ def setup_subscribers(_namespace, _number_of_robots):
         topic_handler.SubscribingHandler(topic_name, Bool, callback_rounds, robot_id)
         topic_name = _namespace + str(robot_id) + "/start_pos"
         topic_handler.SubscribingHandler(topic_name, Point, callback_start_pos, robot_id)
+    wait_for_pos()
 
 
 def wait_for_targets(_number_of_robots, quiet=False, frequency=1):
@@ -99,8 +102,6 @@ def _apply_end_procedure(_robot_id):
         # up to the user
         pass
     elif end_procedure == 'start':
-        rospy.loginfo(str(start_pos))
-        rospy.loginfo("END: " + str(start_pos[_robot_id]))
         move_controller[_robot_id].linear_move_to(
             start_pos[_robot_id], quiet=False)
 
@@ -122,10 +123,20 @@ def update_movement(_number_of_robots, frequency=0.5):
         rospy.Rate(frequency).sleep()
 
 
+def wait_for_pos():
+    """ Waits until a start pos is received.
+    """
+    global pos_received_flag
+    while not all(value == 0 for value in pos_received_flag.values()):
+        rospy.Rate(0.5).sleep()
+    rospy.loginfo("All start positions received!")
+
+
 move_controller = {}
 robot_targets = {}
 robot_rounds = {}
 start_pos = {}
+pos_received_flag = {}
 rospy.init_node('movement_controller', anonymous=True)
 namespace = rospy.get_param('namespace')
 number_of_robots = rospy.get_param('number_of_robots')
