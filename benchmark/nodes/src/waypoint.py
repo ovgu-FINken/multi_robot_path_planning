@@ -30,6 +30,17 @@ class WayPointMap(Enum):
     WAREHOUSE = "warehouse"
 
 
+def get_num_of_wps(waypoint_map_name):
+    """ Returns the number of wps in a wp map.
+    :param waypoint_map_name:
+    :return: number (int)
+    """
+    wp_dict = get_waypoint_map(waypoint_map_name)
+    if wp_dict is None:
+        return 0
+    return len(wp_dict)
+
+
 def get_waypoint_map(waypoint_map_name):
     """ Returns the corresponding waypoint array.
     :param waypoint_map_name:

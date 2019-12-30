@@ -1005,3 +1005,87 @@
 [2019-12-30 16:25:46.634212] [MAKESPAN] 3 finished with makespan of 172.836s <<<
 [2019-12-30 16:25:52.652916] [WP TIME] tb3_0 from [1.8, 0.0, 0.0] to [-1.8, 0.0, 0.0] in 16.11s
 [2019-12-30 16:25:52.660407] [MAKESPAN] 0 finished with makespan of 174.842s <<<
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2019-12-30 16:50:42.008147
+==> Benchmark ID: 1577721042
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: start
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2019-12-30 16:54:20.277628
+==> Benchmark ID: 1577721260
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: start
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2019-12-30 16:57:04.680793
+==> Benchmark ID: 1577721424
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: start
+--------------------------------------------------------
+
+[2019-12-30 16:59:08.486241] [WPTIME] tb3_3 from [1.8, 0.0, 0.0] to [-1.8, 0.0, 0.0] in 72.192s
+[2019-12-30 16:59:30.608149] [WPTIME] tb3_0 from [1.8, 0.0, 0.0] to [-1.8, 0.0, 0.0] in 78.212s
+[2019-12-30 17:00:00.507278] [WPTIME] tb3_1 from [1.8, 0.0, 0.0] to [-1.8, 0.0, 0.0] in 86.242s
+[2019-12-30 17:00:00.538880] [WPTIME] tb3_2 from [1.8, 0.0, 0.0] to [-1.8, 0.0, 0.0] in 86.246s
+[2019-12-30 17:00:22.716045] [WPTIME] tb3_3 from [-1.8, 0.0, 0.0] to [0.0, 1.8, 0.0] in 20.064s
+[2019-12-30 17:00:51.592589] [WPTIME] tb3_0 from [-1.8, 0.0, 0.0] to [0.0, 1.8, 0.0] in 22.076s
+[2019-12-30 17:01:12.939421] [WPTIME] tb3_3 from [0.0, 1.8, 0.0] to [0.0, -1.8, 0.0] in 14.074s
+[2019-12-30 17:01:19.643990] [WPTIME] tb3_1 from [-1.8, 0.0, 0.0] to [0.0, 1.8, 0.0] in 22.112s
+[2019-12-30 17:01:40.486425] [WPTIME] tb3_0 from [0.0, 1.8, 0.0] to [0.0, -1.8, 0.0] in 14.092s
+[2019-12-30 17:02:01.303585] [WPTIME] tb3_2 from [-1.8, 0.0, 0.0] to [0.0, 1.8, 0.0] in 34.172s
+[2019-12-30 17:02:29.545481] [WPTIME] tb3_3 from [0.0, -1.8, 0.0] to [1.8, 0.0, 0.0] in 22.15s
+[2019-12-30 17:02:36.779031] [WPTIME] tb3_1 from [0.0, 1.8, 0.0] to [0.0, -1.8, 0.0] in 22.138s
+[2019-12-30 17:02:44.549982] [WPTIME] tb3_0 from [0.0, -1.8, 0.0] to [1.8, 0.0, 0.0] in 18.126s
+[2019-12-30 17:03:20.487510] [WPTIME] tb3_2 from [0.0, 1.8, 0.0] to [0.0, -1.8, 0.0] in 22.13s
+[2019-12-30 17:03:20.499770] [WPTIME] tb3_3 from [1.8, 0.0, 0.0] to [-1.8, 0.0, 0.0] in 14.064s
+[2019-12-30 17:03:20.500298] [MAKESPAN] 3 finished with makespan of 142.548s <<<
+[2019-12-30 17:03:20.545822] [MAKESPAN] 3 finished with makespan of 142.558s <<<
+[2019-12-30 17:03:28.019389] [MAKESPAN] 3 finished with makespan of 144.556s <<<
+[2019-12-30 17:03:35.405692] [MAKESPAN] 3 finished with makespan of 146.564s <<<
+[2019-12-30 17:03:42.356449] [WPTIME] tb3_0 from [1.8, 0.0, 0.0] to [-1.8, 0.0, 0.0] in 16.06s
+[2019-12-30 17:03:42.357428] [MAKESPAN] 0 finished with makespan of 148.568s <<<
+[2019-12-30 17:03:42.369826] [MAKESPAN] 0 finished with makespan of 148.568s <<<
+[2019-12-30 17:03:42.410318] [MAKESPAN] 3 finished with makespan of 148.586s <<<
+[2019-12-30 17:03:49.375287] [MAKESPAN] 0 finished with makespan of 150.594s <<<
+[2019-12-30 17:03:49.432123] [MAKESPAN] 3 finished with makespan of 150.606s <<<
+[2019-12-30 17:03:56.441718] [MAKESPAN] 0 finished with makespan of 152.608s <<<
+[2019-12-30 17:03:56.503485] [MAKESPAN] 3 finished with makespan of 152.62s <<<
