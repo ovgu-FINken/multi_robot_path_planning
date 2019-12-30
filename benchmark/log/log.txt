@@ -371,3 +371,103 @@
 --------------------------------------------------------
 
 [2019-12-30 11:32:18.727655] [MAKESPAN] 1 finished with makespan of 2s <<<
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2019-12-30 15:40:17.868707
+==> Benchmark ID: 1577716817
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: start
+--------------------------------------------------------
+
+[2019-12-30 15:40:17.869125] [MAKESPAN] 1 finished with makespan of 2s <<<
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2019-12-30 15:40:29.693869
+==> Benchmark ID: 1577716829
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: start
+--------------------------------------------------------
+
+[2019-12-30 15:40:29.694287] [MAKESPAN] 1 finished with makespan of 2s <<<
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2019-12-30 15:40:37.569452
+==> Benchmark ID: 1577716837
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: start
+--------------------------------------------------------
+
+[2019-12-30 15:40:37.570013] [MAKESPAN] 1 finished with makespan of 2s <<<
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2019-12-30 15:41:24.673454
+==> Benchmark ID: 1577716884
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: start
+--------------------------------------------------------
+
+[2019-12-30 15:41:24.673859] [MAKESPAN] 1 finished with makespan of 2s <<<
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2019-12-30 15:41:35.795641
+==> Benchmark ID: 1577716895
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: start
+--------------------------------------------------------
+
+[2019-12-30 15:41:35.796097] [MAKESPAN] 1 finished with makespan of 2s <<<

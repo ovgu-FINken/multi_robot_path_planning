@@ -66,6 +66,7 @@ class Logger:
         self._output_to_txt = output_to_txt
         self._output_to_csv = output_to_csv
         self._log_file = {}
+        self._id = calendar.timegm(time.gmtime())
         if initial_setup_print:
             self.setup()
 
@@ -137,8 +138,9 @@ class Logger:
         """ Writes the text to the log csv file.
         :param text: ['col1', 'col2', ...]
         """
+        text.insert(0, str(self._id))
         writer = csv.writer(self._log_file[FileType.CSV.value])
-        writer.writerows(text)
+        writer.writerow(text)
 
     def _write_to_txt_file(self, text, timestamp=True):
         """ Writes text to the log file.
@@ -203,7 +205,7 @@ class Logger:
         sm = settings.SettingsManager()
         text = "\n\n---------------------- BENCHMARK ----------------------\n" \
                + "==> datetime: " + str(datetime.datetime.now()) + "\n" \
-               + "==> Benchmark ID: " + str(calendar.timegm(time.gmtime())) + "\n" \
+               + "==> Benchmark ID: " + str(self._id) + "\n" \
                + "==> model_name: " + str(sm.read("model_name")) + "\n" \
                + "==> model_type: " + str(sm.read("model_type")) + "\n" \
                + "==> namespace: " + str(sm.read("namespace")) + "\n" \
@@ -218,6 +220,7 @@ class Logger:
                + "==> end_procedure: " + str(sm.read("end_procedure")) + "\n" \
                + "--------------------------------------------------------\n"
         self._write_to_file(text, FileType.TXT.value, timestamp=False)
+
 
 logger = Logger()
 logger.makespan(1, 2)
