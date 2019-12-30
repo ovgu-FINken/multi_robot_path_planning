@@ -142,3 +142,9 @@ to evaluate the performance for the path planner:
 The intention is that one would add one agent at a time until
 an algorithm cannot solve a problem in a given time/memory limit."
 ([Reference](https://movingai.com/benchmarks/mapf.html))
+
+### Clean log files
+All log files can be cleaned (content deletion) via the following shell script:
+```
+bash scripts/clean_log.sh
+```
