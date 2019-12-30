@@ -97,10 +97,11 @@ class Logger:
         :param log_value:
         :return True, False
         """
+        rospy.loginfo("type {0} value {1}".format(file_type, log_value))
         try:
             if log_value is None:
                 return not self._log_file[file_type].closed
-            return not self._log_file[file_type][log_value].closed
+            return not self._log_file[file_type].closed
         except KeyError:
             return False
 
@@ -172,7 +173,7 @@ class Logger:
             text = "[WP TIME] " + str(robot) + " from " + str(wp_1) + " to " + str(wp_2) + " in " + str(_time)
             self._write_to_file(text, FileType.TXT.value)
         if self._output_to_csv:
-            text = []
+            text = [str(robot), str(wp_1), str(wp_2), str(_time)]
             self._write_to_file(text, FileType.CSV.value, log_value=LogValues.FLOWTIME.value)
 
     def makespan(self, robot, makespan):
