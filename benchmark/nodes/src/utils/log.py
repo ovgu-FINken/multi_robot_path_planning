@@ -22,7 +22,9 @@ DEFAULT_LOG_DIRECTORY = rospkg.RosPack().get_path('benchmark') + "/log/"
 DEFAULT_TXT_FILE_NAME = "log.txt"
 DEFAULT_CSV_MAKESPAN_FILE_NAME = "log_makespan.csv"
 DEFAULT_CSV_FLOWTIME_FILE_NAME = "log_flowtime.csv"
+DEFAULT_CSV_FLOWTIME_AVG_FILE_NAME = "log_flowtime_avg.csv"
 DEFAULT_CSV_MAKESPAN_AVG_FILE_NAME = "log_makespan_avg.csv"
+DEFAULT_CSV_WPTIME_FILE_NAME = "log_wptime.csv"
 
 
 class LogValues(Enum):
@@ -30,6 +32,8 @@ class LogValues(Enum):
     """
     MAKESPAN = 'makespan'
     FLOWTIME = 'flowtime'
+    AVG_FLOWTIME = 'avg_flowtime'
+    WPTIME = 'wptime'
     AVG_MAKESPAN = 'avg_makespan'
 
 
@@ -60,7 +64,9 @@ class Logger:
             FileType.CSV.value: {
                 LogValues.MAKESPAN.value: log_dir + DEFAULT_CSV_MAKESPAN_FILE_NAME,
                 LogValues.FLOWTIME.value: log_dir + DEFAULT_CSV_FLOWTIME_FILE_NAME,
-                LogValues.AVG_MAKESPAN.value: log_dir + DEFAULT_CSV_MAKESPAN_AVG_FILE_NAME
+                LogValues.AVG_MAKESPAN.value: log_dir + DEFAULT_CSV_MAKESPAN_AVG_FILE_NAME,
+                LogValues.AVG_FLOWTIME.value: log_dir + DEFAULT_CSV_FLOWTIME_AVG_FILE_NAME,
+                LogValues.WPTIME.value: log_dir + DEFAULT_CSV_WPTIME_FILE_NAME
             }
         }
         self._output_to_txt = output_to_txt
@@ -97,7 +103,6 @@ class Logger:
         :param log_value:
         :return True, False
         """
-        rospy.loginfo("type {0} value {1}".format(file_type, log_value))
         try:
             if log_value is None:
                 return not self._log_file[file_type].closed
@@ -162,7 +167,7 @@ class Logger:
             # CSV log does not support plain text log (unintended); do nothing
             pass
 
-    def time(self, robot, wp_1, wp_2, _time):
+    def wptime(self, robot, wp_1, wp_2, _time):
         """ Logs the time a robot needed from wp 1 to 2.
         :param robot:
         :param wp_1:
@@ -170,11 +175,34 @@ class Logger:
         :param _time:
         """
         if self._output_to_txt:
-            text = "[WP TIME] " + str(robot) + " from " + str(wp_1) + " to " + str(wp_2) + " in " + str(_time)
+            text = "[WPTIME] " + str(robot) + " from " + str(wp_1) + " to " + str(wp_2) + " in " + str(_time)
             self._write_to_file(text, FileType.TXT.value)
         if self._output_to_csv:
             text = [str(robot), str(wp_1), str(wp_2), str(_time)]
+            self._write_to_file(text, FileType.CSV.value, log_value=LogValues.WPTIME.value)
+
+    def flowtime(self, robot, _time):
+        """ Logs the flowtime, the time a robot needed to get from wp to wp in average.
+        :param robot:
+        :param _time:
+        """
+        if self._output_to_txt:
+            text = "[FLOWTIME] " + str(robot) + ": " + str(_time)
+            self._write_to_file(text, FileType.TXT.value)
+        if self._output_to_csv:
+            text = [str(robot), str(_time)]
             self._write_to_file(text, FileType.CSV.value, log_value=LogValues.FLOWTIME.value)
+
+    def flowtime_avg(self, _time):
+        """ Logs the average flowtime, the time all robots needed to get from wp to wp in average.
+        :param _time:
+        """
+        if self._output_to_txt:
+            text = "[FLOWTIME AVG] " + str(_time)
+            self._write_to_file(text, FileType.TXT.value)
+        if self._output_to_csv:
+            text = [str(_time)]
+            self._write_to_file(text, FileType.CSV.value, log_value=LogValues.AVG_FLOWTIME.value)
 
     def makespan(self, robot, makespan):
         """ Logs the makespan for a robot.
