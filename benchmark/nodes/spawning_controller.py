@@ -84,7 +84,8 @@ def publish_start_position(_namespace, _positions, frequency=3):
     for robot_id in range(number_of_robots):
         name = _namespace + str(robot_id) + "/start_pos"
         pub = topic_handler.PublishingHandler(name, Point)
-        pub.publish(_positions[robot_id])
+        pub.publish(_positions[robot_id], single_shot=True, quiet=False)
+        rospy.loginfo("FOUND!!!!!")
 
 
 spawner = sp.RobotSpawner(world="world")
