@@ -1,9 +1,16 @@
 # Path Planning Benchmark
 Welcome to the Path Planning Benchmark!
-1. [Settings](#settings)
-2. [Worlds](#worlds)
-3. [Execution](#execution)
-4. [Evaluation](#evaluation)
+1. [System](#system)
+2. [Settings](#settings)
+3. [Worlds](#worlds)
+4. [Execution](#execution)
+5. [Evaluation](#evaluation)
+
+## System
+This framework was successfully tested under:
+- Ubuntu 18.04
+- ROS Melodic
+- Python 2.7
 
 ## Settings
 
