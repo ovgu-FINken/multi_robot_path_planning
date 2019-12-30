@@ -80,7 +80,7 @@ class Logger:
                 self._log_file_paths[FileType.TXT.value], 'a')
         elif file_type == FileType.CSV or file_type == FileType.CSV.value:
             self._log_file[FileType.CSV.value] = open(
-                self._log_file_paths[FileType.CSV.value][log_value], 'a', newline='')
+                self._log_file_paths[FileType.CSV.value][log_value], 'a')
 
     def _close(self, file_type):
         """ Closes the log file.
@@ -220,7 +220,3 @@ class Logger:
                + "==> end_procedure: " + str(sm.read("end_procedure")) + "\n" \
                + "--------------------------------------------------------\n"
         self._write_to_file(text, FileType.TXT.value, timestamp=False)
-
-
-logger = Logger()
-logger.makespan(1, 2)
