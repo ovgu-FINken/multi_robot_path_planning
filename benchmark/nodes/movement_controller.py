@@ -21,7 +21,6 @@ def callback_start_pos(data, args):
     :param args:
     """
     global start_pos, pos_received_flag
-    rospy.loginfo("GOT START POS: " + str(data))
     start_pos[args[0]] = [data.x, data.y, data.z]
     pos_received_flag[args[0]] = True
 
