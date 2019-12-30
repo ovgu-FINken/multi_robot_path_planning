@@ -21,6 +21,7 @@ def callback_start_pos(data, args):
     :param args:
     """
     global start_pos
+    rospy.loginfo("GOT START POS: " + str(data))
     start_pos[args[0]] = data
 
 
@@ -98,6 +99,7 @@ def _apply_end_procedure(_robot_id):
         # up to the user
         pass
     elif end_procedure == 'start':
+        rospy.loginfo(str(start_pos))
         rospy.loginfo("END: " + str(start_pos[_robot_id]))
         move_controller[_robot_id].linear_move_to(
             start_pos[_robot_id], quiet=False)

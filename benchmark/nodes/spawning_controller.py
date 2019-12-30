@@ -62,7 +62,6 @@ def spawn_robots(_positions, _orientations, _number_of_robots,
             position=_position, orientation=_orientation,
             name=str(i), update_if_exist=False,
             use_launch_file=True)
-        publish_start_position(_namespace + str(i), _position)
     spawner.spawn_via_launch(_number_of_robots, _positions)
 
 
@@ -76,13 +75,16 @@ def setup_subscriber(_number_of_robots, _namespace):
         topic_handler.SubscribingHandler(topic_name, Bool, callback_rounds, robot_id)
 
 
-def publish_start_position(_robot_name, _position):
+def publish_start_position(_namespace, _positions, frequency=3):
     """ Publishes the start position of the robot.
-    :param _robot_name:
-    :param _position:
+    :param _namespace:
+    :param _positions:
+    :param frequency:
     """
-    pub = topic_handler.PublishingHandler(_robot_name + "/start_pos", Point)
-    pub.publish(_position)
+    for robot_id in range(number_of_robots):
+        name = _namespace + str(robot_id) + "/start_pos"
+        pub = topic_handler.PublishingHandler(name, Point)
+        pub.publish(_positions[robot_id])
 
 
 spawner = sp.RobotSpawner(world="world")
@@ -97,7 +99,7 @@ end_procedure = rospy.get_param('end_procedure')
 setup_subscriber(number_of_robots, namespace)
 positions, orientations = run_formation(
     number_of_robots, position, orientation, formation)
+publish_start_position(namespace, positions)
 spawn_robots(
     positions, orientations, number_of_robots,
     model_name, model_type, namespace)
-rospy.spin()
