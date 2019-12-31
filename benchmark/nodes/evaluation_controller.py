@@ -23,20 +23,21 @@ def callback_target(data, args):
     :param data:
     :param args:
     """
-    global timer, previous_wps, logger, makespan
-    if args[0] not in previous_wps:
-        previous_wps[args[0]] = data
-        timer.start_timer(args[0])
-        makespan.start_timer(args[0])
-    elif previous_wps[args[0]] != data:
-        if timer.is_running(args[0]):
-            duration = timer.get_time(args[0])
-            logger.wptime(
-                namespace + str(args[0]),
-                [previous_wps[args[0]].x, previous_wps[args[0]].y, previous_wps[args[0]].z],
-                [data.x, data.y, data.z], str(duration) + "s")
-        previous_wps[args[0]] = data
-        timer.start_timer(args[0])
+    global timer, previous_wps, logger, makespan, end
+    if not end:
+        if args[0] not in previous_wps:
+            previous_wps[args[0]] = data
+            timer.start_timer(args[0])
+            makespan.start_timer(args[0])
+        elif previous_wps[args[0]] != data:
+            if timer.is_running(args[0]):
+                duration = timer.get_time(args[0])
+                logger.wptime(
+                    namespace + str(args[0]),
+                    [previous_wps[args[0]].x, previous_wps[args[0]].y, previous_wps[args[0]].z],
+                    [data.x, data.y, data.z], str(duration) + "s")
+            previous_wps[args[0]] = data
+            timer.start_timer(args[0])
 
 
 def callback_rounds(data, args):
@@ -44,18 +45,20 @@ def callback_rounds(data, args):
     :param data:
     :param args:
     """
-    global logger, makespan, finished
-    if data == Bool(True) and not finished[args[0]]:
-        logger.makespan(namespace + args[0], makespan.get_time(args[0]))
-        flowtime = makespan.get_time(args[0]) / waypoint.get_num_of_wps(wp_map)
-        logger.flowtime(namespace + args[0], flowtime)
-        finished[args[0]] = True
-    if all(item is True for item in finished):
-        makespan_list = [makespan.get_time(key) for key in range(number_of_robots)]
-        makespan_avg = sum(makespan_list) / len(makespan_list)
-        logger.makespan_avg(makespan_avg)
-        flowtime_avg = makespan_avg / waypoint.get_num_of_wps(wp_map)
-        logger.flowtime_avg(flowtime_avg)
+    global logger, makespan, finished, end
+    if not end:
+        if data == Bool(True) and not finished[args[0]]:
+            logger.makespan(namespace + str(args[0]), makespan.get_time(args[0]))
+            flowtime = makespan.get_time(args[0]) / waypoint.get_num_of_wps(wp_map)
+            logger.flowtime(namespace + str(args[0]), flowtime)
+            finished[args[0]] = True
+        if all(item is True for item in finished.values()):
+            makespan_list = [makespan.get_time(key) for key in range(number_of_robots)]
+            makespan_avg = sum(makespan_list) / len(makespan_list)
+            logger.makespan_avg(makespan_avg)
+            flowtime_avg = makespan_avg / waypoint.get_num_of_wps(wp_map)
+            logger.flowtime_avg(flowtime_avg)
+            end = True
 
 
 def setup_subscriber(_number_of_robots, _namespace):
@@ -76,6 +79,7 @@ logger = log.Logger()
 previous_wps = {}
 finished = {}
 flowtime = {}
+end = False
 rospy.init_node('evaluation_controller', anonymous=True)
 namespace = rospy.get_param('namespace')
 number_of_robots = rospy.get_param('number_of_robots')
