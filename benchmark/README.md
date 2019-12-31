@@ -1,6 +1,7 @@
 # Path Planning Benchmark
 Welcome to the Path Planning Benchmark!
 1. [System](#system)
+2. [Structure](#structure)
 2. [Settings](#settings)
 3. [Worlds](#worlds)
 4. [Execution](#execution)
@@ -11,6 +12,13 @@ This framework was successfully tested under:
 - Ubuntu 18.04
 - ROS Melodic
 - Python 2.7
+
+## Structure
+The following Figure illustrates the node graph for two robots
+(captured in RQT). Note that this graph was reduced to the benchmark
+essential nodes and topics.
+
+![alt text](res/imgs/graphs/node_graph.png "node_graph")
 
 ## Settings
 
