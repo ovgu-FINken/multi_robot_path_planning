@@ -46,9 +46,9 @@ def callback_rounds(data, args):
     """
     global logger, makespan, finished
     if data == Bool(True) and not finished[args[0]]:
-        logger.makespan(args[0], makespan.get_time(args[0]))
+        logger.makespan(namespace + args[0], makespan.get_time(args[0]))
         flowtime = makespan.get_time(args[0]) / waypoint.get_num_of_wps(wp_map)
-        logger.flowtime(args[0], flowtime)
+        logger.flowtime(namespace + args[0], flowtime)
         finished[args[0]] = True
     if all(item is True for item in finished):
         makespan_list = [makespan.get_time(key) for key in range(number_of_robots)]
