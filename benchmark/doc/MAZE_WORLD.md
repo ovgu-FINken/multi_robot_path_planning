@@ -1,4 +1,6 @@
 # Maze World
+:white_check_mark: SLAM CONFORM
+
 This file contains information about the Maze world.
 1. [Usage](#usage)
 2. [World](#world)

@@ -1,4 +1,6 @@
-# TB3 World
+# Warehouse 2 World
+:white_check_mark: SLAM CONFORM
+
 This file contains information about the Warehouse world.
 1. [Usage](#usage)
 2. [World](#world)
@@ -6,17 +8,17 @@ This file contains information about the Warehouse world.
 
 ## Usage
 For using this world file in the benchmark, please set the `world` option 
-in the `settings/settings.json` file to `warehouse.world`. 
+in the `settings/settings.json` file to `warehouse_2.world`. 
 
 ## World
 The warehouse world:
-![alt text](../res/imgs/worlds/warehouse.png "warehouse_world")
+![alt text](../res/imgs/worlds/warehouse_2.png "warehouse_2_world")
 
 ## Waypoints
-This world is equipped with one waypoint map: `warehouse`.
-The `warehouse` map contains six waypoints, such that the robots have to
+This world is equipped with one waypoint map: `warehouse_2`.
+The `warehouse_2` map contains six waypoints, such that the robots have to
 move zagzag:
-![alt text](../res/imgs/wp_maps/warehouse.png "warehouse")
+![alt text](../res/imgs/wp_maps/warehouse_2.png "warehouse_2")
 
 All Waypoints (WP-IDs) and their corresponding positions
 [x,y,z] in the map are summarized in this table: 
