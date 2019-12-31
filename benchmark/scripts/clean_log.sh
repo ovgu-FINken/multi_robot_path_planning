@@ -8,9 +8,9 @@
 #################################################
 
 
-echo "" > log/log.txt
-echo "" > log/log_flowtime.csv
-echo "" > log/log_flowtime_avg.csv
-echo "" > log/log_makespan.csv
-echo "" > log/log_makespan_avg.csv
-echo "" > log/log_wptime.csv
+truncate -s 0 log/log.txt
+truncate -s 0 log/log_flowtime.csv
+truncate -s 0 log/log_flowtime_avg.csv
+truncate -s 0 log/log_makespan.csv
+truncate -s 0 log/log_makespan_avg.csv
+truncate -s 0 log/log_wptime.csv

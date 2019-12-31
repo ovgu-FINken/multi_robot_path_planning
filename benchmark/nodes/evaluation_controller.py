@@ -47,7 +47,7 @@ def callback_rounds(data, args):
     :param args:
     """
     global logger, makespan, finished
-    if data == Bool(True) and args[0] not in finished:
+    if data == Bool(True) and not finished[args[0]]:
         print("Robot {0} finished in makespan of {1}s".format(
             args[0], makespan.get_time(args[0])))
         logger.makespan(args[0], makespan.get_time(args[0]))
@@ -55,15 +55,16 @@ def callback_rounds(data, args):
         print("Flowtime: {}".format(flowtime))
         logger.flowtime(args[0], flowtime)
         finished[args[0]] = True
-        if all(item is True for item in finished):
-            print("All robots successfully finished the benchmark!")
-            makespan_list = [makespan.get_time(key) for key in range(number_of_robots)]
-            makespan_avg = sum(makespan_list) / len(makespan_list)
-            print("Average makespan: {}".format(makespan_avg))
-            logger.makespan_avg(makespan_avg)
-            flowtime_avg = makespan_avg / waypoint.get_num_of_wps(wp_map)
-            print("Average Flowtime: {}".format(flowtime_avg))
-            logger.flowtime_avg(flowtime_avg)
+        rospy.loginfo(finished) #<--
+    if all(item is True for item in finished):
+        print("All robots successfully finished the benchmark!")
+        makespan_list = [makespan.get_time(key) for key in range(number_of_robots)]
+        makespan_avg = sum(makespan_list) / len(makespan_list)
+        print("Average makespan: {}".format(makespan_avg))
+        logger.makespan_avg(makespan_avg)
+        flowtime_avg = makespan_avg / waypoint.get_num_of_wps(wp_map)
+        print("Average Flowtime: {}".format(flowtime_avg))
+        logger.flowtime_avg(flowtime_avg)
 
 
 def setup_subscriber(_number_of_robots, _namespace):
@@ -71,7 +72,9 @@ def setup_subscriber(_number_of_robots, _namespace):
     :param _number_of_robots:
     :param _namespace:
     """
+    global finished
     for robot_id in range(number_of_robots):
+        finished[robot_id] = False
         topic_name = namespace + str(robot_id) + "/waypoint"
         topic_handler.SubscribingHandler(topic_name, Point, callback_target, robot_id)
         topic_name = namespace + str(robot_id) + "/rounds"
