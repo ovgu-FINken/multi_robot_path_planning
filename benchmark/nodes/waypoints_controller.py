@@ -27,13 +27,13 @@ def callback_target(name, point):
         target_publisher[name].publish(point, quiet=True)
 
 
-def callback_rounds(name, finished):
+def callback_finished(name, finished):
     """ This callback method will publish the new round status.
     :param name:
     :param finished:
     """
-    global rounds_publisher
-    rounds_publisher[name].publish(finished, quiet=True)
+    global finished_publisher
+    finished_publisher[name].publish(finished, quiet=True)
 
 
 def callback_position(data, args):
@@ -57,14 +57,14 @@ def setup_waypoint_publisher(_publisher, _number_of_robots, _namespace):
         _publisher[robot_id] = _pub
 
 
-def setup_rounds_publisher(_publisher, _number_of_robots, _namespace):
+def setup_finished_publisher(_publisher, _number_of_robots, _namespace):
     """ Init for the rounds publisher.
     :param _publisher:
     :param _number_of_robots:
     :param _namespace:
     """
     for robot_id in range(_number_of_robots):
-        _topic_name = _namespace + str(robot_id) + "/rounds"
+        _topic_name = _namespace + str(robot_id) + "/finished"
         _pub = topic_handler.PublishingHandler(_topic_name, Bool, queue_size=10)
         _publisher[robot_id] = _pub
 
@@ -91,7 +91,7 @@ def update_wps(_number_of_robots, _namespace, _rounds,
     """
     wp_manager = wp.WayPointManager(
         namespace=_namespace, number_of_robots=_number_of_robots,
-        wp_callback=callback_target, round_callback=callback_rounds,
+        wp_callback=callback_target, finished_callback=callback_finished,
         waypoints=_wp_map, threshold=wp_threshold, rounds=_rounds)
     while not rospy.is_shutdown():
         wp_manager.update(robot_current_positions)
@@ -100,7 +100,7 @@ def update_wps(_number_of_robots, _namespace, _rounds,
 
 robot_current_positions = {}
 target_publisher = {}
-rounds_publisher = {}
+finished_publisher = {}
 rospy.init_node("waypoint_controller", anonymous=True)
 namespace = rospy.get_param('namespace')
 wp_map = rospy.get_param('wp_map')
@@ -108,6 +108,6 @@ wp_threshold = rospy.get_param('wp_threshold')
 number_of_robots = rospy.get_param('number_of_robots')
 rounds = rospy.get_param('rounds')
 setup_waypoint_publisher(target_publisher, number_of_robots, namespace)
-setup_rounds_publisher(rounds_publisher, number_of_robots, namespace)
+setup_finished_publisher(finished_publisher, number_of_robots, namespace)
 setup_position_subscriber(number_of_robots, namespace)
 update_wps(number_of_robots, namespace, rounds, wp_map, wp_threshold)

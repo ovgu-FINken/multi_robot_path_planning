@@ -30,19 +30,19 @@ def callback_target(data, args):
     :param data:
     :param args:
     """
-    global robot_targets, robot_rounds
-    if not robot_rounds[args[0]]:
+    global robot_targets, robot_finished
+    if not robot_finished[args[0]]:
         robot_targets[args[0]] = [data.x, data.y, data.z]
 
 
-def callback_rounds(data, args):
+def callback_finished(data, args):
     """ Callback for rounds completed.
     :param data:
     :param args:
     """
-    global robot_rounds
+    global robot_finished
     if data == Bool(True):
-        robot_rounds[args[0]] = True
+        robot_finished[args[0]] = True
 
 
 def setup_move_controller(_namespace, _number_of_robots):
@@ -60,14 +60,14 @@ def setup_subscribers(_namespace, _number_of_robots):
     :param _namespace:
     :param _number_of_robots:
     """
-    global robot_rounds, pos_received_flag
+    global robot_finished, pos_received_flag
     for robot_id in range(_number_of_robots):
         pos_received_flag[robot_id] = False
-        robot_rounds[robot_id] = False
+        robot_finished[robot_id] = False
         topic_name = _namespace + str(robot_id) + "/waypoint"
         topic_handler.SubscribingHandler(topic_name, Point, callback_target, robot_id)
         topic_name = _namespace + str(robot_id) + "/rounds"
-        topic_handler.SubscribingHandler(topic_name, Bool, callback_rounds, robot_id)
+        topic_handler.SubscribingHandler(topic_name, Bool, callback_finished, robot_id)
         topic_name = _namespace + str(robot_id) + "/start_pos"
         topic_handler.SubscribingHandler(topic_name, Point, callback_start_pos, robot_id)
     wait_for_pos()
@@ -110,11 +110,11 @@ def update_movement(_number_of_robots, frequency=0.5):
     :param _number_of_robots:
     :param frequency:
     """
-    global robot_rounds
+    global robot_finished
     while not rospy.is_shutdown():
         for robot_id in range(_number_of_robots):
             if robot_id in robot_targets:
-                if not robot_rounds[robot_id]:
+                if not robot_finished[robot_id]:
                     move_controller[robot_id].linear_move_to(
                         robot_targets[robot_id], quiet=False)
                 else:
@@ -133,7 +133,7 @@ def wait_for_pos():
 
 move_controller = {}
 robot_targets = {}
-robot_rounds = {}
+robot_finished = {}
 start_pos = {}
 pos_received_flag = {}
 rospy.init_node('movement_controller', anonymous=True)

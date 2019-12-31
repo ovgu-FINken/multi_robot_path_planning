@@ -17,7 +17,7 @@ import os
 
 
 WP_TOPIC_NAME = "waypoint"
-ROUNDS_TOPIC_NAME = "rounds"
+FINISHED_TOPIC_NAME = "finished"
 NODE_NAME = "waypoint_controller"
 DEFAULT_NODE_UPDATE_FREQUENCY = 3
 
@@ -77,7 +77,7 @@ class WayPointManager:
     def __init__(self, namespace, number_of_robots, rounds,
                  waypoints=WayPointMap.TB3_EDGE,
                  node_update_frequency=DEFAULT_NODE_UPDATE_FREQUENCY,
-                 wp_callback=None, round_callback=None,
+                 wp_callback=None, finished_callback=None,
                  threshold=0.2):
         """ Init. method.
         :param rounds:
@@ -86,7 +86,7 @@ class WayPointManager:
         :param number_of_robots
         :param waypoints
         :param node_update_frequency
-        :param round_callback:
+        :param finished_callback:
         :param wp_callback: Use own wp_callback method instead of local publisher.
         """
         self._rounds = rounds
@@ -98,7 +98,7 @@ class WayPointManager:
         self._node_update_frequency = node_update_frequency
         self._publisher = {}
         self._wp_callback = wp_callback
-        self._round_callback = round_callback
+        self._finished_callback = finished_callback
         self._rounds_completed = {}
         self._setup_publisher()
         self._init_wps()
@@ -187,7 +187,7 @@ class WayPointManager:
         """
         if self._wp_callback is not None:
             self._wp_callback(robot_name, self._get_target_point(robot_name))
-            self._round_callback(robot_name, self._finished(robot_name))
+            self._finished_callback(robot_name, self._finished(robot_name))
         else:
             self._publish_target_points(robot_name)
             self._publish_rounds(robot_name)
@@ -211,10 +211,10 @@ class WayPointManager:
                 topic_name = self._namespace + '_' + str(robot_name) + '/' + WP_TOPIC_NAME
                 pub = topic_handler.PublishingHandler(topic_name, Point, queue_size=10)
                 self._publisher[WP_TOPIC_NAME][robot_name] = pub
-        if self._round_callback is None:
-            self._publisher[ROUNDS_TOPIC_NAME] = {}
+        if self._finished_callback is None:
+            self._publisher[FINISHED_TOPIC_NAME] = {}
             for robot_name in range(self._number_of_robots):
-                topic_name = self._namespace + '_' + str(robot_name) + '/' + ROUNDS_TOPIC_NAME
+                topic_name = self._namespace + '_' + str(robot_name) + '/' + FINISHED_TOPIC_NAME
                 pub = topic_handler.PublishingHandler(topic_name, Bool, queue_size=10)
                 self._publisher[WP_TOPIC_NAME][robot_name] = pub
 
@@ -236,11 +236,11 @@ class WayPointManager:
         :param robot_name: publish only for this robot
         """
         if robot_name is not None:
-            self._publisher[ROUNDS_TOPIC_NAME][robot_name].publish(self._get_target_point(robot_name))
+            self._publisher[FINISHED_TOPIC_NAME][robot_name].publish(self._get_target_point(robot_name))
         else:
             for robot_name in range(self._number_of_robots):
                 target_point = self._get_target_point(robot_name)
-                self._publisher[ROUNDS_TOPIC_NAME][robot_name].publish(target_point)
+                self._publisher[FINISHED_TOPIC_NAME][robot_name].publish(target_point)
 
     def _update_target_points(self, robot_name):
         """ Updates the target points for a robot.
