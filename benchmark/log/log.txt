@@ -254,3 +254,23 @@
 ==> include_start_time: False
 --------------------------------------------------------
 
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2019-12-31 11:27:18.310351
+==> Benchmark ID: 1577788038
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 2
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: start
+==> include_start_time: False
+--------------------------------------------------------
+
