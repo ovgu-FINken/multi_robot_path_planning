@@ -28,7 +28,8 @@ All adjustable parameter can be found in the settings file: `settings/settings.j
   "wp_threshold": 0.2,
   "world": "turtlebot3.world",
   "rounds": 1,
-  "end_procedure": "despawn"
+  "end_procedure": "despawn",
+  "include_start_time": false
 }
 ```
 
@@ -99,6 +100,12 @@ simulation-based benchmarks. Alternatively, this variable can be set to
 the robot will move to the start position after the last waypoint is reached.
 Ultimately, the `ìdle` state is a free state, where the robots might just move 
 randomly, which is up to the user.
+
+#### Include Start Time
+The **Include Start Time** property is a boolean value, thus can be set to either
+`true` or `false`. If enabled all [evaluation metrics](#evaluation) will include the 
+time required to get from the initial start position (spawn point) to the first wayypoint.
+Whereas, if disabled this time will not be included into the computation.
 
 #### RQT & RVIZ
 Furthermore, RQT and RVIZ can be started by enabling

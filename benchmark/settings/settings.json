@@ -10,5 +10,6 @@
   "wp_threshold": 0.2,
   "world": "turtlebot3.world",
   "rounds": 1,
-  "end_procedure": "start"
+  "end_procedure": "start",
+  "include_start_time": false
 }

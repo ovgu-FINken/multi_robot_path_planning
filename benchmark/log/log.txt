@@ -119,3 +119,25 @@
 [2019-12-31 09:38:37.310756] [MAKESPAN AVG] 189.8085s
 [2019-12-31 09:38:37.321566] [FLOWTIME AVG] 47.452125
 [2019-12-31 09:38:37.326031] [FLOWTIME AVG] 47.452125
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2019-12-31 10:21:58.733985
+==> Benchmark ID: 1577784118
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: start
+==> include_start_time: False
+--------------------------------------------------------
+
+[2019-12-31 10:25:02.234869] [WPTIME] tb3_3 from [-1.8, 0.0, 0.0] to [0.0, 1.8, 0.0] in 20.106s
+[2019-12-31 10:25:14.520627] [WPTIME] tb3_0 from [-1.8, 0.0, 0.0] to [0.0, 1.8, 0.0] in 20.126s

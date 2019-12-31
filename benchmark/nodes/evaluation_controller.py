@@ -27,8 +27,9 @@ def callback_target(data, args):
     if not end:
         if args[0] not in previous_wps:
             previous_wps[args[0]] = data
-            timer.start_timer(args[0])
-            makespan.start_timer(args[0])
+            if include_start_time:
+                timer.start_timer(args[0])
+                makespan.start_timer(args[0])
         elif previous_wps[args[0]] != data:
             if timer.is_running(args[0]):
                 duration = timer.get_time(args[0])
@@ -83,6 +84,7 @@ end = False
 rospy.init_node('evaluation_controller', anonymous=True)
 namespace = rospy.get_param('namespace')
 number_of_robots = rospy.get_param('number_of_robots')
+include_start_time = rospy.get_param('include_start_time')
 wp_map = rospy.get_param('wp_map')
 timer = time.Timer(number_of_robots)
 makespan = time.Timer(number_of_robots)

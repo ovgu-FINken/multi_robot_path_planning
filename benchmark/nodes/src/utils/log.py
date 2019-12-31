@@ -265,5 +265,6 @@ class Logger:
                + "==> world: " + str(sm.read("world")) + "\n" \
                + "==> rounds: " + str(sm.read("rounds")) + "\n" \
                + "==> end_procedure: " + str(sm.read("end_procedure")) + "\n" \
+               + "==> include_start_time: " + str(sm.read("include_start_time")) + "\n" \
                + "--------------------------------------------------------\n"
         self._write_to_file(text, FileType.TXT.value, timestamp=False)
