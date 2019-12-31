@@ -1,11 +1,11 @@
 # Path Planning Benchmark
 Welcome to the Path Planning Benchmark!
 1. [System](#system)
-2. [Structure](#structure)
-2. [Settings](#settings)
-3. [Worlds](#worlds)
-4. [Execution](#execution)
-5. [Evaluation](#evaluation)
+2. [Implementation](#implementation)
+3. [Settings](#settings)
+4. [Worlds](#worlds)
+5. [Execution](#execution)
+6. [Evaluation](#evaluation)
 
 ## System
 This framework was successfully tested under:
@@ -13,12 +13,47 @@ This framework was successfully tested under:
 - ROS Melodic
 - Python 2.7
 
-## Structure
+## Implementation
 The following Figure illustrates the node graph for two robots
 (captured in RQT). Note that this graph was reduced to the benchmark
-essential nodes and topics.
+essential nodes and topics. (Here, the turtlebot model (tb3) is used.)
 
 ![alt text](res/imgs/graphs/node_graph.png "node_graph")
+
+### Nodes and Topics
+
+#### World Creator
+The **/world_creator** is responsible for creating the gazebo world and is only 
+essential in simulation-based benchmarks.
+
+#### Spawning Controller
+This also applies to the **/spawning_controller**,
+which spawns the robot models, starts AMCL localization, the move base navigation, and
+the static transform publisher (TF). The start positions of each robots are published under **/tb3_x/benchmark/start_pos**, which might be used
+in the end procedure of the benchmark (see [settings](#settings)). This node is also capable of despawning a robot, therefore, the 
+connection to the **/tb3_x/benchmark/finished** topic is required. This despawning, however, is only 
+executed if (and only if) the despawn option is activated (see [settings](#settings)).
+
+#### Waypoint Controller
+After the robots are successfully spawned, the **/waypoint_controller** will load the waypoint map
+and publishes the current target point (waypoint) for each robot, individually (**/tb3_x/benchmark/waypoint**).
+Furthermore, this node publishes a boolean value to the **/tb3_x/benchmark/finished** topic, which 
+indicates if a specific robot finished the benchmark.
+
+#### Movement Controller
+The **/movement_controller** is responsible for the movement of each robot. Here, a user defined 
+path planner can be utilized. A subscription to the **/tb3_x/benchmark/waypoint** topic is used for 
+the goal position, to which the robot should move. The value of the **/tb3_x/benchmark/finished** topic 
+indicates if the robot has finished the benchmark and the end procedure (see [settings](#settings)) can be 
+applied. Finally, the **/tb3_x/benchmark/start_pos** is used to move the back to the start position if the 
+benchmark finished (Note, this option has to be activated, see [settings](#settings)).
+
+#### Evaluation Controller
+All evaluation related measurements are handled by the **/evaluation_controller**. 
+Here, a timer is started and stopped, respectively, if a new waypoint is reached. This 
+time is then used in a diversity of evaluation metrics. Therefore, a subscription to the 
+current target position (**/tb3_x/benchmark/waypoint**) and the finished flag (**/tb3_x/benchmark/finished**)
+is required.
 
 ## Settings
 
