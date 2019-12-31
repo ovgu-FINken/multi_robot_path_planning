@@ -157,71 +157,89 @@ class Logger:
             text = "[" + str(datetime.datetime.now()) + "] " + text
         self._log_file[FileType.TXT.value].write(text + "\n")
 
-    def info(self, text):
+    def info(self, text, quiet=False):
         """ Straightforward log for plain text.
         :param text:
+        :param quiet:
         """
+        if not quiet:
+            rospy.loginfo(text)
         if self._output_to_txt:
             self._write_to_file(text, FileType.TXT.value)
         if self._output_to_csv:
             # CSV log does not support plain text log (unintended); do nothing
             pass
 
-    def wptime(self, robot, wp_1, wp_2, _time):
+    def wptime(self, robot, wp_1, wp_2, _time, quiet=False):
         """ Logs the time a robot needed from wp 1 to 2.
         :param robot:
         :param wp_1:
         :param wp_2:
         :param _time:
+        :param quiet:
         """
+        text = "[WPTIME] " + str(robot) + " from " + str(wp_1) + " to " + str(wp_2) + " in " + str(_time)
+        if not quiet:
+            rospy.loginfo(text)
         if self._output_to_txt:
-            text = "[WPTIME] " + str(robot) + " from " + str(wp_1) + " to " + str(wp_2) + " in " + str(_time)
             self._write_to_file(text, FileType.TXT.value)
         if self._output_to_csv:
             text = [str(robot), str(wp_1), str(wp_2), str(_time)]
             self._write_to_file(text, FileType.CSV.value, log_value=LogValues.WPTIME.value)
 
-    def flowtime(self, robot, _time):
+    def flowtime(self, robot, _time, quiet=False):
         """ Logs the flowtime, the time a robot needed to get from wp to wp in average.
         :param robot:
         :param _time:
+        :param quiet:
         """
+        text = "[FLOWTIME] " + str(robot) + ": " + str(_time)
+        if not quiet:
+            rospy.loginfo(text)
         if self._output_to_txt:
-            text = "[FLOWTIME] " + str(robot) + ": " + str(_time)
             self._write_to_file(text, FileType.TXT.value)
         if self._output_to_csv:
             text = [str(robot), str(_time)]
             self._write_to_file(text, FileType.CSV.value, log_value=LogValues.FLOWTIME.value)
 
-    def flowtime_avg(self, _time):
+    def flowtime_avg(self, _time, quiet=False):
         """ Logs the average flowtime, the time all robots needed to get from wp to wp in average.
         :param _time:
+        :param quiet:
         """
+        text = "[FLOWTIME AVG] " + str(_time)
+        if not quiet:
+            rospy.loginfo(text)
         if self._output_to_txt:
-            text = "[FLOWTIME AVG] " + str(_time)
             self._write_to_file(text, FileType.TXT.value)
         if self._output_to_csv:
             text = [str(_time)]
             self._write_to_file(text, FileType.CSV.value, log_value=LogValues.AVG_FLOWTIME.value)
 
-    def makespan(self, robot, makespan):
+    def makespan(self, robot, makespan, quiet=False):
         """ Logs the makespan for a robot.
         :param robot:
         :param makespan:
+        :param quiet:
         """
+        text = "[MAKESPAN] " + str(robot) + " finished in " + str(makespan) + "s"
+        if not quiet:
+            rospy.loginfo(text)
         if self._output_to_txt:
-            text = "[MAKESPAN] " + str(robot) + " finished with makespan of " + str(makespan) + "s <<<"
             self._write_to_file(text, FileType.TXT.value)
         if self._output_to_csv:
             text = [str(robot), str(makespan)]
             self._write_to_file(text, FileType.CSV.value, log_value=LogValues.MAKESPAN.value)
 
-    def makespan_avg(self, makespan):
+    def makespan_avg(self, makespan, quiet=False):
         """ Logs the makespan average for all robots.
         :param makespan:
+        :param quiet:
         """
+        text = "[MAKESPAN AVG] " + str(makespan) + "s"
+        if not quiet:
+            rospy.loginfo(text)
         if self._output_to_txt:
-            text = "[MAKESPAN AVG] Average makespan: " + str(makespan) + "s <<< <<< <<<"
             self._write_to_file(text, FileType.TXT.value)
         if self._output_to_csv:
             text = [str(makespan)]

@@ -35,8 +35,6 @@ def callback_target(data, args):
                 namespace + str(args[0]),
                 [previous_wps[args[0]].x, previous_wps[args[0]].y, previous_wps[args[0]].z],
                 [data.x, data.y, data.z], str(duration) + "s")
-            print("Robot {0} reached WP ({1}) after {2}s".format(
-                args[0], [data.x, data.y, data.z], duration))
         previous_wps[args[0]] = data
         timer.start_timer(args[0])
 
@@ -48,22 +46,15 @@ def callback_rounds(data, args):
     """
     global logger, makespan, finished
     if data == Bool(True) and not finished[args[0]]:
-        print("Robot {0} finished in makespan of {1}s".format(
-            args[0], makespan.get_time(args[0])))
         logger.makespan(args[0], makespan.get_time(args[0]))
         flowtime = makespan.get_time(args[0]) / waypoint.get_num_of_wps(wp_map)
-        print("Flowtime: {}".format(flowtime))
         logger.flowtime(args[0], flowtime)
         finished[args[0]] = True
-        rospy.loginfo(finished) #<--
     if all(item is True for item in finished):
-        print("All robots successfully finished the benchmark!")
         makespan_list = [makespan.get_time(key) for key in range(number_of_robots)]
         makespan_avg = sum(makespan_list) / len(makespan_list)
-        print("Average makespan: {}".format(makespan_avg))
         logger.makespan_avg(makespan_avg)
         flowtime_avg = makespan_avg / waypoint.get_num_of_wps(wp_map)
-        print("Average Flowtime: {}".format(flowtime_avg))
         logger.flowtime_avg(flowtime_avg)
 
 
