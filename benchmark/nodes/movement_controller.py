@@ -65,11 +65,11 @@ def setup_subscribers(_namespace, _number_of_robots):
     for robot_id in range(_number_of_robots):
         pos_received_flag[robot_id] = False
         robot_finished[robot_id] = False
-        topic_name = _namespace + str(robot_id) + names.TopicNames.WAYPOINT.value
+        topic_name = _namespace + str(robot_id) + "/" + names.TopicNames.WAYPOINT.value
         topic_handler.SubscribingHandler(topic_name, Point, callback_target, robot_id)
-        topic_name = _namespace + str(robot_id) + names.TopicNames.FINISHED.value
+        topic_name = _namespace + str(robot_id) + "/" + names.TopicNames.FINISHED.value
         topic_handler.SubscribingHandler(topic_name, Bool, callback_finished, robot_id)
-        topic_name = _namespace + str(robot_id) + names.TopicNames.START_POSITION.value
+        topic_name = _namespace + str(robot_id) + "/" + names.TopicNames.START_POSITION.value
         topic_handler.SubscribingHandler(topic_name, Point, callback_start_pos, robot_id)
     wait_for_pos()
 

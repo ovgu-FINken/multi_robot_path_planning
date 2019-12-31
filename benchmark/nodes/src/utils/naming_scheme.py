@@ -17,12 +17,12 @@ BENCHMARK_NAMESPACE = "benchmark/"
 class NodeNames(Enum):
     """ Enum of all benchmark node names.
     """
-    EVALUATION_CONTROLLER = BENCHMARK_NAMESPACE + "evaluation_controller"
-    WAYPOINT_CONTROLLER = BENCHMARK_NAMESPACE + "waypoint_controller"
-    MOVEMENT_CONTROLLER = BENCHMARK_NAMESPACE + "movement_controller"
-    SPAWNING_CONTROLLER = BENCHMARK_NAMESPACE + "spawning_controller"
-    SETTINGS_PUBLISHER = BENCHMARK_NAMESPACE + "settings_publisher"
-    WORLD_CREATOR = BENCHMARK_NAMESPACE + "world_creator"
+    EVALUATION_CONTROLLER = "evaluation_controller"
+    WAYPOINT_CONTROLLER = "waypoint_controller"
+    MOVEMENT_CONTROLLER = "movement_controller"
+    SPAWNING_CONTROLLER = "spawning_controller"
+    SETTINGS_PUBLISHER = "settings_publisher"
+    WORLD_CREATOR = "world_creator"
 
 
 class TopicNames(Enum):

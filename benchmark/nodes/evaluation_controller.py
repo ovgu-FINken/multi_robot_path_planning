@@ -71,9 +71,9 @@ def setup_subscriber(_number_of_robots, _namespace):
     global finished
     for robot_id in range(number_of_robots):
         finished[robot_id] = False
-        topic_name = namespace + str(robot_id) + names.TopicNames.WAYPOINT.value
+        topic_name = namespace + str(robot_id) + "/" + names.TopicNames.WAYPOINT.value
         topic_handler.SubscribingHandler(topic_name, Point, callback_target, robot_id)
-        topic_name = namespace + str(robot_id) + names.TopicNames.FINISHED.value
+        topic_name = namespace + str(robot_id) + "/" + names.TopicNames.FINISHED.value
         topic_handler.SubscribingHandler(topic_name, Bool, callback_finished, robot_id)
 
 
