@@ -10,9 +10,10 @@
 
 import rospy
 import os
+import src.utils.naming_scheme as names
 
 
-rospy.init_node('world_creator', anonymous=True)
+rospy.init_node(names.NodeNames.WORLD_CREATOR.value, anonymous=True)
 world_name = rospy.get_param('world')
 dir_path = os.path.dirname(os.path.realpath(__file__))
 world_path = os.path.join(dir_path, '..', 'worlds', world_name)

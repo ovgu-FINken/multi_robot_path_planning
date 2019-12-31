@@ -15,6 +15,7 @@ from std_msgs.msg import Int16MultiArray
 import src.utils.topic_handler as topic_handler
 from geometry_msgs.msg import Point
 from std_msgs.msg import Bool
+import src.utils.naming_scheme as names
 
 
 def callback_target(name, point):
@@ -52,7 +53,7 @@ def setup_waypoint_publisher(_publisher, _number_of_robots, _namespace):
     :param _namespace:
     """
     for robot_id in range(_number_of_robots):
-        _topic_name = _namespace + str(robot_id) + "/waypoint"
+        _topic_name = _namespace + str(robot_id) + "/" + names.TopicNames.WAYPOINT.value
         _pub = topic_handler.PublishingHandler(_topic_name, Point, queue_size=10)
         _publisher[robot_id] = _pub
 
@@ -64,7 +65,7 @@ def setup_finished_publisher(_publisher, _number_of_robots, _namespace):
     :param _namespace:
     """
     for robot_id in range(_number_of_robots):
-        _topic_name = _namespace + str(robot_id) + "/finished"
+        _topic_name = _namespace + str(robot_id) + "/" + names.TopicNames.FINISHED.value
         _pub = topic_handler.PublishingHandler(_topic_name, Bool, queue_size=10)
         _publisher[robot_id] = _pub
 
@@ -101,7 +102,7 @@ def update_wps(_number_of_robots, _namespace, _rounds,
 robot_current_positions = {}
 target_publisher = {}
 finished_publisher = {}
-rospy.init_node("waypoint_controller", anonymous=True)
+rospy.init_node(names.NodeNames.WAYPOINT_CONTROLLER.value, anonymous=True)
 namespace = rospy.get_param('namespace')
 wp_map = rospy.get_param('wp_map')
 wp_threshold = rospy.get_param('wp_threshold')

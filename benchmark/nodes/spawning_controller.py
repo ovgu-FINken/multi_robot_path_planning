@@ -14,9 +14,10 @@ import src.formation as form
 import src.utils.topic_handler as topic_handler
 from std_msgs.msg import Bool
 from geometry_msgs.msg import Point
+import src.utils.naming_scheme as names
 
 
-def callback_rounds(data, args):
+def callback_finished(data, args):
     """ Callback when the rounds are fulfilled.
     :param data:
     :param args:
@@ -71,8 +72,8 @@ def setup_subscriber(_number_of_robots, _namespace):
     :param _namespace:
     """
     for robot_id in range(number_of_robots):
-        topic_name = namespace + str(robot_id) + "/rounds"
-        topic_handler.SubscribingHandler(topic_name, Bool, callback_rounds, robot_id)
+        topic_name = namespace + str(robot_id) + names.TopicNames.FINISHED.value
+        topic_handler.SubscribingHandler(topic_name, Bool, callback_finished, robot_id)
 
 
 def publish_start_position(_namespace, _positions):
@@ -81,7 +82,7 @@ def publish_start_position(_namespace, _positions):
     :param _positions:
     """
     for robot_id in range(number_of_robots):
-        name = _namespace + str(robot_id) + "/start_pos"
+        name = _namespace + str(robot_id) + names.TopicNames.START_POSITION.value
         pub = topic_handler.PublishingHandler(name, Point)
         pub.publish(_positions[robot_id], single_shot=True)
 

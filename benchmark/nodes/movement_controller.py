@@ -13,6 +13,7 @@ import src.movement as movement
 import src.utils.topic_handler as topic_handler
 from geometry_msgs.msg import Point
 from std_msgs.msg import Bool
+import src.utils.naming_scheme as names
 
 
 def callback_start_pos(data, args):
@@ -64,11 +65,11 @@ def setup_subscribers(_namespace, _number_of_robots):
     for robot_id in range(_number_of_robots):
         pos_received_flag[robot_id] = False
         robot_finished[robot_id] = False
-        topic_name = _namespace + str(robot_id) + "/waypoint"
+        topic_name = _namespace + str(robot_id) + names.TopicNames.WAYPOINT.value
         topic_handler.SubscribingHandler(topic_name, Point, callback_target, robot_id)
-        topic_name = _namespace + str(robot_id) + "/rounds"
+        topic_name = _namespace + str(robot_id) + names.TopicNames.FINISHED.value
         topic_handler.SubscribingHandler(topic_name, Bool, callback_finished, robot_id)
-        topic_name = _namespace + str(robot_id) + "/start_pos"
+        topic_name = _namespace + str(robot_id) + names.TopicNames.START_POSITION.value
         topic_handler.SubscribingHandler(topic_name, Point, callback_start_pos, robot_id)
     wait_for_pos()
 
@@ -136,7 +137,7 @@ robot_targets = {}
 robot_finished = {}
 start_pos = {}
 pos_received_flag = {}
-rospy.init_node('movement_controller', anonymous=True)
+rospy.init_node(names.NodeNames.MOVEMENT_CONTROLLER.value, anonymous=True)
 namespace = rospy.get_param('namespace')
 number_of_robots = rospy.get_param('number_of_robots')
 end_procedure = rospy.get_param('end_procedure')

@@ -15,9 +15,7 @@ from std_msgs.msg import Empty as EmptyMsg
 import src.utils.ros_utils as ros_utils
 import rospkg
 import yaml
-
-
-NODE_NAME = "spawning_controller"
+import src.utils.naming_scheme as names
 
 
 class RobotSpawner:
@@ -132,10 +130,7 @@ class RobotSpawner:
             simulate="True",
             auto_drive="False")
 
-        rospack = rospkg.RosPack()
-        directory = rospack.get_path('benchmark')
-        # HACK
-        directory = "/home/johschm/git/DrivingSwarm/src/pathplanning/benchmark/config"
+        directory = rospkg.RosPack().get_path('benchmark') + "/config"
         file_name = os.path.join(directory, "robot_" + self._name + "_params.yaml")
         file = open(file_name, "w")
         yaml.dump(data, file, default_flow_style=False)
@@ -227,7 +222,7 @@ class RobotSpawner:
     def _create_node():
         """ Creates a node.
         """
-        rospy.init_node(NODE_NAME, anonymous=True)
+        rospy.init_node(names.NodeNames.SPAWNING_CONTROLLER.value, anonymous=True)
         rospy.sleep(5)
         rospy.wait_for_service("/gazebo/spawn_urdf_model")
 

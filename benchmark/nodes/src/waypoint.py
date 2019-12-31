@@ -14,11 +14,9 @@ import src.utils.topic_handler as topic_handler
 from std_msgs.msg import Bool
 import json
 import os
+import src.utils.naming_scheme as names
 
 
-WP_TOPIC_NAME = "waypoint"
-FINISHED_TOPIC_NAME = "finished"
-NODE_NAME = "waypoint_controller"
 DEFAULT_NODE_UPDATE_FREQUENCY = 3
 
 
@@ -63,7 +61,7 @@ def setup_node():
     """ Setup method for the way point node.
     Here the current way point is published.
     """
-    rospy.init_node(NODE_NAME, anonymous=True)
+    rospy.init_node(names.NodeNames.WAYPOINT_CONTROLLER.value, anonymous=True)
 
 
 class WayPointManager:
@@ -206,17 +204,17 @@ class WayPointManager:
         """ Setup for the waypoint topics.
         """
         if self._wp_callback is None:
-            self._publisher[WP_TOPIC_NAME] = {}
+            self._publisher[names.TopicNames.WAYPOINT.value] = {}
             for robot_name in range(self._number_of_robots):
-                topic_name = self._namespace + '_' + str(robot_name) + '/' + WP_TOPIC_NAME
+                topic_name = self._namespace + '_' + str(robot_name) + '/' + names.TopicNames.WAYPOINT.value
                 pub = topic_handler.PublishingHandler(topic_name, Point, queue_size=10)
-                self._publisher[WP_TOPIC_NAME][robot_name] = pub
+                self._publisher[names.TopicNames.WAYPOINT.value][robot_name] = pub
         if self._finished_callback is None:
-            self._publisher[FINISHED_TOPIC_NAME] = {}
+            self._publisher[names.TopicNames.FINISHED.value] = {}
             for robot_name in range(self._number_of_robots):
-                topic_name = self._namespace + '_' + str(robot_name) + '/' + FINISHED_TOPIC_NAME
+                topic_name = self._namespace + '_' + str(robot_name) + '/' + names.TopicNames.FINISHED.value
                 pub = topic_handler.PublishingHandler(topic_name, Bool, queue_size=10)
-                self._publisher[WP_TOPIC_NAME][robot_name] = pub
+                self._publisher[names.TopicNames.FINISHED.value][robot_name] = pub
 
     def _publish_target_points(self, robot_name=None):
         """ Updates the target point for the robot
@@ -224,11 +222,11 @@ class WayPointManager:
         :param robot_name: publish only for this robot
         """
         if robot_name is not None:
-            self._publisher[WP_TOPIC_NAME][robot_name].publish(self._get_target_point(robot_name))
+            self._publisher[names.TopicNames.WAYPOINT.value][robot_name].publish(self._get_target_point(robot_name))
         else:
             for robot_name in range(self._number_of_robots):
                 target_point = self._get_target_point(robot_name)
-                self._publisher[WP_TOPIC_NAME][robot_name].publish(target_point)
+                self._publisher[names.TopicNames.WAYPOINT.value][robot_name].publish(target_point)
 
     def _publish_rounds(self, robot_name=None):
         """ Updates the rounds for the robot
@@ -236,11 +234,11 @@ class WayPointManager:
         :param robot_name: publish only for this robot
         """
         if robot_name is not None:
-            self._publisher[FINISHED_TOPIC_NAME][robot_name].publish(self._get_target_point(robot_name))
+            self._publisher[names.TopicNames.FINISHED.value][robot_name].publish(self._get_target_point(robot_name))
         else:
             for robot_name in range(self._number_of_robots):
                 target_point = self._get_target_point(robot_name)
-                self._publisher[FINISHED_TOPIC_NAME][robot_name].publish(target_point)
+                self._publisher[names.TopicNames.FINISHED.value][robot_name].publish(target_point)
 
     def _update_target_points(self, robot_name):
         """ Updates the target points for a robot.

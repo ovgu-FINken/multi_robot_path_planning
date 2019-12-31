@@ -16,6 +16,7 @@ from std_msgs.msg import Bool
 import src.timer as time
 import src.utils.log as log
 import src.waypoint as waypoint
+import src.utils.naming_scheme as names
 
 
 def callback_target(data, args):
@@ -70,9 +71,9 @@ def setup_subscriber(_number_of_robots, _namespace):
     global finished
     for robot_id in range(number_of_robots):
         finished[robot_id] = False
-        topic_name = namespace + str(robot_id) + "/waypoint"
+        topic_name = namespace + str(robot_id) + names.TopicNames.WAYPOINT.value
         topic_handler.SubscribingHandler(topic_name, Point, callback_target, robot_id)
-        topic_name = namespace + str(robot_id) + "/rounds"
+        topic_name = namespace + str(robot_id) + names.TopicNames.FINISHED.value
         topic_handler.SubscribingHandler(topic_name, Bool, callback_finished, robot_id)
 
 
@@ -81,7 +82,7 @@ previous_wps = {}
 finished = {}
 flowtime = {}
 end = False
-rospy.init_node('evaluation_controller', anonymous=True)
+rospy.init_node(names.NodeNames.EVALUATION_CONTROLLER.value, anonymous=True)
 namespace = rospy.get_param('namespace')
 number_of_robots = rospy.get_param('number_of_robots')
 include_start_time = rospy.get_param('include_start_time')
