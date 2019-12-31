@@ -1,5 +1,5 @@
 # TB3 World
-:x: SLAM CONFORM
+:x: NOT SLAM CONFORM
 
 This file contains information about the Turtlebot3 world.
 1. [Usage](#usage)

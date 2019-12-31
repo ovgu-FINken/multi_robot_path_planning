@@ -1,5 +1,5 @@
 # Warehouse 1 World
-:x: SLAM CONFORM
+:x: NOT SLAM CONFORM
 
 This file contains information about the Warehouse world.
 1. [Usage](#usage)
