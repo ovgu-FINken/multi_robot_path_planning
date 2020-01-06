@@ -1,11 +1,43 @@
 # Path Planning Benchmark
 Welcome to the Path Planning Benchmark!
-1. [System](#system)
-2. [Implementation](#implementation)
-3. [Settings](#settings)
-4. [Worlds](#worlds)
-5. [Execution](#execution)
-6. [Evaluation](#evaluation)
+
+<!-- TOC START min:1 max:5 link:true asterisk:false update:true -->
+- [Path Planning Benchmark](#path-planning-benchmark)
+  - [System](#system)
+  - [Implementation](#implementation)
+    - [Nodes and Topics](#nodes-and-topics)
+      - [World Creator](#world-creator)
+      - [Spawning Controller](#spawning-controller)
+      - [Waypoint Controller](#waypoint-controller)
+      - [Movement Controller](#movement-controller)
+      - [Evaluation Controller](#evaluation-controller)
+  - [Settings](#settings)
+      - [World Name](#world-name)
+      - [Model Type](#model-type)
+      - [Namespace](#namespace)
+      - [Number of Robots](#number-of-robots)
+      - [Formation](#formation)
+      - [Position](#position)
+      - [Orientation](#orientation)
+      - [Waypoint Map](#waypoint-map)
+      - [Waypoint Threshold](#waypoint-threshold)
+      - [World Map](#world-map)
+      - [Rounds](#rounds)
+      - [End Procedure](#end-procedure)
+      - [Include Start Time](#include-start-time)
+      - [RQT & RVIZ](#rqt--rviz)
+  - [Worlds](#worlds)
+  - [Execution](#execution)
+  - [Foreign Movement](#foreign-movement)
+  - [Evaluation](#evaluation)
+    - [General TXT log file](#general-txt-log-file)
+    - [WP-Time log file](#wp-time-log-file)
+    - [Flowtime log file](#flowtime-log-file)
+    - [Average Flowtime log file](#average-flowtime-log-file)
+    - [Makespan log file](#makespan-log-file)
+    - [Average Makespan log file](#average-makespan-log-file)
+    - [Clean log files](#clean-log-files)
+<!-- TOC END -->
 
 ## System
 This framework was successfully tested under:
@@ -23,35 +55,35 @@ essential nodes and topics. (Here, the turtlebot model (tb3) is used.)
 ### Nodes and Topics
 
 #### World Creator
-The **/world_creator** is responsible for creating the gazebo world and is only 
+The **/world_creator** is responsible for creating the gazebo world and is only
 essential in simulation-based benchmarks.
 
 #### Spawning Controller
 This also applies to the **/spawning_controller**,
 which spawns the robot models, starts AMCL localization, the move base navigation, and
 the static transform publisher (TF). The start positions of each robots are published under **/tb3_x/benchmark/start_pos**, which might be used
-in the end procedure of the benchmark (see [settings](#settings)). This node is also capable of despawning a robot, therefore, the 
-connection to the **/tb3_x/benchmark/finished** topic is required. This despawning, however, is only 
+in the end procedure of the benchmark (see [settings](#settings)). This node is also capable of despawning a robot, therefore, the
+connection to the **/tb3_x/benchmark/finished** topic is required. This despawning, however, is only
 executed if (and only if) the despawn option is activated (see [settings](#settings)).
 
 #### Waypoint Controller
 After the robots are successfully spawned, the **/waypoint_controller** will load the waypoint map
 and publishes the current target point (waypoint) for each robot, individually (**/tb3_x/benchmark/waypoint**).
-Furthermore, this node publishes a boolean value to the **/tb3_x/benchmark/finished** topic, which 
+Furthermore, this node publishes a boolean value to the **/tb3_x/benchmark/finished** topic, which
 indicates if a specific robot finished the benchmark.
 
 #### Movement Controller
-The **/movement_controller** is responsible for the movement of each robot. Here, a user defined 
-path planner can be utilized. A subscription to the **/tb3_x/benchmark/waypoint** topic is used for 
-the goal position, to which the robot should move. The value of the **/tb3_x/benchmark/finished** topic 
-indicates if the robot has finished the benchmark and the end procedure (see [settings](#settings)) can be 
-applied. Finally, the **/tb3_x/benchmark/start_pos** is used to move the back to the start position if the 
+The **/movement_controller** is responsible for the movement of each robot. Here, a user defined
+path planner can be utilized. A subscription to the **/tb3_x/benchmark/waypoint** topic is used for
+the goal position, to which the robot should move. The value of the **/tb3_x/benchmark/finished** topic
+indicates if the robot has finished the benchmark and the end procedure (see [settings](#settings)) can be
+applied. Finally, the **/tb3_x/benchmark/start_pos** is used to move the back to the start position if the
 benchmark finished (Note, this option has to be activated, see [settings](#settings)).
 
 #### Evaluation Controller
-All evaluation related measurements are handled by the **/evaluation_controller**. 
-Here, a timer is started and stopped, respectively, if a new waypoint is reached. This 
-time is then used in a diversity of evaluation metrics. Therefore, a subscription to the 
+All evaluation related measurements are handled by the **/evaluation_controller**.
+Here, a timer is started and stopped, respectively, if a new waypoint is reached. This
+time is then used in a diversity of evaluation metrics. Therefore, a subscription to the
 current target position (**/tb3_x/benchmark/waypoint**) and the finished flag (**/tb3_x/benchmark/finished**)
 is required.
 
@@ -106,13 +138,13 @@ for other formations the positions are automatically computed.
 This can be set to any valid position vector `[x, y, z]` in the map.
 
 #### Orientation
-The **Orientation** defines the orientation of the formation. This is 
+The **Orientation** defines the orientation of the formation. This is
 similar to the position parameter and will only be used in the `dense_block`
 formation. This can be set to any valid orientation euler vector.
 
 #### Waypoint Map
 The **Waypoint Map** defines the set of waypoints to be used.
-This can be set to `maze` or `tb3_edge`. CAUTION: These waypoint maps are 
+This can be set to `maze` or `tb3_edge`. CAUTION: These waypoint maps are
 tailored to specific world files. Please, read the [world docs](doc).
 
 #### Waypoint Threshold
@@ -121,32 +153,32 @@ More specifically, it defines the radius of the waypoint.
 This can be set to any Float.
 
 #### World Map
-The **World** defines the gazebo world file, which will be loaded by 
+The **World** defines the gazebo world file, which will be loaded by
 gazebo after the execution of the benchmark.
 This can be set to `maze.world`, `square.world`, `turtlebot3.world`, or
 `tworooms.world` (All world files are located in the [world folder](worlds).).
 
 #### Rounds
-The **Rounds** variable defines the number the benchmark should run. 
-Each waypoint map as a finite set of waypoints, once the initial waypoint 
+The **Rounds** variable defines the number the benchmark should run.
+Each waypoint map as a finite set of waypoints, once the initial waypoint
 is reached again one round is fulfilled. When all rounds are accomplished,
 the benchmark finished.
 This can be set to any Integer.
 
 #### End Procedure
-The **End Procedure** defines how the robots will behave after they 
-successfully finished all rounds. Here, this can be set to `despawn`, which 
+The **End Procedure** defines how the robots will behave after they
+successfully finished all rounds. Here, this can be set to `despawn`, which
 simply deletes the robot model. This, however, is only applicable in
-simulation-based benchmarks. Alternatively, this variable can be set to 
-`stay`, which will freeze the robot at the last waypoint, whereas the value 
-`start` will send the start position as the next goal, such that 
+simulation-based benchmarks. Alternatively, this variable can be set to
+`stay`, which will freeze the robot at the last waypoint, whereas the value
+`start` will send the start position as the next goal, such that
 the robot will move to the start position after the last waypoint is reached.
-Ultimately, the `ìdle` state is a free state, where the robots might just move 
+Ultimately, the `ìdle` state is a free state, where the robots might just move
 randomly, which is up to the user.
 
 #### Include Start Time
 The **Include Start Time** property is a boolean value, thus can be set to either
-`true` or `false`. If enabled all [evaluation metrics](#evaluation) will include the 
+`true` or `false`. If enabled all [evaluation metrics](#evaluation) will include the
 time required to get from the initial start position (spawn point) to the first wayypoint.
 Whereas, if disabled this time will not be included into the computation.
 
@@ -162,7 +194,7 @@ The following world files are supported:
 * [Warehouse 1 World](doc/WAREHOUSE_1_WORLD.md)
 * [Warehouse 2 World](doc/WAREHOUSE_2_WORLD.md)
 
-Please, refer to these document files for more information, like how to 
+Please, refer to these document files for more information, like how to
 use these world maps and the corresponding waypoint maps.
 Furthermore, note the `SLAM CONFORM` flag, which indicates SLAM conform asymmetric maps.
 
@@ -183,12 +215,19 @@ gnome-terminal -- bash <FULL_PATH>/benchmark.sh
 gnome-terminal -- bash <FULL_PATH>/kill.sh
 ```
 
+## Foreign Movement
+The benchmark is by definition intended to be used by foreign movement controllers, like
+an MAPF algorithm based movement. This can be easily achieved by disabling the `DEFAULT_MOVEMENT`
+flag in the [benchmark script](./scripts/benchmark.sh). If this flag is set to `False`, the entire
+movement controller, used by default, will be disabled and a foreign node can handle all movement related
+tasks freely. Note, that this also comprises the `start` [end procedure](#end-procedure) handling.
+
 ## Evaluation
 
 Whenever a robot is reaching a new waypoint the duration to reach this goal
 is tracked and printed into the console, as well as stored in an [eval log](log/eval_log.txt).
 
-Furthermore, for purely simulation-based benchmarks, the following benchmark scenario can be used 
+Furthermore, for purely simulation-based benchmarks, the following benchmark scenario can be used
 to evaluate the performance for the path planner:
 "Each benchmark file has a list of start/goal locations.
 The intention is that one would add one agent at a time until
@@ -198,9 +237,9 @@ an algorithm cannot solve a problem in a given time/memory limit."
 ### General TXT log file
 The general log file, can be found [here](log/log.txt).
 This file provides the most comprehensive overview among all log files,
-as such the other log files will refer to this file for more precise 
+as such the other log files will refer to this file for more precise
 information. More specifically, this log file contains the entire parameter
-list defined in the [settings](#settings). These parameters are shown in the 
+list defined in the [settings](#settings). These parameters are shown in the
 header, which is created for each benchmark run. Afterwards all evaluation results
 are stored in the body. For instance, a general log entry can look like this:
 ```
