@@ -16,8 +16,9 @@ source ~/.bashrc
 SESSION_NAME="benchmark"
 NUM=0
 ENABLE_RVIZ=False
-ENABLE_RQT=True
+ENABLE_RQT=False
 USE_SETTINGS_FILE=True
+DEFAULT_MOVEMENT=True
 
 # start tmux
 tmux new-session -s $SESSION_NAME -d
@@ -49,9 +50,11 @@ tmux new-window -t $SESSION_NAME -n "waypoints"
 tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark waypoints.launch use_settings_file:=$USE_SETTINGS_FILE" C-m
 
 # movement
-NUM=$((++NUM))
-tmux new-window -t $SESSION_NAME -n "movement"
-tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark movement.launch" C-m
+if [ $DEFAULT_MOVEMENT == True ] ; then
+  NUM=$((++NUM))
+  tmux new-window -t $SESSION_NAME -n "movement"
+  tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark movement.launch" C-m
+fi
 
 # evaluation
 NUM=$((++NUM))
