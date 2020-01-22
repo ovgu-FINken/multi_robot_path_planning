@@ -32,7 +32,7 @@
 // Signal handling
 #include <signal.h>
 
-#include "amcl/map/map.h"
+#include "amcl/map/map.h" //TODO or is it #include "map/map.h ???
 #include "amcl/pf/pf.h"
 #include "amcl/sensors/amcl_odom.h"
 #include "amcl/sensors/amcl_laser.h"
@@ -87,6 +87,8 @@ typedef struct
 {
   // Total weight (weights sum to 1)
   double weight;
+
+  int count //COLLVOID(?)
 
   // Mean of pose esimate
   pf_vector_t pf_pose_mean;
@@ -248,7 +250,7 @@ class AmclNode
     ros::NodeHandle nh_;
     ros::NodeHandle private_nh_;
     ros::Publisher pose_pub_;
-    ros::Publisher particlecloud_pub_;
+    ros::Publisher particlecloud_pub_, particlecloud_weighted_pub_;
     ros::ServiceServer global_loc_srv_;
     ros::ServiceServer nomotion_update_srv_; //to let amcl update samples without requiring motion
     ros::ServiceServer set_map_srv_;
@@ -1218,6 +1220,7 @@ AmclNode::laserReceived(const sensor_msgs::LaserScanConstPtr& laser_scan)
   }
 
   bool resampled = false;
+  bool publish_weights = false; //COLLVOID
   // If the robot has moved, update the filter
   if(lasers_update_[laser_index])
   {
@@ -1351,7 +1354,7 @@ AmclNode::laserReceived(const sensor_msgs::LaserScanConstPtr& laser_scan)
         hyp_count < pf_->sets[pf_->current_set].cluster_count; hyp_count++)
     {
       double weight;
-      // int count;
+      int count; //COLLVOID
       pf_vector_t pose_mean;
       pf_matrix_t pose_cov;
       if (!pf_get_cluster_stats(pf_, hyp_count, &weight, &pose_mean, &pose_cov))
@@ -1361,6 +1364,7 @@ AmclNode::laserReceived(const sensor_msgs::LaserScanConstPtr& laser_scan)
       }
 
       hyps[hyp_count].weight = weight;
+      hyps[hyp_count].count = count;
       hyps[hyp_count].pf_pose_mean = pose_mean;
       hyps[hyp_count].pf_pose_cov = pose_cov;
 

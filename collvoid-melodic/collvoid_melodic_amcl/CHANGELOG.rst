@@ -49,16 +49,16 @@ Changelog for package amcl
 1.16.0 (2018-07-25)
 -------------------
 * Switch to TF2 `#755 <https://github.com/ros-planning/navigation/issues/755>`_
-* Merge pull request `#734 <https://github.com/ros-planning/navigation/issues/734>`_ from ros-planning/melodic_731
+* Merge pull request `#734 <https://github.com/ros-planning/navigation/issues/734>`_ from ros-planning/731
   AMCL dynamic reconfigure: Extend parameter range (Forward port `#731 <https://github.com/ros-planning/navigation/issues/731>`_)
-* Merge pull request `#728 <https://github.com/ros-planning/navigation/issues/728>`_ from ros-planning/melodic_tf2_conversion
+* Merge pull request `#728 <https://github.com/ros-planning/navigation/issues/728>`_ from ros-planning/tf2_conversion
   switch AMCL to use TF2
 * fix swapped odom1/4 in omni model, fixes `#499 <https://github.com/ros-planning/navigation/issues/499>`_
 * Merge pull request `#730 <https://github.com/ros-planning/navigation/issues/730>`_ from Glowcloud/melodic-devel
   Fix for Potential Memory Leak  in AmclNode::reconfigureCB `#729 <https://github.com/ros-planning/navigation/issues/729>`_
 * Fix for Potential Memory Leak  in AmclNode::reconfigureCB
 * switch AMCL to use TF2
-* Merge pull request `#727 <https://github.com/ros-planning/navigation/issues/727>`_ from ros-planning/melodic_668
+* Merge pull request `#727 <https://github.com/ros-planning/navigation/issues/727>`_ from ros-planning/668
   Update laser_model_type enum on AMCL.cfg (Melodic port of `#668 <https://github.com/ros-planning/navigation/issues/668>`_)
 * Update laser_model_type enum on AMCL.cfg
   Adding likelihood_field_prob laser model option on AMCL.cfg to be able to control dynamic parameters with this laser sensor model.

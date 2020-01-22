@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>collvoid_melodic</name>
+  <name>collvoid</name>
   <version>0.0.0</version>
-  <description>The collvoid_melodic package</description>
+  <description>The collvoid package</description>
 
   <maintainer email="nele.traichel@st.ovgu.de">nele</maintainer>
   <license>BSD</license>

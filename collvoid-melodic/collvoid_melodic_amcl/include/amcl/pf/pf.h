@@ -164,8 +164,8 @@ void pf_get_cep_stats(pf_t *pf, pf_vector_t *mean, double *var);
 
 // Compute the statistics for a particular cluster.  Returns 0 if
 // there is no such cluster.
-int pf_get_cluster_stats(pf_t *pf, int cluster, double *weight,
-                         pf_vector_t *mean, pf_matrix_t *cov);
+int pf_get_cluster_stats(pf_t *pf, int cluster, double *weight, int *count,
+                         pf_vector_t *mean, pf_matrix_t *cov); // COLLVOID: int*count 
 
 // Re-compute the cluster statistics for a sample set
 void pf_cluster_stats(pf_t *pf, pf_sample_set_t *set);

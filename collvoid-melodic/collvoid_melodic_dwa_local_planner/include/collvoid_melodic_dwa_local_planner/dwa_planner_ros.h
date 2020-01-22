@@ -43,8 +43,9 @@
 #include <tf2_ros/buffer.h>
 
 #include <dynamic_reconfigure/server.h>
-#include <dwa_local_planner/DWAPlannerConfig.h>
+#include <collvoid_dwa_local_planner/DWAPlannerConfig.h>
 
+#include <std_srvs/Empty.h>
 #include <angles/angles.h>
 
 #include <nav_msgs/Odometry.h>
@@ -57,103 +58,146 @@
 
 #include <dwa_local_planner/dwa_planner.h>
 
-namespace dwa_local_planner {
-  /**
+namespace collvoid_dwa_local_planner
+{
+/**
    * @class DWAPlannerROS
    * @brief ROS Wrapper for the DWAPlanner that adheres to the
    * BaseLocalPlanner interface and can be used as a plugin for move_base.
    */
-  class DWAPlannerROS : public nav_core::BaseLocalPlanner {
-    public:
-      /**
+class DWAPlannerROS : public nav_core::BaseLocalPlanner
+{
+public:
+  /**
        * @brief  Constructor for DWAPlannerROS wrapper
        */
-      DWAPlannerROS();
+  DWAPlannerROS();
 
-      /**
+  /**
        * @brief  Constructs the ros wrapper
        * @param name The name to give this instance of the trajectory planner
        * @param tf A pointer to a transform listener
        * @param costmap The cost map to use for assigning costs to trajectories
        */
-      void initialize(std::string name, tf2_ros::Buffer* tf,
-          costmap_2d::Costmap2DROS* costmap_ros);
+  void initialize(std::string name, tf2_ros::Buffer *tf,
+                  costmap_2d::Costmap2DROS *costmap_ros);
 
-      /**
+  /**
        * @brief  Destructor for the wrapper
        */
-      ~DWAPlannerROS();
+  ~DWAPlannerROS();
 
-      /**
+  /**
        * @brief  Given the current position, orientation, and velocity of the robot,
        * compute velocity commands to send to the base
        * @param cmd_vel Will be filled with the velocity command to be passed to the robot base
        * @return True if a valid trajectory was found, false otherwise
        */
-      bool computeVelocityCommands(geometry_msgs::Twist& cmd_vel);
+  bool computeVelocityCommands(geometry_msgs::Twist &cmd_vel);
 
-
-      /**
+  /**
        * @brief  Given the current position, orientation, and velocity of the robot,
        * compute velocity commands to send to the base, using dynamic window approach
        * @param cmd_vel Will be filled with the velocity command to be passed to the robot base
        * @return True if a valid trajectory was found, false otherwise
        */
-      bool dwaComputeVelocityCommands(geometry_msgs::PoseStamped& global_pose, geometry_msgs::Twist& cmd_vel);
+  bool dwaComputeVelocityCommands(geometry_msgs::PoseStamped &global_pose, geometry_msgs::Twist &cmd_vel);
 
-      /**
+  /**
        * @brief  Set the plan that the controller is following
        * @param orig_global_plan The plan to pass to the controller
        * @return True if the plan was updated successfully, false otherwise
        */
-      bool setPlan(const std::vector<geometry_msgs::PoseStamped>& orig_global_plan);
+  bool setPlan(const std::vector<geometry_msgs::PoseStamped> &orig_global_plan);
 
-      /**
+  /**
        * @brief  Check if the goal pose has been achieved
        * @return True if achieved, false otherwise
        */
-      bool isGoalReached();
+  bool isGoalReached();
 
+  /** << COLLVOID
+   * Check if a trajectory (normally a part of a global plan) is free of obstacles
+   * within obstacle_max_distance_ meters from the robot
+   * @param robot_pose Current robot pose
+   * @param trajectory Trajectory to check
+   * @param distance Distance from the robot to the closest obstacle, if any
+   * @return True if the trajectory is free, false otherwise
+   */
+  bool freeOfObstacles(const geometry_msgs::PoseStamped &robot_local_pose,
+                       const std::vector<geometry_msgs::PoseStamped> &plan, double &distance); //tf::Stamped<tf::Pose>
+  // COLLVOID >>
 
+  bool isInitialized()
+  {
+    return initialized_;
+  }
 
-      bool isInitialized() {
-        return initialized_;
-      }
-
-    private:
-      /**
+private:
+  /**
        * @brief Callback to update the local planner's parameters based on dynamic reconfigure
        */
-      void reconfigureCB(DWAPlannerConfig &config, uint32_t level);
+  void reconfigureCB(DWAPlannerConfig &config, uint32_t level);
 
-      void publishLocalPlan(std::vector<geometry_msgs::PoseStamped>& path);
+  void publishLocalPlan(std::vector<geometry_msgs::PoseStamped> &path);
 
-      void publishGlobalPlan(std::vector<geometry_msgs::PoseStamped>& path);
+  void publishGlobalPlan(std::vector<geometry_msgs::PoseStamped> &path);
 
-      tf2_ros::Buffer* tf_; ///< @brief Used for transforming point clouds
+  bool clearCostmapsService(std_srvs::Empty::Request &req, std_srvs::Empty::Response &resp); //COLLVOID
+  void clearCostmaps();                                                                      //COLLVOID
 
-      // for visualisation, publishers of global and local plan
-      ros::Publisher g_plan_pub_, l_plan_pub_;
+  tf2_ros::Buffer *tf_; ///< @brief Used for transforming point clouds
 
-      base_local_planner::LocalPlannerUtil planner_util_;
+  // for visualisation, publishers of global and local plan
+  ros::Publisher g_plan_pub_, l_plan_pub_;
+  ros::ServiceServer clear_costmaps_srv_; //A ServiceServer should always be created through a call to NodeHandle::advertiseService(), or copied from one that was.
 
-      boost::shared_ptr<DWAPlanner> dp_; ///< @brief The trajectory controller
+  base_local_planner::LocalPlannerUtil planner_util_;
 
-      costmap_2d::Costmap2DROS* costmap_ros_;
+  boost::shared_ptr<DWAPlanner> dp_; ///< @brief The trajectory controller
 
-      dynamic_reconfigure::Server<DWAPlannerConfig> *dsrv_;
-      dwa_local_planner::DWAPlannerConfig default_config_;
-      bool setup_;
-      geometry_msgs::PoseStamped current_pose_;
+  costmap_2d::Costmap2DROS *costmap_ros_;
 
-      base_local_planner::LatchedStopRotateController latchedStopRotateController_;
+  dynamic_reconfigure::Server<DWAPlannerConfig> *dsrv_;
+  collvoid_dwa_local_planner::DWAPlannerConfig default_config_;
+  bool setup_;
+  geometry_msgs::PoseStamped current_pose_;
 
+  base_local_planner::LatchedStopRotateController latchedStopRotateController_;
+  base_local_planner::WorldModel *world_model_;
 
-      bool initialized_;
+  bool initialized_;
 
+  base_local_planner::OdometryHelperRos odom_helper_;
+  std::string odom_topic_;
 
-      base_local_planner::OdometryHelperRos odom_helper_;
-      std::string odom_topic_;
-  };
+  // << COLLVOID Trajectory free parameters
+  double obstacle_max_distance_ = 1.0; //was 1.6
+  size_t blocked_path_count_ = 0;
+  size_t max_blocked_paths_ = 10; // blocked_path_count_ can grow until this value before considering a path blocked
+
+  inline double distance2D(const geometry_msgs::PoseStamped &p1, const geometry_msgs::PoseStamped &p2)
+  {
+    double x1 = p1.pose.position.x, x2 = p2.pose.position.x;
+    double y1 = p1.pose.position.y, y2 = p2.pose.position.y;
+    return std::sqrt(std::pow(x2 - x1, 2.0) + std::pow(y2 - y1, 2.0));
+  }
+
+  inline double distance2D(const geometry_msgs::PoseStamped &p, const std::vector<geometry_msgs::PoseStamped> &t, size_t &closest_point)
+  {
+    double min_distance = std::numeric_limits<double>::infinity();
+    for (size_t i = 0; i < t.size(); i++)
+    {
+      double distance = distance2D(p, t[i]);
+      if (distance < min_distance)
+      {
+        min_distance = distance;
+        closest_point = i;
+      }
+    }
+    return min_distance;
+    // COLLVOID >>
+  }
 };
+}; // namespace collvoid_dwa_local_planner
 #endif

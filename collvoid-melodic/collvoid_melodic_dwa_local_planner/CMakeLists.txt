@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(dwa_local_planner)
+project(collvoid_dwa_local_planner)
 
 find_package(catkin REQUIRED
         COMPONENTS
@@ -41,7 +41,7 @@ generate_dynamic_reconfigure_options(
 
 catkin_package(
     INCLUDE_DIRS include
-    LIBRARIES collvoid_melodic_dwa_local_planner
+    LIBRARIES collvoid_dwa_local_planner
     CATKIN_DEPENDS
         base_local_planner
         dynamic_reconfigure
@@ -53,19 +53,19 @@ catkin_package(
         tf2_ros
 )
 
-add_library(collvoid_melodic_dwa_local_planner
+add_library(collvoid_dwa_local_planner
     src/dwa_planner.cpp 
     src/dwa_planner_ros.cpp
-#    src/goal_alignment_cost_function.cpp
-#    src/path_alignment_cost_function.cpp
-#    include/collvoid_dwa_local_planner/
+    src/goal_alignment_cost_function.cpp
+    src/path_alignment_cost_function.cpp
+    include/collvoid_dwa_local_planner/
 )
-add_dependencies(collvoid_melodic_dwa_local_planner ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-add_dependencies(collvoid_melodic_dwa_local_planner collvoid_local_planner)
-add_dependencies(collvoid_melodic_dwa_local_planner collvoid_scoring_function)
-target_link_libraries(collvoid_melodic_dwa_local_planner base_local_planner ${catkin_LIBRARIES})
+add_dependencies(collvoid_dwa_local_planner ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(collvoid_dwa_local_planner collvoid_local_planner)
+add_dependencies(collvoid_dwa_local_planner collvoid_scoring_function)
+target_link_libraries(collvoid_dwa_local_planner base_local_planner ${catkin_LIBRARIES})
 
-install(TARGETS collvoid_melodic_dwa_local_planner
+install(TARGETS collvoid_dwa_local_planner
        ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
        LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
        )

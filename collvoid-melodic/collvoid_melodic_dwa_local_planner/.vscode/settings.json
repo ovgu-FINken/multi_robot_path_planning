@@ -3,10 +3,8 @@
         "/home/nele/DrivingSwarm/devel/lib/python2.7/dist-packages",
         "/opt/ros/melodic/lib/python2.7/dist-packages"
     ],
+    "cmake.configureOnOpen": true,
     "files.associations": {
-        "deque": "cpp",
-        "string": "cpp",
-        "vector": "cpp",
         "cctype": "cpp",
         "clocale": "cpp",
         "cmath": "cpp",
@@ -28,9 +26,11 @@
         "complex": "cpp",
         "condition_variable": "cpp",
         "cstdint": "cpp",
+        "deque": "cpp",
         "list": "cpp",
         "unordered_map": "cpp",
         "unordered_set": "cpp",
+        "vector": "cpp",
         "exception": "cpp",
         "hash_map": "cpp",
         "hash_set": "cpp",
@@ -67,7 +67,7 @@
         "optional": "cpp",
         "random": "cpp",
         "set": "cpp",
+        "string": "cpp",
         "string_view": "cpp"
-    },
-    "restructuredtext.confPath": ""
+    }
 }

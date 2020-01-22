@@ -17,8 +17,10 @@
  *
  */
 
-#include "collvoid_melodic_dwa_local_planner/goal_alignment_cost_function.h"
-#include <tf/tf.h> //TODO tf2
+#include "collvoid_dwa_local_planner/goal_alignment_cost_function.h"
+//#include <tf/tf.h>
+#include <tf2/utils.h>
+
 
 #include <math.h>
 #include <base_local_planner/goal_functions.h>
@@ -28,7 +30,7 @@ namespace collvoid_dwa_local_planner#include "collvoid_dwa_local_planner/goal_al
 double GoalAlignmentCostFunction::scoreTrajectory(base_local_planner::Trajectory &traj)
 {
     if (traj.getPointsSize() < 1) return 0;
-    double goalHeading = tf::getYaw(goalPose_.pose.orientation);
+    double goalHeading = tf2::getYaw(global_pose.pose.orientation);
     double x, y, th;
     traj.getEndpoint(x, y, th);
     double delta_th = fabs(angles::shortest_angular_distance(th, goalHeading));
