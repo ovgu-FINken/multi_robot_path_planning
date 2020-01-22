@@ -27,10 +27,10 @@
 
     <build_depend>message_filters</build_depend>
     <build_depend>tf2_geometry_msgs</build_depend>
-    <build_depend>collvoid_msgs</build_depend>
-    <build_depend>rostest</build_depend>
 
     <!--
+    <build_depend>rostest</build_depend>
+    <build_depend>collvoid_msgs</build_depend>
     <build_depend>rosbag</build_depend>
     <build_depend>dynamic_reconfigure</build_depend>
     <build_depend>message_filters</build_depend>
