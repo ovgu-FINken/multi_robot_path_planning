@@ -108,8 +108,7 @@ generate_messages(
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES collvoid_msgs
-#  CATKIN_DEPENDS geometry_msgs nav_msgs roscpp
-#  DEPENDS system_lib
+  CATKIN_DEPENDS geometry_msgs nav_msgs 
 )
 
 ###########

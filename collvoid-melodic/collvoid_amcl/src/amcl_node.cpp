@@ -88,7 +88,7 @@ typedef struct
   // Total weight (weights sum to 1)
   double weight;
 
-  int count //COLLVOID(?)
+  int count; //COLLVOID(?)
 
   // Mean of pose esimate
   pf_vector_t pf_pose_mean;
@@ -1357,7 +1357,7 @@ AmclNode::laserReceived(const sensor_msgs::LaserScanConstPtr& laser_scan)
       int count; //COLLVOID
       pf_vector_t pose_mean;
       pf_matrix_t pose_cov;
-      if (!pf_get_cluster_stats(pf_, hyp_count, &weight, &pose_mean, &pose_cov))
+      if (!pf_get_cluster_stats(pf_, hyp_count, &weight, &count, &pose_mean, &pose_cov))
       {
         ROS_ERROR("Couldn't get stats on cluster %d", hyp_count);
         break;

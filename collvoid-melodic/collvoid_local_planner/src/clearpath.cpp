@@ -641,8 +641,8 @@ namespace collvoid {
 
             //cur_vel_theta = 0.0; //HACK
 
-            min_theta = -2 * limits.max_rot_vel;//std::max(-max_vel_theta, cur_vel_theta - acc_lim_theta * sim_period);
-            max_theta = 2 * limits.max_rot_vel;//std::min(max_vel_theta, cur_vel_theta + acc_lim_theta * sim_period);
+            min_theta = -2 * limits.max_vel_theta;//std::max(-max_vel_theta, cur_vel_theta - acc_lim_theta * sim_period);
+            max_theta = 2 * limits.max_vel_theta;//std::min(max_vel_theta, cur_vel_theta + acc_lim_theta * sim_period);
 
             double step_x, step_theta;
 

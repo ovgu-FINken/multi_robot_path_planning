@@ -639,7 +639,7 @@ void pf_get_cep_stats(pf_t *pf, pf_vector_t *mean, double *var)
 
 
 // Get the statistics for a particular cluster.
-int pf_get_cluster_stats(pf_t *pf, int clabel, double *weight,
+int pf_get_cluster_stats(pf_t *pf, int clabel, double *weight,int *count,
                          pf_vector_t *mean, pf_matrix_t *cov)
 {
   pf_sample_set_t *set;

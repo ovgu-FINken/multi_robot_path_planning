@@ -1,85 +1,121 @@
-<package>
-    <name>collvoid_local_planner</name>
-    <version>1.0.0</version>
-    <description>collvoid local planner</description>
-    <maintainer email="daniel.claes@maastrichtuniversity.nl">Daniel Claes</maintainer>
+<?xml version="1.0"?>
+<package format="2">
+  <name>collvoid_local_planner</name>
+  <version>0.0.0</version>
+  <description>The collvoid_local_planner package</description>
 
-    <license>BSD</license>
-    <license>proprietary license (RVO2)</license>
+  <!-- One maintainer tag required, multiple allowed, one person per tag -->
+  <!-- Example:  -->
+  <!-- <maintainer email="jane.doe@example.com">Jane Doe</maintainer> -->
+  <maintainer email="nele@todo.todo">nele</maintainer>
 
-    <url type="website">http://ros.org/wiki/collvoid_local_planner</url>
-    <!-- <url type="bugtracker"></url> -->
 
-    <author>Daniel Claes</author>
+  <!-- One license tag required, multiple allowed, one license per tag -->
+  <!-- Commonly used license strings: -->
+  <!--   BSD, MIT, Boost Software License, GPLv2, GPLv3, LGPLv2.1, LGPLv3 -->
+  <license>TODO</license>
 
-    <!-- Dependencies which this package needs to build itself. -->
-    <buildtool_depend>catkin</buildtool_depend>
 
-    <!-- Dependencies needed to compile this package. -->
-    <build_depend>roscpp</build_depend>
-    <build_depend>roscpp_serialization</build_depend>
-    <build_depend>rosconsole</build_depend>
-    <build_depend>message_generation</build_depend>
-    <build_depend>costmap_2d</build_depend>
+  <!-- Url tags are optional, but multiple are allowed, one per tag -->
+  <!-- Optional attribute type can be: website, bugtracker, or repository -->
+  <!-- Example: -->
+  <!-- <url type="website">http://wiki.ros.org/collvoid_local_planner</url> -->
 
-    <build_depend>roslib</build_depend>
 
-    <build_depend>collvoid_msgs</build_depend>
-    <build_depend>collvoid_srvs</build_depend>
+  <!-- Author tags are optional, multiple are allowed, one per tag -->
+  <!-- Authors do not have to be maintainers, but could be -->
+  <!-- Example: -->
+  <!-- <author email="jane.doe@example.com">Jane Doe</author> -->
 
-    <build_depend>visualization_msgs</build_depend>
-    <build_depend>laser_geometry</build_depend>
-    <build_depend>tf</build_depend>
-    <build_depend>angles</build_depend>
-    <build_depend>base_local_planner</build_depend>
-    <build_depend>pluginlib</build_depend>
-    <build_depend>nav_core</build_depend>
-    <build_depend>actionlib</build_depend>
-    <build_depend>move_base_msgs</build_depend>
-    <build_depend>std_srvs</build_depend>
-    <build_depend>dynamic_reconfigure</build_depend>
-    <build_depend>amcl</build_depend>
 
-    <!-- Dependencies needed after this package is compiled. -->
-    <run_depend>roscpp</run_depend>
-    <run_depend>roscpp_serialization</run_depend>
-    <run_depend>roslib</run_depend>
-    <run_depend>rosconsole</run_depend>
-    <run_depend>message_generation</run_depend>
-    <run_depend>costmap_2d</run_depend>
-    <run_depend>collvoid_srvs</run_depend>
-    <run_depend>collvoid_msgs</run_depend>
-    <run_depend>visualization_msgs</run_depend>
-    <run_depend>laser_geometry</run_depend>
-    <run_depend>tf</run_depend>
-    <run_depend>angles</run_depend>
-    <run_depend>base_local_planner</run_depend>
-    <run_depend>pluginlib</run_depend>
-    <run_depend>nav_core</run_depend>
-    <run_depend>actionlib</run_depend>
-    <run_depend>move_base_msgs</run_depend>
-    <run_depend>std_srvs</run_depend>
-    <run_depend>dynamic_reconfigure</run_depend>
-    <run_depend>amcl</run_depend>
+  <!-- The *depend tags are used to specify dependencies -->
+  <!-- Dependencies can be catkin packages or system dependencies -->
+  <!-- Examples: -->
+  <!-- Use depend as a shortcut for packages that are both build and exec dependencies -->
+  <!--   <depend>roscpp</depend> -->
+  <!--   Note that this is equivalent to the following: -->
+  <!--   <build_depend>roscpp</build_depend> -->
+  <!--   <exec_depend>roscpp</exec_depend> -->
+  <!-- Use build_depend for packages you need at compile time: -->
+  <!--   <build_depend>message_generation</build_depend> -->
+  <!-- Use build_export_depend for packages you need in order to build against this package: -->
+  <!--   <build_export_depend>message_generation</build_export_depend> -->
+  <!-- Use buildtool_depend for build tool packages: -->
+  <!--   <buildtool_depend>catkin</buildtool_depend> -->
+  <!-- Use exec_depend for packages you need at runtime: -->
+  <!--   <exec_depend>message_runtime</exec_depend> -->
+  <!-- Use test_depend for packages you need only for testing: -->
+  <!--   <test_depend>gtest</test_depend> -->
+  <!-- Use doc_depend for packages you need only for building documentation: -->
+  <!--   <doc_depend>doxygen</doc_depend> -->
+  <buildtool_depend>catkin</buildtool_depend>
 
-    <!-- Dependencies needed only for running tests. -->
-    <!-- <test_depend>roscpp</test_depend> -->
-    <!-- <test_depend>collvoid_msgs</test_depend> -->
-    <!-- <test_depend>visualization_msgs</test_depend> -->
-    <!-- <test_depend>laser_geometry</test_depend> -->
-    <!-- <test_depend>tf</test_depend> -->
-    <!-- <test_depend>angles</test_depend> -->
-    <!-- <test_depend>base_local_planner</test_depend> -->
-    <!-- <test_depend>pluginlib</test_depend> -->
-    <!-- <test_depend>nav_core</test_depend> -->
-    <!-- <test_depend>actionlib</test_depend> -->
-    <!-- <test_depend>move_base_msgs</test_depend> -->
-    <!-- <test_depend>std_srvs</test_depend> -->
-    <!-- <test_depend>dynamic_reconfigure</test_depend> -->
-    <!-- <test_depend>amcl</test_depend> -->
+  <build_depend>actionlib</build_depend>
+  <build_depend>amcl</build_depend>
+  <build_depend>angles</build_depend>
+  <build_depend>base_local_planner</build_depend>
+  <build_depend>collvoid_msgs</build_depend>
+  <build_depend>collvoid_srvs</build_depend>
+  <build_depend>costmap_2d</build_depend>
+  <build_depend>dynamic_reconfigure</build_depend>
+  <build_depend>laser_geometry</build_depend>
+  <build_depend>message_generation</build_depend>
+  <build_depend>message_runtime</build_depend>
+  <build_depend>move_base_msgs</build_depend>
+  <build_depend>nav_core</build_depend>
+  <build_depend>pluginlib</build_depend>
+  <build_depend>rosconsole</build_depend>
+  <build_depend>roscpp_serialization</build_depend>
+  <build_depend>roslib</build_depend>
+  <build_depend>rospy</build_depend>
+  <build_depend>std_srvs</build_depend>
+  <build_depend>tf2</build_depend>
+  <build_depend>visualization_msgs</build_depend>
 
-    <export>
-        <cpp lflags="-Wl,-rpath,${prefix}/lib -L${prefix}/lib -lcollvoid_local_planner" cflags="-I${prefix}/include"/>
-        <nav_core plugin="${prefix}/blp_plugin.xml"/>
-    </export>
+  <build_export_depend>actionlib</build_export_depend>
+  <build_export_depend>amcl</build_export_depend>
+  <build_export_depend>angles</build_export_depend>
+  <build_export_depend>base_local_planner</build_export_depend>
+  <build_export_depend>collvoid_msgs</build_export_depend>
+  <build_export_depend>collvoid_srvs</build_export_depend>
+  <build_export_depend>costmap_2d</build_export_depend>
+  <build_export_depend>dynamic_reconfigure</build_export_depend>
+  <build_export_depend>laser_geometry</build_export_depend>
+  <build_export_depend>move_base_msgs</build_export_depend>
+  <build_export_depend>nav_core</build_export_depend>
+  <build_export_depend>pluginlib</build_export_depend>
+  <build_export_depend>rosconsole</build_export_depend>
+  <build_export_depend>roscpp_serialization</build_export_depend>
+  <build_export_depend>roslib</build_export_depend>
+  <build_export_depend>rospy</build_export_depend>
+  <build_export_depend>std_srvs</build_export_depend>
+  <build_export_depend>tf2</build_export_depend>
+  <build_export_depend>visualization_msgs</build_export_depend>
+
+  <exec_depend>actionlib</exec_depend>
+  <exec_depend>amcl</exec_depend>
+  <exec_depend>angles</exec_depend>
+  <exec_depend>base_local_planner</exec_depend>
+  <exec_depend>collvoid_msgs</exec_depend>
+  <exec_depend>collvoid_srvs</exec_depend>
+  <exec_depend>costmap_2d</exec_depend>
+  <exec_depend>dynamic_reconfigure</exec_depend>
+  <exec_depend>laser_geometry</exec_depend>
+  <exec_depend>move_base_msgs</exec_depend>
+  <exec_depend>nav_core</exec_depend>
+  <exec_depend>pluginlib</exec_depend>
+  <exec_depend>rosconsole</exec_depend>
+  <exec_depend>roscpp_serialization</exec_depend>
+  <exec_depend>roslib</exec_depend>
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>std_srvs</exec_depend>
+  <exec_depend>tf2</exec_depend>
+  <exec_depend>visualization_msgs</exec_depend>
+
+
+  <!-- The export tag contains other, unspecified, tags -->
+  <export>
+    <!-- Other tools can request additional information be placed here -->
+
+  </export>
 </package>

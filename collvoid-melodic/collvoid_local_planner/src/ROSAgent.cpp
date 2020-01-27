@@ -91,7 +91,7 @@ namespace collvoid {
 
 
         // obstacle costs can vary due to scaling footprint feature
-        obstacle_costs_->setParams(config.max_trans_vel, 0, 0);
+        obstacle_costs_->setParams(config.max_vel_trans, 0, 0);
 
         //collvoid_
         orca_ = config.orca;
@@ -400,7 +400,7 @@ namespace collvoid {
 
         computeNewVelocity(goal_dir, cmd_vel);
 //
-        if(std::abs(cmd_vel.angular.z)<planner_util_->getCurrentLimits().min_rot_vel)
+        if(std::abs(cmd_vel.angular.z)<planner_util_->getCurrentLimits().min_vel_theta)
             cmd_vel.angular.z = 0.0;
         if(std::abs(cmd_vel.linear.x)<planner_util_->getCurrentLimits().min_vel_x)
             cmd_vel.linear.x = 0.0;
@@ -523,11 +523,11 @@ namespace collvoid {
                 if (last_twist_ang_ != 0.0)
                 {
                     cmd_vel.angular.z = sign(last_twist_ang_) *
-                                        std::min(std::abs(dif_ang / time_to_holo_), limits.max_rot_vel);
+                                        std::min(std::abs(dif_ang / time_to_holo_), limits.max_vel_theta);
                 }
                 else {
                     cmd_vel.angular.z = sign(dif_ang) *
-                                        std::min(std::abs(dif_ang / time_to_holo_), limits.max_rot_vel);
+                                        std::min(std::abs(dif_ang / time_to_holo_), limits.max_vel_theta);
 
                 }
 //                ROS_ERROR("dif_ang %f", dif_ang);
@@ -540,7 +540,7 @@ namespace collvoid {
                 last_twist_ang_ = cmd_vel.angular.z;
             }
             else {
-                cmd_vel.angular.z = sign(dif_ang) * std::min(std::abs(dif_ang / time_to_holo_), limits.max_rot_vel);
+                cmd_vel.angular.z = sign(dif_ang) * std::min(std::abs(dif_ang / time_to_holo_), limits.max_vel_theta);
                 last_twist_ang_ = 0.;
             }
             //ROS_ERROR("vstar = %.3f", vstar);
@@ -567,7 +567,7 @@ namespace collvoid {
             // }
             //      if (std::abs(dif_ang) < M_PI/2.0)
             if (min_dist > 2 * fixed_robot_radius_)
-                cmd_vel.angular.z = sign(dif_ang) * std::min(std::abs(dif_ang), limits.max_rot_vel);
+                cmd_vel.angular.z = sign(dif_ang) * std::min(std::abs(dif_ang), limits.max_vel_theta);
         }
 
     }
@@ -655,7 +655,7 @@ namespace collvoid {
         double dif_ang = angles::shortest_angular_distance(heading_, speed_ang);
         if (std::abs(dif_ang) > M_PI / 2.0) { // || cur_allowed_error_ < 2.0 * min_error) {
             double max_track_speed = calculateMaxTrackSpeedAngle(time_to_holo_, M_PI / 2.0, cur_allowed_error_,
-                                                                 limits.max_vel_x, limits.max_rot_vel, v_max_ang);
+                                                                 limits.max_vel_x, limits.max_vel_theta, v_max_ang);
             if (max_track_speed <= 2 * min_error) {
                 max_track_speed = 2 * min_error;
             }
@@ -663,7 +663,7 @@ namespace collvoid {
             addMovementConstraintsDiffSimple(max_track_speed, heading_, additional_orca_lines_);
         }
         else {
-            addMovementConstraintsDiff(cur_allowed_error_, time_to_holo_, limits.max_vel_x, limits.max_rot_vel, heading_, v_max_ang,
+            addMovementConstraintsDiff(cur_allowed_error_, time_to_holo_, limits.max_vel_x, limits.max_vel_theta, heading_, v_max_ang,
                                        additional_orca_lines_);
         }
     }
@@ -738,7 +738,7 @@ namespace collvoid {
                     min_dist_obst_ = dist;
                 }
 
-                if (dist > planner_util_->getCurrentLimits().max_trans_vel * trunc_time_)
+                if (dist > planner_util_->getCurrentLimits().max_vel_trans * trunc_time_)
                     continue;
                 obst_footprint.clear();
                 for(Vector2 p: obst.points) {
@@ -1056,11 +1056,11 @@ namespace collvoid {
                 if (last_twist_ang_ != 0.0)
                 {
                     theta = sign(last_twist_ang_) *
-                            std::min(std::abs(dif_ang / time_to_holo_), limits.max_rot_vel);
+                            std::min(std::abs(dif_ang / time_to_holo_), limits.max_vel_theta);
                 }
                 else {
                     theta = sign(dif_ang) *
-                            std::min(std::abs(dif_ang / time_to_holo_), limits.max_rot_vel);
+                            std::min(std::abs(dif_ang / time_to_holo_), limits.max_vel_theta);
 
                 }
                 if (std::abs(dif_ang) > 4.0 * M_PI / 4.0) {
@@ -1069,7 +1069,7 @@ namespace collvoid {
 
             }
             else {
-                theta = sign(dif_ang) * std::min(std::abs(dif_ang / time_to_holo_), limits.max_rot_vel);
+                theta = sign(dif_ang) * std::min(std::abs(dif_ang / time_to_holo_), limits.max_vel_theta);
             }
 
         } // end non holo robot
@@ -1096,7 +1096,7 @@ namespace collvoid {
     }
 
     double ROSAgent::vMaxAng() {
-        double theoretical_max_v = planner_util_->getCurrentLimits().max_rot_vel * wheel_base_ / 2.0;
+        double theoretical_max_v = planner_util_->getCurrentLimits().max_vel_theta * wheel_base_ / 2.0;
         //return theoretical_max_v - std::abs(base_odom_.twist.twist.angular.z) * wheel_base_/2.0;
         return planner_util_->getCurrentLimits().max_vel_x; //TODO: fixme!!
     }
@@ -1214,7 +1214,7 @@ namespace collvoid {
                 new_vel = safe_samples_[0].velocity;
             }
             else {
-                new_vel = planner_util_->getCurrentLimits().min_trans_vel * normalize(new_vel);
+                new_vel = planner_util_->getCurrentLimits().min_vel_trans * normalize(new_vel);
                 if (std::isnan(new_vel.x()) || std::isnan(new_vel.y())) {
                     ROS_WARN("Did not find safe velocity, chosing 0");
                     new_velocity_ = Vector2();

@@ -46,9 +46,11 @@
 #include <geometry_msgs/PolygonStamped.h>
 
 #include <collvoid_msgs/PoseTwistWithCovariance.h>
-#include <tf/transform_listener.h>
+#include <tf2_ros/transform_listener.h>
+#include <tf2_ros/buffer.h>
+#include <tf2_geometry_msgs/tf2_geometr_msgs.h>
 #include <sensor_msgs/PointCloud.h>
-#include <tf/message_filter.h>
+//#include <tf/message_filter.h>
 #include <message_filters/subscriber.h>
 #include <laser_geometry/laser_geometry.h>
 
@@ -76,7 +78,7 @@ namespace collvoid {
         double scoreTrajectory(Eigen::Vector3f vel_samples);
 
         void reconfigure(collvoid_local_planner::CollvoidConfig &cfg);
-        void init(ros::NodeHandle private_nh, tf::TransformListener *tf, base_local_planner::LocalPlannerUtil *planner_util, costmap_2d::Costmap2DROS* costmap_ros);
+        void init(ros::NodeHandle private_nh, tf2_ros::TransformListener *tf, base_local_planner::LocalPlannerUtil *planner_util, costmap_2d::Costmap2DROS* costmap_ros);
 
         void computeNewVelocity(Vector2 pref_velocity, geometry_msgs::Twist &cmd_vel);
         void computeOrcaVelocity(Vector2 pref_velocity);
@@ -106,8 +108,8 @@ namespace collvoid {
 
         double vMaxAng();
 
-        void updatePlanAndLocalCosts(tf::Stamped<tf::Pose> global_pose,
-                                               const std::vector<geometry_msgs::PoseStamped> &new_plan, const tf::Stamped<tf::Pose>& robot_vel);
+        void updatePlanAndLocalCosts(geometry_msgs::PoseStamped global_pose,
+                                               const std::vector<geometry_msgs::PoseStamped> &new_plan, const geometry_msgs::PoseStamped& robot_vel);
         Eigen::Vector3f createTwistFromVector(Vector2 speed, base_local_planner::LocalPlannerLimits &limits);
 
             //config

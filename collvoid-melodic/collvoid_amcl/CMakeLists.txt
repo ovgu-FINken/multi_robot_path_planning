@@ -87,8 +87,8 @@ target_link_libraries(collvoid_amcl_sensors collvoid_amcl_map collvoid_amcl_pf)
 add_executable(collvoid_amcl
                        src/amcl_node.cpp)
 add_dependencies(collvoid_amcl ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-# add_dependencies(collvoid_amcl collvoid_amcl_gencfg)
-# add_dependencies(collvoid_amcl collvoid_msgs_generate_messages_cpp)
+#add_dependencies(collvoid_amcl collvoid_amcl_gencfg)
+#add_dependencies(collvoid_amcl collvoid_msgs_generate_messages_cpp)
 
 target_link_libraries(collvoid_amcl
     collvoid_amcl_sensors collvoid_amcl_map collvoid_amcl_pf
@@ -101,7 +101,7 @@ install( TARGETS
     DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
-install( TARGETSs
+install( TARGETS
     collvoid_amcl_sensors collvoid_amcl_map collvoid_amcl_pf
     DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 )

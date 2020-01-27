@@ -39,7 +39,9 @@
 
 
 //register this planner as a BaseGlobalPlanner plugin
-PLUGINLIB_DECLARE_CLASS(collvoid_simple_global_planner, CollvoidSimpleGlobalPlanner, collvoid_simple_global_planner::CollvoidSimpleGlobalPlanner, nav_core::BaseGlobalPlanner)
+//PLUGINLIB_DECLARE_CLASS(collvoid_simple_global_planner, CollvoidSimpleGlobalPlanner, collvoid_simple_global_planner::CollvoidSimpleGlobalPlanner, nav_core::BaseGlobalPlanner)
+
+PLUGINLIB_EXPORT_CLASS(collvoid_simple_global_planner::CollvoidSimpleGlobalPlanner, nav_core::BaseGlobalPlanner)
 
 namespace collvoid_simple_global_planner {
 

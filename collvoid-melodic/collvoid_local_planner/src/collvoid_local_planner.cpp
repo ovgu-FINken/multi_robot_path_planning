@@ -40,7 +40,7 @@ using namespace std;
 using namespace costmap_2d;
 
 //register this planner as a BaseLocalPlanner plugin
-PLUGINLIB_DECLARE_CLASS(collvoid_local_planner, CollvoidLocalPlanner, collvoid_local_planner::CollvoidLocalPlanner,
+PLUGINLIB_EXPORT_CLASS(collvoid_local_planner::CollvoidLocalPlanner,
                         nav_core::BaseLocalPlanner)
 
 
@@ -73,7 +73,7 @@ namespace collvoid_local_planner {
     }
 
 
-    void CollvoidLocalPlanner::initialize(std::string name, tf::TransformListener *tf,
+    void CollvoidLocalPlanner::initialize(std::string name, tf2_ros::Buffer* tf,
                                           costmap_2d::Costmap2DROS *costmap_ros) {
         if (!isInitialized()) {
 
@@ -160,23 +160,23 @@ namespace collvoid_local_planner {
 
         // update generic local planner params
         base_local_planner::LocalPlannerLimits limits;
-        limits.max_trans_vel = config.max_trans_vel;
-        limits.min_trans_vel = config.min_trans_vel;
+        limits.max_vel_trans = config.max_vel_trans;
+        limits.min_vel_trans = config.min_vel_trans;
         limits.max_vel_x = config.max_vel_x;
         limits.min_vel_x = config.min_vel_x;
         limits.max_vel_y = config.max_vel_y;
         limits.min_vel_y = config.min_vel_y;
-        limits.max_rot_vel = config.max_rot_vel;
-        limits.min_rot_vel = config.min_rot_vel;
+        limits.max_vel_theta = config.max_vel_theta;
+        limits.min_vel_theta = config.min_vel_theta;
         limits.acc_lim_x = config.acc_lim_x;
         limits.acc_lim_y = config.acc_lim_y;
         limits.acc_lim_theta = config.acc_lim_theta;
-        limits.acc_limit_trans = config.acc_limit_trans;
+        limits.acc_lim_trans = config.acc_lim_trans;
         limits.xy_goal_tolerance = config.xy_goal_tolerance;
         limits.yaw_goal_tolerance = config.yaw_goal_tolerance;
         limits.prune_plan = config.prune_plan;
         limits.trans_stopped_vel = config.trans_stopped_vel;
-        limits.rot_stopped_vel = config.rot_stopped_vel;
+        limits.theta_stopped_vel = config.theta_stopped_vel;
 
         planner_util_.reconfigureCB(limits, config.restore_defaults);
 
@@ -240,7 +240,7 @@ namespace collvoid_local_planner {
         }
 
         // Set current velocities from odometry
-        tf::Stamped<tf::Pose> robot_vel;
+        geometry_msgs::PoseStamped& robot_vel; tf::Stamped<tf::Pose> robot_vel;
         odom_helper_.getRobotVel(robot_vel);
 
         me_->updatePlanAndLocalCosts(current_pose_, transformed_plan_, robot_vel);
@@ -300,12 +300,12 @@ namespace collvoid_local_planner {
         collvoid::Vector2 goal_dir = collvoid::Vector2(res.linear.x, res.linear.y);
         // collvoid::Vector2 goal_dir = collvoid::Vector2(goal_x,goal_y);
 
-        if (collvoid::abs(goal_dir) > planner_util_.getCurrentLimits().max_trans_vel) {
-            goal_dir = planner_util_.getCurrentLimits().max_trans_vel * collvoid::normalize(goal_dir);
+        if (collvoid::abs(goal_dir) > planner_util_.getCurrentLimits().max_vel_trans) {
+            goal_dir = planner_util_.getCurrentLimits().max_vel_trans * collvoid::normalize(goal_dir);
         }
 
-        else if (collvoid::abs(goal_dir) < planner_util_.getCurrentLimits().min_trans_vel) {
-            goal_dir = planner_util_.getCurrentLimits().min_trans_vel * 1.2 * collvoid::normalize(goal_dir);
+        else if (collvoid::abs(goal_dir) < planner_util_.getCurrentLimits().min_vel_trans) {
+            goal_dir = planner_util_.getCurrentLimits().min_vel_trans * 1.2 * collvoid::normalize(goal_dir);
         }
 
         collvoid::Vector2 pref_vel = collvoid::Vector2(goal_dir.x(), goal_dir.y());
@@ -315,13 +315,13 @@ namespace collvoid_local_planner {
         me_->computeNewVelocity(pref_vel, cmd_vel);
 
         double cmd_vel_len = collvoid::abs(collvoid::Vector2(cmd_vel.linear.x, cmd_vel.linear.y));
-        if (std::abs(cmd_vel.angular.z) < planner_util_.getCurrentLimits().min_rot_vel)
-            if (std::abs(cmd_vel.angular.z) > planner_util_.getCurrentLimits().min_rot_vel/2)
-                cmd_vel.angular.z =sign(cmd_vel.angular.z) *  planner_util_.getCurrentLimits().min_rot_vel;
+        if (std::abs(cmd_vel.angular.z) < planner_util_.getCurrentLimits().min_vel_theta)
+            if (std::abs(cmd_vel.angular.z) > planner_util_.getCurrentLimits().min_vel_theta/2)
+                cmd_vel.angular.z =sign(cmd_vel.angular.z) *  planner_util_.getCurrentLimits().min_vel_theta;
             else
                 cmd_vel.angular.z = 0.0;
 
-        return !(cmd_vel.angular.z == 0.0 && cmd_vel_len < planner_util_.getCurrentLimits().min_trans_vel);
+        return !(cmd_vel.angular.z == 0.0 && cmd_vel_len < planner_util_.getCurrentLimits().min_vel_trans);
 
     }
 
