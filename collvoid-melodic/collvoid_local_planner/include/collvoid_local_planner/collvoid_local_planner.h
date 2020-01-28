@@ -41,7 +41,7 @@
 #include <costmap_2d/costmap_2d_ros.h>
 #include <tf2_ros/buffer.h>
 #include <tf2_ros/transform_listener.h>
-#include <tf2_geometry_msgs/tf2_geometr_msgs.h>
+#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 
 #include <dynamic_reconfigure/server.h>
 #include <base_local_planner/local_planner_util.h>
@@ -51,6 +51,7 @@
 #include <base_local_planner/oscillation_cost_function.h>
 #include <base_local_planner/obstacle_cost_function.h>
 
+
 #include "collvoid_local_planner/ROSAgent.h"
 #include "collvoid_local_planner/CollvoidConfig.h"
 //#include <base_local_planner/trajectory_planner_ros.h>
@@ -59,13 +60,12 @@ using namespace collvoid;
 
 namespace collvoid_local_planner
 {
-/* typedef boost::shared_ptr<ROSAgent> ROSAgentPtr; */
+/* typedef std::shared_ptr<ROSAgent> ROSAgentPtr; */
 
 class CollvoidLocalPlanner : public nav_core::BaseLocalPlanner
 {
 public:
     CollvoidLocalPlanner();
-    //CollvoidLocalPlanner(std::string name, tf::TransformListener* tf, costmap_2d::Costmap2DROS* costmap_ros);
 
     /**
        * @brief  Virtual destructor for the interface
@@ -104,7 +104,7 @@ private:
     void publishLocalPlan(std::vector<geometry_msgs::PoseStamped> &path);
     void publishGlobalPlan(std::vector<geometry_msgs::PoseStamped> &path);
 
-    void findBestWaypoint(geometry_msgs::PoseStamped &target_pose, const tf::geometry_msgs::PoseStamped &global_pose);
+    void findBestWaypoint(geometry_msgs::PoseStamped &target_pose, const geometry_msgs::PoseStamped &global_pose);
 
     bool clearCostmapsService(std_srvs::Empty::Request &req, std_srvs::Empty::Response &resp);
     //Dyn reconfigure
@@ -115,7 +115,7 @@ private:
 
     //Datatypes:
     costmap_2d::Costmap2DROS *costmap_ros_;
-    tf::TransformListener *tf_;
+    tf2_ros::Buffer *tf_;
     base_local_planner::LocalPlannerUtil planner_util_;
     base_local_planner::OdometryHelperRos odom_helper_;
     std::string odom_topic_;

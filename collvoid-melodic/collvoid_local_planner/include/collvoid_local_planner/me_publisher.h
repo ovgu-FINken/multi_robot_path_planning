@@ -29,7 +29,7 @@ class MePublisher {
 public:
     MePublisher();
     virtual ~MePublisher() { };
-    void init(ros::NodeHandle private_nh, tf::TransformListener *tf);
+    void init(ros::NodeHandle private_nh, std::shared_ptr<tf2_ros::Buffer> tf);
 
 private:
     void computeNewMinkowskiFootprint();
@@ -69,7 +69,7 @@ private:
     ros::Publisher position_share_pub_, polygon_pub_, me_pub_;
     ros::Subscriber odom_sub_, particle_sub_;
     ros::ServiceServer server_;
-    tf::TransformListener *tf_;
+    std::shared_ptr<tf2_ros::Buffer> tf_;
 
     geometry_msgs::Twist twist_;
 

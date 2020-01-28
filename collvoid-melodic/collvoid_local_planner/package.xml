@@ -71,7 +71,9 @@
   <build_depend>std_srvs</build_depend>
   <build_depend>tf2</build_depend>
   <build_depend>visualization_msgs</build_depend>
+  <build_depend>tf2_ros</build_depend>
 
+  <build_export_depend>tf2_ros</build_export_depend>
   <build_export_depend>actionlib</build_export_depend>
   <build_export_depend>amcl</build_export_depend>
   <build_export_depend>angles</build_export_depend>
@@ -92,6 +94,7 @@
   <build_export_depend>tf2</build_export_depend>
   <build_export_depend>visualization_msgs</build_export_depend>
 
+  <exec_depend>tf2_ros</exec_depend>
   <exec_depend>actionlib</exec_depend>
   <exec_depend>amcl</exec_depend>
   <exec_depend>angles</exec_depend>
@@ -111,6 +114,7 @@
   <exec_depend>std_srvs</exec_depend>
   <exec_depend>tf2</exec_depend>
   <exec_depend>visualization_msgs</exec_depend>
+  <exec_depend>message_generation</exec_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->

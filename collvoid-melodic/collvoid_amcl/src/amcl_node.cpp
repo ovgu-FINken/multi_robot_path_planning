@@ -149,8 +149,8 @@ class AmclNode
 
   private:
     std::shared_ptr<tf2_ros::TransformBroadcaster> tfb_;
-    std::shared_ptr<tf2_ros::TransformListener> tfl_;
     std::shared_ptr<tf2_ros::Buffer> tf_;
+    std::shared_ptr<tf2_ros::TransformListener> tfl_;
 
     bool sent_first_transform_;
 
@@ -297,7 +297,7 @@ std::vector<std::pair<int,int> > AmclNode::free_space_indices;
 
 #define USAGE "USAGE: amcl"
 
-boost::shared_ptr<AmclNode> amcl_node_ptr;
+std::shared_ptr<AmclNode> amcl_node_ptr;
 
 void sigintHandler(int sig)
 {

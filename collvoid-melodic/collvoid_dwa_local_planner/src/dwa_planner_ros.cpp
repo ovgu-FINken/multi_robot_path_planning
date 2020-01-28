@@ -101,7 +101,7 @@ DWAPlannerROS::DWAPlannerROS()
 
 void DWAPlannerROS::initialize(
     std::string name,
-    tf2_ros::Buffer *tf,
+    std::shared_ptr<tf2_ros::Buffer> tf,
     costmap_2d::Costmap2DROS *costmap_ros)
 {
   if (!isInitialized())
@@ -121,7 +121,7 @@ void DWAPlannerROS::initialize(
     world_model_ = new base_local_planner::CostmapModel(*costmap_ros->getCostmap());
 
     //create the actual planner that we'll use.. it'll configure itself from the parameter server
-    dp_ = boost::shared_ptr<DWAPlanner>(new DWAPlanner(name, &planner_util_));
+    dp_ = std::shared_ptr<DWAPlanner>(new DWAPlanner(name, &planner_util_));
 
     if (private_nh.getParam("odom_topic", odom_topic_))
     {
@@ -152,10 +152,10 @@ void DWAPlannerROS::initialize(
 
 void DWAPlannerROS::clearCostmaps()
 {
-  std::vector<boost::shared_ptr<costmap_2d::Layer>> *plugins = costmap_ros_->getLayeredCostmap()->getPlugins();
-  for (std::vector<boost::shared_ptr<costmap_2d::Layer>>::iterator layer = plugins->begin(); layer != plugins->end(); ++layer)
+  std::vector<std::shared_ptr<costmap_2d::Layer>> *plugins = costmap_ros_->getLayeredCostmap()->getPlugins();
+  for (std::vector<std::shared_ptr<costmap_2d::Layer>>::iterator layer = plugins->begin(); layer != plugins->end(); ++layer)
   {
-    boost::shared_ptr<costmap_2d::ObstacleLayer> obstacle_layer = boost::dynamic_pointer_cast<costmap_2d::ObstacleLayer>(*layer);
+    std::shared_ptr<costmap_2d::ObstacleLayer> obstacle_layer = boost::dynamic_pointer_cast<costmap_2d::ObstacleLayer>(*layer);
     if (!obstacle_layer)
     {
       // ROS_INFO("NO Obstacle layer\n");

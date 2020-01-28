@@ -27,7 +27,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifndef ROSAGENT_H
 #define ROSAGENT_H
 
@@ -48,7 +47,7 @@
 #include <collvoid_msgs/PoseTwistWithCovariance.h>
 #include <tf2_ros/transform_listener.h>
 #include <tf2_ros/buffer.h>
-#include <tf2_geometry_msgs/tf2_geometr_msgs.h>
+#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 #include <sensor_msgs/PointCloud.h>
 //#include <tf/message_filter.h>
 #include <message_filters/subscriber.h>
@@ -66,134 +65,128 @@
 #include <base_local_planner/simple_scored_sampling_planner.h>
 #include <base_local_planner/map_grid_cost_function.h>
 
+namespace collvoid
+{
+class ROSAgent : public Agent
+{
+public:
+    ROSAgent();
 
-namespace collvoid {
-    class ROSAgent : public Agent {
-    public:
-        ROSAgent();
+    ~ROSAgent();
+    bool checkTrajectory(Eigen::Vector3f pos, Eigen::Vector3f vel, Eigen::Vector3f vel_samples);
 
-        ~ROSAgent();
-        bool checkTrajectory(Eigen::Vector3f pos, Eigen::Vector3f vel, Eigen::Vector3f vel_samples);
+    double scoreTrajectory(Eigen::Vector3f vel_samples);
 
-        double scoreTrajectory(Eigen::Vector3f vel_samples);
+    void reconfigure(collvoid_local_planner::CollvoidConfig &cfg);
+    void init(ros::NodeHandle private_nh, std::shared_ptr<tf2_ros::Buffer> tf, base_local_planner::LocalPlannerUtil *planner_util, costmap_2d::Costmap2DROS *costmap_ros);
 
-        void reconfigure(collvoid_local_planner::CollvoidConfig &cfg);
-        void init(ros::NodeHandle private_nh, tf2_ros::TransformListener *tf, base_local_planner::LocalPlannerUtil *planner_util, costmap_2d::Costmap2DROS* costmap_ros);
+    void computeNewVelocity(Vector2 pref_velocity, geometry_msgs::Twist &cmd_vel);
+    void computeOrcaVelocity(Vector2 pref_velocity);
+    void computeClearpathVelocity(Vector2 pref_velocity);
+    void computeSampledVelocity(Vector2 pref_velocity);
 
-        void computeNewVelocity(Vector2 pref_velocity, geometry_msgs::Twist &cmd_vel);
-        void computeOrcaVelocity(Vector2 pref_velocity);
-        void computeClearpathVelocity(Vector2 pref_velocity);
-        void computeSampledVelocity(Vector2 pref_velocity);
+    void addNHConstraints(double min_dist, Vector2 pref_velocity);
 
-        void addNHConstraints(double min_dist, Vector2 pref_velocity);
+    void computeObstacles();
+    std::vector<Obstacle> getObstacles();
+    void sortObstacleLines();
 
-        void computeObstacles();
-        std::vector<Obstacle> getObstacles();
-        void sortObstacleLines();
+    collvoid::Vector2 LineSegmentToLineSegmentIntersection(double x1, double y1, double x2, double y2, double x3,
+                                                           double y3, double x4, double y4);
 
+    double getDistToFootprint(collvoid::Vector2 &point);
+    void computeObstacleLine(Vector2 &point);
+    void createObstacleLine(std::vector<Vector2> &own_footprint, Vector2 &obst1, Vector2 &obst2);
 
-        collvoid::Vector2 LineSegmentToLineSegmentIntersection(double x1, double y1, double x2, double y2, double x3,
-                                                               double y3, double x4, double y4);
+    bool getMe();
+    bool getNeighbors();
+    AgentPtr createAgentFromMsg(collvoid_msgs::PoseTwistWithCovariance &msg);
 
-        double getDistToFootprint(collvoid::Vector2 &point);
-        void computeObstacleLine(Vector2 &point);
-        void createObstacleLine(std::vector<Vector2> &own_footprint, Vector2 &obst1, Vector2 &obst2);
+    bool compareNeighborsPositions(const AgentPtr &agent1, const AgentPtr &agent2);
+    bool compareVectorPosition(const collvoid::Vector2 &v1, const collvoid::Vector2 &v2);
 
-        bool getMe();
-        bool getNeighbors();
-        AgentPtr createAgentFromMsg(collvoid_msgs::PoseTwistWithCovariance &msg);
+    double vMaxAng();
 
-        bool compareNeighborsPositions(const AgentPtr &agent1, const AgentPtr &agent2);
-        bool compareVectorPosition(const collvoid::Vector2 &v1, const collvoid::Vector2 &v2);
+    void updatePlanAndLocalCosts(geometry_msgs::PoseStamped global_pose,
+                                 const std::vector<geometry_msgs::PoseStamped> &new_plan, const geometry_msgs::PoseStamped &robot_vel);
+    Eigen::Vector3f createTwistFromVector(Vector2 speed, base_local_planner::LocalPlannerLimits &limits);
 
-        double vMaxAng();
+    //config
+    int num_samples_;
 
-        void updatePlanAndLocalCosts(geometry_msgs::PoseStamped global_pose,
-                                               const std::vector<geometry_msgs::PoseStamped> &new_plan, const geometry_msgs::PoseStamped& robot_vel);
-        Eigen::Vector3f createTwistFromVector(Vector2 speed, base_local_planner::LocalPlannerLimits &limits);
+    //NH stuff
+    double min_error_holo_;
+    double max_error_holo_;
+    bool holo_robot_;
+    double time_to_holo_;
 
-            //config
-        int num_samples_;
+    //ORCA stuff
+    double min_dist_obst_;
 
-        //NH stuff
-        double min_error_holo_;
-        double max_error_holo_;
-        bool holo_robot_;
-        double time_to_holo_;
+    //obstacles
+    std::vector<collvoid::Vector2> obstacle_points_;
+    costmap_2d::Costmap2DROS *costmap_ros_;
 
-        //ORCA stuff
-        double min_dist_obst_;
+    //Agent description
+    std::string base_frame_, global_frame_, name_space_;
+    double wheel_base_;
+    double fixed_robot_radius_;
 
-        //obstacles
-        std::vector<collvoid::Vector2> obstacle_points_;
-        costmap_2d::Costmap2DROS* costmap_ros_;
+    //set automatically
+    bool initialized_;
+    double last_twist_ang_;
 
+    double current_angular_speed_;
 
-        //Agent description
-        std::string base_frame_, global_frame_, name_space_;
-        double wheel_base_;
-        double fixed_robot_radius_;
+    std::vector<std::pair<collvoid::Vector2, collvoid::Vector2>> footprint_lines_;
 
-        //set automatically
-        bool initialized_;
-        double last_twist_ang_;
+    //COLLVOID
+    boost::mutex obstacle_lock_, computing_lock_;
 
-        double current_angular_speed_;
+    //me stuff
+    std::shared_ptr<tf2_ros::Buffer> tf_;   
 
-        std::vector<std::pair<collvoid::Vector2, collvoid::Vector2> > footprint_lines_;
+    //subscribers and publishers
+    ros::Publisher lines_pub_, neighbors_pub_, vo_pub_, samples_pub_, speed_pub_, obstacles_pub_;
 
-        //COLLVOID
-        boost::mutex obstacle_lock_, computing_lock_;
+    // service calls
+    bool getTwistServiceCB(collvoid_local_planner::GetCollvoidTwist::Request &req, collvoid_local_planner::GetCollvoidTwist::Response &res);
+    geometry_msgs::Twist computeVelocityCommand(Vector2 waypoint, double goal_ang);
 
-        //me stuff
-        tf::TransformListener *tf_;
+    ros::ServiceServer get_collvoid_twist_service_;
+    ros::ServiceClient get_obstacles_srv_;
+    ros::ServiceClient get_me_srv_, get_neighbors_srv_;
 
-        //subscribers and publishers
-        ros::Publisher lines_pub_, neighbors_pub_, vo_pub_, samples_pub_, speed_pub_, obstacles_pub_;
+    bool use_dwa_score_;
+    Eigen::Vector3f pos_, vel_;
 
+    //obstacle check
+    base_local_planner::LocalPlannerUtil *planner_util_;
 
-        // service calls
-        bool getTwistServiceCB(collvoid_local_planner::GetCollvoidTwist::Request &req, collvoid_local_planner::GetCollvoidTwist::Response &res);
-        geometry_msgs::Twist computeVelocityCommand(Vector2 waypoint, double goal_ang);
+    double pdist_scale_;
 
-        ros::ServiceServer get_collvoid_twist_service_;
-        ros::ServiceClient get_obstacles_srv_;
-        ros::ServiceClient get_me_srv_, get_neighbors_srv_;
+    double sim_period_; ///< @brief The number of seconds to use to compute max/min vels for dwa
 
+    double forward_point_distance_;
+    double goal_heading_sq_dist_;
 
-        bool use_dwa_score_;
-        Eigen::Vector3f pos_, vel_;
+    std::vector<geometry_msgs::PoseStamped> global_plan_;
 
-        //obstacle check
-        base_local_planner::LocalPlannerUtil *planner_util_;
+    boost::mutex configuration_mutex_;
 
-        double pdist_scale_;
+    // see constructor body for explanations
+    base_local_planner::SimpleTrajectoryGenerator generator_;
+    base_local_planner::ObstacleCostFunction *obstacle_costs_;
 
-        double sim_period_;///< @brief The number of seconds to use to compute max/min vels for dwa
+    base_local_planner::MapGridCostFunction *path_costs_;
+    base_local_planner::MapGridCostFunction *goal_costs_;
+    base_local_planner::MapGridCostFunction *goal_front_costs_;
+    base_local_planner::MapGridCostFunction *alignment_costs_;
+    base_local_planner::SimpleScoredSamplingPlanner scored_sampling_planner_;
+    std::vector<base_local_planner::TrajectoryCostFunction *> critics_;
+};
 
-        double forward_point_distance_;
-        double goal_heading_sq_dist_;
+typedef std::shared_ptr<ROSAgent> ROSAgentPtr;
 
-        std::vector<geometry_msgs::PoseStamped> global_plan_;
-
-        boost::mutex configuration_mutex_;
-
-        // see constructor body for explanations
-        base_local_planner::SimpleTrajectoryGenerator generator_;
-        base_local_planner::ObstacleCostFunction* obstacle_costs_;
-
-        base_local_planner::MapGridCostFunction* path_costs_;
-        base_local_planner::MapGridCostFunction* goal_costs_;
-        base_local_planner::MapGridCostFunction* goal_front_costs_;
-        base_local_planner::MapGridCostFunction* alignment_costs_;
-        base_local_planner::SimpleScoredSamplingPlanner scored_sampling_planner_;
-        std::vector<base_local_planner::TrajectoryCostFunction *> critics_;
-
-
-    };
-
-    typedef boost::shared_ptr<ROSAgent> ROSAgentPtr;
-
-
-}
+} // namespace collvoid
 #endif

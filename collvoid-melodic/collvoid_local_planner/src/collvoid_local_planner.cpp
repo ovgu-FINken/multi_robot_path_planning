@@ -33,6 +33,8 @@
 #include <base_local_planner/simple_scored_sampling_planner.h>
 #include <std_srvs/Empty.h>
 #include <costmap_2d/obstacle_layer.h>
+#include <tf2_ros/buffer.h>
+#include <tf2_ros/transform_listener.h>
 
 #include "collvoid_local_planner/collvoid_local_planner.h"
 
@@ -73,7 +75,7 @@ namespace collvoid_local_planner {
     }
 
 
-    void CollvoidLocalPlanner::initialize(std::string name, tf2_ros::Buffer* tf,
+    void CollvoidLocalPlanner::initialize(std::string name, tf2_ros::Buffer *tf,
                                           costmap_2d::Costmap2DROS *costmap_ros) {
         if (!isInitialized()) {
 
@@ -137,7 +139,8 @@ namespace collvoid_local_planner {
         }
         costmap_ros_->getLayeredCostmap()->updateMap(0, 0, 0);
         costmap_ros_->updateMap();
-        //ros::Duration(0.5).sleep();
+        //ros::Duration(0.5).sleep()/home/nele/DrivingSwarm/src/pathplanning/collvoid-melodic/collvoid_local_planner/src/ROSAgent.cpp: In member function ‘bool collvoid::ROSAgent::getTwistServiceCB(collvoid_local_planner::GetCollvoidTwist::Request&, collvoid_local_planner::GetCollvoidTwist::Response&)’:
+;
         return true;
     }
 

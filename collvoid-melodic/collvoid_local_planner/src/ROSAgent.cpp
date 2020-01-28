@@ -33,8 +33,11 @@
 #include <collvoid_srvs/GetObstacles.h>
 #include <base_local_planner/trajectory.h>
 
-#include "collvoid_local_planner/ROSAgent.h"
+#include <geometry_msgs/TransformStamped.h>
+#include <tf2_ros/buffer.h>
+#include <tf2_ros/transform_listener.h>
 
+#include "collvoid_local_planner/ROSAgent.h"
 #include "collvoid_local_planner/orca.h"
 #include "collvoid_local_planner/collvoid_publishers.h"
 
@@ -124,9 +127,10 @@ namespace collvoid {
         delete goal_costs_;
         delete goal_front_costs_;
         delete alignment_costs_;
+        //delete tf_; maybe somewhen? :>
     }
 
-    void ROSAgent::init(ros::NodeHandle private_nh, tf::TransformListener *tf, base_local_planner::LocalPlannerUtil *planner_util,
+    void ROSAgent::init(ros::NodeHandle private_nh, std::shared_ptr<tf2_ros::Buffer> tf, base_local_planner::LocalPlannerUtil *planner_util,
                         costmap_2d::Costmap2DROS* costmap_ros) {
         tf_ = tf;
         planner_util_ = planner_util;
@@ -350,8 +354,12 @@ namespace collvoid {
         //goals in the frame of the planner
         goal_pose.stamp_ = ros::Time();
 
+        //void TransformListener::transformPose 	( 	const std::string &  	target_frame,
+        //                                                const geometry_msgs::PoseStamped &  	stamped_in,
+		//                                                  geometry_msgs::PoseStamped &  	stamped_out	 
+	    //                                             ) 	
         try{
-            tf_->transformPose(global_frame_, goal_pose, global_pose);
+            tf_->transform(goal_pose, global_pose,global_frame_);
         }
         catch(tf::TransformException& ex){
             ROS_WARN("Failed to transform the goal pose from %s into the %s frame: %s",
@@ -382,7 +390,7 @@ namespace collvoid {
         global_pose.setIdentity();
         global_pose.frame_id_ = base_frame_;
         global_pose.stamp_ = ros::Time();
-        tf_->transformPose(global_frame_, global_pose, global_pose);
+        tf_->transform(global_pose, global_pose, global_frame_);
 
         Vector2 pos = Vector2(global_pose.getOrigin().x(), global_pose.getOrigin().y());
         Vector2 goal_dir = waypoint - pos;
@@ -674,14 +682,16 @@ namespace collvoid {
         collvoid_srvs::GetObstacles srv;
         if (get_obstacles_srv_.call(srv)) {
             //sensor_msgs::PointCloud in, result;
-            tf::StampedTransform obst_to_global_transform;
+            geometry_msgs::TransformStamped obst_to_global_transform;
             if (srv.response.obstacles.size() > 0) {
                 try {
-                    tf_->waitForTransform(global_frame_, srv.response.obstacles.at(0).header.frame_id,
+                    //canTransform (const std::string &target_frame, const ros::Time &target_time, const std::string &source_frame, const ros::Time &source_time, const std::string &fixed_frame, const ros::Duration timeout, std::string *errstr=NULL) const =0
+                    //canTransform (const std::string &target_frame, const std::string &source_frame, const ros::Time &time, const ros::Duration timeout, std::string *errstr=NULL) const =0
+                    tf_->canTransform(global_frame_, srv.response.obstacles.at(0).header.frame_id,
                                           srv.response.obstacles.at(0).header.stamp,
                                           ros::Duration(0.2));
-                    tf_->lookupTransform(global_frame_, srv.response.obstacles.at(0).header.frame_id,
-                                         srv.response.obstacles.at(0).header.stamp, obst_to_global_transform);
+                    obst_to_global_transform = tf_->lookupTransform(global_frame_, srv.response.obstacles.at(0).header.frame_id,
+                                         srv.response.obstacles.at(0).header.stamp, ros::Duration(0.2)); // 
                 }
                 catch (tf::TransformException &ex) {
                     ROS_WARN(
@@ -690,7 +700,8 @@ namespace collvoid {
                     return obstacles;
                 }
 
-                tf::Stamped<tf::Point> tf_pose;
+                tf2::Transform tf_pose;
+                tf2::Transform tf_pose2;
                 geometry_msgs::PoseStamped newer_pose;
                 geometry_msgs::Point p;
                 Vector2 v;
@@ -700,12 +711,13 @@ namespace collvoid {
                         p.x = p32.x;
                         p.y = p32.y;
 
-                        tf::pointMsgToTF(p, tf_pose);
-                        tf_pose.setData(obst_to_global_transform * tf_pose);
+                        tf2::convert(p, tf_pose);
+                        tf2::Transform transformMultiplier;
+                        tf2::convert(obst_to_global_transform, transformMultiplier);
+                        tf_pose2=(transformMultiplier * tf_pose);
 
-                        v = Vector2(tf_pose.getX(), tf_pose.getY());
+                        v = Vector2(tf_pose2.getOrigin().x, tf_pose2.getOrigin().y);
                         obst.points.push_back(v);
-
                     }
                     obstacles.push_back(obst);
                 }
@@ -1235,9 +1247,10 @@ int main(int argc, char **argv) {
     ros::NodeHandle nh("~");
 
     ROSAgentPtr me(new ROSAgent);
-    tf::TransformListener tf;
+    std::shared_ptr<tf2_ros::Buffer> buffer;
+    std::shared_ptr<tf2_ros::TransformListener> tfl(buffer);
 
-    //me->init(nh, &tf);
+    //me->init(nh, buffer);
     ROS_INFO("ROSAgent initialized");
     ros::spin();
 

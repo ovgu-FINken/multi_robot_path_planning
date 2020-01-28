@@ -106,12 +106,12 @@ namespace collvoid{
 
 
 
-        std::vector<boost::shared_ptr<Agent> > agent_neighbors_, human_neighbors_;
+        std::vector<std::shared_ptr<Agent> > agent_neighbors_, human_neighbors_;
 
 
     };
 
-    typedef boost::shared_ptr<Agent> AgentPtr;
+    typedef std::shared_ptr<Agent> AgentPtr;
 
 
 }

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(collvoid_controller)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
-# add_compile_options(-std=c++11)
+add_compile_options(-std=c++11)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -109,7 +109,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES collvoid_controller
-  CATKIN_DEPENDS collvoid_local_planner geometry_msgs roscpp rospy std_msgs std_srvs tf2
+  CATKIN_DEPENDS geometry_msgs roscpp rospy std_msgs std_srvs tf2 collvoid_local_planner
 #  DEPENDS collvoid_local_planner geometry_msgs roscpp rospy std_msgs std_srvs tf2
 )
 
