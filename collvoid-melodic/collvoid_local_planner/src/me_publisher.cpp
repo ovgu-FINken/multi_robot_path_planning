@@ -2,12 +2,21 @@
 // Created by danielclaes on 23/06/15.
 //
 
+#include <geometry_msgs/PoseStamped.h>
 #include <tf2_ros/buffer.h>
 #include <tf2_ros/transform_listener.h>
+#include <tf2/transform_datatypes.h>
+#include <tf2/exceptions.h>
 #include <visualization_msgs/MarkerArray.h>
 #include <costmap_2d/array_parser.h>
 #include <costmap_2d/footprint.h>
-#include "collvoid_local_planner/me_publisher.h"
+#include <collvoid_local_planner/me_publisher.h>
+#include <tf2/LinearMath/Transform.h>
+#include <sensor_msgs/PointCloud2.h>
+#include <pcl/point_cloud.h>
+#include <pcl_ros/transforms.h>
+#include <pcl_ros/impl/transforms.hpp>
+
 
 template <typename T>
 void getParam(const ros::NodeHandle nh, const std::string &name, T *place)
@@ -100,24 +109,23 @@ void MePublisher::amclPoseArrayWeightedCallback(const collvoid_msgs::PoseArrayWe
     boost::mutex::scoped_lock lock(convex_lock_);
 
     pose_array_weighted_.clear();
-    sensor_msgs::PointCloud result;
-    //in.header = msg->header;
-    sensor_msgs::PointCloud pc;
-    pc.header = msg->header;
-    pc.header.stamp = ros::Time(0);
+    pcl::PointCloud<pcl::PointXYZ> result;
+    //sensor_msgs::PointCloud2 result;
+    //sensor_msgs::PointCloud2 pc;
+    pcl::PointCloud<pcl::PointXYZ> pc;
     for (int i = 0; i < (int)msg->poses.size(); i++)
     {
-        geometry_msgs::Point32 p;
+        pcl::PointXYZ p;
         p.x = msg->poses[i].position.x;
         p.y = msg->poses[i].position.y;
-        pc.points.push_back(p);
+        pc.push_back(p);
     }
     try
     {
-        tf_->canTransform(global_frame_, base_frame_, pc.header.stamp, ros::Duration(0.2));
-        tf_->transform(pc, result, base_frame_); // transformPointcloud
+        tf_->canTransform(global_frame_, base_frame_, ros::Time(0), ros::Duration(0.2));
+        pcl_ros::transformPointCloud(base_frame_, pc, result, *tf_); 
     }
-    catch (tf::TransformException ex)
+    catch (tf2::TransformException ex)
     {
         ROS_WARN("%s", ex.what());
         ROS_WARN("Me Publisher: AMCL callback point transform failed");
@@ -125,7 +133,10 @@ void MePublisher::amclPoseArrayWeightedCallback(const collvoid_msgs::PoseArrayWe
     };
     for (int i = 0; i < (int)msg->poses.size(); i++)
     {
-        pose_array_weighted_.push_back(std::make_pair(msg->weights[i], result.points[i]));
+        geometry_msgs::Point32 r;
+        r.x = result[i].x;
+        r.y = result[i].y;
+        pose_array_weighted_.push_back(std::make_pair(msg->weights[i], r));
     }
     //    if (!use_polygon_footprint_ || orca_) {
     if (!use_polygon_footprint_)
@@ -153,7 +164,7 @@ void MePublisher::odomCallback(const nav_msgs::Odometry::ConstPtr &msg)
         last_time_me_published_ = ros::Time::now();
         publishMePoseTwist();
 
-        tf::Stamped<tf::Pose> global_pose;
+        geometry_msgs::PoseStamped global_pose;
         if (getGlobalPose(global_pose, global_frame_, msg->header.stamp))
         {
             collvoid::publishMePosition(radius_, global_pose, global_frame_, base_frame_, me_pub_);
@@ -167,20 +178,18 @@ void MePublisher::odomCallback(const nav_msgs::Odometry::ConstPtr &msg)
     }
 }
 
-bool MePublisher::getGlobalPose(tf::Stamped<tf::Pose> &global_pose, std::string target_frame, const ros::Time stamp)
+bool MePublisher::getGlobalPose(geometry_msgs::PoseStamped &global_pose, std::string target_frame, const ros::Time stamp)
 {
-    //let's get the pose of the robot in the frame of the plan
-    global_pose.setIdentity();
-    global_pose.frame_id_ = base_frame_;
-    global_pose.stamp_ = stamp;
-    //global_pose.setRotation(tf::createIdentityQuaternion());
+    // //let's get the pose of the robot in the frame of the plan
+    // global_pose.setIdentity();
+    global_pose.header.frame_id = base_frame_;
+    global_pose.header.stamp = stamp;
     try
     {
-        //tf_->waitForTransform(target_frame, base_frame_, global_pose.stamp_, ros::Duration(0.2));
-        tf_->canTransform(target_frame, base_frame_, global_pose.stamp_, ros::Duration(0.2));
+        tf_->canTransform(target_frame, base_frame_, global_pose.header.stamp, ros::Duration(0.2));
         tf_->transform(global_pose, global_pose, target_frame); //transformPose
     }
-    catch (tf::TransformException ex)
+    catch (tf2::TransformException ex)
     {
         ROS_WARN_THROTTLE(2, "%s", ex.what());
         ROS_WARN_THROTTLE(2, "point odom transform failed");
@@ -193,11 +202,11 @@ bool MePublisher::createMeMsg(collvoid_msgs::PoseTwistWithCovariance &me_msg, st
 {
     me_msg.header.stamp = ros::Time::now();
     me_msg.header.frame_id = target_frame;
-    tf::Stamped<tf::Pose> global_pose;
+    geometry_msgs::PoseStamped global_pose;
     if (getGlobalPose(global_pose, target_frame, me_msg.header.stamp))
     {
         geometry_msgs::PoseStamped pose_msg;
-        tf::poseStampedTFToMsg(global_pose, pose_msg);
+        tf2::convert(global_pose, pose_msg);
         me_msg.pose.pose = pose_msg.pose;
     }
     else

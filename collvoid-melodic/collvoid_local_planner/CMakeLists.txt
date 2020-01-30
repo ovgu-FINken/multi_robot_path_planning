@@ -9,6 +9,7 @@ add_compile_options(-std=c++11)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   actionlib
+  pcl_ros
   amcl
   angles
   base_local_planner
@@ -18,11 +19,14 @@ find_package(catkin REQUIRED COMPONENTS
   dynamic_reconfigure
   laser_geometry
   message_generation
+  sensor_msgs
   move_base_msgs
   nav_core
   pluginlib
   rosconsole
   roscpp_serialization
+  tf2_geometry_msgs
+  geometry_msgs
   roslib
   rospy
   std_srvs
@@ -122,7 +126,7 @@ generate_messages(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
  INCLUDE_DIRS include
- LIBRARIES collvoid_local_planner collvoid_sorting_function
+ LIBRARIES collvoid_local_planner #collvoid_sorting_function
  CATKIN_DEPENDS actionlib amcl angles base_local_planner collvoid_msgs collvoid_srvs costmap_2d dynamic_reconfigure laser_geometry message_generation move_base_msgs nav_core pluginlib rosconsole roscpp_serialization roslib rospy std_srvs tf2 visualization_msgs
 #  DEPENDS system_lib
 )
@@ -153,7 +157,12 @@ target_link_libraries(collvoid_scoring_function
         ${Boost_LIBRARIES}
         )
 
-add_library(collvoid_local_planner src/collvoid_local_planner.cpp src/Agent.cpp src/ROSAgent.cpp src/orca.cpp src/collvoid_publishers.cpp src/clearpath.cpp)
+add_library(collvoid_local_planner 
+	src/collvoid_local_planner.cpp 
+	src/Agent.cpp src/ROSAgent.cpp 
+	src/orca.cpp
+	src/collvoid_publishers.cpp 
+	src/clearpath.cpp)
 add_dependencies(collvoid_local_planner ${${PROJECT_NAME}_EXPORTED_TARGETS})
 add_dependencies(collvoid_local_planner ${catkin_EXPORTED_TARGETS})
 target_link_libraries(collvoid_local_planner

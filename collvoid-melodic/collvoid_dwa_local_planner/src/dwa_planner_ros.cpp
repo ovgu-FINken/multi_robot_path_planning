@@ -389,7 +389,7 @@ bool DWAPlannerROS::computeVelocityCommands(geometry_msgs::Twist &cmd_vel)
   }
 }
 
-bool DWAPlannerROS::freeOfObstacles(const tf::Stamped<tf::Pose> &robot_pose,
+bool DWAPlannerROS::freeOfObstacles(const geometry_msgs::PoseStamped &robot_pose,
                                     const std::vector<geometry_msgs::PoseStamped> &trajectory, double &distance)
 {
   for (size_t i = 0; i < trajectory.size(); ++i)

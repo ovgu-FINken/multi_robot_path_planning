@@ -22,6 +22,11 @@
 #include "collvoid_local_planner/Vector2.h"
 #include "collvoid_local_planner/collvoid_publishers.h"
 
+#include <tf2_ros/buffer.h>
+#include <tf2/LinearMath/Transform.h>
+
+#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+
 
 using namespace collvoid;
 
@@ -43,7 +48,7 @@ private:
     void getFootprint(ros::NodeHandle private_nh);
     bool getMeCB(collvoid_srvs::GetMe::Request &req, collvoid_srvs::GetMe::Response &res);
 
-    bool getGlobalPose(tf::Stamped <tf::Pose> &global_pose, std::string target_frame, const ros::Time stamp);
+    bool getGlobalPose(geometry_msgs::PoseStamped &global_pose, std::string target_frame, const ros::Time stamp);
     bool createMeMsg(collvoid_msgs::PoseTwistWithCovariance &me_msg, std::string target_frame);
 
 
@@ -79,3 +84,4 @@ private:
 };
 
 #endif //COLLVOID_LOCAL_PLANNER_ME_PUBLISHER_H
+

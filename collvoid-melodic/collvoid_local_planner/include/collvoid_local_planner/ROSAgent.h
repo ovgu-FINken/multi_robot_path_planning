@@ -39,27 +39,32 @@
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
 
-#include <collvoid_msgs/PoseArrayWeighted.h>
-#include <collvoid_msgs/AggregatedPoseTwist.h>
-
+#include <geometry_msgs/TransformStamped.h>
 #include <geometry_msgs/PolygonStamped.h>
+#include <geometry_msgs/PoseStamped.h>
 
-#include <collvoid_msgs/PoseTwistWithCovariance.h>
+#include <tf2/LinearMath/Quaternion.h>
+#include <tf2/LinearMath/Matrix3x3.h>
+#include <tf2/LinearMath/Transform.h>
 #include <tf2_ros/transform_listener.h>
 #include <tf2_ros/buffer.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
-#include <sensor_msgs/PointCloud.h>
-//#include <tf/message_filter.h>
+//#include <pcl_ros/transforms.hpp>
+
+#include <sensor_msgs/PointCloud2.h>
 #include <message_filters/subscriber.h>
 #include <laser_geometry/laser_geometry.h>
 
+#include <collvoid_msgs/PoseArrayWeighted.h>
+#include <collvoid_msgs/AggregatedPoseTwist.h>
+#include <collvoid_msgs/PoseTwistWithCovariance.h>
 #include <collvoid_local_planner/Agent.h>
 #include <collvoid_local_planner/GetCollvoidTwist.h>
 #include <collvoid_srvs/GetNeighbors.h>
 #include <collvoid_srvs/GetMe.h>
 
-#include <base_local_planner/local_planner_util.h>
 #include <collvoid_local_planner/CollvoidConfig.h>
+#include <base_local_planner/local_planner_util.h>
 #include <base_local_planner/obstacle_cost_function.h>
 #include <base_local_planner/simple_trajectory_generator.h>
 #include <base_local_planner/simple_scored_sampling_planner.h>
@@ -78,7 +83,7 @@ public:
     double scoreTrajectory(Eigen::Vector3f vel_samples);
 
     void reconfigure(collvoid_local_planner::CollvoidConfig &cfg);
-    void init(ros::NodeHandle private_nh, std::shared_ptr<tf2_ros::Buffer> tf, base_local_planner::LocalPlannerUtil *planner_util, costmap_2d::Costmap2DROS *costmap_ros);
+    void init(ros::NodeHandle private_nh, tf2_ros::Buffer *tf, base_local_planner::LocalPlannerUtil *planner_util, costmap_2d::Costmap2DROS *costmap_ros);
 
     void computeNewVelocity(Vector2 pref_velocity, geometry_msgs::Twist &cmd_vel);
     void computeOrcaVelocity(Vector2 pref_velocity);
@@ -144,7 +149,7 @@ public:
     boost::mutex obstacle_lock_, computing_lock_;
 
     //me stuff
-    std::shared_ptr<tf2_ros::Buffer> tf_;   
+    tf2_ros::Buffer* tf_;
 
     //subscribers and publishers
     ros::Publisher lines_pub_, neighbors_pub_, vo_pub_, samples_pub_, speed_pub_, obstacles_pub_;

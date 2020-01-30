@@ -31,19 +31,23 @@
 #define COLLVOID_LOCAL_PLANNER_H_
 
 #include <nav_core/base_local_planner.h>
-#include <angles/angles.h>
 #include <nav_msgs/Odometry.h>
 #include <nav_msgs/GridCells.h>
 #include <ros/ros.h>
 
+#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+#include <tf2_ros/buffer.h>
+#include <tf2_ros/transform_listener.h>
+
+#include <geometry_msgs/TransformStamped.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <geometry_msgs/Twist.h>
 #include <costmap_2d/costmap_2d_ros.h>
-#include <tf2_ros/buffer.h>
-#include <tf2_ros/transform_listener.h>
-#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 
-#include <dynamic_reconfigure/server.h>
+#include <tf2/LinearMath/Quaternion.h>
+#include <tf2/LinearMath/Matrix3x3.h>
+#include <tf2/LinearMath/Transform.h>
+
 #include <base_local_planner/local_planner_util.h>
 #include <base_local_planner/odometry_helper_ros.h>
 #include <base_local_planner/latched_stop_rotate_controller.h>
@@ -53,7 +57,9 @@
 
 
 #include "collvoid_local_planner/ROSAgent.h"
+
 #include "collvoid_local_planner/CollvoidConfig.h"
+#include <dynamic_reconfigure/server.h>
 //#include <base_local_planner/trajectory_planner_ros.h>
 
 using namespace collvoid;
@@ -76,20 +82,20 @@ public:
        * @param cmd_vel Will be filled with the velocity command to be passed to the robot base
        * @return True if a valid velocity command was found, false otherwise
        */
-    virtual bool computeVelocityCommands(geometry_msgs::Twist &cmd_vel) = 0;
+    bool computeVelocityCommands(geometry_msgs::Twist &cmd_vel);
 
     /**
        * @brief  Check if the goal pose has been achieved by the local planner
        * @return True if achieved, false otherwise
        */
-    virtual bool isGoalReached() = 0;
+    bool isGoalReached();
 
     /**
        * @brief  Set the plan that the local planner is following
        * @param plan The plan to pass to the local planner
        * @return True if the plan was updated successfully, false otherwise
        */
-    virtual bool setPlan(const std::vector<geometry_msgs::PoseStamped> &plan) = 0;
+    bool setPlan(const std::vector<geometry_msgs::PoseStamped> &plan);
 
     /**
        * @brief  Constructs the local planner
@@ -97,7 +103,7 @@ public:
        * @param tf A pointer to a transform listener
        * @param costmap_ros The cost map to use for assigning costs to local plans
        */
-    virtual void initialize(std::string name, tf2_ros::Buffer *tf, costmap_2d::Costmap2DROS *costmap_ros) = 0;
+    void initialize(std::string name, tf2_ros::Buffer *tf, costmap_2d::Costmap2DROS *costmap_ros);
     inline bool isInitialized() const { return initialized_; } //COLLVOID
 
 private:

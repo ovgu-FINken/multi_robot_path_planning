@@ -32,6 +32,12 @@
 #include <boost/foreach.hpp>
 #include <boost/tuple/tuple.hpp>
 
+#include <tf2_ros/buffer.h
+#include <tf2_ros/transform_listener.h
+#include <tf2_ros/message_filter.h>
+
+#include <tf2/exceptions.h>
+#include <tf2/convert.h>
 
 #include <collvoid_local_planner/ROSAgent.h>
 
@@ -41,7 +47,7 @@
 
 namespace collvoid {
 
-    tf::TransformListener *tf_;
+    std::shared_ptr<tf2_ros::Buffer> tf_;
     std::string base_frame_, global_frame_, odom_frame_;
     std::vector <std::pair<double, geometry_msgs::PoseStamped>> pose_array_weighted_;
     double footprint_radius_, radius_, cur_loc_unc_radius_;
@@ -191,11 +197,11 @@ namespace collvoid {
             in.pose = msg->poses[i];
             geometry_msgs::PoseStamped result;
             try {
-                tf_->waitForTransform(global_frame_, base_frame_, msg->header.stamp, ros::Duration(0.3));
-                tf_->transformPose(base_frame_, in, result);
+                tf_->canTransform(global_frame_, base_frame_, msg->header.stamp, ros::Duration(0.3));
+                tf_->transform(in, result, base_frame_);
                 pose_array_weighted_.push_back(std::make_pair(msg->weights[i], result));
             }
-            catch (tf::TransformException ex) {
+            catch (tf2::TransformException ex) {
                 ROS_ERROR("%s", ex.what());
                 ROS_ERROR("point transform failed");
             };
@@ -232,43 +238,43 @@ namespace collvoid {
 
     void odomCallback(const nav_msgs::Odometry::ConstPtr &msg) {
         //we assume that the odometry is published in the frame of the base
-        tf::Stamped <tf::Pose> global_pose;
+        geometry_msgs::PoseStamped global_pose;
         //let's get the pose of the robot in the frame of the plan
         global_pose.setIdentity();
         global_pose.frame_id_ = base_frame_;
         global_pose.stamp_ = msg->header.stamp;
 
         try {
-            tf_->waitForTransform(global_frame_, base_frame_, global_pose.stamp_, ros::Duration(0.2));
-            tf_->transformPose(global_frame_, global_pose, global_pose);
+            tf_->canTransform(global_frame_, base_frame_, global_pose.stamp_, ros::Duration(0.2));
+            tf_->transform(global_pose, global_pose, global_frame_);
         }
-        catch (tf::TransformException ex) {
+        catch (tf2::TransformException ex) {
             ROS_ERROR("%s", ex.what());
             ROS_ERROR("point odom transform failed");
             return;
         };
 
         geometry_msgs::PoseStamped pose_msg;
-        tf::poseStampedTFToMsg(global_pose, pose_msg);
+        tf2::convert(global_pose, pose_msg);
 
-        tf::Stamped <tf::Pose> odom_pose;
+        geometry_msgs::PoseStamped odom_pose;
         //let's get the pose of the robot in the frame of the plan
         odom_pose.setIdentity();
         odom_pose.frame_id_ = base_frame_;
         odom_pose.stamp_ = msg->header.stamp;
 
         try {
-            tf_->waitForTransform(odom_frame_, base_frame_, odom_pose.stamp_, ros::Duration(0.2));
-            tf_->transformPose(odom_frame_, odom_pose, odom_pose);
+            tf_->canTransform(odom_frame_, base_frame_, odom_pose.stamp_, ros::Duration(0.2));
+            tf_->transform(odom_pose, odom_pose, odom_frame_);
         }
-        catch (tf::TransformException ex) {
+        catch (tf2::TransformException ex) {
             ROS_ERROR("%s", ex.what());
             ROS_ERROR("point odom transform failed");
             return;
         };
 
         geometry_msgs::PoseStamped odom_pose_msg;
-        tf::poseStampedTFToMsg(odom_pose, odom_pose_msg);
+        tf2::convert(odom_pose, odom_pose_msg);
 
         //std::cout << "[" <<pose_msg.pose.position.x << ", " << pose_msg.pose.position.y <<"]" << std::endl;
         //std::cout <<"[" <<odom_pose_msg.pose.position.x << ", " << odom_pose_msg.pose.position.y <<"]" << std::endl;
@@ -303,18 +309,20 @@ namespace collvoid {
 int main(int argc, char **argv) {
     ros::init(argc, argv, "Helper");
     ros::NodeHandle nh;
-    tf::TransformListener tf;
+
+    std::shared_ptr<tf2_ros::Buffer> buffer;
+    std::shared_ptr<tf2::TransformListener> tfl(buffer);
     collvoid::pose_array_weighted_.clear();
     collvoid::odom_frame_ = "odom";
     collvoid::global_frame_ = "/map";
     collvoid::base_frame_ = "base_link";
 
-    collvoid::tf_ = &tf;
+    collvoid::tf_ = &tfl; //TODO reference better than shared pointer here?
     message_filters::Subscriber <amcl::PoseArrayWeighted> amcl_posearray_sub;
     amcl_posearray_sub.subscribe(nh, "particlecloud_weighted", 10);
-    tf::MessageFilter <amcl::PoseArrayWeighted> *tf_filter;
+    tf2_ros::MessageFilter<amcl::PoseArrayWeighted> *tf_filter; //TODO shared pointer??
 
-    tf_filter = new tf::MessageFilter<amcl::PoseArrayWeighted>(amcl_posearray_sub, *collvoid::tf_,
+    tf_filter = new tf2_ros::MessageFilter<amcl::PoseArrayWeighted>(amcl_posearray_sub, *collvoid::tf_,
                                                                collvoid::global_frame_, 10);
     tf_filter->registerCallback(boost::bind(&collvoid::amclPoseArrayWeightedCallback, _1));
     //ros::Subscriber odom_sub = nh.subscribe("odom", 1, collvoid::odomCallback);

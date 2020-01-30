@@ -59,6 +59,7 @@
 #include "tf2/utils.h"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.h"
 #include "tf2_ros/buffer.h"
+#include <tf2/exceptions.h>
 #include "tf2_ros/message_filter.h" // depr.:  "tf/message_filter.h"
 #include "tf2_ros/transform_broadcaster.h"
 #include "tf2_ros/transform_listener.h"

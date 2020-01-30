@@ -27,23 +27,33 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #include <pluginlib/class_list_macros.h>
+// #include <costmap_2d/costmap_2d_ros.h>
+// #include <costmap_2d/costmap_2d.h>
+
 #include <base_local_planner/goal_functions.h>
 #include <base_local_planner/simple_scored_sampling_planner.h>
 #include <std_srvs/Empty.h>
 #include <costmap_2d/obstacle_layer.h>
+#include <tf2/utils.h>
+
 #include <tf2_ros/buffer.h>
 #include <tf2_ros/transform_listener.h>
+#include <tf2/LinearMath/Quaternion.h>
+#include <tf2/LinearMath/Matrix3x3.h>
+#include <tf2/LinearMath/Transform.h>
+
+#include <geometry_msgs/PoseStamped.h>
+#include <geometry_msgs/TransformStamped.h>
 
 #include "collvoid_local_planner/collvoid_local_planner.h"
 
 using namespace std;
 using namespace costmap_2d;
 
+
 //register this planner as a BaseLocalPlanner plugin
-PLUGINLIB_EXPORT_CLASS(collvoid_local_planner::CollvoidLocalPlanner,
-                        nav_core::BaseLocalPlanner)
+PLUGINLIB_EXPORT_CLASS(collvoid_local_planner::CollvoidLocalPlanner, nav_core::BaseLocalPlanner)
 
 
 template<typename T>
@@ -66,8 +76,9 @@ T getParamDef(const ros::NodeHandle nh, const string &name, const T &default_val
 namespace collvoid_local_planner {
 
     CollvoidLocalPlanner::CollvoidLocalPlanner() :
-            odom_helper_("odom"), initialized_(false) {
-    }
+            odom_helper_("odom"), 
+            initialized_(false) {
+    } //TODO is this the correct constructor??
 
 
     CollvoidLocalPlanner::~CollvoidLocalPlanner() {
@@ -243,7 +254,7 @@ namespace collvoid_local_planner {
         }
 
         // Set current velocities from odometry
-        geometry_msgs::PoseStamped& robot_vel; tf::Stamped<tf::Pose> robot_vel;
+        geometry_msgs::PoseStamped robot_vel;
         odom_helper_.getRobotVel(robot_vel);
 
         me_->updatePlanAndLocalCosts(current_pose_, transformed_plan_, robot_vel);
@@ -264,41 +275,41 @@ namespace collvoid_local_planner {
                                                                                   boost::bind(&ROSAgent::checkTrajectory, me_, _1, _2, _3));
         }
 
-        tf::Stamped<tf::Pose> target_pose;
+        geometry_msgs::PoseStamped target_pose;
 
-        target_pose.setIdentity();
-        target_pose.frame_id_ = planner_util_.getGlobalFrame(); //TODO should be base frame
+        //target_pose.setIdentity();
+        target_pose.header.frame_id = planner_util_.getGlobalFrame(); //TODO should be base frame
         if (!skip_next_) {
-
             geometry_msgs::PoseStamped target_pose_msg;
             findBestWaypoint(target_pose_msg, current_pose_);
         }
-        tf::poseStampedMsgToTF(transformed_plan_.at(current_waypoint_), target_pose);
+        tf2::convert(transformed_plan_.at(current_waypoint_), target_pose);
 
         std::vector<geometry_msgs::PoseStamped> local_plan;
         geometry_msgs::PoseStamped pos;
 
-        tf::poseStampedTFToMsg(current_pose_, pos);
+        tf2::convert(current_pose_, pos);
         local_plan.push_back(pos);
         geometry_msgs::PoseStamped pos2 = transformed_plan_.at(current_waypoint_);
         local_plan.push_back(pos2);
         publishGlobalPlan(transformed_plan_);
         publishLocalPlan(local_plan);
 
-        tf::Stamped<tf::Pose> me_pose;
+        geometry_msgs::PoseStamped me_pose;
 
-        tf_->transformPose(me_->global_frame_, current_pose_, me_pose);
-        tf_->transformPose(me_->global_frame_, target_pose, target_pose);
+        tf_->transform(current_pose_, me_pose, me_->global_frame_);
+        tf_->transform(target_pose, target_pose, me_->global_frame_);
 
         geometry_msgs::Twist res;
 
-
-
-        res.linear.x = target_pose.getOrigin().x() - me_pose.getOrigin().x();
-        res.linear.y = target_pose.getOrigin().y() - me_pose.getOrigin().y();
-        res.angular.z = angles::shortest_angular_distance(tf::getYaw(me_pose.getRotation()),
-                                                          atan2(res.linear.y, res.linear.x));
-
+        res.linear.x = target_pose.pose.position.x - me_pose.pose.position.x;
+        res.linear.y = target_pose.pose.position.y - me_pose.pose.position.y;
+        //res.angular.z = angles::shortest_angular_distance(tf::getYaw(me_pose.getRotation()), atan2(res.linear.y, res.linear.x));  //atan2 ==> arctangens, returns angle of polar coordinates 
+        tf2::Quaternion q_target;
+        tf2::Quaternion q_me;
+        tf2::convert (target_pose.pose.orientation, q_target); 
+        tf2::convert  (me_pose.pose.orientation, q_me);
+        res.angular.z = q_me.angleShortestPath(q_target); // TODO maybe the other way around
 
         collvoid::Vector2 goal_dir = collvoid::Vector2(res.linear.x, res.linear.y);
         // collvoid::Vector2 goal_dir = collvoid::Vector2(goal_x,goal_y);
@@ -329,7 +340,7 @@ namespace collvoid_local_planner {
     }
 
     void CollvoidLocalPlanner::findBestWaypoint(geometry_msgs::PoseStamped &target_pose,
-                                                const tf::Stamped<tf::Pose> &global_pose) {
+                                                const geometry_msgs::PoseStamped &global_pose) {
         //current_waypoint_ = 0;
         current_waypoint_ = 0;
         double min_dist = DBL_MAX;

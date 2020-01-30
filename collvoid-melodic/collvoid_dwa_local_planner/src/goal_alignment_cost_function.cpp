@@ -21,19 +21,30 @@
 //#include <tf/tf.h>
 #include <tf2/utils.h>
 
-
 #include <math.h>
 #include <base_local_planner/goal_functions.h>
 
-namespace collvoid_dwa_local_planner#include "collvoid_dwa_local_planner/goal_alignment_cost_function.h"
+#include <collvoid_dwa_local_planner/goal_alignment_cost_function.h>
+
+namespace collvoid_dwa_local_planner
 {
 double GoalAlignmentCostFunction::scoreTrajectory(base_local_planner::Trajectory &traj)
 {
-    if (traj.getPointsSize() < 1) return 0;
-    double goalHeading = tf2::getYaw(global_pose.pose.orientation);
+    if (traj.getPointsSize() < 1)
+        return 0;
+    // math.asin(global_pose.pose.orientation.z);
+
+    // reading yaw from quaternion in message
+    tf2::Quaternion q;
+    tf2::convert(goalPose_.pose.orientation, q);
+    tf2::Matrix3x3 matrix(q);
+    double roll, pitch, yaw;
+    matrix.getRPY(roll, pitch, yaw);
+    //double goalHeading = yaw;
+
     double x, y, th;
     traj.getEndpoint(x, y, th);
-    double delta_th = fabs(angles::shortest_angular_distance(th, goalHeading));
+    double delta_th = fabs(angles::shortest_angular_distance(th, yaw));
     return delta_th / M_PI;
 }
-}
+} // namespace collvoid_dwa_local_planner

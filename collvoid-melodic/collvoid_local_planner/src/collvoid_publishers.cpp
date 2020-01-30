@@ -27,9 +27,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <tf2/LinearMath/Quaternion.h>
+#include <tf2/LinearMath/Matrix3x3.h>
+#include <tf2/LinearMath/Transform.h>
+#include <tf2/LinearMath/Vector3.h>
+#include <tf2/convert.h>
+#include <collvoid_local_planner/collvoid_publishers.h>
+#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 
-
-#include "collvoid_local_planner/collvoid_publishers.h"
 
 namespace collvoid {
 
@@ -198,11 +203,19 @@ namespace collvoid {
     }
 
 
-    void publishMePosition(double radius, tf::Stamped <tf::Pose> global_pose, std::string target_frame, std::string name_space, ros::Publisher me_pub){
+    void publishMePosition(double radius, geometry_msgs::PoseStamped global_pose, std::string target_frame, std::string name_space, ros::Publisher me_pub){
         visualization_msgs::MarkerArray sphere_list;
         sphere_list.markers.clear();
-        Vector2 position = Vector2(global_pose.getOrigin().x(), global_pose.getOrigin().y());
-        double yaw = tf::getYaw(global_pose.getRotation());
+        
+        // reading yaw from quaternion in message 
+        tf2::Quaternion q;
+        tf2::convert(global_pose.pose.orientation, q);
+        tf2::Matrix3x3 matrix(q);
+        double roll, pitch, yaw;
+        matrix.getRPY(roll, pitch, yaw);
+
+        Vector2 position = Vector2(global_pose.pose.position.x, global_pose.pose.position.y);
+
         fillMarkerWithParams(sphere_list, radius, position, yaw, target_frame, name_space);
         me_pub.publish(sphere_list);
     }

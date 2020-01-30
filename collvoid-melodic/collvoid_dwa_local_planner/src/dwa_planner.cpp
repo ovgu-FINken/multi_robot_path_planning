@@ -128,7 +128,7 @@ DWAPlanner::DWAPlanner(std::string name, base_local_planner::LocalPlannerUtil *p
                                                                                                path_costs_(planner_util->getCostmap(), 0.0, 0.0, false),
                                                                                                goal_costs_(planner_util->getCostmap(), 0.0, 0.0, true),
                                                                                                goal_front_costs_(planner_util->getCostmap(), 0.0, 0.0, true),
-                                                                                               alignment_costs_(planner_util->getCostmap(), 0.0, 0.0, false)),
+                                                                                               alignment_costs_(planner_util->getCostmap(), 0.0, 0.0, false),
                                                                                                collvoid_costs_()
 {
   ros::NodeHandle private_nh("~/" + name);

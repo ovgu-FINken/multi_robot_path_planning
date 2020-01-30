@@ -32,10 +32,13 @@
 
 /* #include <ros/ros.h> */
 #include <ros/ros.h>
-#include <tf/tf.h>
 #include <visualization_msgs/MarkerArray.h>
 #include "collvoid_local_planner/Vector2.h"
 #include "collvoid_local_planner/Agent.h"
+#include <tf2/LinearMath/Quaternion.h>
+#include <tf2/LinearMath/Matrix3x3.h>
+#include <tf2/LinearMath/Transform.h>
+#include <tf2/LinearMath/Vector3.h>
 
 namespace collvoid {
 
@@ -50,7 +53,7 @@ namespace collvoid {
 
     void publishNeighborPositionsBare(std::vector<AgentPtr>& neighbors, std::string target_frame, std::string name_space, ros::Publisher neighbors_pub);
 
-    void publishMePosition(double radius, tf::Stamped <tf::Pose> global_pose, std::string target_frame, std::string name_space, ros::Publisher me_pub);
+    void publishMePosition(double radius, geometry_msgs::PoseStamped global_pose, std::string target_frame, std::string name_space, ros::Publisher me_pub);
 
     void fillMarkerWithParams(visualization_msgs::MarkerArray &marker, double radius, Vector2 position, double yaw, std::string base_frame,
                               std::string name_space);

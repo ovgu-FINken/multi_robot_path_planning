@@ -125,7 +125,7 @@ public:
    * @return True if the trajectory is free, false otherwise
    */
   bool freeOfObstacles(const geometry_msgs::PoseStamped &robot_local_pose,
-                       const std::vector<geometry_msgs::PoseStamped> &plan, double &distance); //tf::Stamped<tf::Pose>
+                       const std::vector<geometry_msgs::PoseStamped> &plan, double &distance); //geometry_msgs::PoseStamped
   // COLLVOID >>
 
   bool isInitialized()
