@@ -120,8 +120,8 @@ public:
         */
 
   void updatePlanAndLocalCosts(const geometry_msgs::PoseStamped &global_pose,
-                               const std::vector<geometry_msgs::PoseStamped> &new_plan);
-  //const std::vector<geometry_msgs::Point> &footprint_spec);
+                               const std::vector<geometry_msgs::PoseStamped> &new_plan,
+                               const std::vector<geometry_msgs::Point> &footprint_spec);
 
   /**
        * @brief Get the period at which the local planner is expected to run

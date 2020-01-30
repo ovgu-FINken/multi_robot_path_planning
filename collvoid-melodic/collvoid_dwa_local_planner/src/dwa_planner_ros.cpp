@@ -35,7 +35,9 @@
 * Author: Eitan Marder-Eppstein
 *********************************************************************/
 
+#include <collvoid_dwa_local_planner/dwa_planner.h>
 #include <collvoid_dwa_local_planner/dwa_planner_ros.h>
+
 #include <Eigen/Core>
 #include <cmath>
 
@@ -46,6 +48,7 @@
 #include <base_local_planner/goal_functions.h>
 #include <nav_msgs/Path.h>
 #include <tf2/utils.h>
+#include <tf2/convert.h>
 #include <costmap_2d/obstacle_layer.h>
 
 #include <nav_core/parameter_magic.h>
@@ -101,7 +104,7 @@ DWAPlannerROS::DWAPlannerROS()
 
 void DWAPlannerROS::initialize(
     std::string name,
-    std::shared_ptr<tf2_ros::Buffer> tf,
+    tf2_ros::Buffer *tf,
     costmap_2d::Costmap2DROS *costmap_ros)
 {
   if (!isInitialized())
@@ -152,10 +155,11 @@ void DWAPlannerROS::initialize(
 
 void DWAPlannerROS::clearCostmaps()
 {
-  std::vector<std::shared_ptr<costmap_2d::Layer>> *plugins = costmap_ros_->getLayeredCostmap()->getPlugins();
-  for (std::vector<std::shared_ptr<costmap_2d::Layer>>::iterator layer = plugins->begin(); layer != plugins->end(); ++layer)
+  //std::vector<std::shared_ptr<costmap_2d::Layer>>
+  std::vector<boost::shared_ptr<costmap_2d::Layer>> *plugins = costmap_ros_->getLayeredCostmap()->getPlugins();
+  for (std::vector<boost::shared_ptr<costmap_2d::Layer>>::iterator layer = plugins->begin(); layer != plugins->end(); ++layer)
   {
-    std::shared_ptr<costmap_2d::ObstacleLayer> obstacle_layer = boost::dynamic_pointer_cast<costmap_2d::ObstacleLayer>(*layer);
+    boost::shared_ptr<costmap_2d::ObstacleLayer> obstacle_layer = boost::dynamic_pointer_cast<costmap_2d::ObstacleLayer>(*layer);
     if (!obstacle_layer)
     {
       // ROS_INFO("NO Obstacle layer\n");
@@ -395,7 +399,7 @@ bool DWAPlannerROS::freeOfObstacles(const geometry_msgs::PoseStamped &robot_pose
   for (size_t i = 0; i < trajectory.size(); ++i)
   {
     geometry_msgs::PoseStamped robot_pose_msg;
-    poseStampedTFToMsg(robot_pose, robot_pose_msg);
+    tf2::convert(robot_pose, robot_pose_msg);
     distance = distance2D(trajectory[i], robot_pose_msg);
     if (distance < 0.2 || distance > obstacle_max_distance_) // TODO use footprint!
       continue;

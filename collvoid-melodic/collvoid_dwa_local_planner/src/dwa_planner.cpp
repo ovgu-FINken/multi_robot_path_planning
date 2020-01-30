@@ -266,6 +266,7 @@ bool DWAPlanner::checkTrajectory(
   return false;
 }
 
+
 void DWAPlanner::updatePlanAndLocalCosts(
     const geometry_msgs::PoseStamped &global_pose,
     const std::vector<geometry_msgs::PoseStamped> &new_plan,
@@ -339,7 +340,7 @@ base_local_planner::Trajectory DWAPlanner::findBestPath(
     geometry_msgs::PoseStamped &drive_velocities,
     std::vector<geometry_msgs::Point> footprint_spec)
 {
-  obstacle_costs_.setFootprint(footprint_spec);)
+  obstacle_costs_.setFootprint(footprint_spec);
 
   //make sure that our configuration doesn't change mid-run
   boost::mutex::scoped_lock l(configuration_mutex_);
