@@ -1,0 +1,33 @@
+<launch>
+
+	<node name="map_server" pkg="map_server" type="map_server" args="$(find collvoid_stage)/world/' + self.world_name + '_map.yaml"/>
+	<rosparam command="load" file="$(find collvoid_stage)/params/stage_params.yaml"/>
+	<rosparam command="load" file="$(find collvoid_stage)/' +self.yamlfile + '"/>
+	<rosparam command="load" file="$(find collvoid_stage)/params_created.yaml"/>
+
+	<node pkg="stage_ros" type="stageros" name="stageros" args="$(find collvoid_stage)/world/' + self.world_name + '_created.world" respawn="false" output="screen" />
+
+
+<!-- for x in range(self.num_robots) -->
+
+	<include file="$(find collvoid_stage)/launch/amcl_diff_multi.launch">
+		<arg name="robot" value="robot_{0}"/>
+	</include>
+
+	<include file="$(find collvoid_stage)/launch/move_base_dwa.launch">
+		<arg name="robot" value="robot_{0}"/>
+                <arg name="type" value="{0}"/>
+                <arg name="controlled" value="true"/>
+	</include>
+
+	<node pkg="collvoid_controller" type="controller_robots.py" name="controller_robots" ns="robot_{0}"/>
+
+<!-- if self.visualize -->
+	<node pkg="collvoid_controller" type="collvoid_visualizer.py" name="controller_viz" output="screen"/>
+	<node pkg="rviz" type="rviz" name="rviz" args="-d $(find collvoid_stage)/multi_view.rviz" output="screen" />\n')
+<!-- else -->
+	<node pkg="collvoid_controller" type="controller.py" name="controller" output="screen"/>
+	<node pkg="collvoid_controller" type="collvoid_visualizer.py" name="controller_viz" output="screen"/>
+	<node pkg="rviz" type="rviz" name="rviz" args="-d $(find collvoid_stage)/multi_view.rviz" output="screen" />\n')
+
+</launch>
