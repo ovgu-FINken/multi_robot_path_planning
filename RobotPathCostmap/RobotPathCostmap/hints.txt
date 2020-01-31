@@ -1,0 +1,4 @@
+// catkin make isolated ~= catkin build
+
+wenn catkin build nicht funktioniert, mit catkin build probieren
+
