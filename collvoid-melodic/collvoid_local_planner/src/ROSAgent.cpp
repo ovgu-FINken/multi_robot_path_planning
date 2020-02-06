@@ -131,7 +131,7 @@ ROSAgent::~ROSAgent()
     //delete tf_; maybe somewhen? :>
 }
 
-void ROSAgent::init(ros::NodeHandle private_nh, tf2_ros::Buffer* tf, base_local_planner::LocalPlannerUtil *planner_util,
+void ROSAgent::init(ros::NodeHandle private_nh, tf2_ros::Buffer *tf, base_local_planner::LocalPlannerUtil *planner_util,
                     costmap_2d::Costmap2DROS *costmap_ros)
 {
     tf_ = tf;
@@ -1400,11 +1400,8 @@ int main(int argc, char **argv)
     ros::NodeHandle nh("~");
 
     ROSAgentPtr me(new ROSAgent);
-    //std::shared_ptr<tf2_ros::Buffer> buffer;
-    //std::shared_ptr<tf2_ros::TransformListener> tfl = std::make_shared<tf2_ros::TransformListener>(*buffer);
-    //std::shared_ptr<tf2_ros::TransformListener> tfl(buffer);
-    tf2_ros::Buffer buffer;
-    tf2_ros::TransformListener tfl(buffer);
+    std::shared_ptr<tf2_ros::Buffer> buffer(new tf2_ros::Buffer());
+    std::shared_ptr<tf2_ros::TransformListener> tfl(new tf2_ros::TransformListener(*buffer));
 
     //me->init(nh, &buffer);
     ROS_INFO("ROSAgent initialized");

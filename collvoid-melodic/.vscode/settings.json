@@ -69,5 +69,6 @@
         "set": "cpp",
         "string_view": "cpp"
     },
-    "restructuredtext.confPath": ""
+    "restructuredtext.confPath": "",
+    "cmake.configureOnOpen": false
 }

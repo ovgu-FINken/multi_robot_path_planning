@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(collvoid_local_planner)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
-add_compile_options(-std=c++11)
+add_compile_options(-std=c++11 -g)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -126,7 +126,7 @@ generate_messages(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
  INCLUDE_DIRS include
- LIBRARIES collvoid_local_planner #collvoid_sorting_function
+ LIBRARIES collvoid_local_planner collvoid_scoring_function
  CATKIN_DEPENDS actionlib amcl angles base_local_planner collvoid_msgs collvoid_srvs costmap_2d dynamic_reconfigure laser_geometry message_generation move_base_msgs nav_core pluginlib rosconsole roscpp_serialization roslib rospy std_srvs tf2 visualization_msgs
 #  DEPENDS system_lib
 )

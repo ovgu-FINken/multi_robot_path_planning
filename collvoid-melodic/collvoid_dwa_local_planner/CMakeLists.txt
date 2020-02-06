@@ -67,10 +67,10 @@ add_library(collvoid_dwa_local_planner
     src/path_alignment_cost_function.cpp
     include/collvoid_dwa_local_planner/
 )
-add_dependencies(collvoid_dwa_local_planner ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-add_dependencies(collvoid_dwa_local_planner collvoid_local_planner)
-add_dependencies(collvoid_dwa_local_planner collvoid_scoring_function)
 target_link_libraries(collvoid_dwa_local_planner ${catkin_LIBRARIES})
+add_dependencies(collvoid_dwa_local_planner ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+#add_dependencies(collvoid_dwa_local_planner collvoid_local_planner)
+#add_dependencies(collvoid_dwa_local_planner collvoid_scoring_function)
 
 install(TARGETS collvoid_dwa_local_planner
        ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}

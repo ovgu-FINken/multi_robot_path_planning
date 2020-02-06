@@ -17,7 +17,6 @@
 #include <pcl_ros/transforms.h>
 #include <pcl_ros/impl/transforms.hpp>
 
-
 template <typename T>
 void getParam(const ros::NodeHandle nh, const std::string &name, T *place)
 {
@@ -43,7 +42,9 @@ MePublisher::MePublisher()
 
 void MePublisher::init(ros::NodeHandle nh, std::shared_ptr<tf2_ros::Buffer> tf)
 {
+    //ROS_INFO_STREAM("[ROS_INFO] ---- tf value " << tf.get() << "----");
     tf_ = tf;
+    //ROS_INFO_STREAM("[ROS_INFO] ---- tf_ value " << tf_.get() << "----");
     ros::NodeHandle ns_nh("move_base/local_costmap");
     ros::NodeHandle private_nh("collvoid");
 
@@ -123,7 +124,7 @@ void MePublisher::amclPoseArrayWeightedCallback(const collvoid_msgs::PoseArrayWe
     try
     {
         tf_->canTransform(global_frame_, base_frame_, ros::Time(0), ros::Duration(0.2));
-        pcl_ros::transformPointCloud(base_frame_, pc, result, *tf_); 
+        pcl_ros::transformPointCloud(base_frame_, pc, result, *tf_);
     }
     catch (tf2::TransformException ex)
     {
@@ -414,8 +415,9 @@ int main(int argc, char **argv)
     ros::NodeHandle nh;
 
     std::shared_ptr<MePublisher> me(new MePublisher());
-    std::shared_ptr<tf2_ros::Buffer> buffer;
-    std::shared_ptr<tf2_ros::TransformListener> tfl;
+    std::shared_ptr<tf2_ros::Buffer> buffer(new tf2_ros::Buffer());
+    std::shared_ptr<tf2_ros::TransformListener> tfl(new tf2_ros::TransformListener(*buffer));
+    //ROS_INFO("[ROS_INFO] ---- buffer value %x \n ----------", buffer.get());
     me->init(nh, buffer);
     ROS_INFO("ROS MePublisher initialized");
     ros::spin();

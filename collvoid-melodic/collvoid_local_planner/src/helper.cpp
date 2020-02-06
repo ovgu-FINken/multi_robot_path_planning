@@ -310,14 +310,16 @@ int main(int argc, char **argv) {
     ros::init(argc, argv, "Helper");
     ros::NodeHandle nh;
 
-    std::shared_ptr<tf2_ros::Buffer> buffer;
-    std::shared_ptr<tf2::TransformListener> tfl(buffer);
+    std::shared_ptr<tf2_ros::Buffer> buffer(new tf2_ros::Buffer());
+    std::shared_ptr<tf2_ros::TransformListener> tfl(new tf2_ros::TransformListener(*buffer));
+    // std::shared_ptr<tf2_ros::Buffer> buffer;
+    // std::shared_ptr<tf2::TransformListener> tfl(buffer);
     collvoid::pose_array_weighted_.clear();
     collvoid::odom_frame_ = "odom";
     collvoid::global_frame_ = "/map";
     collvoid::base_frame_ = "base_link";
 
-    collvoid::tf_ = &tfl; //TODO reference better than shared pointer here?
+    collvoid::tf_ = &tfl;
     message_filters::Subscriber <amcl::PoseArrayWeighted> amcl_posearray_sub;
     amcl_posearray_sub.subscribe(nh, "particlecloud_weighted", 10);
     tf2_ros::MessageFilter<amcl::PoseArrayWeighted> *tf_filter; //TODO shared pointer??
