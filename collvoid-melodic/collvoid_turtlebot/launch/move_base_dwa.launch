@@ -31,9 +31,7 @@
             <!-- from uncertainty grid move_base launch file/ -->
 
             <remap from="cmd_vel" to="/$(arg robot)/navigation_velocity_smoother/raw_cmd_vel"/>
-            <!--
-                 <remap from="odom" to="/$(arg robot)/odom"/> 
-            -->
+            <remap from="odom" to="/$(arg robot)/odom"/>
             <remap from="scan" to="/$(arg robot)/scan_filtered"/>
             <!--<param name="base_global_planner" value="collvoid_simple_global_planner/CollvoidSimpleGlobalPlanner" />-->
         </node>

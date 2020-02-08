@@ -42,9 +42,7 @@ MePublisher::MePublisher()
 
 void MePublisher::init(ros::NodeHandle nh, std::shared_ptr<tf2_ros::Buffer> tf)
 {
-    //ROS_INFO_STREAM("[ROS_INFO] ---- tf value " << tf.get() << "----");
     tf_ = tf;
-    //ROS_INFO_STREAM("[ROS_INFO] ---- tf_ value " << tf_.get() << "----");
     ros::NodeHandle ns_nh("move_base/local_costmap");
     ros::NodeHandle private_nh("collvoid");
 
@@ -63,8 +61,8 @@ void MePublisher::init(ros::NodeHandle nh, std::shared_ptr<tf2_ros::Buffer> tf)
     // agent params
     my_id_ = getParamDef<std::string>(private_nh, "name", my_id_);
 
-    private_nh.param<std::string>("base_frame", base_frame_, nh.getNamespace() + "/base_link");
-    private_nh.param<std::string>("global_frame", global_frame_, "map");
+    private_nh.param<std::string>("base_frame_fuuu", base_frame_, static_cast<std::string> (my_id_) + "/base_link");
+    private_nh.param<std::string>("global_frame_fuuu", global_frame_, static_cast<std::string> (my_id_) + "/map");
 
     eps_ = getParamDef(private_nh, "eps", 0.1);
     ROS_INFO("My name is: %s, Eps: %f", my_id_.c_str(), eps_);
