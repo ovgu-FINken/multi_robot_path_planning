@@ -1,0 +1,87 @@
+<!--
+@author:    Johann Schmidt
+@date:      November 2019
+@brief:     Script used to spawn a turtlebot.
+@todo:
+-->
+
+<launch>
+
+	<arg name="model"
+		default="$(env TURTLEBOT3_MODEL)"
+		doc="model type [burger, waffle, waffle_pi]"/>
+	<arg name="nr" default="2"/>
+	<arg name="namespace" default="tb3_"/>
+	<arg name="robot_name" default="$(eval arg('namespace') + str(arg('nr')))"/>
+	<arg name="pose_x" default="0.0 0.0"/>
+	<arg name="pose_y" default="0.0 0.0"/>
+	<arg name="pose_z" default="0.0"/>
+	<arg name="simulate" default="True"/>
+	<arg name="auto_drive" default="False"/>
+	<arg name="recurse" default="True"/>
+
+	<arg name="current_pose_x" value="$(eval arg('pose_x').split()[int(arg('nr')) - 1])"/>
+	<arg name="current_pose_y" value="$(eval arg('pose_y').split()[int(arg('nr')) - 1])"/>
+
+	<group ns="$(arg robot_name)">
+
+        <!-- description -->
+        <param name="robot_description"
+               command="$(find xacro)/xacro
+               --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro"
+			    if="$(arg simulate)"/>
+
+        <!-- spawn -->
+		<node name="spawn_urdf"
+			pkg="gazebo_ros"
+			type="spawn_model"
+			args="
+					-x $(arg current_pose_x)
+					-y $(arg current_pose_y)
+					-z $(arg pose_z)
+					-urdf
+					-param robot_description
+					-model $(arg robot_name)"
+			respawn="false"
+			output="screen"
+			if="$(arg simulate)" />
+
+        <!-- auto drive -->
+		<include file="$(find turtlebot3_gazebo)/launch/turtlebot3_simulation.launch"
+				if="$(arg auto_drive)">
+			<arg name="cmd_vel" value="/$(arg robot_name)/cmd_vel"/>
+		</include>
+
+		<!-- TurtleBot3 -->
+		<include file="$(find turtlebot3_bringup)/launch/turtlebot3_remote.launch">
+			<arg name="model" value="$(arg model)" />
+			<arg name="multi_robot_name" value="$(arg robot_name)"/>
+		</include>
+
+		<!-- Localization -->
+		<include file="$(find benchmark)/launch/amcl.launch">
+			<arg name="robot_name" value="$(arg robot_name)"/>
+		</include>
+
+		<!-- Navigation -->
+		<include file="$(find benchmark)/launch/move_base.launch">
+			<arg name="model" value="$(arg model)" />
+			<arg name="robot_name" value="$(arg robot_name)" />
+		</include>
+
+        <!-- static transform publisher -->
+		<node pkg="tf"
+              type="static_transform_publisher"
+              name="world_to_$(arg robot_name)_tf_broadcaster"
+              args="0 0 0 0 0 0 /map /$(arg robot_name)/map 100"/>
+	</group>
+
+    <!-- Recursively include this launch file until nr=1 -->
+	<include file="$(find benchmark)/launch/spawn.launch"
+		if="$(eval arg('nr') > 0 and arg('recurse'))">
+		<arg name="nr" value="$(eval arg('nr') - 1)"/>
+		<arg name="pose_x" value="$(arg pose_x)"/>
+		<arg name="pose_y" value="$(arg pose_y)"/>
+    </include>
+
+</launch>
