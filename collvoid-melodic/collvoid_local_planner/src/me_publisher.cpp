@@ -61,8 +61,8 @@ void MePublisher::init(ros::NodeHandle nh, std::shared_ptr<tf2_ros::Buffer> tf)
     // agent params
     my_id_ = getParamDef<std::string>(private_nh, "name", my_id_);
 
-    private_nh.param<std::string>("base_frame_fuuu", base_frame_, static_cast<std::string> (my_id_) + "/base_link");
-    private_nh.param<std::string>("global_frame_fuuu", global_frame_, static_cast<std::string> (my_id_) + "/map");
+    private_nh.param<std::string>("base_frame", base_frame_, static_cast<std::string> (my_id_) + "/base_link");
+    private_nh.param<std::string>("global_frame_id", global_frame_, static_cast<std::string> (my_id_) + "/map");
 
     eps_ = getParamDef(private_nh, "eps", 0.1);
     ROS_INFO("My name is: %s, Eps: %f", my_id_.c_str(), eps_);

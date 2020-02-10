@@ -519,3 +519,43 @@
 ==> include_start_time: False
 --------------------------------------------------------
 
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-02-09 23:16:31.524125
+==> Benchmark ID: 1581286591
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 3
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: start
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-02-09 23:19:26.589055
+==> Benchmark ID: 1581286766
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 3
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: start
+==> include_start_time: False
+--------------------------------------------------------
+

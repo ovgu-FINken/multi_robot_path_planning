@@ -67,7 +67,7 @@ class ControllerRobots(object):
         self.sub_goal = rospy.Subscriber("delayed_goal", PoseStamped, self.cb_delayed_goal)
         self.sub_ground_truth = rospy.Subscriber("base_pose_ground_truth", Odometry, self.cb_ground_truth, queue_size=1)
 
-        use_sim = rospy.get_param("/use_sim_time", default=False)
+        use_sim = rospy.get_param("/use_sim_time", default=True)
         if use_sim:
             from stage_ros.msg import Stall
             self.sub_stall = rospy.Subscriber("stall", Stall, self.cb_stall)

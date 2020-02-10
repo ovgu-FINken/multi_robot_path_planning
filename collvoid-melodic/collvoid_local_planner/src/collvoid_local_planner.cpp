@@ -78,7 +78,7 @@ namespace collvoid_local_planner {
     CollvoidLocalPlanner::CollvoidLocalPlanner() :
             odom_helper_("odom"), 
             initialized_(false) {
-    } //TODO is this the correct constructor??
+    } 
 
 
     CollvoidLocalPlanner::~CollvoidLocalPlanner() {

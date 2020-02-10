@@ -129,7 +129,7 @@ local_costmap:
   robot_base_frame: base_footprint
   update_frequency: 3.0
   publish_frequency: 2.0
-  static_map: false
+  #static_map: false
   rolling_window: true
   width: 4.0
   height: 4.0
@@ -151,7 +151,7 @@ global_costmap:
   robot_base_frame: base_footprint
   update_frequency: 3.0
   publish_frequency: 1.0
-  static_map: true
+  #static_map: true
   plugins:
   - {name: static_layer,            type: "costmap_2d::StaticLayer"}
   - {name: obstacle_layer,      type: "costmap_2d::VoxelLayer"}
