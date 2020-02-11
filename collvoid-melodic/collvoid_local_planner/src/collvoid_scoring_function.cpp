@@ -63,7 +63,7 @@ bool CollvoidScoringFunction::getNeighbors()
     }
     else
     {
-        ROS_INFO("Collvoid Scoring: Could not get nieghbors");
+        ROS_INFO("Collvoid Scoring: Could not get neighbors");
 
         return false;
     }

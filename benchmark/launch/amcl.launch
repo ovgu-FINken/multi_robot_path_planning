@@ -21,7 +21,7 @@ Starts the map server.
   <remap from="/scan"    to="/$(arg robot_name)/scan"/>
   <include file="$(find turtlebot3_navigation)/launch/amcl.launch">
   </include>
-  <param name="amcl/base_frame_id" value="$(arg robot_name)/base_footprint"/>
+  <param name="amcl/base_frame_id" value="$(arg robot_name)/base_link"/>
   <param name="amcl/odom_frame_id" value="$(arg robot_name)/odom"/>
   <param name="amcl/global_frame_id" value="$(arg robot_name)/map"/>
   <param name="/use_sim_time" value="true"/>

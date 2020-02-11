@@ -122,7 +122,7 @@ void MePublisher::amclPoseArrayWeightedCallback(const collvoid_msgs::PoseArrayWe
     try
     {
         tf_->canTransform(global_frame_, base_frame_, ros::Time(0), ros::Duration(0.2));
-        pcl_ros::transformPointCloud(base_frame_, pc, result, *tf_);
+        pcl_ros::transformPointCloud(base_frame_, pc, result, *tf_); // rather global_frame_???
     }
     catch (tf2::TransformException ex)
     {
