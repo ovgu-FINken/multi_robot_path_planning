@@ -10,24 +10,26 @@ Starts the map server.
   <arg name="move_forward_only" default="false"/>
   <arg name="robot" default="tb3_1"/>
 
+  <!-- Map server -->
+  <!-- <node name="map_server" pkg="map_server" type="map_server" args="$(find turtlebot3_navigation)/maps/map.yaml"> -->
+    <!-- <remap from="/map" to="/$(arg robot)/map"/> -->
+    <!-- <param name="~frame_id" value="$(arg robot)/map"/> -->
+  <!-- </node> -->
 
   <group ns="/$(arg robot)">
-    <!-- Map server -->
-    <node name="map_server" pkg="map_server" type="map_server" args="$(find turtlebot3_navigation)/maps/map.yaml">
-      <!-- <remap from="/map" to="/$(arg robot)/map"/> -->
-      <param name="~frame_id" value="$(arg robot)/map"/>
-    </node>
 
     <!-- Localization (AMCL) -->
     <node name="inital_pose_publisher" pkg="tracking_certainty_grid" type="inital_pose_publisher"/>
-    <!-- <remap from="map" to="/$(arg robot)/map"/> -->
-    <remap from="/scan" to="/$(arg robot)/scan"/>
 
-    <include file="$(find turtlebot3_navigation)/launch/amcl.launch">
+    <include file="$(find collvoid_turtlebot)/launch/amcl_multi.launch">
+      <arg name="robot" value="$(arg robot)"/>
+      <arg name="use_map_topic" value="true"/>
+      <arg name="odom_frame_id" value="$(arg robot)/odom"/>
+      <arg name="base_frame_id" value="$(arg robot)/base_footprint"/>
+      <!-- <arg name="global_frame_id" value="/map"/> -->
+      <arg name="global_frame_id" value="map"/>
     </include>
-    <param name="amcl/base_frame_id" value="$(arg robot)/base_footprint"/>
-    <param name="amcl/odom_frame_id" value="$(arg robot)/odom"/>
-    <param name="amcl/global_frame_id" value="$(arg robot)/map"/>
+
     <param name="/use_sim_time" value="true"/>
 
     <!-- rviz -->
