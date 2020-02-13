@@ -33,6 +33,7 @@ find_package(catkin REQUIRED COMPONENTS
   tf2
   tf2_ros
   visualization_msgs
+  pcl_conversions
 )
 
 ## System dependencies are found with CMake's conventions

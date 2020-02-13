@@ -16,6 +16,7 @@
 #include <pcl/point_cloud.h>
 #include <pcl_ros/transforms.h>
 #include <pcl_ros/impl/transforms.hpp>
+#include <pcl_conversions/pcl_conversions.h>
 
 template <typename T>
 void getParam(const ros::NodeHandle nh, const std::string &name, T *place)
@@ -61,7 +62,7 @@ void MePublisher::init(ros::NodeHandle nh, std::shared_ptr<tf2_ros::Buffer> tf)
     // agent params
     my_id_ = getParamDef<std::string>(private_nh, "name", my_id_);
 
-    private_nh.param<std::string>("base_frame", base_frame_, static_cast<std::string> (my_id_) + "/base_link");
+    private_nh.param<std::string>("base_frame", base_frame_, my_id_ + "/base_link");
     private_nh.param<std::string>("global_frame_id", global_frame_,"map");
 
     eps_ = getParamDef(private_nh, "eps", 0.1);
@@ -108,10 +109,12 @@ void MePublisher::amclPoseArrayWeightedCallback(const collvoid_msgs::PoseArrayWe
     boost::mutex::scoped_lock lock(convex_lock_);
 
     pose_array_weighted_.clear();
-    pcl::PointCloud<pcl::PointXYZ> result;
     //sensor_msgs::PointCloud2 result;
     //sensor_msgs::PointCloud2 pc;
+    pcl::PointCloud<pcl::PointXYZ> result;
     pcl::PointCloud<pcl::PointXYZ> pc;
+    pc.header.frame_id=msg->header.frame_id;
+    pc.header.stamp=pcl_conversions::toPCL(ros::Time(0));
     for (int i = 0; i < (int)msg->poses.size(); i++)
     {
         pcl::PointXYZ p;
@@ -121,8 +124,9 @@ void MePublisher::amclPoseArrayWeightedCallback(const collvoid_msgs::PoseArrayWe
     }
     try
     {
-        tf_->canTransform(global_frame_, base_frame_, ros::Time(0), ros::Duration(0.2));
-        pcl_ros::transformPointCloud(base_frame_, pc, result, *tf_); // rather global_frame_???
+
+        tf_->canTransform(global_frame_,base_frame_, pcl_conversions::fromPCL(pc.header.stamp), ros::Duration(0.2));
+        pcl_ros::transformPointCloud(base_frame_, pc, result, *tf_);
     }
     catch (tf2::TransformException ex)
     {
@@ -133,8 +137,8 @@ void MePublisher::amclPoseArrayWeightedCallback(const collvoid_msgs::PoseArrayWe
     for (int i = 0; i < (int)msg->poses.size(); i++)
     {
         geometry_msgs::Point32 r;
-        r.x = result[i].x;
-        r.y = result[i].y;
+        r.x = result.points[i].x;
+        r.y = result.points[i].y;
         pose_array_weighted_.push_back(std::make_pair(msg->weights[i], r));
     }
     //    if (!use_polygon_footprint_ || orca_) {
