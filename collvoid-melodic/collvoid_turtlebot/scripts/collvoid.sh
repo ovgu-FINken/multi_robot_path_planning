@@ -16,7 +16,6 @@ NUM=0
 MAPPING=${MAPPING:=amcl}
 WORLD=""
 NUM_ROBOT=2
-DEBUG=false
 
 # start tmux
 tmux new-session -s $SESSION_NAME -d

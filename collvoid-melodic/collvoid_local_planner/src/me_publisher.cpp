@@ -198,7 +198,7 @@ bool MePublisher::getGlobalPose(geometry_msgs::PoseStamped &global_pose, std::st
         ROS_WARN_THROTTLE(2, "point odom transform failed");
         return false;
     };
-    // ROS_WARN_STREAM("[getGlobalPose] point odom transform succeeded");
+    // ROS_INFO_STREAM("[getGlobalPose] point odom transform succeeded");
     return true;
 }
 

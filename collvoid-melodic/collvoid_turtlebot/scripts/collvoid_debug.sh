@@ -16,7 +16,6 @@ NUM=0
 MAPPING=${MAPPING:=amcl}
 WORLD=""
 NUM_ROBOT=2
-DEBUG=false
 
 # start tmux
 tmux new-session -s $SESSION_NAME -d
@@ -31,9 +30,23 @@ read -t 3
 NUM=$((++NUM))
 tmux new-window -t $SESSION_NAME -n "map_server"
 tmux send-keys -t $SESSION_NAME:$NUM "roslaunch collvoid_turtlebot map_server.launch" C-m
+read -t 3
 
-#####
-X=0
+##### 1st robot in debug mode
+X=1
+
+# localisation
+NUM=$((++NUM))
+tmux new-window -t $SESSION_NAME -n "amcl_${X}"
+tmux send-keys -t $SESSION_NAME:$NUM "roslaunch collvoid_turtlebot amcl_simple.launch robot:=tb3_${X}" C-m
+
+# navigation
+NUM=$((++NUM))
+tmux new-window -t $SESSION_NAME -n "move_base_${X}"
+tmux send-keys -t $SESSION_NAME:$NUM "roslaunch collvoid_turtlebot move_base_dwa_debug.launch robot_name:=tb3_${X}" C-m
+read -t 3
+
+##### 2nd, 3rd, ... robot in normal mode
 while [ $X -lt $NUM_ROBOT ]; do
   X=$((X + 1))
 
@@ -45,14 +58,10 @@ while [ $X -lt $NUM_ROBOT ]; do
   # navigation
   NUM=$((++NUM))
   tmux new-window -t $SESSION_NAME -n "move_base_${X}"
-  tmux send-keys -t $SESSION_NAME:$NUM "roslaunch collvoid_turtlebot move_base_dwa_debug.launch robot_name:=tb3_${X}" C-m
+  tmux send-keys -t $SESSION_NAME:$NUM "roslaunch collvoid_turtlebot move_base_dwa.launch robot_name:=tb3_${X}" C-m
   read -t 3
 done
 
-# goal ???
-#NUM=$((++NUM))
-#tmux new-window -t $SESSION_NAME -n "waypoints"
-#tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark waypoints.launch use_settings_file:=$USE_SETTINGS_FILE" C-m
 
 #### rviz
 NUM=$((++NUM))
