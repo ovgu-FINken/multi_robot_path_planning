@@ -111,8 +111,8 @@ public:
   base_local_planner::Trajectory findBestPath(
       const geometry_msgs::PoseStamped &global_pose,
       const geometry_msgs::PoseStamped &global_vel,
-      geometry_msgs::PoseStamped &drive_velocities,
-      std::vector<geometry_msgs::Point> footprint_spec); //COLLVOID
+      geometry_msgs::PoseStamped &drive_velocities);
+     //  std::vector<geometry_msgs::Point> footprint_spec); //COLLVOID
 
   /** COLLVOID
         * @brief  Take in a new global plan for the local planner to follow, and adjust local costmaps

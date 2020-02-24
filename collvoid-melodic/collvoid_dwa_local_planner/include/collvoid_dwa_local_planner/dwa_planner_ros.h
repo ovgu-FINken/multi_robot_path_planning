@@ -121,7 +121,7 @@ public:
    * Check if a trajectory (normally a part of a global plan) is free of obstacles
    * within obstacle_max_distance_ meters from the robot
    * @param robot_pose Current robot pose
-   * @param trajectory Trajectory to check
+   * @param plan Trajectory to check
    * @param distance Distance from the robot to the closest obstacle, if any
    * @return True if the trajectory is free, false otherwise
    */

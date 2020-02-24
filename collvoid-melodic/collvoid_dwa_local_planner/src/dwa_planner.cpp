@@ -125,11 +125,11 @@ void DWAPlanner::reconfigure(DWAPlannerConfig &config)
 
 DWAPlanner::DWAPlanner(std::string name, base_local_planner::LocalPlannerUtil *planner_util) : planner_util_(planner_util),
                                                                                                obstacle_costs_(planner_util->getCostmap()),
-                                                                                               path_costs_(planner_util->getCostmap(), 0.0, 0.0, false),
+                                                                                               path_costs_(planner_util->getCostmap()),
                                                                                                goal_costs_(planner_util->getCostmap(), 0.0, 0.0, true),
                                                                                                goal_front_costs_(planner_util->getCostmap(), 0.0, 0.0, true),
-                                                                                               alignment_costs_(planner_util->getCostmap(), 0.0, 0.0, false),
-                                                                                               collvoid_costs_()
+                                                                                               alignment_costs_(planner_util->getCostmap()),
+                                                                                               collvoid_costs_() //CollvoidScoringFunction
 {
   ros::NodeHandle private_nh("~/" + name);
 
@@ -175,7 +175,7 @@ DWAPlanner::DWAPlanner(std::string name, base_local_planner::LocalPlannerUtil *p
   private_nh.param("publish_traj_pc", publish_traj_pc_, false);
 
   ros::NodeHandle nh;
-  collvoid_costs_.init(nh);
+  collvoid_costs_.init(nh); 
   double collvoid_scale;
   private_nh.param("collvoid_scale", collvoid_scale, 12.);
 
@@ -187,10 +187,10 @@ DWAPlanner::DWAPlanner(std::string name, base_local_planner::LocalPlannerUtil *p
   critics.push_back(&oscillation_costs_);   // discards oscillating motions (assisgns cost -1)
   critics.push_back(&obstacle_costs_);      // discards trajectories that move into obstacles
   critics.push_back(&goal_front_costs_);    // prefers trajectories that make the nose go towards (local) nose goal
-  critics.push_back(&collvoid_costs_);      // COLLVOIDtries to adapt collvoid settings
+  critics.push_back(&collvoid_costs_);      // COLLVOID tries to adapt collvoid settings
   critics.push_back(&alignment_costs_);     // prefers trajectories that keep the robot nose on nose path
-  critics.push_back(&path_alignment_cost_); //COLLVOID
-  critics.push_back(&goal_alignment_cost_); //COLLVOID
+  critics.push_back(&path_alignment_cost_); // COLLVOID
+  critics.push_back(&goal_alignment_cost_); // COLLVOID
   critics.push_back(&path_costs_);          // prefers trajectories on global path
   critics.push_back(&goal_costs_);          // prefers trajectories that go towards (local) goal, based on wave propagation
   critics.push_back(&twirling_costs_);      // optionally prefer trajectories that don't spin
@@ -321,6 +321,7 @@ void DWAPlanner::updatePlanAndLocalCosts(
     // once we are close to goal, trying to keep the nose close to anything destabilizes behavior.
     alignment_costs_.setScale(0.0);
   }
+  //COLLVOID
   if (sq_dist > goal_heading_sq_dist_)
   {
     goal_alignment_cost_.setScale(0);
@@ -337,10 +338,10 @@ void DWAPlanner::updatePlanAndLocalCosts(
 base_local_planner::Trajectory DWAPlanner::findBestPath(
     const geometry_msgs::PoseStamped &global_pose,
     const geometry_msgs::PoseStamped &global_vel,
-    geometry_msgs::PoseStamped &drive_velocities,
-    std::vector<geometry_msgs::Point> footprint_spec)
+    geometry_msgs::PoseStamped &drive_velocities)
+    // std::vector<geometry_msgs::Point> footprint_spec)
 {
-  obstacle_costs_.setFootprint(footprint_spec);
+  // obstacle_costs_.setFootprint(footprint_spec);
 
   //make sure that our configuration doesn't change mid-run
   boost::mutex::scoped_lock l(configuration_mutex_);

@@ -170,8 +170,6 @@ namespace collvoid {
         VO result = createVO(position1, footprint1, position2, footprint2, vel2);
         result.point = 0.5 * (vel1 + vel2);
         return result;
-
-
     }
 
     VO createHRVO(Vector2 &position1, const std::vector<Vector2> &footprint1, Vector2 &vel1, Vector2 &position2,

@@ -243,7 +243,7 @@ namespace collvoid_local_planner {
         }
         transformed_plan_.clear();
         if (! planner_util_.getLocalPlan(current_pose_, transformed_plan_)) {
-            ROS_ERROR("Could not get local plan");
+            ROS_ERROR("[Collvoid local planner] Could not get local plan");
             return false;
         }
 

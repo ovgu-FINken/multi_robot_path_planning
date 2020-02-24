@@ -817,6 +817,7 @@ void ROSAgent::computeObstacles()
         std::vector<Vector2> obst_footprint;
         for (Obstacle obst : obstacles)
         {
+            ROS_INFO("Obstacle: %f", obst.points[1].x());
             //obst.points = rotateFootprint(obst.points, heading_);
             Vector2 obst_center = (obst.points[0] + obst.points[2]) / 2.;
             double dist = distSqPointLineSegment(obst.points[0], obst.points[1], position_);

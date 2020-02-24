@@ -45,7 +45,7 @@ while [ $X -lt $NUM_ROBOT ]; do
   # navigation
   NUM=$((++NUM))
   tmux new-window -t $SESSION_NAME -n "move_base_${X}"
-  tmux send-keys -t $SESSION_NAME:$NUM "roslaunch collvoid_turtlebot move_base_dwa.launch robot_name:=tb3_${X}" C-m
+  tmux send-keys -t $SESSION_NAME:$NUM "roslaunch collvoid_turtlebot move_base_dwa_debug.launch robot_name:=tb3_${X}" C-m
   read -t 3
 done
 

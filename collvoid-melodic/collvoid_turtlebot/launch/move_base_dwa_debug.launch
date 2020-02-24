@@ -3,11 +3,11 @@
     <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
     <arg name="type" default="turtle" />
     <arg name="robot_name" default="tb3_1" />
-
+    
     <group ns="/$(arg robot_name)">
 
         <!-- move_base -->
-        <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen" >
+        <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen" launch-prefix="gdbserver :1234">
             <rosparam command="load" file="$(find collvoid_turtlebot)/params/costmap_common_$(arg type).yaml" ns="local_costmap" />
             <rosparam command="load" file="$(find collvoid_turtlebot)/params/costmap_common_$(arg type).yaml" ns="global_costmap" />
             <rosparam command="load" file="$(find collvoid_turtlebot)/params/move_base_params_$(arg type).yaml" />

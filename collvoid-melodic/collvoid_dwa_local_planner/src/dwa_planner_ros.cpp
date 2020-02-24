@@ -121,7 +121,7 @@ void DWAPlannerROS::initialize(
     costmap_2d::Costmap2D *costmap = costmap_ros_->getCostmap();
 
     planner_util_.initialize(tf, costmap, costmap_ros_->getGlobalFrameID());
-    world_model_ = new base_local_planner::CostmapModel(*costmap_ros->getCostmap());
+    // world_model_ = new base_local_planner::CostmapModel(*costmap_ros->getCostmap());
 
     //create the actual planner that we'll use.. it'll configure itself from the parameter server
     dp_ = std::shared_ptr<DWAPlanner>(new DWAPlanner(name, &planner_util_));
@@ -153,6 +153,7 @@ void DWAPlannerROS::initialize(
   }
 }
 
+// <<< COLLVOID
 void DWAPlannerROS::clearCostmaps()
 {
   //std::vector<std::shared_ptr<costmap_2d::Layer>>
@@ -162,12 +163,12 @@ void DWAPlannerROS::clearCostmaps()
     boost::shared_ptr<costmap_2d::ObstacleLayer> obstacle_layer = boost::dynamic_pointer_cast<costmap_2d::ObstacleLayer>(*layer);
     if (!obstacle_layer)
     {
-      // ROS_INFO("NO Obstacle layer\n");
+      ROS_INFO("NO Obstacle layer\n");
       continue;
     }
     else
     {
-      //ROS_INFO("REMOVING Obstacle layer\n");
+      ROS_INFO("REMOVING Obstacle layer\n");
       (*layer)->reset();
     }
   }
@@ -182,6 +183,7 @@ bool DWAPlannerROS::clearCostmapsService(std_srvs::Empty::Request &req, std_srvs
   clearCostmaps();
   return true;
 }
+// COLLVOID >>>
 
 bool DWAPlannerROS::setPlan(const std::vector<geometry_msgs::PoseStamped> &orig_global_plan)
 {
@@ -194,7 +196,7 @@ bool DWAPlannerROS::setPlan(const std::vector<geometry_msgs::PoseStamped> &orig_
   latchedStopRotateController_.resetLatching();
 
   ROS_INFO("Got new plan");
-  blocked_path_count_ = 0;
+  blocked_path_count_ = 0; //COLLVOID
   return dp_->setPlan(orig_global_plan);
 }
 
@@ -236,7 +238,7 @@ DWAPlannerROS::~DWAPlannerROS()
 {
   //make sure to clean things up
   delete dsrv_;
-  delete world_model_;
+  // delete world_model_;
 }
 
 bool DWAPlannerROS::dwaComputeVelocityCommands(geometry_msgs::PoseStamped &global_pose, geometry_msgs::Twist &cmd_vel)
@@ -262,7 +264,7 @@ bool DWAPlannerROS::dwaComputeVelocityCommands(geometry_msgs::PoseStamped &globa
   drive_cmds.header.frame_id = costmap_ros_->getBaseFrameID();
 
   // call with updated footprint
-  base_local_planner::Trajectory path = dp_->findBestPath(global_pose, robot_vel, drive_cmds, costmap_ros_->getRobotFootprint());
+  base_local_planner::Trajectory path = dp_->findBestPath(global_pose, robot_vel, drive_cmds); //COLLVOID: + costmap_ros_->getRobotFootprint());
   //ROS_ERROR("Best: %.2f, %.2f, %.2f, %.2f", path.xv_, path.yv_, path.thetav_, path.cost_);
 
   /* For timing uncomment
@@ -327,7 +329,7 @@ bool DWAPlannerROS::computeVelocityCommands(geometry_msgs::Twist &cmd_vel)
   std::vector<geometry_msgs::PoseStamped> transformed_plan;
   if (!planner_util_.getLocalPlan(current_pose_, transformed_plan))
   {
-    ROS_ERROR("Could not get local plan");
+    ROS_ERROR("[DWA Local Planer] Could not get local plan");
     return false;
   }
 
@@ -338,6 +340,7 @@ bool DWAPlannerROS::computeVelocityCommands(geometry_msgs::Twist &cmd_vel)
     return false;
   }
 
+  //<<< COLLVOID: clearing the costmap manually if there are obstacles
   double distance;
   if (!freeOfObstacles(current_pose_, transformed_plan, distance))
   {
@@ -353,6 +356,7 @@ bool DWAPlannerROS::computeVelocityCommands(geometry_msgs::Twist &cmd_vel)
   }
   else
     blocked_path_count_ = 0;
+  //COLLVOID >>>
 
   ROS_DEBUG_NAMED("collvoid_dwa_local_planner", "Received a transformed plan with %zu points.", transformed_plan.size());
 
@@ -393,6 +397,7 @@ bool DWAPlannerROS::computeVelocityCommands(geometry_msgs::Twist &cmd_vel)
   }
 }
 
+// <<< COLLVOID
 bool DWAPlannerROS::freeOfObstacles(const geometry_msgs::PoseStamped &robot_pose,
                                     const std::vector<geometry_msgs::PoseStamped> &trajectory, double &distance)
 {
@@ -419,5 +424,7 @@ bool DWAPlannerROS::freeOfObstacles(const geometry_msgs::PoseStamped &robot_pose
 
   return true;
 }
+// COLLVOID >>>
+
 
 }; // namespace collvoid_dwa_local_planner
