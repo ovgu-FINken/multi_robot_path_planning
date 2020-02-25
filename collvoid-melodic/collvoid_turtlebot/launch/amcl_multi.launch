@@ -7,7 +7,7 @@
   <arg name="base_frame_id" default="base_footprint"/>
   <arg name="global_frame_id" default="/map"/>
 
-  <node pkg="collvoid_amcl" type="collvoid_amcl" name="amcl">
+  <node pkg="amcl" type="amcl" name="amcl">
     <!-- Publish scans from best pose at a max of 10 Hz -->
     <param name="odom_model_type" value="diff"/>
     <param name="transform_tolerance" value="0.2" />
