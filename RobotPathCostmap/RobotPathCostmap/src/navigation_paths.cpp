@@ -1,7 +1,7 @@
 #include <string>
 #include <nav_msgs>
 #include <list>
-#include <RobotPathCostmap/navigation_paths.h>
+#include <RobotPathCostmap/RobotPathCostmap/include/navigation_paths.h>
 
 //http://docs.ros.org/api/nav_msgs/html/msg/Path.html
 
@@ -13,7 +13,8 @@ void NavigationPathLayer::onInitialize()
 {
 
     bool* side_inflation = false;
-    float* inflation_size = 1;
+    int* inflation_size = 1;
+    int* filter_size = 20; 
     ros::NodeHandle nh("~/" + name_), g_nh; // ToDo: check cooperation with other Multi-robot-path-planning-files
     paths_sub_ = nh.subscribe("/paths", 1, &NavigationPathLayer::pathCallback, this); // ToDo: check if frame_id of robot stays the same
     list<Path> paths_list_;
@@ -31,6 +32,8 @@ void NavigationPathLayer::pathCallback(const nav_msgs::Path& path)
 
     bool* isOld = false;
     unsigned int* index_ = paths_list_.size(); // this value cannot be assigned in for-loop (as back check)
+
+    // 2 Filter einfügen: einmal mit Seitenbias, einmal ohne bzw. aus launch-File übernehmen, welcher der beiden erstellt werden soll
 
     for (unsigned int i = 0; i < paths_list_.size(); i++)
     {
@@ -59,31 +62,62 @@ void NavigationPathLayer::pathCallback(const nav_msgs::Path& path)
 
 void NavigationPathLayer::updateBounds()
 {
-
+    // Grenzen der Costmap neu setzen, um alle benötigten Punkte zu beinhalten
 }
 
 void NavigationPathLayer::updateCosts()
 {
+    // Wenn Änderung bei übergebenen Pfaden
 
+        // Kosten auf 0 zurücksetzen
+
+        // Kostenberge je Pfad einfügen
 }
 
-void NavigationPathLayer::setSideInflation(bool* inflate)
+void NavigationPathLayer::setSideInflation(bool inflate)
 {
     side_inflation* = inflate;
 }
 
+void NavigationPathLayer::setFilterSize(int size)
+{
+    filter_size* = size;
+}
+
 void NavigationPathLayer::scaleSideInflation(float* inflation_scale)
 {
-    inflation_size* = inflation_scale;
+    // maximal factor 1 of the costs of the normal path
+    inflation_size* = min(inflation_scale, 1); 
 }
 
 void NavigationPathLayer::inflate_side()
 {
-// optional
+// optional; done later
 // create costs on other robots' right side to always pass them on the other
-
-
 }
+
+void NavigationPathLayer::resetCosts()
+{
+    // gesamte Map auf 0 zurücksetzen
+}
+
+void NavigationPathLayer::createCostHillChain() // Pfad übergeben
+{
+    // Entlang des Pfades Kosten erhöhen ()
+    // Gauß-Filter entlang des Pfades
+        // wenn side_inflation
+            // Gaußfilter mit Seitenbias nutzen
+        // sonst
+            // normaler Gaußfilter verwenden
+    // für jeden Pixel in der Konvolution den max-Wert von Filterwert an der Stelle und aktuellem Wert nehmen
+
+    // entlang des Pfades linear abnehmende/zunehmende Kosten? (je weiter in die "Zukunft" desto weniger /mehr Einfluss auf die Costmap 
+    // (Unsicherheit als geringe Wahrscheinlichkeit oder als größeren Puffer betrachten))
+
+    // open-cv gaußfilter costmap konvertieren ggfs
+}
+
+void NavigationPathLayer::createFilter() // Größe und side_inflation übergeben
 
 }
 

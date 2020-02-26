@@ -17,7 +17,8 @@ public:
     virtual void NavigationPathLayer::pathCallback(const nav_msgs::& paths);
     virtual void NavigationPathLayer::updateBounds();
     virtual void NavigationPathLayer::updateCosts();
-    virtual void NavigationPathLayer::setSideInflation(bool* inflate);
+    virtual void NavigationPathLayer::setSideInflation(bool inflate);
+    virtual void NavigationPathLayer::setFilterSize(int size);
     virtual void NavigationPathLayer::scaleSideInflation(float* inflation_scale);
 
 protected:
@@ -26,7 +27,11 @@ protected:
 
 private:
     bool* side_inflation;
-    float* inflation_size;
+    int* inflation_size;
+    int* filter_size;
+    virtual void NavigationPathLayer::resetCosts();
+    virtual void NavigationPathLayer::createCostHillChain();
+    virtual void void NavigationPathLayer::createFilter();
 
 
 }
