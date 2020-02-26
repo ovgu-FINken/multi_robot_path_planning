@@ -115,6 +115,7 @@ void NavigationPathLayer::createCostHillChain() // Pfad übergeben
     // (Unsicherheit als geringe Wahrscheinlichkeit oder als größeren Puffer betrachten))
 
     // open-cv gaußfilter costmap konvertieren ggfs
+    // http://wiki.ros.org/cv_bridge/Tutorials/UsingCvBridgeToConvertBetweenROSImagesAndOpenCVImages
 }
 
 void NavigationPathLayer::createFilter() // Größe und side_inflation übergeben
