@@ -32,6 +32,7 @@
 #include <tf2/LinearMath/Transform.h>
 #include <tf2/LinearMath/Vector3.h>
 #include <tf2/convert.h>
+#include <tf2/utils.h>
 #include <collvoid_local_planner/collvoid_publishers.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 
@@ -207,12 +208,15 @@ namespace collvoid {
         visualization_msgs::MarkerArray sphere_list;
         sphere_list.markers.clear();
         
+        /*
         // reading yaw from quaternion in message 
         tf2::Quaternion q;
         tf2::convert(global_pose.pose.orientation, q);
         tf2::Matrix3x3 matrix(q);
         double roll, pitch, yaw;
         matrix.getRPY(roll, pitch, yaw);
+        */
+        double yaw = tf2::getYaw(global_pose.pose.orientation);
 
         Vector2 position = Vector2(global_pose.pose.position.x, global_pose.pose.position.y);
 

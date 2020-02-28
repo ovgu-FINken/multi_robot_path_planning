@@ -32,8 +32,8 @@ double GoalAlignmentCostFunction::scoreTrajectory(base_local_planner::Trajectory
 {
     if (traj.getPointsSize() < 1)
         return 0;
-    // math.asin(global_pose.pose.orientation.z);
 
+    /*
     // reading yaw from quaternion in message
     tf2::Quaternion q;
     tf2::convert(goalPose_.pose.orientation, q);
@@ -41,6 +41,9 @@ double GoalAlignmentCostFunction::scoreTrajectory(base_local_planner::Trajectory
     double roll, pitch, yaw;
     matrix.getRPY(roll, pitch, yaw);
     //double goalHeading = yaw;
+    */
+    double yaw = tf2::getYaw(goalPose_.pose.orientation);
+
 
     double x, y, th;
     traj.getEndpoint(x, y, th);

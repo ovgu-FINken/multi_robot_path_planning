@@ -38,6 +38,7 @@
 #include <tf2_ros/transform_listener.h>
 #include <tf2/exceptions.h>
 #include <tf2/transform_datatypes.h>
+#include <tf2/utils.h>
 
 #include "collvoid_local_planner/ROSAgent.h"
 #include "collvoid_local_planner/orca.h"
@@ -249,13 +250,16 @@ bool ROSAgent::getMe()
         this->radius_ = msg.radius;
         this->position_ = Vector2(msg.pose.pose.position.x, msg.pose.pose.position.y);
 
+        /*
         // reading yaw from quaternion in geometry message
         tf2::Quaternion q;
         tf2::convert(msg.pose.pose.orientation, q);
         tf2::Matrix3x3 matrix(q);
         double roll, pitch, yaw;
         matrix.getRPY(roll, pitch, yaw);
-        this->heading_ = yaw; //this->heading_ = tf::getYaw(msg.pose.pose.orientation);
+        this->heading_ = yaw;
+        */
+        this->heading_ = tf2::getYaw(msg.pose.pose.orientation);
 
         std::vector<Vector2> minkowski_footprint;
         for (geometry_msgs::Point32 p : msg.footprint.polygon.points)
@@ -341,13 +345,16 @@ AgentPtr ROSAgent::createAgentFromMsg(collvoid_msgs::PoseTwistWithCovariance &ms
     agent->controlled_ = msg.controlled;
     agent->position_ = Vector2(msg.pose.pose.position.x, msg.pose.pose.position.y);
 
+    /*
     // reading yaw from quaternion in geometry message
     tf2::Quaternion q;
     tf2::convert(msg.pose.pose.orientation, q);
     tf2::Matrix3x3 matrix(q);
     double roll, pitch, yaw;
     matrix.getRPY(roll, pitch, yaw);
-    agent->heading_ = yaw; //agent->heading_ = tf::getYaw(msg.pose.pose.orientation);
+    agent->heading_ = yaw; 
+    */
+    agent->heading_ = tf2::getYaw(msg.pose.pose.orientation);
 
     std::vector<Vector2> minkowski_footprint;
     for (geometry_msgs::Point32 p : msg.footprint.polygon.points)
@@ -407,12 +414,15 @@ bool ROSAgent::getTwistServiceCB(collvoid_local_planner::GetCollvoidTwist::Reque
 
     Vector2 goal = Vector2(global_pose_msg.pose.position.x, global_pose_msg.pose.position.y);
 
+    /*
     // reading yaw from quaternion in geometry message
     tf2::Quaternion q;
     tf2::convert(global_pose_msg.pose.orientation, q);
     tf2::Matrix3x3 matrix(q);
     double roll, pitch, yaw;
-    matrix.getRPY(roll, pitch, yaw); //double ang = tf::getYaw(global_pose_msg.pose.orientation);
+    matrix.getRPY(roll, pitch, yaw);
+    */
+    double yaw = tf2::getYaw(global_pose_msg.pose.orientation);
 
     res.twist = computeVelocityCommand(goal, yaw);
     return true;
@@ -517,12 +527,15 @@ void ROSAgent::computeNewVelocity(Vector2 pref_velocity, geometry_msgs::Twist &c
             }
             geometry_msgs::PoseStamped goal_pose = global_plan_.back();
 
+            /*
             // reading yaw from quaternion in geometry message
             tf2::Quaternion q;
             tf2::convert(goal_pose.pose.orientation, q);
             tf2::Matrix3x3 matrix(q);
             double roll, pitch, yaw;
             matrix.getRPY(roll, pitch, yaw);
+            */
+            double yaw = tf2::getYaw(goal_pose.pose.orientation);
 
             Eigen::Vector3f goal(goal_pose.pose.position.x, goal_pose.pose.position.y, yaw);
             Eigen::Vector3f vsamples(1, 1, 1);
@@ -1054,18 +1067,21 @@ void ROSAgent::updatePlanAndLocalCosts(geometry_msgs::PoseStamped global_pose,
     // alignment costs
     geometry_msgs::PoseStamped goal_pose = global_plan_.back();
 
+    /*
     // reading yaw from quaternion in geometry message
     tf2::Quaternion q;
     tf2::convert(global_pose.pose.orientation, q);
     tf2::Matrix3x3 matrix(q);
     double roll, pitch, yaw;
     matrix.getRPY(roll, pitch, yaw);
-    pos_ = Eigen::Vector3f(global_pose.pose.position.x, global_pose.pose.position.y, yaw);
-
-    // TODO possible error point
     tf2::convert(robot_vel.pose.orientation, q);
     matrix.getRPY(roll, pitch, yaw);
-    vel_ = Eigen::Vector3f(robot_vel.pose.position.x, robot_vel.pose.position.y, yaw);
+    */
+
+    double yaw = tf2::getYaw(global_pose.pose.orientation);
+    pos_ = Eigen::Vector3f(global_pose.pose.position.x, global_pose.pose.position.y, yaw);
+    double yaw2 = tf2::getYaw(robot_vel.pose.orientation);
+    vel_ = Eigen::Vector3f(robot_vel.pose.position.x, robot_vel.pose.position.y, yaw2);
 
     double sq_dist =
         (pos_[0] - goal_pose.pose.position.x) * (pos_[0] - goal_pose.pose.position.x) +
@@ -1131,12 +1147,16 @@ bool ROSAgent::checkTrajectory(Eigen::Vector3f pos,
     base_local_planner::Trajectory traj;
     geometry_msgs::PoseStamped goal_pose = global_plan_.back();
 
+    /*
     // reading yaw from quaternion in geometry message
     tf2::Quaternion q;
     tf2::convert(goal_pose.pose.orientation, q);
     tf2::Matrix3x3 matrix(q);
     double roll, pitch, yaw;
     matrix.getRPY(roll, pitch, yaw);
+    */
+    double yaw = tf2::getYaw(goal_pose.pose.orientation);
+
     Eigen::Vector3f goal(goal_pose.pose.position.x, goal_pose.pose.position.y, yaw);
     base_local_planner::LocalPlannerLimits limits = planner_util_->getCurrentLimits();
     Eigen::Vector3f vsamples(1, 1, 1);

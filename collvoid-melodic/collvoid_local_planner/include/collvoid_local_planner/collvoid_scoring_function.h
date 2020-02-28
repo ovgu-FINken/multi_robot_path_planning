@@ -5,7 +5,7 @@
 #ifndef COLLVOID_LOCAL_PLANNER_COLLVOID_SCORING_FUNCTION_H
 #define COLLVOID_LOCAL_PLANNER_COLLVOID_SCORING_FUNCTION_H
 #include <ros/ros.h>
-#include <tf/tf.h>
+//#include <tf/tf.h>
 #include <base_local_planner/trajectory_cost_function.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <collvoid_msgs/PoseTwistWithCovariance.h>

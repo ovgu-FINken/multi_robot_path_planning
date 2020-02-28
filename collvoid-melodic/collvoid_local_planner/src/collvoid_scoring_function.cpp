@@ -3,6 +3,8 @@
 //
 
 #include "collvoid_local_planner/collvoid_scoring_function.h"
+#include <tf2/utils.h>
+
 
 namespace collvoid_scoring_function
 {
@@ -31,10 +33,16 @@ void CollvoidScoringFunction::init(ros::NodeHandle nh)
 
 bool CollvoidScoringFunction::getMe()
 {
-    collvoid_srvs::GetMe srv;
+    collvoid_srvs::GetMe srv; 
     if (get_me_srv_.call(srv))
     {
-        me_ = createAgentFromMsg(srv.response.me);
+        /**
+         * service GetMe: @returns PoseTwistWithCovariance message
+         * method createAgentFromMsg: @returns AgentPtr (shared_ptr<Agent>)
+         * me_: defined in collvoid_local_planner.h
+        */
+
+        me_ = createAgentFromMsg(srv.response.me); 
         me_->use_truncation_ = use_truncation_;
         me_->trunc_time_ = trunc_time_;
         me_->use_polygon_footprint_ = use_polygon_footprint_;
@@ -90,13 +98,15 @@ AgentPtr CollvoidScoringFunction::createAgentFromMsg(collvoid_msgs::PoseTwistWit
     agent->controlled_ = msg.controlled;
     agent->position_ = Vector2(msg.pose.pose.position.x, msg.pose.pose.position.y);
 
+    /**
     // reading yaw from quaternion in geometry message
     tf2::Quaternion q;
     tf2::convert(msg.pose.pose.orientation, q);
     tf2::Matrix3x3 matrix(q);
     double roll, pitch, yaw;
     matrix.getRPY(roll, pitch, yaw);
-    agent->heading_ = yaw;
+    */
+    agent->heading_ = tf2::getYaw(msg.pose.pose.orientation);
     
     std::vector<Vector2> minkowski_footprint;
     for (geometry_msgs::Point32 p : msg.footprint.polygon.points)
