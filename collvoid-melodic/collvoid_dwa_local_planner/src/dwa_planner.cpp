@@ -123,6 +123,7 @@ void DWAPlanner::reconfigure(DWAPlannerConfig &config)
   vsamples_[2] = vth_samp;
 }
 
+// constructor
 DWAPlanner::DWAPlanner(std::string name, base_local_planner::LocalPlannerUtil *planner_util) : planner_util_(planner_util),
                                                                                                obstacle_costs_(planner_util->getCostmap()),
                                                                                                path_costs_(planner_util->getCostmap()),
@@ -166,20 +167,29 @@ DWAPlanner::DWAPlanner(std::string name, base_local_planner::LocalPlannerUtil *p
   private_nh.param("sum_scores", sum_scores, false);
   obstacle_costs_.setSumScores(sum_scores);
 
-  private_nh.param("publish_cost_grid_pc", publish_cost_grid_pc_, false);
+  private_nh.param("publish_cost_grid_pc", publish_cost_grid_pc_, true); // for debug purposes true, default usually false
   map_viz_.initialize(name, planner_util->getGlobalFrame(), boost::bind(&DWAPlanner::getCellCosts, this, _1, _2, _3, _4, _5, _6));
 
   private_nh.param("global_frame_id", frame_id_, std::string("odom"));
 
   traj_cloud_pub_ = private_nh.advertise<sensor_msgs::PointCloud2>("trajectory_cloud", 1);
-  private_nh.param("publish_traj_pc", publish_traj_pc_, false);
+  private_nh.param("publish_traj_pc", publish_traj_pc_, true); // for debug purposes true, default usually false
 
+  //COLLVOID
   ros::NodeHandle nh;
-  collvoid_costs_.init(nh); 
+  collvoid_costs_.init(nh);
   double collvoid_scale;
   private_nh.param("collvoid_scale", collvoid_scale, 12.);
 
   collvoid_costs_.setScale(collvoid_scale);
+
+   /**
+   *  * @class TrajectoryCostFunction
+   * @brief Provides an interface for critics of trajectories
+    * During each sampling run, a batch of many trajectories will be scored using such a cost function.
+    * The prepare method is called before each batch run, and then for each
+    * trajectory of the sampling set, score_trajectory may be called.
+   */
 
   // set up all the cost functions that will be applied in order
   // (any function returning negative values will abort scoring, so the order can improve performance)
@@ -189,8 +199,8 @@ DWAPlanner::DWAPlanner(std::string name, base_local_planner::LocalPlannerUtil *p
   critics.push_back(&goal_front_costs_);    // prefers trajectories that make the nose go towards (local) nose goal
   critics.push_back(&collvoid_costs_);      // COLLVOID tries to adapt collvoid settings
   critics.push_back(&alignment_costs_);     // prefers trajectories that keep the robot nose on nose path
-  critics.push_back(&path_alignment_cost_); // COLLVOID
-  critics.push_back(&goal_alignment_cost_); // COLLVOID
+  critics.push_back(&path_alignment_cost_); // COLLVOID!
+  critics.push_back(&goal_alignment_cost_); // COLLVOID!
   critics.push_back(&path_costs_);          // prefers trajectories on global path
   critics.push_back(&goal_costs_);          // prefers trajectories that go towards (local) goal, based on wave propagation
   critics.push_back(&twirling_costs_);      // optionally prefer trajectories that don't spin
@@ -199,6 +209,12 @@ DWAPlanner::DWAPlanner(std::string name, base_local_planner::LocalPlannerUtil *p
   std::vector<base_local_planner::TrajectorySampleGenerator *> generator_list;
   generator_list.push_back(&generator_);
 
+  /**
+  * @class SimpleScoredSamplingPlanner
+  * @brief Generates a local plan using the given generator and cost functions.
+  * Assumes less cost are best, and negative costs indicate infinite costs
+  * Critics return costs > 0, or negative costs for invalid trajectories
+  */
   scored_sampling_planner_ = base_local_planner::SimpleScoredSamplingPlanner(generator_list, critics);
 
   private_nh.param("cheat_factor", cheat_factor_, 1.0);
@@ -251,10 +267,12 @@ bool DWAPlanner::checkTrajectory(
                         &limits,
                         vsamples_);
   generator_.generateTrajectory(pos, vel, vel_samples, traj);
-  double scale = collvoid_costs_.getScale();
-  collvoid_costs_.setScale(0);
+
+  double collvoid_scale = collvoid_costs_.getScale(); //COLLVOID
+  collvoid_costs_.setScale(0);                        // TODO COLLVOID: why ist it set to zero ....
   double cost = scored_sampling_planner_.scoreTrajectory(traj, -1);
-  collvoid_costs_.setScale(scale);
+  collvoid_costs_.setScale(collvoid_scale); // TODO COLLVOID: .... and then back to scale??
+
   //if the trajectory is a legal one... the check passes
   if (cost >= 0)
   {
@@ -265,7 +283,6 @@ bool DWAPlanner::checkTrajectory(
   //otherwise the check fails
   return false;
 }
-
 
 void DWAPlanner::updatePlanAndLocalCosts(
     const geometry_msgs::PoseStamped &global_pose,
@@ -362,7 +379,19 @@ base_local_planner::Trajectory DWAPlanner::findBestPath(
   result_traj_.cost_ = -7;
   // find best trajectory by sampling and scoring the samples
   std::vector<base_local_planner::Trajectory> all_explored;
-  scored_sampling_planner_.findBestTrajectory(result_traj_, &all_explored);
+
+  /**
+   * Calls generator until generator has no more samples or max_samples is reached.
+   * For each generated traj, calls critics in turn. If any critic returns negative
+   * value, that value is assumed as costs, else the costs are the sum of all critics
+   * result. Returns true and sets the traj parameter to the first trajectory with
+   * minimal non-negative costs if sampling yields trajectories with non-negative costs,
+   * else returns false.
+   *
+   * @param traj The container to write the result to
+   * @param all_explored pass NULL or a container to collect all trajectories for debugging (has a penalty)
+   */
+  scored_sampling_planner_.findBestTrajectory(result_traj_, &all_explored); // TODO display/print the trajectories and their costs
 
   if (publish_traj_pc_)
   {

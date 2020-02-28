@@ -9,20 +9,24 @@ namespace collvoid_scoring_function
 
 void CollvoidScoringFunction::init(ros::NodeHandle nh)
 {
+    // init services
     get_me_srv_ = nh.serviceClient<collvoid_srvs::GetMe>("get_me");
     get_neighbors_srv_ = nh.serviceClient<collvoid_srvs::GetNeighbors>("get_neighbors");
+
+    // init publisher
     neighbors_pub_ = nh.advertise<visualization_msgs::MarkerArray>("neighbors", 1);
     samples_pub_ = nh.advertise<visualization_msgs::MarkerArray>("samples", 1);
     vo_pub_ = nh.advertise<visualization_msgs::Marker>("vo", 1);
 
+    // get param values
     ros::NodeHandle co_nh("~/CollvoidScoring");
     use_truncation_ = co_nh.param("use_truncation", true);
     trunc_time_ = co_nh.param("trunctime", 8.);
     use_polygon_footprint_ = co_nh.param("use_polygon_footprint", true);
     max_dist_vo_ = co_nh.param("max_dist_vo", 0.1);
     points.clear();
+
     ROS_INFO("Collvoid Scoring init done! Trunctime %f, max_dist_vo %f", trunc_time_, max_dist_vo_);
-    //holo_robot_ = false;
 }
 
 bool CollvoidScoringFunction::getMe()
