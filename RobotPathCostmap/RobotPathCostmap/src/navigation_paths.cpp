@@ -9,6 +9,10 @@
 namespace navigation_path_layers 
 {
 
+    static float* gauss_a = 1;
+    static const int gauss_b = 0;
+    static const float gauss_c = 1;
+
 void NavigationPathLayer::onInitialize()
 {
 
@@ -31,6 +35,7 @@ void NavigationPathLayer::pathCallback(const nav_msgs::Path& path)
     */
 
     bool* isOld = false;
+    bool changed = false;
     unsigned int* index_ = paths_list_.size(); // this value cannot be assigned in for-loop (as back check)
 
     // 2 Filter einfügen: einmal mit Seitenbias, einmal ohne bzw. aus launch-File übernehmen, welcher der beiden erstellt werden soll
@@ -46,16 +51,30 @@ void NavigationPathLayer::pathCallback(const nav_msgs::Path& path)
         }
     }
 
-    if (paths_list_.size == 0 || isOld)
+    if (!isOld)
     {
-        paths_list_.push(paths);
+        paths_list_.push(path);
     } else
     {
-        paths_list_[i] = path;
+        std::string oldPath = paths_list_[index_].poses.toString();
+        std::string newPath = path.poses.toString();
+        if (oldpath.compare(newpath) != 0)
+        {
+            changed = true;
+        }
+
+        paths_list_[index_] = path; // timestamp is newer
     }
 
     delete isOld;
     delete index_;
+    delete oldPath;
+    delete newPath;
+
+    if (changed)
+    {
+        updateCosts();
+    }
 }
 
 
@@ -67,27 +86,46 @@ void NavigationPathLayer::updateBounds()
 
 void NavigationPathLayer::updateCosts()
 {
-    // Wenn Änderung bei übergebenen Pfaden
+    // Wenn Änderung bei übergebenen Pfaden (nur dann Funktionsaufruf)
+    // Kosten auf 0 zurücksetzen
+    resetCosts();
 
-        // Kosten auf 0 zurücksetzen
-
+    for(nav_msgs::Path& path: navigation_path_layers::paths_list_)
+    {
+        std::vector positions<std::vector<int>> positions;
+        for(geometry_msgs::PoseStamped pose_ : path.poses)
+        {
+            std::vector<int> position = {pose_.pose.position.x, pose_.pose.position.y};
+            positions.push(position)
+        }
         // Kostenberge je Pfad einfügen
+        createCostHillChain();
+    }
 }
 
 void NavigationPathLayer::setSideInflation(bool inflate)
 {
-    side_inflation* = inflate;
-}
-
-void NavigationPathLayer::setFilterSize(int size)
-{
-    filter_size* = size;
+    navigation_path_layers::side_inflation* = inflate;
+    navigation_path_layers::createFilter();
 }
 
 void NavigationPathLayer::scaleSideInflation(float* inflation_scale)
 {
     // maximal factor 1 of the costs of the normal path
-    inflation_size* = min(inflation_scale, 1); 
+    navigation_path_layers::inflation_size* = min(inflation_scale, 1);
+    navigation_path_layers::createFilter();
+}
+
+void NavigationPathLayer::setFilterSize(int size)
+{
+    navigation_path_layers::filter_size* = size;
+    navigation_path_layers::createFilter();
+}
+
+void NavigationPathLayer::setFilterStrength(float s)
+{
+    navigation_path_layers::gauss_a = s;
+    navigation_path_layers::createFilter();
 }
 
 void NavigationPathLayer::inflate_side()
@@ -101,7 +139,7 @@ void NavigationPathLayer::resetCosts()
     // gesamte Map auf 0 zurücksetzen
 }
 
-void NavigationPathLayer::createCostHillChain() // Pfad übergeben
+void NavigationPathLayer::createCostHillChain(std::vector positions<std::vector<int>> positions) // Pfad übergeben
 {
     // Entlang des Pfades Kosten erhöhen ()
     // Gauß-Filter entlang des Pfades
@@ -118,7 +156,10 @@ void NavigationPathLayer::createCostHillChain() // Pfad übergeben
     // http://wiki.ros.org/cv_bridge/Tutorials/UsingCvBridgeToConvertBetweenROSImagesAndOpenCVImages
 }
 
-void NavigationPathLayer::createFilter() // Größe und side_inflation übergeben
+void NavigationPathLayer::createFilter() // Größe und side_inflation nutzen
+{
+
+}
 
 }
 

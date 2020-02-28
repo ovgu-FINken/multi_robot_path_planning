@@ -20,6 +20,7 @@ public:
     virtual void NavigationPathLayer::setSideInflation(bool inflate);
     virtual void NavigationPathLayer::setFilterSize(int size);
     virtual void NavigationPathLayer::scaleSideInflation(float* inflation_scale);
+    virtual void NavigationPathLayer::setFilterStrength(float s);
 
 protected:
 
