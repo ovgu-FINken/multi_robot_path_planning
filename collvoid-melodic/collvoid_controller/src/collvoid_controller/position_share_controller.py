@@ -53,7 +53,7 @@ class PositionShareController(object):
         self.name = rospy.get_param('~name', self.name)
         rospy.loginfo("Position Share started with name: %s", self.name)
 
-        self.neighbors = {}
+        self.neighbors = {} # empty dictionary
         self.neighbors_lock = Lock()
         self.me = None
 
@@ -137,10 +137,11 @@ class PositionShareController(object):
                 return
 
             my_pose = self.me.pose.pose
-            _, _, my_theta = tf.transformations.euler_from_quaternion(quat_array_from_msg(my_pose.orientation))
+            _, _, my_theta = tf.transformations.euler_from_quaternion(quat_array_from_msg(my_pose.orientation)) 
 
             change = False
             for name in self.neighbors:
+                # rospy.loginfo("Neighbors' name: %s", name) # debug
                 if (time - self.neighbors[name]['last_seen']).to_sec() < last_seen_threshold \
                         and ((abs(self.neighbors[name]['twist'].twist.linear.x) < 0.05 and abs(
                             self.neighbors[name]['twist'].twist.linear.y) < 0.05)):

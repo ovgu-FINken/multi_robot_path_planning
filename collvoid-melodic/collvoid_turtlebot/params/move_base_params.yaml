@@ -139,7 +139,7 @@ DWAPlannerROS:
 #   yaw_goal_tolerance: 0.3 # 0.05
 #   xy_goal_tolerance: 0.15 # 0.10
 
-#   holo_robot: false
+  holo_robot: false
 #   wheel_base: 0.25
 #   robot_radius: 0.20
 # 
