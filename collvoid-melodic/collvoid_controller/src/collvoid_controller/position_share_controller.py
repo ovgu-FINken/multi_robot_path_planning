@@ -141,7 +141,6 @@ class PositionShareController(object):
 
             change = False
             for name in self.neighbors:
-                # rospy.loginfo("Neighbors' name: %s", name) # debug
                 if (time - self.neighbors[name]['last_seen']).to_sec() < last_seen_threshold \
                         and ((abs(self.neighbors[name]['twist'].twist.linear.x) < 0.05 and abs(
                             self.neighbors[name]['twist'].twist.linear.y) < 0.05)):
@@ -152,6 +151,9 @@ class PositionShareController(object):
 
                     cur_pose = self.neighbors[name]['position'].pose
                     _, _, cur_theta = tf.transformations.euler_from_quaternion(quat_array_from_msg(cur_pose.orientation))
+
+                    #rospy.loginfo("Neighbors' name: %s, position x: %d, y: %d", name, cur_pose.position.x, cur_pose.position.y) # debugging
+                    #rospy.loginfo("My position x: %d, y: %d", my_pose.position.x, my_pose.position.y) # debugging
 
                     relative_pose_x = cur_pose.position.x - my_pose.position.x
                     relative_pose_y = cur_pose.position.y - my_pose.position.y
@@ -175,10 +177,12 @@ class PositionShareController(object):
                         self.neighbors[name]['stationary'] = False
                         change = True
 
+            # publish scan data to "clearing_scan"
             if change or force_clear:
                 self.clearing_laser_scan.header.stamp = self.me.header.stamp
                 self.clearing_laser_pub.publish(self.clearing_laser_scan)
 
+            # publish point cloud data to "stationary_robots"
             static_robots_cloud = pcl2.create_cloud_xyz32(self.cloud_header, cloud_points)
             static_robots_cloud.header.stamp = self.me.header.stamp
             self.point_cloud_pub.publish(static_robots_cloud)

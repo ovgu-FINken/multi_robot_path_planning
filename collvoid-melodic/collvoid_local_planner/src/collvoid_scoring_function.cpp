@@ -5,7 +5,6 @@
 #include "collvoid_local_planner/collvoid_scoring_function.h"
 #include <tf2/utils.h>
 
-
 namespace collvoid_scoring_function
 {
 
@@ -33,22 +32,22 @@ void CollvoidScoringFunction::init(ros::NodeHandle nh)
 
 bool CollvoidScoringFunction::getMe()
 {
-    collvoid_srvs::GetMe srv; 
+    collvoid_srvs::GetMe srv;
     if (get_me_srv_.call(srv))
     {
         /**
          * service GetMe: @returns PoseTwistWithCovariance message
          * method createAgentFromMsg: @returns AgentPtr (shared_ptr<Agent>)
-         * me_: defined in collvoid_local_planner.h
+         * me_: defined in collvoid_local_planner.h as ROSAgentPtr
         */
 
-        me_ = createAgentFromMsg(srv.response.me); 
+        me_ = createAgentFromMsg(srv.response.me);
         me_->use_truncation_ = use_truncation_;
         me_->trunc_time_ = trunc_time_;
         me_->use_polygon_footprint_ = use_polygon_footprint_;
         me_->type_vo_ = HRVOS;
 
-        //ROS_INFO("GOT ME");
+        // ROS_INFO("GOT ME");
         return true;
     }
     else
@@ -67,6 +66,12 @@ bool CollvoidScoringFunction::getNeighbors()
         {
             me_->agent_neighbors_.push_back(createAgentFromMsg(msg));
         }
+
+        // //debugging
+        // for (AgentPtr agent : me_->agent_neighbors_)
+        // {
+        //     ROS_INFO("[GetNeighbors] Neighbor's velocity vector2: %f %f", agent->velocity_.x(), agent->velocity_.y());
+        // }
 
         std::sort(me_->agent_neighbors_.begin(), me_->agent_neighbors_.end(),
                   boost::bind(&CollvoidScoringFunction::compareNeighborsPositions, this, _1, _2));
@@ -107,7 +112,7 @@ AgentPtr CollvoidScoringFunction::createAgentFromMsg(collvoid_msgs::PoseTwistWit
     matrix.getRPY(roll, pitch, yaw);
     */
     agent->heading_ = tf2::getYaw(msg.pose.pose.orientation);
-    
+
     std::vector<Vector2> minkowski_footprint;
     for (geometry_msgs::Point32 p : msg.footprint.polygon.points)
     {
@@ -146,15 +151,18 @@ bool CollvoidScoringFunction::prepare()
     {
         return false;
     }
-    // Calculate VOs
+    // Calculate and publish VOs
     me_->computeAgentVOs();
-
     collvoid::publishVOs(me_->position_, me_->all_vos_, use_truncation_, "/map", "/map", vo_pub_);
     collvoid::publishPoints(me_->position_, points, "/map", "/map", samples_pub_);
-    //for (size_t i = 0; i < me_->all_vos_.size(); ++i) {
-    //    VO v = me_->all_vos_.at(i);
-    //    ROS_INFO("Origin %f %f", v.point.x(), v.point.y()) ;
-    // }
+
+    // debugging
+    for (size_t i = 0; i < me_->all_vos_.size(); ++i)
+    {
+        VO v = me_->all_vos_.at(i);
+        //    ROS_INFO("VO #" << i << "has origin: " << v.point.x() << ", " << v.point.y());
+        ROS_INFO("VO nr. %lu has origin: %f %f", i, v.point.x(), v.point.y());
+    }
 
     points.clear();
 

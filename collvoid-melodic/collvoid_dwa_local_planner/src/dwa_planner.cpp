@@ -75,7 +75,7 @@ void DWAPlanner::reconfigure(DWAPlannerConfig &config)
   occdist_scale_ = config.occdist_scale;
   obstacle_costs_.setScale(occdist_scale_);
 
-  // collvoid_costs_.setScale(config.collvoid_scale);
+  collvoid_costs_.setScale(config.collvoid_scale);
 
   stop_time_buffer_ = config.stop_time_buffer;
   oscillation_costs_.setOscillationResetDist(config.oscillation_reset_dist, config.oscillation_reset_angle);
@@ -129,8 +129,8 @@ DWAPlanner::DWAPlanner(std::string name, base_local_planner::LocalPlannerUtil *p
                                                                                                path_costs_(planner_util->getCostmap()),
                                                                                                goal_costs_(planner_util->getCostmap(), 0.0, 0.0, true),
                                                                                                goal_front_costs_(planner_util->getCostmap(), 0.0, 0.0, true),
-                                                                                               alignment_costs_(planner_util->getCostmap())
-                                                                                              //  collvoid_costs_() //CollvoidScoringFunction
+                                                                                               alignment_costs_(planner_util->getCostmap()),
+                                                                                               collvoid_costs_() //CollvoidScoringFunction
 {
   ros::NodeHandle private_nh("~/" + name);
 
@@ -175,13 +175,13 @@ DWAPlanner::DWAPlanner(std::string name, base_local_planner::LocalPlannerUtil *p
   traj_cloud_pub_ = private_nh.advertise<sensor_msgs::PointCloud2>("trajectory_cloud", 1);
   private_nh.param("publish_traj_pc", publish_traj_pc_, true); // for debug purposes true, default usually false
 
-  // //COLLVOID
-  // ros::NodeHandle nh;
-  // collvoid_costs_.init(nh);
-  // double collvoid_scale;
-  // private_nh.param("collvoid_scale", collvoid_scale, 12.);
+  //COLLVOID
+  ros::NodeHandle nh;
+  collvoid_costs_.init(nh);
+  double collvoid_scale;
+  private_nh.param("collvoid_scale", collvoid_scale, 12.);
 
-  // collvoid_costs_.setScale(collvoid_scale);
+  collvoid_costs_.setScale(collvoid_scale);
 
    /**
    *  * @class TrajectoryCostFunction
@@ -197,10 +197,10 @@ DWAPlanner::DWAPlanner(std::string name, base_local_planner::LocalPlannerUtil *p
   critics.push_back(&oscillation_costs_);   // discards oscillating motions (assisgns cost -1)
   critics.push_back(&obstacle_costs_);      // discards trajectories that move into obstacles
   critics.push_back(&goal_front_costs_);    // prefers trajectories that make the nose go towards (local) nose goal
-  // critics.push_back(&collvoid_costs_);      // COLLVOID tries to adapt collvoid settings
+  critics.push_back(&collvoid_costs_);      // COLLVOID tries to adapt collvoid settings
   critics.push_back(&alignment_costs_);     // prefers trajectories that keep the robot nose on nose path
-  // critics.push_back(&path_alignment_cost_); // COLLVOID!
-  // critics.push_back(&goal_alignment_cost_); // COLLVOID!
+  critics.push_back(&path_alignment_cost_); // COLLVOID!
+  critics.push_back(&goal_alignment_cost_); // COLLVOID!
   critics.push_back(&path_costs_);          // prefers trajectories on global path
   critics.push_back(&goal_costs_);          // prefers trajectories that go towards (local) goal, based on wave propagation
   critics.push_back(&twirling_costs_);      // optionally prefer trajectories that don't spin
@@ -268,10 +268,10 @@ bool DWAPlanner::checkTrajectory(
                         vsamples_);
   generator_.generateTrajectory(pos, vel, vel_samples, traj);
 
-  // double collvoid_scale = collvoid_costs_.getScale(); //COLLVOID
-  // collvoid_costs_.setScale(0);                        // TODO COLLVOID: why ist it set to zero ....
+  double collvoid_scale = collvoid_costs_.getScale(); //COLLVOID
+  collvoid_costs_.setScale(0);                        // TODO COLLVOID: why ist it set to zero ....
   double cost = scored_sampling_planner_.scoreTrajectory(traj, -1);
-  // collvoid_costs_.setScale(collvoid_scale); // TODO COLLVOID: .... and then back to scale??
+  collvoid_costs_.setScale(collvoid_scale); // TODO COLLVOID: .... and then back to scale??
 
   //if the trajectory is a legal one... the check passes
   if (cost >= 0)

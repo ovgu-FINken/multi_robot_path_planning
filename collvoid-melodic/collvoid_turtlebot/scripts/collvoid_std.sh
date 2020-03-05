@@ -15,7 +15,7 @@ SESSION_NAME="collvoid"
 NUM=0
 MAPPING=${MAPPING:=amcl}
 WORLD=""
-NUM_ROBOT=2
+NUM_ROBOT=3
 
 # start tmux
 tmux new-session -s $SESSION_NAME -d
