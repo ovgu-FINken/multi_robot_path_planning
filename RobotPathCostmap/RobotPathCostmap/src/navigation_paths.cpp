@@ -1,22 +1,25 @@
 #include <string>
 #include <nav_msgs>
 #include <list>
+#include <cmath>
 #include <RobotPathCostmap/RobotPathCostmap/include/navigation_paths.h>
 
 //http://docs.ros.org/api/nav_msgs/html/msg/Path.html
 
+// ToDo: setFilterStrength()-function
 
 namespace navigation_path_layers 
 {
 
-    static float* gauss_a = 1;
-    static const int gauss_b = 0;
-    static const float gauss_c = 1;
+    static double* gauss_a = 1;
+    static const double gauss_sigma = 1.0;
+	static const double  gauss_r, gauss_s = 2.0 * gauss_sigma * gauss_sigma;
 
 void NavigationPathLayer::onInitialize()
 {
 
     bool* side_inflation = false;
+	int* filter_strength = 1; // ToDo: adapt to suitable default value for costs
     int* inflation_size = 1;
     int* filter_size = 20; 
     ros::NodeHandle nh("~/" + name_), g_nh; // ToDo: check cooperation with other Multi-robot-path-planning-files
@@ -99,7 +102,7 @@ void NavigationPathLayer::updateCosts()
             positions.push(position)
         }
         // Kostenberge je Pfad einfügen
-        createCostHillChain();
+        createCostHillChain(positions);
     }
 }
 
@@ -139,16 +142,16 @@ void NavigationPathLayer::resetCosts()
     // gesamte Map auf 0 zurücksetzen
 }
 
-void NavigationPathLayer::createCostHillChain(std::vector positions<std::vector<int>> positions) // Pfad übergeben
+void NavigationPathLayer::createCostHillChain(std::vector<std::vector<int>> positions) // Pfad übergeben
 {
-    // Entlang des Pfades Kosten erhöhen ()
-    // Gauß-Filter entlang des Pfades
-        // wenn side_inflation
-            // Gaußfilter mit Seitenbias nutzen
-        // sonst
-            // normaler Gaußfilter verwenden
-    // für jeden Pixel in der Konvolution den max-Wert von Filterwert an der Stelle und aktuellem Wert nehmen
-
+    // increase costs along the path
+	for (unsigned int pos = 0; pos < positions.size(); i++)
+	{
+		std::vector<int> position = positions[pos];
+		useFilter(position);
+	}
+ 
+	// Später eventuell
     // entlang des Pfades linear abnehmende/zunehmende Kosten? (je weiter in die "Zukunft" desto weniger /mehr Einfluss auf die Costmap 
     // (Unsicherheit als geringe Wahrscheinlichkeit oder als größeren Puffer betrachten))
 
@@ -158,7 +161,51 @@ void NavigationPathLayer::createCostHillChain(std::vector positions<std::vector<
 
 void NavigationPathLayer::createFilter() // Größe und side_inflation nutzen
 {
+	// sum is for normalization 
+	double sum = 0.0;
+	int bound = int((filter_size - 1) / 2);
 
+	for (unsigned int i = -bound; i <= bound; i++)
+	{
+		for (unsigned int j = -bound; j <= bound; j++)
+		{
+			gauss_r = sqrt(i * i + j * j);
+			kernel[i + bound][j + bound] = (exp(-(gauss_r * gauss_r) / gauss_s)) / (M_PI * gauss_s);
+			sum += kernel[i + bound][j + bound];
+		}
+	}
+
+	if (*side_inflation)
+	{
+		// add values to "left" side of robot
+		// sum += these values
+	}
+
+	// normalising the Kernel 
+	for (int i = 0; i < filter_size; ++i)
+	{
+		for (int j = 0; j < filter_size; ++j)
+		{
+			kernel[i][j] /= sum;
+		}
+	}
+
+	return kernel;
+}
+
+void useFilter(std::vector<int> position)
+{
+	int bound = int((filter_size - 1) / 2);
+
+	// für jeden Pixel in der Konvolution den max-Wert von Filterwert an der Stelle und aktuellem Wert nehmen
+	for (unsigned int i = -bound; i <= bound; i++)
+	{
+		for (unsigned int j = -bound; j <= bound; j++)
+		{
+			double current = map[position[0] + i][position[1] + j];
+			map[position[0] + i][position[1] + j] = max(current, kernel[i][j] * filter_strength);
+		}
+	}
 }
 
 }

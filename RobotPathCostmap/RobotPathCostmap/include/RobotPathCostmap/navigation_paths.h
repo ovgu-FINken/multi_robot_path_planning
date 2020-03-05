@@ -32,7 +32,8 @@ private:
     int* filter_size;
     virtual void NavigationPathLayer::resetCosts();
     virtual void NavigationPathLayer::createCostHillChain();
-    virtual void void NavigationPathLayer::createFilter();
+    virtual void NavigationPathLayer::createFilter();
+	virtual void NavigationPathLayer::useFilter();
 
 
 }
