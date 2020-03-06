@@ -2,11 +2,14 @@
 #include <nav_msgs>
 #include <list>
 #include <cmath>
-#include <RobotPathCostmap/RobotPathCostmap/include/navigation_paths.h>
+#include "./../include/RobotPathCostmap/navigation_paths.h">
+
+// ToDo: Libs einbinden
+// ToDo: launch-file
+// ToDo: Package.xml
 
 //http://docs.ros.org/api/nav_msgs/html/msg/Path.html
 
-// ToDo: setFilterStrength()-function
 
 namespace navigation_path_layers 
 {
@@ -21,10 +24,12 @@ void NavigationPathLayer::onInitialize()
     bool* side_inflation = false;
 	int* filter_strength = 1; // ToDo: adapt to suitable default value for costs
     int* inflation_size = 1;
-    int* filter_size = 20; 
+    int* filter_size = 20;
+    first_time_ = true;
     ros::NodeHandle nh("~/" + name_), g_nh; // ToDo: check cooperation with other Multi-robot-path-planning-files
-    paths_sub_ = nh.subscribe("/paths", 1, &NavigationPathLayer::pathCallback, this); // ToDo: check if frame_id of robot stays the same
+    paths_sub_ = nh.subscribe("/paths", 1, &NavigationPathLayer::pathCallback, this);
     list<Path> paths_list_;
+    NavigationPathLayer::createFilter();
 
 }
 
@@ -40,8 +45,6 @@ void NavigationPathLayer::pathCallback(const nav_msgs::Path& path)
     bool* isOld = false;
     bool changed = false;
     unsigned int* index_ = paths_list_.size(); // this value cannot be assigned in for-loop (as back check)
-
-    // 2 Filter einfügen: einmal mit Seitenbias, einmal ohne bzw. aus launch-File übernehmen, welcher der beiden erstellt werden soll
 
     for (unsigned int i = 0; i < paths_list_.size(); i++)
     {
@@ -82,15 +85,37 @@ void NavigationPathLayer::pathCallback(const nav_msgs::Path& path)
 
 
 
-void NavigationPathLayer::updateBounds()
+void NavigationPathLayer::updateBounds( double* min_x, double* min_y, double* max_x, double* max_y)
 {
+    // ToDo
     // Grenzen der Costmap neu setzen, um alle benötigten Punkte zu beinhalten
+    if (first_time_)
+  {
+    last_min_x_ = *min_x;
+    last_min_y_ = *min_y;
+    last_max_x_ = *max_x;
+    last_max_y_ = *max_y;
+    first_time_ = false;
+  }
+  else
+  {
+    double a = *min_x, b = *min_y, c = *max_x, d = *max_y;
+    *min_x = std::min(last_min_x_, *min_x);
+    *min_y = std::min(last_min_y_, *min_y);
+    *max_x = std::max(last_max_x_, *max_x);
+    *max_y = std::max(last_max_y_, *max_y);
+    last_min_x_ = a;
+    last_min_y_ = b;
+    last_max_x_ = c;
+    last_max_y_ = d;
+  }
 }
 
 void NavigationPathLayer::updateCosts()
 {
-    // Wenn Änderung bei übergebenen Pfaden (nur dann Funktionsaufruf)
-    // Kosten auf 0 zurücksetzen
+    costmap_2d::Costmap2D* costmap = layered_costmap_->getCostmap();
+    // function call only if given path changed
+    // reset costs to 0
     resetCosts();
 
     for(nav_msgs::Path& path: navigation_path_layers::paths_list_)
@@ -101,8 +126,8 @@ void NavigationPathLayer::updateCosts()
             std::vector<int> position = {pose_.pose.position.x, pose_.pose.position.y};
             positions.push(position)
         }
-        // Kostenberge je Pfad einfügen
-        createCostHillChain(positions);
+        // add cost hills per path
+        costmap = createCostHillChain(positions, costmap);
     }
 }
 
@@ -112,23 +137,31 @@ void NavigationPathLayer::setSideInflation(bool inflate)
     navigation_path_layers::createFilter();
 }
 
-void NavigationPathLayer::scaleSideInflation(float* inflation_scale)
+void NavigationPathLayer::scaleSideInflation(double* inflation_scale)
 {
     // maximal factor 1 of the costs of the normal path
-    navigation_path_layers::inflation_size* = min(inflation_scale, 1);
+    navigation_path_layers::inflation_size* = std::min(inflation_scale, 1);
     navigation_path_layers::createFilter();
 }
 
 void NavigationPathLayer::setFilterSize(int size)
 {
+    if (size%2 == 1) 
+    {
     navigation_path_layers::filter_size* = size;
-    navigation_path_layers::createFilter();
+    } else
+    {
+        // minimum size required
+        navigation_path_layers::filter_size* = std::max(size-1, 5); // ToDo: suitable min-value
+    }
+    
+    // navigation_path_layers::createFilter();
 }
 
-void NavigationPathLayer::setFilterStrength(float s)
+void NavigationPathLayer::setFilterStrength(int s)
 {
-    navigation_path_layers::gauss_a = s;
-    navigation_path_layers::createFilter();
+    navigation_path_layers::filter_strength = s;
+    // navigation_path_layers::createFilter();
 }
 
 void NavigationPathLayer::inflate_side()
@@ -139,24 +172,27 @@ void NavigationPathLayer::inflate_side()
 
 void NavigationPathLayer::resetCosts()
 {
-    // gesamte Map auf 0 zurücksetzen
+    // gesamte Layer auf 0 zurücksetzen
 }
 
-void NavigationPathLayer::createCostHillChain(std::vector<std::vector<int>> positions) // Pfad übergeben
+costmap_2d::Costmap2D* NavigationPathLayer::createCostHillChain(std::vector<std::vector<int>> positions, costmap_2d::Costmap2D* costmap) // Pfad übergeben
 {
+    costmap_ = costmap;
     // increase costs along the path
 	for (unsigned int pos = 0; pos < positions.size(); i++)
 	{
 		std::vector<int> position = positions[pos];
-		useFilter(position);
+		costmap_ = useFilter(position, costmap_);
 	}
  
-	// Später eventuell
+	// add later
     // entlang des Pfades linear abnehmende/zunehmende Kosten? (je weiter in die "Zukunft" desto weniger /mehr Einfluss auf die Costmap 
     // (Unsicherheit als geringe Wahrscheinlichkeit oder als größeren Puffer betrachten))
 
     // open-cv gaußfilter costmap konvertieren ggfs
     // http://wiki.ros.org/cv_bridge/Tutorials/UsingCvBridgeToConvertBetweenROSImagesAndOpenCVImages
+
+    return costmap_;
 }
 
 void NavigationPathLayer::createFilter() // Größe und side_inflation nutzen
@@ -177,7 +213,8 @@ void NavigationPathLayer::createFilter() // Größe und side_inflation nutzen
 
 	if (*side_inflation)
 	{
-		// add values to "left" side of robot
+        // ToDo: add later
+		// add values to "right" side of robot
 		// sum += these values
 	}
 
@@ -193,19 +230,21 @@ void NavigationPathLayer::createFilter() // Größe und side_inflation nutzen
 	return kernel;
 }
 
-void useFilter(std::vector<int> position)
+costmap_2d::Costmap2D* useFilter(std::vector<int> position, costmap_2d::Costmap2D* costmap)
 {
 	int bound = int((filter_size - 1) / 2);
 
-	// für jeden Pixel in der Konvolution den max-Wert von Filterwert an der Stelle und aktuellem Wert nehmen
+	// for each pixel in the convolution take maximum value of current and calculated value of convolution at this pixel
 	for (unsigned int i = -bound; i <= bound; i++)
 	{
 		for (unsigned int j = -bound; j <= bound; j++)
 		{
-			double current = map[position[0] + i][position[1] + j];
-			map[position[0] + i][position[1] + j] = max(current, kernel[i][j] * filter_strength);
+			double current = costmap[position[0] + i][position[1] + j];
+			costmap[position[0] + i][position[1] + j] = std::max(current, kernel[i][j] * filter_strength); // ToDo map-variable
 		}
 	}
+
+    return costmap;
 }
 
 }
