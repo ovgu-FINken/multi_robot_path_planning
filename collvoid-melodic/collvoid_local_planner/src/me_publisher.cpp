@@ -63,7 +63,7 @@ void MePublisher::init(ros::NodeHandle nh, std::shared_ptr<tf2_ros::Buffer> tf)
     my_id_ = getParamDef<std::string>(private_nh, "name", my_id_);
 
     private_nh.param<std::string>("base_frame", base_frame_, my_id_ + "/base_link");
-    private_nh.param<std::string>("global_frame_id", global_frame_,"map");
+    private_nh.param<std::string>("global_frame_id", global_frame_, "map");
 
     eps_ = getParamDef(private_nh, "eps", 0.1);
     ROS_INFO("My name is: %s, Eps: %f", my_id_.c_str(), eps_);
@@ -113,8 +113,8 @@ void MePublisher::amclPoseArrayWeightedCallback(const collvoid_msgs::PoseArrayWe
     //sensor_msgs::PointCloud2 pc;
     pcl::PointCloud<pcl::PointXYZ> result;
     pcl::PointCloud<pcl::PointXYZ> pc;
-    pc.header.frame_id=msg->header.frame_id;
-    pc.header.stamp=pcl_conversions::toPCL(ros::Time(0));
+    pc.header.frame_id = msg->header.frame_id;
+    pc.header.stamp = pcl_conversions::toPCL(ros::Time(0));
     for (int i = 0; i < (int)msg->poses.size(); i++)
     {
         pcl::PointXYZ p;
@@ -125,7 +125,7 @@ void MePublisher::amclPoseArrayWeightedCallback(const collvoid_msgs::PoseArrayWe
     try
     {
 
-        tf_->canTransform(global_frame_,base_frame_, pcl_conversions::fromPCL(pc.header.stamp), ros::Duration(0.2));
+        tf_->canTransform(global_frame_, base_frame_, pcl_conversions::fromPCL(pc.header.stamp), ros::Duration(0.2));
         pcl_ros::transformPointCloud(base_frame_, pc, result, *tf_);
     }
     catch (tf2::TransformException ex)
@@ -189,8 +189,9 @@ bool MePublisher::getGlobalPose(geometry_msgs::PoseStamped &global_pose, std::st
     global_pose.header.stamp = stamp;
     try
     {
-        tf_->canTransform(target_frame, base_frame_, global_pose.header.stamp, ros::Duration(0.2));
-        tf_->transform(global_pose, global_pose, target_frame); //transformPose
+        tf_->canTransform(target_frame, base_frame_, global_pose.header.stamp, ros::Duration(0.1)); // default: 0.2
+        tf_->transform(global_pose, global_pose, target_frame); //http://docs.ros.org/melodic/api/tf2_ros/html/c++/classtf2__ros_1_1BufferInterface.html#a6674f53992999da887a22e54467cba0b
+        ROS_INFO("[getGlobalPose] global_pose: %f, %f, %f, %f,", global_pose.pose.orientation.x, global_pose.pose.orientation.y, global_pose.pose.orientation.z, global_pose.pose.orientation.w); //DEBUGGING
     }
     catch (tf2::TransformException ex)
     {
@@ -202,16 +203,26 @@ bool MePublisher::getGlobalPose(geometry_msgs::PoseStamped &global_pose, std::st
     return true;
 }
 
+/**
+ * @brief: adds the pose of itself in a target frame to the me_msg 
+*/
 bool MePublisher::createMeMsg(collvoid_msgs::PoseTwistWithCovariance &me_msg, std::string target_frame)
 {
     me_msg.header.stamp = ros::Time::now();
-    me_msg.header.frame_id = target_frame;
-    geometry_msgs::PoseStamped global_pose;
+    me_msg.header.frame_id = target_frame; // map
+    // ROS_INFO_STREAM("[createMeMsg] target_frame: " << target_frame); //DEBUGGING
+
+    geometry_msgs::PoseStamped global_pose; //0.0, 0.0, 0.0, 0.0 --> o.k.
+    // ROS_INFO("[createMeMsg] global_pose: %f, %f, %f, %f,", global_pose.pose.orientation.x, global_pose.pose.orientation.y, global_pose.pose.orientation.z, global_pose.pose.orientation.w); //DEBUGGING
     if (getGlobalPose(global_pose, target_frame, me_msg.header.stamp))
     {
-        geometry_msgs::PoseStamped pose_msg;
-        tf2::convert(global_pose, pose_msg);
-        me_msg.pose.pose = pose_msg.pose;
+        me_msg.pose.pose = global_pose.pose;                                                                                                                                                    // -nan, -nan, -nan, -nan --> not ok
+        // ROS_INFO("[createMeMsg] global_pose: %f, %f, %f, %f,", global_pose.pose.orientation.x, global_pose.pose.orientation.y, global_pose.pose.orientation.z, global_pose.pose.orientation.w); //DEBUGGING
+
+        // geometry_msgs::PoseStamped pose_msg;
+        // tf2::convert(global_pose, pose_msg);
+        // me_msg.pose.pose = pose_msg.pose; // -nan, -nan, -nan, -nan --> not ok
+        // ROS_INFO("[createMeMsg] me_msg-pose: %f, %f, %f, %f,", me_msg.pose.pose.orientation.x, me_msg.pose.pose.orientation.y, me_msg.pose.pose.orientation.z, me_msg.pose.pose.orientation.w); //DEBUGGING
     }
     else
     {

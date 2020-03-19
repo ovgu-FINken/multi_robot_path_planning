@@ -62,7 +62,7 @@ bool CollvoidScoringFunction::getNeighbors()
     collvoid_srvs::GetNeighbors srv;
     if (get_neighbors_srv_.call(srv))
     {
-        for (collvoid_msgs::PoseTwistWithCovariance msg : srv.response.neighbors)
+        for (collvoid_msgs::PoseTwistWithCovariance msg : srv.response.neighbors) //https://en.cppreference.com/w/cpp/language/range-for
         {
             me_->agent_neighbors_.push_back(createAgentFromMsg(msg));
         }
@@ -110,8 +110,10 @@ AgentPtr CollvoidScoringFunction::createAgentFromMsg(collvoid_msgs::PoseTwistWit
     tf2::Matrix3x3 matrix(q);
     double roll, pitch, yaw;
     matrix.getRPY(roll, pitch, yaw);
+    agent->heading_ = yaw;
     */
     agent->heading_ = tf2::getYaw(msg.pose.pose.orientation);
+    // ROS_INFO("[createAgentFromMsg] Agent's heading: %f, %f, %f, %f",msg.pose.pose.orientation.x, msg.pose.pose.orientation.y, msg.pose.pose.orientation.z, msg.pose.pose.orientation.w); //DEBUGGING
 
     std::vector<Vector2> minkowski_footprint;
     for (geometry_msgs::Point32 p : msg.footprint.polygon.points)
@@ -128,11 +130,12 @@ AgentPtr CollvoidScoringFunction::createAgentFromMsg(collvoid_msgs::PoseTwistWit
     else
     {
         double dif_x, dif_y, dif_ang, time_dif;
-        time_dif = 0.1;
+        time_dif = 0.1; // TODO why??
         dif_ang = time_dif * msg.twist.twist.angular.z;
         dif_x = msg.twist.twist.linear.x * cos(dif_ang / 2.0);
         dif_y = msg.twist.twist.linear.x * sin(dif_ang / 2.0);
         agent->velocity_ = rotateVectorByAngle(dif_x, dif_y, agent->heading_);
+        // ROS_INFO("[createAgentFromMsg] Agent's velocity: %f %f, and heading: %f", dif_x, dif_y, agent->heading_); //DEBUGGING
     }
 
     return agent;
@@ -160,8 +163,7 @@ bool CollvoidScoringFunction::prepare()
     for (size_t i = 0; i < me_->all_vos_.size(); ++i)
     {
         VO v = me_->all_vos_.at(i);
-        //    ROS_INFO("VO #" << i << "has origin: " << v.point.x() << ", " << v.point.y());
-        ROS_INFO("VO nr. %lu has origin: %f %f", i, v.point.x(), v.point.y());
+        // ROS_INFO("VO nr. %lu has origin: %f %f", i, v.point.x(), v.point.y()); //DEBUGGING
     }
 
     points.clear();

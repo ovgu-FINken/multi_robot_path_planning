@@ -42,7 +42,7 @@ def make_rotation_transformation(angle, origin=(0, 0)):
 
 class PositionShareController(object):
     def __init__(self):
-        self.position_share_pub = rospy.Publisher('/position_share', PoseTwistWithCovariance, queue_size=1)
+        # self.position_share_pub = rospy.Publisher('/position_share', PoseTwistWithCovariance, queue_size=1)
         # Set the name
         self.name = rospy.get_namespace()
         if self.name == "/":
@@ -95,7 +95,10 @@ class PositionShareController(object):
             robot['robot_id'] = msg.robot_id
             robot['controlled'] = msg.controlled
             robot['twist'] = msg.twist
+            rospy.loginfo("[position_share_cb] %s's twist, linear: %f, %f, %f", msg.robot_id, msg.twist.twist.linear.x, msg.twist.twist.linear.y, msg.twist.twist.linear.z) # DEBUGGING
             robot['position'] = msg.pose
+            # rospy.loginfo("[position_share_cb] Orientation: %f, %f, %f, %f", msg.pose.pose.orientation.x, msg.pose.pose.orientation.y, msg.pose.pose.orientation.z, msg.pose.pose.orientation.w) # DEBUGGING
+            rospy.loginfo("[position_share_cb] %s's position: %f, %f, %f", msg.robot_id, msg.pose.pose.position.x, msg.pose.pose.position.y, msg.pose.pose.position.z) # DEBUGGING
             robot['footprint'] = msg.footprint
             robot['radius'] = msg.radius
             robot['holo_robot'] = msg.holo_robot
@@ -120,7 +123,7 @@ class PositionShareController(object):
         msg.controlled = robot['controlled']
         msg.holo_robot = robot['holo_robot']
         msg.twist = robot['twist']
-        msg.pose.pose = self.predict_pose(robot, time)
+        msg.pose.pose = robot['position'].pose  #self.predict_pose(robot, time)
         msg.footprint = robot['footprint']
         msg.radius = robot['radius']
         msg.holo_robot = robot['holo_robot']
