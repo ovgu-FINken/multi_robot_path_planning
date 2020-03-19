@@ -95,10 +95,10 @@ class PositionShareController(object):
             robot['robot_id'] = msg.robot_id
             robot['controlled'] = msg.controlled
             robot['twist'] = msg.twist
-            rospy.loginfo("[position_share_cb] %s's twist, linear: %f, %f, %f", msg.robot_id, msg.twist.twist.linear.x, msg.twist.twist.linear.y, msg.twist.twist.linear.z) # DEBUGGING
+            # rospy.loginfo("[position_share_cb] %s's twist, linear: %f, %f, %f", msg.robot_id, msg.twist.twist.linear.x, msg.twist.twist.linear.y, msg.twist.twist.linear.z) # DEBUGGING
             robot['position'] = msg.pose
-            # rospy.loginfo("[position_share_cb] Orientation: %f, %f, %f, %f", msg.pose.pose.orientation.x, msg.pose.pose.orientation.y, msg.pose.pose.orientation.z, msg.pose.pose.orientation.w) # DEBUGGING
-            rospy.loginfo("[position_share_cb] %s's position: %f, %f, %f", msg.robot_id, msg.pose.pose.position.x, msg.pose.pose.position.y, msg.pose.pose.position.z) # DEBUGGING
+            # rospy.loginfo("[position_share_cb] %s's orientation: %f, %f, %f, %f", msg.robot_id, msg.pose.pose.orientation.x, msg.pose.pose.orientation.y, msg.pose.pose.orientation.z, msg.pose.pose.orientation.w) # DEBUGGING
+            # rospy.loginfo("[position_share_cb] %s's position: %f, %f, %f", msg.robot_id, msg.pose.pose.position.x, msg.pose.pose.position.y, msg.pose.pose.position.z) # DEBUGGING
             robot['footprint'] = msg.footprint
             robot['radius'] = msg.radius
             robot['holo_robot'] = msg.holo_robot

@@ -163,7 +163,7 @@ bool CollvoidScoringFunction::prepare()
     for (size_t i = 0; i < me_->all_vos_.size(); ++i)
     {
         VO v = me_->all_vos_.at(i);
-        // ROS_INFO("VO nr. %lu has origin: %f %f", i, v.point.x(), v.point.y()); //DEBUGGING
+        ROS_INFO("VO nr. %lu has origin: %f %f", i, v.point.x(), v.point.y()); //DEBUGGING
     }
 
     points.clear();

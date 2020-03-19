@@ -183,15 +183,19 @@ void MePublisher::odomCallback(const nav_msgs::Odometry::ConstPtr &msg)
 
 bool MePublisher::getGlobalPose(geometry_msgs::PoseStamped &global_pose, std::string target_frame, const ros::Time stamp)
 {
-    // //let's get the pose of the robot in the frame of the plan
-    // global_pose.setIdentity();
+    // //let's get the pose of the robot in the frame of the map
     global_pose.header.frame_id = base_frame_;
     global_pose.header.stamp = stamp;
+    global_pose.pose.orientation.x = 0;
+    global_pose.pose.orientation.y = 0;
+    global_pose.pose.orientation.z = 0;
+    global_pose.pose.orientation.w = 1; 
+
     try
     {
-        tf_->canTransform(target_frame, base_frame_, global_pose.header.stamp, ros::Duration(0.1)); // default: 0.2
-        tf_->transform(global_pose, global_pose, target_frame); //http://docs.ros.org/melodic/api/tf2_ros/html/c++/classtf2__ros_1_1BufferInterface.html#a6674f53992999da887a22e54467cba0b
-        ROS_INFO("[getGlobalPose] global_pose: %f, %f, %f, %f,", global_pose.pose.orientation.x, global_pose.pose.orientation.y, global_pose.pose.orientation.z, global_pose.pose.orientation.w); //DEBUGGING
+        tf_->canTransform(target_frame, base_frame_, global_pose.header.stamp, ros::Duration(0.2));
+        tf_->transform(global_pose, global_pose, target_frame);                                                                                                                                   //http://docs.ros.org/melodic/api/tf2_ros/html/c++/classtf2__ros_1_1BufferInterface.html#a6674f53992999da887a22e54467cba0b
+        // ROS_INFO("[getGlobalPose] global_pose: %f, %f, %f, %f,", global_pose.pose.orientation.x, global_pose.pose.orientation.y, global_pose.pose.orientation.z, global_pose.pose.orientation.w); //DEBUGGING
     }
     catch (tf2::TransformException ex)
     {
@@ -216,7 +220,7 @@ bool MePublisher::createMeMsg(collvoid_msgs::PoseTwistWithCovariance &me_msg, st
     // ROS_INFO("[createMeMsg] global_pose: %f, %f, %f, %f,", global_pose.pose.orientation.x, global_pose.pose.orientation.y, global_pose.pose.orientation.z, global_pose.pose.orientation.w); //DEBUGGING
     if (getGlobalPose(global_pose, target_frame, me_msg.header.stamp))
     {
-        me_msg.pose.pose = global_pose.pose;                                                                                                                                                    // -nan, -nan, -nan, -nan --> not ok
+        me_msg.pose.pose = global_pose.pose; // -nan, -nan, -nan, -nan --> not ok
         // ROS_INFO("[createMeMsg] global_pose: %f, %f, %f, %f,", global_pose.pose.orientation.x, global_pose.pose.orientation.y, global_pose.pose.orientation.z, global_pose.pose.orientation.w); //DEBUGGING
 
         // geometry_msgs::PoseStamped pose_msg;
