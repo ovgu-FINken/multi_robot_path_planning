@@ -189,12 +189,12 @@ bool MePublisher::getGlobalPose(geometry_msgs::PoseStamped &global_pose, std::st
     global_pose.pose.orientation.x = 0;
     global_pose.pose.orientation.y = 0;
     global_pose.pose.orientation.z = 0;
-    global_pose.pose.orientation.w = 1; 
+    global_pose.pose.orientation.w = 1;
 
     try
     {
         tf_->canTransform(target_frame, base_frame_, global_pose.header.stamp, ros::Duration(0.2));
-        tf_->transform(global_pose, global_pose, target_frame);                                                                                                                                   //http://docs.ros.org/melodic/api/tf2_ros/html/c++/classtf2__ros_1_1BufferInterface.html#a6674f53992999da887a22e54467cba0b
+        tf_->transform(global_pose, global_pose, target_frame); //http://docs.ros.org/melodic/api/tf2_ros/html/c++/classtf2__ros_1_1BufferInterface.html#a6674f53992999da887a22e54467cba0b
         // ROS_INFO("[getGlobalPose] global_pose: %f, %f, %f, %f,", global_pose.pose.orientation.x, global_pose.pose.orientation.y, global_pose.pose.orientation.z, global_pose.pose.orientation.w); //DEBUGGING
     }
     catch (tf2::TransformException ex)
@@ -240,6 +240,7 @@ bool MePublisher::createMeMsg(collvoid_msgs::PoseTwistWithCovariance &me_msg, st
 
     me_msg.holo_robot = holo_robot_;
     me_msg.radius = (float)(uninflated_robot_radius_ + cur_loc_unc_radius_);
+    // ROS_INFO("[createMeMsg] : uninflated_robot_radius: %f, cur_loc_unc_radius: %f", uninflated_robot_radius_, cur_loc_unc_radius_); //DEBUGGING
     me_msg.robot_id = my_id_;
     me_msg.controlled = controlled_;
 

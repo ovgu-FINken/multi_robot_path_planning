@@ -141,7 +141,7 @@ DWAPlannerROS:
 
 #  holo_robot: false
 #   wheel_base: 0.25
-#   robot_radius: 0.20
+#   robot_radius: 0.106
 # 
 max_planning_retries: 5
 controller_frequency: 10
@@ -166,15 +166,17 @@ recovery_behaviors:
       name: really_aggressive_reset,
       type: clear_costmap_recovery/ClearCostmapRecovery,
     }
- 
+
 conservative_reset:
-  layer_names: ["stationary_robots"]
+  layer_names: ["obstacle_layer"]
   reset_distance: 2.0
 
 aggressive_reset:
-  layer_names: ["stationary_robots"]
+  layer_names: ["obstacle_layer"]
   reset_distance: 0.38
 
 really_aggressive_reset:
-  layer_names: ["obstacle_layer", "stationary_robots"]
+  layer_names: ["obstacle_layer"]
   reset_distance: 0.25
+
+ 
