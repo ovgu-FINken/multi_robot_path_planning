@@ -139,7 +139,7 @@ void Agent::computeAgentVOs()
             {
                 // ROS_INFO("[computeAgentVOs] Agent's velocity vector2: %f %f", agent->velocity_.x(), agent->velocity_.y()); //debugging
                 new_agent_vo = createVO(position_, footprint_, velocity_, agent->position_,
-                                        agent->footprint_, agent->velocity_, HRVOS);
+                                        agent->footprint_, agent->velocity_, VOS);
             }
         }
         else
