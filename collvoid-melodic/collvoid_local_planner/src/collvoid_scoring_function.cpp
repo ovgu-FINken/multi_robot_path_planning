@@ -159,12 +159,13 @@ bool CollvoidScoringFunction::prepare()
     collvoid::publishVOs(me_->position_, me_->all_vos_, use_truncation_, "/map", "/map", vo_pub_);
     collvoid::publishPoints(me_->position_, points, "/map", "/map", samples_pub_);
 
-    // debugging
+    /* DEBUGGING
     for (size_t i = 0; i < me_->all_vos_.size(); ++i)
     {
         VO v = me_->all_vos_.at(i);
-        // ROS_INFO("VO nr. %lu has origin: %f %f", i, v.point.x(), v.point.y()); //DEBUGGING
+        ROS_INFO("VO nr. %lu has origin: %f %f", i, v.point.x(), v.point.y());
     }
+    */
 
     points.clear();
 
