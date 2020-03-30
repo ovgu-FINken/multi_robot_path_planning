@@ -42,7 +42,7 @@ void NavigationPathLayer::pathCallback(const nav_msgs::Path& path)
         --> if new push to list and push id/name of robot to list
     */
 
-    bool* isOld = false;
+    bool isOld = false;
     bool changed = false;
     unsigned int* index_ = paths_list_.size(); // this value cannot be assigned in for-loop (as back check)
 
@@ -130,36 +130,36 @@ void NavigationPathLayer::updateCosts()
     }
 }
 
-void NavigationPathLayer::setSideInflation(bool inflate)
+void NavigationPathLayer::setSideInflation(bool* inflate)
 {
-    navigation_path_layers::side_inflation* = inflate;
+    navigation_path_layers::side_inflation = *inflate;
     navigation_path_layers::createFilter();
 }
 
 void NavigationPathLayer::scaleSideInflation(double* inflation_scale)
 {
     // maximal factor 1 of the costs of the normal path
-    navigation_path_layers::inflation_size* = std::min(inflation_scale, 1);
+    navigation_path_layers::inflation_size = std::min(*inflation_scale, 1);
     navigation_path_layers::createFilter();
 }
 
-void NavigationPathLayer::setFilterSize(int size)
+void NavigationPathLayer::setFilterSize(int* size)
 {
     if (size%2 == 1) 
     {
-    navigation_path_layers::filter_size* = size;
+    navigation_path_layers::filter_size = *size;
     } else
     {
         // minimum size required
-        navigation_path_layers::filter_size* = std::max(size-1, 9); // ~ 12.5 cm tolerance with degrading costs
+        navigation_path_layers::filter_size = std::max(*size-1, 9); // ~ 12.5 cm tolerance with degrading costs
     }
     
     // navigation_path_layers::createFilter();
 }
 
-void NavigationPathLayer::setFilterStrength(int s)
+void NavigationPathLayer::setFilterStrength(int* s)
 {
-    navigation_path_layers::filter_strength = s;
+    navigation_path_layers::filter_strength = *s;
     // navigation_path_layers::createFilter();
 }
 
@@ -176,12 +176,12 @@ void NavigationPathLayer::resetCosts()
 
 costmap_2d::Costmap2D* NavigationPathLayer::createCostHillChain(std::vector<std::vector<int>> positions, costmap_2d::Costmap2D* costmap) // Pfad übergeben
 {
-	costmap_2d::Costmap2D* costmap_ = *costmap;
+	costmap_2d::Costmap2D* costmap_ = costmap;
     // increase costs along the path
 	for (unsigned int pos = 0; pos < positions.size(); i++)
 	{
 		std::vector<int> position = positions[pos];
-		costmap_ = useFilter(position, costmap_);
+		costmap_ = useFilter(position*, costmap_);
 	}
  
 	// add later
@@ -199,7 +199,8 @@ void NavigationPathLayer::createFilter() // Größe und side_inflation nutzen
 {
 	// sum is for normalization 
 	double sum = 0.0;
-	int bound = int((filter_size - 1) / 2);
+	int bound = int((*filter_size - 1) / 2);
+	double[][] * kernel = (double*)malloc(*filter_size * sizeof(double));
 
 	for (unsigned int i = -bound; i <= bound; i++)
 	{
@@ -219,9 +220,9 @@ void NavigationPathLayer::createFilter() // Größe und side_inflation nutzen
 	}
 
 	// normalising the Kernel 
-	for (int i = 0; i < filter_size; ++i)
+	for (int i = 0; i < *filter_size; ++i)
 	{
-		for (int j = 0; j < filter_size; ++j)
+		for (int j = 0; j < *filter_size; ++j)
 		{
 			kernel[i][j] /= sum;
 		}
@@ -230,22 +231,22 @@ void NavigationPathLayer::createFilter() // Größe und side_inflation nutzen
 	return kernel;
 }
 
-costmap_2d::Costmap2D* useFilter(std::vector<int> position, costmap_2d::Costmap2D* costmap)
+costmap_2d::Costmap2D* useFilter(std::vector<int>* position, costmap_2d::Costmap2D* costmap)
 {
 	int bound = int((filter_size - 1) / 2);
-	costmap_2d::Costmap2D* _map = *costmap; // ToDo prove
+	costmap_2d::Costmap2D _map = *costmap; // ToDo prove
 
 	// for each pixel in the convolution take maximum value of current and calculated value of convolution at this pixel
 	for (unsigned int i = -bound; i <= bound; i++)
 	{
 		for (unsigned int j = -bound; j <= bound; j++)
 		{
-			double current = costmap[position[0] + i][position[1] + j];
-			_map[position[0] + i][position[1] + j] = std::max(current, kernel[i][j] * filter_strength);
+			double current = costmap[*position[0] + i][*position[1] + j];
+			_map[*position[0] + i][*position[1] + j] = std::max(current, kernel[i][j] * filter_strength);
 		}
 	}
 
-    return _map;
+    return _map*;
 }
 
 }
