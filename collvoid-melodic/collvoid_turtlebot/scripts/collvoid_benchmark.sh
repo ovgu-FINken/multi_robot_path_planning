@@ -35,7 +35,6 @@ tmux send-keys -t $SESSION_NAME:$NUM "roslaunch collvoid_turtlebot map_server.la
 # benchmark starts counting from 0 for the robot's index
 X=0
 while [ $X -lt $NUM_ROBOT ]; do
-
   # localisation
   NUM=$((++NUM))
   tmux new-window -t $SESSION_NAME -n "amcl_${X}"
@@ -45,7 +44,8 @@ while [ $X -lt $NUM_ROBOT ]; do
   NUM=$((++NUM))
   tmux new-window -t $SESSION_NAME -n "move_base_${X}"
   tmux send-keys -t $SESSION_NAME:$NUM "roslaunch collvoid_turtlebot move_base_dwa.launch robot_name:=tb3_${X}" C-m
-  read -t 3
+
+  X=$((X + 1))
 done
 
 #### rviz

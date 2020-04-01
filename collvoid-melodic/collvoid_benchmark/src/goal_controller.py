@@ -11,7 +11,7 @@ class GoalController:
     def __init__(self):
         # self.pub = rospy.Publisher('move_base_simple/goal', PoseStamped, queue_size=0)
         ns = rospy.get_namespace()
-        topic_name = ns + "/benchmark/waypoints"
+        topic_name = ns + "/benchmark/waypoint"
         self.sub = rospy.Subscriber(topic_name, Point, self.catch_waypoint_cb)
 
         self.client = actionlib.SimpleActionClient('move_base', MoveBaseAction)
