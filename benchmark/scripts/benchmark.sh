@@ -15,7 +15,7 @@ source ~/.bashrc
 # script parameters
 SESSION_NAME="benchmark"
 NUM=0
-ENABLE_RVIZ=True
+ENABLE_RVIZ=False
 ENABLE_RQT=False
 USE_SETTINGS_FILE=True
 DEFAULT_MOVEMENT=True
