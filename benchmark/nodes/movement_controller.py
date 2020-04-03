@@ -112,15 +112,15 @@ def update_movement(_number_of_robots, frequency=0.5):
     :param frequency:
     """
     global robot_finished
-    # while not rospy.is_shutdown():
-    #     for robot_id in range(_number_of_robots):
-    #         if robot_id in robot_targets:
-    #             if not robot_finished[robot_id]:
-    #                 move_controller[robot_id].linear_move_to(
-    #                     robot_targets[robot_id], quiet=False)
-    #             else:
-    #                 _apply_end_procedure(robot_id)
-    #     rospy.Rate(frequency).sleep()
+    while not rospy.is_shutdown():
+        for robot_id in range(_number_of_robots):
+            if robot_id in robot_targets:
+                if not robot_finished[robot_id]:
+                    move_controller[robot_id].linear_move_to(
+                        robot_targets[robot_id], quiet=False)
+                else:
+                    _apply_end_procedure(robot_id)
+        rospy.Rate(frequency).sleep()
 
 
 def wait_for_pos():

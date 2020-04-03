@@ -9,37 +9,43 @@ from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal, MoveBaseResult, Mov
 
 class GoalController:
     def __init__(self):
+
+        # param (!)
+        self._use_srv = True
         ns = rospy.get_namespace()
 
-        # init publisher for simple goal
-        self.pub = rospy.Publisher(
-            'move_base_simple/goal', PoseStamped, queue_size=0)
+        if (self._use_srv):
+            # init move base action client (service API)
+            topic_srv = ns + "move_base"
+            client = actionlib.SimpleActionClient(topic_srv, MoveBaseAction)
+            rospy.loginfo_once("Waiting for MoveBaseAction-Server...")
+            rospy.loginfo("Client for topic " + topic_srv)
+            if (client.wait_for_server(rospy.Duration(0.2))):
+                rospy.loginfo_once("MoveBaseAction client setup finished.")
+                self._client = client
+            else:
+                rospy.logerr("Connection to action server failed. Setup of action client failed.")
+        else:
+            # init publisher for simple goal (topic API)
+            self.pub = rospy.Publisher(
+                'move_base_simple/goal', PoseStamped, queue_size=0)
 
         # init subscriber to waypoints
         topic_wp = ns + "benchmark/waypoint"
         self.sub = rospy.Subscriber(topic_wp, Point, self.catch_waypoint_cb)
 
-        # init move base action client
-        # topic_srv = ns + "move_base"
-        topic_srv = "move_base"
-        client = actionlib.SimpleActionClient(topic_srv, MoveBaseAction)
-        rospy.loginfo_once("Waiting for MoveBaseAction-Server...")
-        rospy.loginfo("Client for topic " + topic_srv)
-        if (client.wait_for_server()):
-            rospy.loginfo_once("MoveBaseAction client setup finished.")
-            self.use_srv = True
-            self._client = client
-
     def catch_waypoint_cb(self, data):
         '''
         @brief: enhance waypoint with orientation, frame_id and timestamp
         '''
-        rospy.loginfo("Received goal: %f, %f, %f", data.x, data.y, data.z)
+        rospy.loginfo("Goal controller received goal: %f, %f, %f",
+                      data.x, data.y, data.z)
         self.cntr = 0
-
-        if (self.use_srv):
+        if (self._use_srv):
+            # service API
             self.forward_goal_as_service(data)
         else:
+            # topic API
             self.forward_goal_as_message(data)
 
     def forward_goal_as_message(self, nextWp):
@@ -55,7 +61,7 @@ class GoalController:
         nextPose.pose.orientation.z = 0
         nextPose.pose.orientation.w = 1
         self.pub.publish(nextPose)
-        rospy.loginfo("Forwarded goal: %f, %f, %f", nextPose.pose.position.x,
+        rospy.loginfo("Forward goal (as message): %f, %f, %f", nextPose.pose.position.x,
                       nextPose.pose.position.y, nextPose.pose.position.z)
 
     def forward_goal_as_service(self, nextWp):
@@ -66,16 +72,13 @@ class GoalController:
         nextGoal.target_pose.header.stamp = rospy.Time.now()
         nextGoal.target_pose.header.frame_id = "map"
         nextGoal.target_pose.pose.position = nextWp
-        # nextGoal.target_pose.pose.position.x = data.x
-        # nextGoal.target_pose.pose.position.y = data.y
-        # nextGoal.target_pose.pose.position.z = data.z
         nextGoal.target_pose.pose.orientation.x = 0
         nextGoal.target_pose.pose.orientation.y = 0
         nextGoal.target_pose.pose.orientation.z = 0
         nextGoal.target_pose.pose.orientation.w = 1
 
         self._client.send_goal(nextGoal)
-        rospy.loginfo("Forwarded goal: %f, %f, %f", nextGoal.target_pose.pose.position.x,
+        rospy.loginfo("Forward goal (as service): %f, %f, %f", nextGoal.target_pose.pose.position.x,
                       nextGoal.target_pose.pose.position.y, nextGoal.target_pose.pose.position.z)
 
         self._client.wait_for_result()

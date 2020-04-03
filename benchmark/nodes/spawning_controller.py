@@ -72,8 +72,10 @@ def setup_subscriber(_number_of_robots, _namespace):
     :param _namespace:
     """
     for robot_id in range(number_of_robots):
-        topic_name = namespace + str(robot_id) + "/" + names.TopicNames.FINISHED.value
-        topic_handler.SubscribingHandler(topic_name, Bool, callback_finished, robot_id)
+        topic_name = namespace + str(robot_id) + \
+            "/" + names.TopicNames.FINISHED.value
+        topic_handler.SubscribingHandler(
+            topic_name, Bool, callback_finished, robot_id)
 
 
 def publish_start_position(_namespace, _positions):
@@ -81,13 +83,22 @@ def publish_start_position(_namespace, _positions):
     :param _namespace:
     :param _positions:
     """
+    # rospy.loginfo("number of robots: %f", number_of_robots )
     for robot_id in range(number_of_robots):
-        name = _namespace + str(robot_id) + "/" + names.TopicNames.START_POSITION.value
+        name = _namespace + str(robot_id) + "/" + \
+            names.TopicNames.START_POSITION.value
         pub = topic_handler.PublishingHandler(name, Point)
-        pub.publish(_positions[robot_id], single_shot=True)
+        # NOT single_shot=True
+        # otherwise the publisher will wait until the movement_controller subscribes the topic (very slow and does not work when default_movement = false!)
+        pub.publish(_positions[robot_id], single_shot=False)
 
 
+### __main__
+# constructor
 spawner = sp.RobotSpawner(world="world")
+rospy.loginfo("RobotSpawn init sucessfully finished.")
+
+# params
 model_name = rospy.get_param('model_name')
 model_type = rospy.get_param('model_type')
 number_of_robots = rospy.get_param('number_of_robots')
@@ -96,10 +107,21 @@ position = rospy.get_param('position')
 orientation = rospy.get_param('orientation')
 formation = rospy.get_param('formation')
 end_procedure = rospy.get_param('end_procedure')
+rospy.loginfo("Spawn controller params finished.")
+
+# subscriber
 setup_subscriber(number_of_robots, namespace)
+rospy.loginfo("Spawn controller subscriber init finished.")
+
+
+# calc formation (dense block etc.)
 positions, orientations = run_formation(
     number_of_robots, position, orientation, formation)
+rospy.loginfo("Spawn controller calculating formation finished.")
+
+# publish starting positions and spawn
 publish_start_position(namespace, positions)
+
 spawn_robots(
     positions, orientations, number_of_robots,
     model_name, model_type, namespace)
