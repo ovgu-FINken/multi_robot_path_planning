@@ -62,7 +62,7 @@ class PublishingHandler(TopicHandler):
         super(PublishingHandler, self).__init__(name, data_type)
         self._publisher = rospy.Publisher(self._name, self._data_type, queue_size=queue_size)
 
-    def publish(self, data, frequency=0, quiet=True, single_shot=False):
+    def publish(self, data, frequency=0, quiet=False, single_shot=False):
         """ Publishes data to the topic
         :param data:
         :param frequency
@@ -83,7 +83,7 @@ class PublishingHandler(TopicHandler):
         else:
             self._publish_once(data, quiet)
 
-    def _publish_once(self, data, quiet=True):
+    def _publish_once(self, data, quiet=False):
         """ Publishes data to the topic
         :param data:
         :param quiet

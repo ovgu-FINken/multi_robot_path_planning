@@ -24,7 +24,6 @@ tmux new-session -s $SESSION_NAME -d
 # NUM=$((++NUM))
 # tmux new-window -t $SESSION_NAME -n "world_and_spawn"
 # tmux send-keys -t $SESSION_NAME:$NUM "roslaunch collvoid_turtlebot simulation_simple.launch" C-m
-# read -t 3
 
 ##### map
 NUM=$((++NUM))

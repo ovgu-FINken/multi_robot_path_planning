@@ -132,16 +132,26 @@ def wait_for_pos():
     rospy.loginfo("All start positions received!")
 
 
+### main ###
+# variables
 move_controller = {}
 robot_targets = {}
 robot_finished = {}
 start_pos = {}
 pos_received_flag = {}
+
+# initialise node
 rospy.init_node(names.NodeNames.MOVEMENT_CONTROLLER.value, anonymous=True)
+
+# params
 namespace = rospy.get_param('namespace')
 number_of_robots = rospy.get_param('number_of_robots')
 end_procedure = rospy.get_param('end_procedure')
+
+# setups
 setup_subscribers(namespace, number_of_robots)
 setup_move_controller(namespace, number_of_robots)
+
+# execution
 wait_for_targets(number_of_robots)
 update_movement(number_of_robots)

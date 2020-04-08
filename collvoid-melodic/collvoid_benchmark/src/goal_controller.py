@@ -20,15 +20,14 @@ class GoalController:
             client = actionlib.SimpleActionClient(topic_srv, MoveBaseAction)
             rospy.loginfo_once("Waiting for MoveBaseAction-Server...")
             rospy.loginfo("Client for topic " + topic_srv)
-            if (client.wait_for_server(rospy.Duration(0.2))):
+            if (client.wait_for_server(rospy.Duration(5))):
                 rospy.loginfo_once("MoveBaseAction client setup finished.")
                 self._client = client
             else:
                 rospy.logerr("Connection to action server failed. Setup of action client failed.")
-        else:
-            # init publisher for simple goal (topic API)
-            self.pub = rospy.Publisher(
-                'move_base_simple/goal', PoseStamped, queue_size=0)
+                # instead init publisher for simple goal (topic API)
+                self._use_srv = False
+                self.pub = rospy.Publisher('move_base_simple/goal', PoseStamped, queue_size=0)
 
         # init subscriber to waypoints
         topic_wp = ns + "benchmark/waypoint"
