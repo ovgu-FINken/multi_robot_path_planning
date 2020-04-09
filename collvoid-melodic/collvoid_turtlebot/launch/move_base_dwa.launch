@@ -49,9 +49,9 @@
         <param name="collvoid/global_frame_id" value="map"/>
         <!-- <param name="collvoid/base_frame" value="base_link" /> -->
 
-        <node pkg="collvoid_local_planner" type="MePublisher" name="me_publisher" />
-        <node pkg="collvoid_controller" type="position_share_controller.py" name="position_share_controller" />
-        <node pkg="collvoid_benchmark" type="goal_controller.py" name="goal_controller" />
+        <node pkg="collvoid_local_planner" type="MePublisher" name="me_publisher" output="screen" />
+        <node pkg="collvoid_controller" type="position_share_controller.py" name="position_share_controller" output="screen" />
     </group>
+        <!-- <node pkg="collvoid_benchmark" type="goal_controller.py" name="goal_controller" output="screen" clear_params="true"/> -->
 </launch>
   

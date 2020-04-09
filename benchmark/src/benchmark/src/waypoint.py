@@ -45,7 +45,7 @@ def get_waypoint_map(waypoint_map_name):
     :return: array
     """
     dir_path = os.path.dirname(os.path.realpath(__file__))
-    file_path = os.path.join(dir_path, '..', '..', 'config', 'waypoints.json')
+    file_path = os.path.join(dir_path, '..', '..', '..', 'config', 'waypoints.json')
     file = open(file_path)
     content = json.load(file)
     if type(waypoint_map_name) is not str:

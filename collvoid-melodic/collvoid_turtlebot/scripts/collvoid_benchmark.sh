@@ -47,11 +47,15 @@ while [ $X -lt $NUM_ROBOT ]; do
   X=$((X + 1))
 done
 
+# goal controller
+NUM=$((++NUM))
+tmux new-window -t $SESSION_NAME -n "goal_controller"
+tmux send-keys -t $SESSION_NAME:$NUM "roslaunch collvoid_turtlebot goal_controller.launch" C-m
+
 #### rviz
 NUM=$((++NUM))
 tmux new-window -t $SESSION_NAME -n "rviz"
 tmux send-keys -t $SESSION_NAME:$NUM "roslaunch turtlebot3_gazebo turtlebot3_gazebo_rviz.launch" C-m
-read -t 3
 
 # attach to the tmux session
 tmux attach
