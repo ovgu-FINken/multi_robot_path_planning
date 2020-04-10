@@ -4,13 +4,14 @@ import rospy
 from std_msgs.msg import Bool
 from geometry_msgs.msg import Point
 
-from benchmark.src import movement 
+from benchmark.src import movement
 from benchmark.src.utils import topic_handler
 from benchmark.src.utils import naming_scheme as names
 
 # import benchmark.src.movement as movement
 # import benchmark.src.utils.topic_handler as topic_handler
 # import benchmark.src.utils.naming_scheme as names
+
 
 def callback_start_pos(data, args):
     """ Callback for robot start positions.
@@ -61,12 +62,18 @@ def setup_subscribers(_namespace, _number_of_robots):
     for robot_id in range(_number_of_robots):
         pos_received_flag[robot_id] = False
         robot_finished[robot_id] = False
-        topic_name = _namespace + str(robot_id) + "/" + names.TopicNames.WAYPOINT.value
-        topic_handler.SubscribingHandler(topic_name, Point, callback_target, robot_id)
-        topic_name = _namespace + str(robot_id) + "/" + names.TopicNames.FINISHED.value
-        topic_handler.SubscribingHandler(topic_name, Bool, callback_finished, robot_id)
-        topic_name = _namespace + str(robot_id) + "/" + names.TopicNames.START_POSITION.value
-        topic_handler.SubscribingHandler(topic_name, Point, callback_start_pos, robot_id)
+        topic_name = _namespace + \
+            str(robot_id) + "/" + names.TopicNames.WAYPOINT.value
+        topic_handler.SubscribingHandler(
+            topic_name, Point, callback_target, robot_id)
+        topic_name = _namespace + \
+            str(robot_id) + "/" + names.TopicNames.FINISHED.value
+        topic_handler.SubscribingHandler(
+            topic_name, Bool, callback_finished, robot_id)
+        topic_name = _namespace + \
+            str(robot_id) + "/" + names.TopicNames.START_POSITION.value
+        topic_handler.SubscribingHandler(
+            topic_name, Point, callback_start_pos, robot_id)
     wait_for_pos()
 
 
@@ -95,7 +102,10 @@ def _apply_end_procedure(_robot_id):
         # do nothing
         pass
     elif end_procedure == 'idle':
-        # TODO up to the user
+        # up to the user
+        pos = [1.8, 0, 0]
+        move_controller[_robot_id].move_to(pos, quiet=False)
+
         pass
     elif end_procedure == 'start':
         move_controller[_robot_id].move_to(
