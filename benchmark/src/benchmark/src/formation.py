@@ -55,7 +55,8 @@ class FormationHandler:
                 or self._formation == Formation.AT_WAY_POINTS.value:
             self._estimate_at_way_points()
         else:
-            rospy.logerr("Invalid formation {} specified!".format(self._formation))
+            rospy.logerr(
+                "Invalid formation {} specified!".format(self._formation))
         return self._position, self._orientation
 
     def _estimate_dense_block(self):
@@ -63,9 +64,15 @@ class FormationHandler:
         and returns the positions and orientations.
         """
         if self._number_of_robots == 1 or self._number_of_robots == 2:
+            rospy.loginfo("Calc. trivial dense block")
             self._handle_trivial_dense_block()
         else:
-            block_dimension = int(math.sqrt(self._number_of_robots))
+            rospy.loginfo("Calc. non-trivial dense block")
+            if self._number_of_robots==3:
+                block_dimension = int(
+                    math.ceil(math.sqrt(self._number_of_robots)))
+            else:
+                block_dimension = int(math.sqrt(self._number_of_robots))
             block_rest = self._number_of_robots - 2 * block_dimension
             num_rows = block_dimension + (0 if block_rest == 0 else 1)
             for row in range(num_rows):

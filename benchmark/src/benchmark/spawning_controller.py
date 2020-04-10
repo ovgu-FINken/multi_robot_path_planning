@@ -83,7 +83,7 @@ def publish_start_position(_namespace, _positions):
     :param _namespace:
     :param _positions:
     """
-    # rospy.loginfo("number of robots: %f", number_of_robots )
+    rospy.loginfo("%f positions passed to start_pos publisher", len(_positions))
     for robot_id in range(number_of_robots):
         name = _namespace + str(robot_id) + "/" + \
             names.TopicNames.START_POSITION.value
