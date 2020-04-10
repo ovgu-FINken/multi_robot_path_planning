@@ -102,13 +102,17 @@ def update_wps(_number_of_robots, _namespace, _rounds,
 robot_current_positions = {}
 target_publisher = {}
 finished_publisher = {}
+
 rospy.init_node(names.NodeNames.WAYPOINT_CONTROLLER.value, anonymous=True)
+
 namespace = rospy.get_param('namespace')
 wp_map = rospy.get_param('wp_map')
 wp_threshold = rospy.get_param('wp_threshold')
 number_of_robots = rospy.get_param('number_of_robots')
 rounds = rospy.get_param('rounds')
+
 setup_waypoint_publisher(target_publisher, number_of_robots, namespace)
 setup_finished_publisher(finished_publisher, number_of_robots, namespace)
 setup_position_subscriber(number_of_robots, namespace)
+
 update_wps(number_of_robots, namespace, rounds, wp_map, wp_threshold)

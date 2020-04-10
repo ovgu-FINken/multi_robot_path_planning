@@ -47,13 +47,16 @@ def get_waypoint_map(waypoint_map_name):
     dir_path = os.path.dirname(os.path.realpath(__file__))
     file_path = os.path.join(dir_path, '..', '..', '..', 'config', 'waypoints.json')
     file = open(file_path)
-    content = json.load(file)
+    content = json.load(file) # returns dict
     if type(waypoint_map_name) is not str:
         waypoint_map_name = waypoint_map_name.value
     try:
-        wps = content.get(waypoint_map_name)
+        wps = content.get(waypoint_map_name) # returns a list with tupels
+        for wp in wps:
+            rospy.loginfo("Received waypoints: %f, %f, %f", wp[0], wp[1], wp[2])
     except KeyError:
         wps = None
+        rospy.logerr("Waypoints could not be read.")
     return wps
 
 
@@ -245,14 +248,17 @@ class WayPointManager:
         """
         # initial target point
         if robot_name not in self._target_point:
+            rospy.loginfo("Setting intial target point")
             self._set_target_point(robot_name, self._waypoint_map[0])
 
         # restart round
         elif self._get_target_point(robot_name) == self._waypoint_map[-1]:
+            rospy.loginfo("Restarting round")
             self._set_target_point(robot_name, self._waypoint_map[0])
 
         # set next in round
         else:
+            rospy.loginfo("Setting next target in round")
             current_target_idx = self._waypoint_map.index(self._get_target_point(robot_name))
             target_point = self._waypoint_map[current_target_idx + 1]
             self._set_target_point(robot_name, target_point)
