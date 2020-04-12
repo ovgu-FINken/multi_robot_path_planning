@@ -87,11 +87,12 @@ def publish_start_position(_namespace, _positions):
     for robot_id in range(number_of_robots):
         name = _namespace + str(robot_id) + "/" + \
             names.TopicNames.START_POSITION.value
-        pub = topic_handler.PublishingHandler(name, Point)
+        pub = topic_handler.PublishingHandler(name, Point, 1)
         # NOT single_shot=True
         # otherwise the publisher will wait until the movement_controller subscribes the topic (very slow and does not work when default_movement = false!)
         pub.publish(_positions[robot_id], single_shot=False)
-
+        rospy.loginfo("Published start pos %f, %f, %f of robot %f", _positions[robot_id][0],_positions[robot_id][1], _positions[robot_id][2], robot_id)
+        # TODO adding frquency and threads: https://answers.ros.org/question/9543/rospy-threading-model/
 
 ### __main__
 # constructor

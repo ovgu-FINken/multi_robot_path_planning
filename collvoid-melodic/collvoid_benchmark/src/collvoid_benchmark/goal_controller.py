@@ -4,6 +4,10 @@ import rospy
 from std_msgs.msg import Bool
 from geometry_msgs.msg import Point
 
+import yaml
+import os
+import rospkg
+
 from benchmark.src import movement
 from benchmark.src.utils import topic_handler
 from benchmark.src.utils import naming_scheme as names
@@ -20,6 +24,8 @@ def callback_start_pos(data, args):
     """
     global start_pos, pos_received_flag
     start_pos[args[0]] = [data.x, data.y, data.z]
+    rospy.loginfo("Received start pos: %f, %f, %f of robot %f",
+                  data.x, data.y, data.z, args[0])
     pos_received_flag[args[0]] = True
 
 
@@ -98,21 +104,43 @@ def _apply_end_procedure(_robot_id):
     if end_procedure == 'despawn':
         # is handled by spawning controller
         pass
+
     elif end_procedure == 'stay':
         # do nothing
         pass
-    elif end_procedure == 'idle':
-        # up to the user
-        pos = [1.8, 0, 0]
-        move_controller[_robot_id].move_to(pos, quiet=False)
 
-        pass
+    elif end_procedure == 'idle':
+        '''
+        @brief: robots moving to start position by reading out the param files created by formation calculator
+        '''
+        file_name = "robot_" + str(_robot_id) + "_params.yaml"
+        # get the file path for benchmark pkg
+        rospack = rospkg.RosPack()
+        pkg_path = rospack.get_path('benchmark')
+        file_path = os.path.join(str(pkg_path), "config", file_name)
+        rospy.loginfo("Reading from file %s", str(file_path))
+
+        pos = []
+        for n in range(number_of_robots):
+            pos.append([0.0, 0.0, 0.0])
+        with open(file_path, 'r') as stream:
+            try:
+                data_loaded = yaml.load(stream)
+                # x = data_loaded.get("")
+                x = float(data_loaded["pose_x"])
+                y = float(data_loaded["pose_y"])
+                z = float(data_loaded["pose_z"])
+                pos[_robot_id] = [x, y, z] # IndexError: list assignment index out of range
+            except yaml.YAMLError as exc:
+                print(exc)
+        move_controller[_robot_id].move_to(pos[_robot_id], quiet=False)
+
     elif end_procedure == 'start':
         move_controller[_robot_id].move_to(
-            start_pos[_robot_id], quiet=False)
+            start_pos[_robot_id], quiet = False)
 
 
-def update_movement(_number_of_robots, frequency=0.5):
+def update_movement(_number_of_robots, frequency = 0.5):
     """ Updates the movement to the target points.
     :param _number_of_robots:
     :param frequency:
@@ -123,7 +151,7 @@ def update_movement(_number_of_robots, frequency=0.5):
             if robot_id in robot_targets:
                 if not robot_finished[robot_id]:
                     move_controller[robot_id].move_to(
-                        robot_targets[robot_id], quiet=False)
+                        robot_targets[robot_id], quiet = False)
                 else:
                     _apply_end_procedure(robot_id)
         rospy.Rate(frequency).sleep()
@@ -140,19 +168,19 @@ def wait_for_pos():
 
 ### main ###
 # variables
-move_controller = {}
-robot_targets = {}
-robot_finished = {}
-start_pos = {}
-pos_received_flag = {}
+move_controller={}
+robot_targets={}
+robot_finished={}
+start_pos={}
+pos_received_flag={}
 
 # initialise node
-rospy.init_node(names.NodeNames.MOVEMENT_CONTROLLER.value, anonymous=True)
+rospy.init_node(names.NodeNames.MOVEMENT_CONTROLLER.value, anonymous = True)
 
 # params
-namespace = rospy.get_param('namespace')
-number_of_robots = rospy.get_param('number_of_robots')
-end_procedure = rospy.get_param('end_procedure')
+namespace=rospy.get_param('namespace')
+number_of_robots=rospy.get_param('number_of_robots')
+end_procedure=rospy.get_param('end_procedure')
 
 # setups
 setup_subscribers(namespace, number_of_robots)

@@ -160,7 +160,8 @@ class WayPointManager:
             return False
         if robot_name not in self._target_point.keys():
             return False
-        if self._target_point[robot_name].count(self._waypoint_map[1]) - 1 >= self._rounds:
+        # The count() is a built-in function in Python. It will return you the count of a given element in the list. 
+        if self._target_point[robot_name].count(self._waypoint_map[1]) - 1 >= self._rounds: 
             return True
         return False
 

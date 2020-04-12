@@ -7,7 +7,6 @@
 # @todo:
 #################################################
 
-
 # source
 # shellcheck source=src/lib.sh
 source ~/.bashrc
@@ -24,13 +23,14 @@ DEFAULT_MOVEMENT=False
 tmux new-session -s $SESSION_NAME -d
 
 # settings
-if [ $USE_SETTINGS_FILE == True ] ; then
+if [ $USE_SETTINGS_FILE == True ]; then
   tmux rename-window -t $SESSION_NAME "settings"
   tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark settings.launch" C-m
 fi
+read -t 1
 
 # world
-if [ $USE_SETTINGS_FILE == True ] ; then
+if [ $USE_SETTINGS_FILE == True ]; then
   NUM=$((++NUM))
   tmux new-window -t $SESSION_NAME -n "world"
   tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark world.launch use_settings_file:=$USE_SETTINGS_FILE" C-m
@@ -50,7 +50,7 @@ tmux new-window -t $SESSION_NAME -n "waypoints"
 tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark waypoints.launch use_settings_file:=$USE_SETTINGS_FILE" C-m
 
 # movement
-if [ $DEFAULT_MOVEMENT == True ] ; then
+if [ $DEFAULT_MOVEMENT == True ]; then
   NUM=$((++NUM))
   tmux new-window -t $SESSION_NAME -n "movement"
   tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark movement.launch" C-m
@@ -62,14 +62,14 @@ tmux new-window -t $SESSION_NAME -n "evaluation"
 tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark evaluation.launch" C-m
 
 # rviz
-if [ $ENABLE_RVIZ == True ] ; then
+if [ $ENABLE_RVIZ == True ]; then
   NUM=$((++NUM))
   tmux new-window -t $SESSION_NAME -n "rviz"
   tmux send-keys -t $SESSION_NAME:$NUM "roslaunch turtlebot3_gazebo turtlebot3_gazebo_rviz.launch" C-m
 fi
 
 # rqt
-if [ $ENABLE_RQT == True ] ; then
+if [ $ENABLE_RQT == True ]; then
   NUM=$((++NUM))
   tmux new-window -t $SESSION_NAME -n "rqt"
   tmux send-keys -t $SESSION_NAME:$NUM "rqt" C-m
