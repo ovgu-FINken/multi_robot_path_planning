@@ -11,7 +11,6 @@ This README helps you with the ***setup and usage*** of the code. If you are loo
 - [Getting Started](#Getting-Started)
   - [Requirements](#Requirements)
   - [Installation](#Installation)
-  - [Built With](#Built-With)
   - [Launching and Testing](#Launching-and-Testing)
 - [Common Errors](#Common-Errors)
 - [Execution with Benchmark]()
@@ -22,8 +21,6 @@ This README helps you with the ***setup and usage*** of the code. If you are loo
 <!-- TOC END -->
 ## Getting Started
 ### Requirements
-*What things you need to install the software and how to install them*
-
 - Ubuntu 18.04
 - ROS melodic
 - Gazebo
@@ -33,35 +30,62 @@ This README helps you with the ***setup and usage*** of the code. If you are loo
 
 ### Installation
 *A step by step series of examples that tell you how to get a development env running. End with an example of getting some data out of the system.*
-1. clone the repository
-2. TODO
-
-
-### Built with 
-[Catkin Tools: ](https://catkin-tools.readthedocs.io/en/latest/verbs/catkin_build.html)
-`catkin build`
+  1. Clone the DrivingSwarm repository: 
+  ```
+  ~$ git clone https://github.com/ovgu-FINken/DrivingSwarm.git
+  ```
+  2. Navigate into the workspace: 
+  ```
+  ~$ cd DrivingSwarm/src
+  ```
+  3. Checkout the pathplanning branch:
+  ```
+  ~/DrivingSwarm/src$ git checkout origin/pathplanning 
+  ```
+  4. Execute:
+  ```
+  ~/DrivingSwarm/src$ gitman update
+  ```
+  5. Navigate into the pathplanning repo: 
+   ```
+   ~/DrivingSwarm/src$ cd pathplanning
+   ```
+  6. (Checkout the collvoid branch): 
+   ```
+   ~/DrivingSwarm/src/pathplanning$ git checkout origin/collvoid
+  ```
+  7. Build your workspace with [Catkin Tools: ](https://catkin-tools.readthedocs.io/en/latest/verbs/catkin_build.html)
+  ```
+  ~/DrivingSwarm/src/pathplanning$ catkin build
+  ```
 
 ### Launching and Testing
-Start the standard script like in the example below. For setting the number of robots, please, make use of the respective flag "-n" (default value = 4).
+1. Start the standard collvoid script like in the example below. For setting the number of robots, please, make use of the respective flag "-n" (default value = 4).
+  ```
+  ~/DrivingSwarm/src/pathplanning$ cd collvoid-melodic/collvoid_turtlebot/scripts/
+  ~/DrivingSwarm/src/pathplanning/collvoid-melodic/collvoid_turtlebot/scripts$ ./collvoid_std.sh -n 3
+  ```
+
+2. After the collvoid_std.sh has started completely, run the following script for testing (again, set the number of robots):
 ```
-~/DrivingSwarm/src/pathplanning$ cd collvoid-melodic/collvoid_turtlebot/scripts/
-~/DrivingSwarm/src/pathplanning$ ./collvoid_std.sh -n 3
+~/DrivingSwarm/src/pathplanning/collvoid-melodic/collvoid_turtlebot/scripts$ ./test.sh -n 3`
 ```
 
 ## Common Errors
 TODO
 
 ## Execution with Benchmark
-1. Start the benchmark script (benchmark.sh)
-2. Wait until the spawner has finished (robots should appear in Gazebo)
+1. Start the benchmark script
+```
+~/DrivingSwarm/src/pathplanning/benchmark/scripts$ ./benchmark.sh
+```
+2. Wait until the spawner has finished (robots should appear in Gazebo), otherwise kill the process with `./kill.sh` and return to 1.
 3. Start the collvoid_benchmark script (see example below)
-
-
-*Note*, that the number of robots has to be **equivalent** to the number defined in the benchmark (benchmark/settings/settings.json). Therefore, make use of the respective flag "-n" like in the example below (default value = 4). 
 ```
-~/DrivingSwarm/src/pathplanning$ cd collvoid-melodic/collvoid_turtlebot/scripts/
-~/DrivingSwarm/src/pathplanning$ ./collvoid_benchmark.sh -n 5
+~/DrivingSwarm/src/pathplanning/collvoid-melodic/collvoid_turtlebot/scripts$ ./collvoid_benchmark.sh -n 5
 ```
+
+*Note*: The number of robots has to be **equivalent** to the number defined in the benchmark (`benchmark/settings/settings.json`). Therefore, make use of the flag "-n" like in the example above (default value = 4). 
 
 ## Authors
 Nele Traichel
@@ -69,7 +93,7 @@ Nele Traichel
 
 ## License
 Due to the usage of external code and libraries this project is (partially?) licensed under:
-- BSD license (multi_robot_collision_avoidance)
+- BSD license 
 - proprietary license ([RVO2 library](http://gamma.cs.unc.edu/RVO2/documentation/2.0/))
 
 ## Acknowledgments

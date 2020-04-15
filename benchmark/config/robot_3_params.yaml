@@ -2,7 +2,7 @@ auto_drive: 'False'
 model: burger
 name: '3'
 namespace: tb3_
-pose_x: '1.7'
-pose_y: '0.7'
+pose_x: '1.5'
+pose_y: '1.1'
 pose_z: '0.0'
 simulate: 'True'
