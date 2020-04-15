@@ -13,7 +13,7 @@ This README helps you with the ***setup and usage*** of the code. If you are loo
   - [Installation](#Installation)
   - [Launching and Testing](#Launching-and-Testing)
 - [Common Errors](#Common-Errors)
-- [Execution with Benchmark]()
+- [Execution with Benchmark](#Execution-with-Benchmark)
 - [Authors](#Authors)
 - [License](#License)
 - [Acknowledgments](#Acknowledgments)
