@@ -29,7 +29,6 @@ This README helps you with the ***setup and usage*** of the code. If you are loo
 - [PyYAML](https://pypi.org/project/PyYAML/): with `pip install PyYAML` (alternatively, see [here](https://pyyaml.org/wiki/PyYAML))
 
 ### Installation
-*A step by step series of examples that tell you how to get a development env running. End with an example of getting some data out of the system.*
   1. Clone the DrivingSwarm repository: 
   ```
   ~$ git clone https://github.com/ovgu-FINken/DrivingSwarm.git
@@ -60,32 +59,39 @@ This README helps you with the ***setup and usage*** of the code. If you are loo
   ```
 
 ### Launching and Testing
-1. Start the standard collvoid script like in the example below. For setting the number of robots, please, make use of the respective flag "-n" (default value = 4).
+1. Start the standard collvoid script and set the **number of robots** simply by appending it (default value = 4, see example below.).
   ```
   ~/DrivingSwarm/src/pathplanning$ cd collvoid-melodic/collvoid_turtlebot/scripts/
-  ~/DrivingSwarm/src/pathplanning/collvoid-melodic/collvoid_turtlebot/scripts$ ./collvoid_std.sh -n 3
+  ~/DrivingSwarm/src/pathplanning/collvoid-melodic/collvoid_turtlebot/scripts$ ./collvoid_std.sh 3
   ```
 
-2. After the collvoid_std.sh has started completely, run the following script for testing (again, set the number of robots):
+2. After the collvoid_std.sh has finished th setup successfully, run the following script for testing it (set the **same** number of robots):
 ```
-~/DrivingSwarm/src/pathplanning/collvoid-melodic/collvoid_turtlebot/scripts$ ./test.sh -n 3`
+~/DrivingSwarm/src/pathplanning/collvoid-melodic/collvoid_turtlebot/scripts$ ./test.sh 3`
+```
+
+3. You can stop all the processes with:
+```
+~/DrivingSwarm/src/pathplanning/collvoid-melodic/collvoid_turtlebot/scripts$ ./kill.sh`
 ```
 
 ## Common Errors
 TODO
 
 ## Execution with Benchmark
-1. Start the benchmark script
+1. Set the number of robots in the settings file of the benchmark (`benchmark/settings/settings.json`, e.g. 5)
+2. Start the benchmark script
 ```
 ~/DrivingSwarm/src/pathplanning/benchmark/scripts$ ./benchmark.sh
 ```
-2. Wait until the spawner has finished (robots should appear in Gazebo), otherwise kill the process with `./kill.sh` and return to 1.
-3. Start the collvoid_benchmark script (see example below)
+3. Wait until the spawner has finished (robots should appear in Gazebo), otherwise kill the process with `./kill.sh` and return to 2.
+
+4. Start the collvoid_benchmark script. Append the correct number of robots (see example below)
+*Note: The number of robots has to be **equivalent** to the number defined in the benchmark settings.* 
 ```
-~/DrivingSwarm/src/pathplanning/collvoid-melodic/collvoid_turtlebot/scripts$ ./collvoid_benchmark.sh -n 5
+~/DrivingSwarm/src/pathplanning/collvoid-melodic/collvoid_turtlebot/scripts$ ./collvoid_benchmark.sh 5
 ```
 
-*Note*: The number of robots has to be **equivalent** to the number defined in the benchmark (`benchmark/settings/settings.json`). Therefore, make use of the flag "-n" like in the example above (default value = 4). 
 
 ## Authors
 Nele Traichel

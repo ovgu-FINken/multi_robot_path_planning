@@ -10,12 +10,14 @@
 # source
 #source ~/.bashrc
 
-# script parameters
+#### script parameters
 SESSION_NAME="collvoid"
 NUM=0
 MAPPING=${MAPPING:=amcl}
 WORLD=""
-NUM_ROBOT=3
+# set the number of robots
+NUM_ROBOT=4
+NUM_ROBOT=$1
 
 # start tmux
 tmux new-session -s $SESSION_NAME -d
@@ -34,8 +36,6 @@ tmux send-keys -t $SESSION_NAME:$NUM "roslaunch collvoid_turtlebot map_server.la
 #####
 X=0
 while [ $X -lt $NUM_ROBOT ]; do
-  X=$((X + 1))
-
   # localisation
   NUM=$((++NUM))
   tmux new-window -t $SESSION_NAME -n "amcl_${X}"
@@ -46,12 +46,9 @@ while [ $X -lt $NUM_ROBOT ]; do
   tmux new-window -t $SESSION_NAME -n "move_base_${X}"
   tmux send-keys -t $SESSION_NAME:$NUM "roslaunch collvoid_turtlebot move_base_dwa.launch robot_name:=tb3_${X}" C-m
   read -t 3
-done
 
-# goal ???
-#NUM=$((++NUM))
-#tmux new-window -t $SESSION_NAME -n "waypoints"
-#tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark waypoints.launch use_settings_file:=$USE_SETTINGS_FILE" C-m
+  X=$((X + 1))
+done
 
 #### rviz
 NUM=$((++NUM))

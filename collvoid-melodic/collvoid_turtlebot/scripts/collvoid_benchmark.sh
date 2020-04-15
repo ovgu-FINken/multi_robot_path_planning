@@ -10,20 +10,19 @@
 # source
 #source ~/.bashrc
 
-# script parameters
+#### script parameters
 SESSION_NAME="collvoid"
 NUM=0
 MAPPING=${MAPPING:=amcl}
 WORLD=""
-NUM_ROBOT=3
+# set the number of robots
+NUM_ROBOT=4
+NUM_ROBOT=$1
 
 # start tmux
 tmux new-session -s $SESSION_NAME -d
 
-#### simulation incl. spawn
-# NUM=$((++NUM))
-# tmux new-window -t $SESSION_NAME -n "world_and_spawn"
-# tmux send-keys -t $SESSION_NAME:$NUM "roslaunch collvoid_turtlebot simulation_simple.launch" C-m
+#### simulation incl. spawn is done by benchmark
 
 ##### map
 NUM=$((++NUM))
