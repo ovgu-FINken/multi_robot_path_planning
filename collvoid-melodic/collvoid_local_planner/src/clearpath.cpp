@@ -176,6 +176,7 @@ namespace collvoid {
                   const std::vector<Vector2> &footprint2, Vector2 &vel2) {
         //std::vector<Vector2> mink_sum = minkowskiSum(footprint1, footprint2);
         //std::vector<Vector2> empty;
+        ROS_INFO("Creating HRVO 1");
         VO result = createRVO(position1, footprint1, vel1, position2, footprint2, vel2);
 
 
@@ -289,7 +290,7 @@ namespace collvoid {
 
     VO createHRVO(Vector2 &position1, double radius1, Vector2 &vel1, Vector2 &position2, double radius2,
                   Vector2 &vel2) {
-
+        ROS_INFO("Creating HRVO 2");
         VO result = createRVO(position1, radius1, vel1, position2, radius2, vel2);
 
         Vector2 rel_velocity = vel1 - vel2;
@@ -312,6 +313,7 @@ namespace collvoid {
     }
 
     VO createTruncVO(VO &vo, double time) {
+        // ROS_INFO("Creating truncated VO"); // DEBUGGING
         VO result;
         result.point = vo.point;
         result.left_leg_dir = vo.left_leg_dir;
@@ -441,6 +443,7 @@ namespace collvoid {
                                 const std::vector<Line> &additional_constraints, const Vector2 &pref_vel,  const Vector2 &cur_vel,
                                 double max_speed, bool use_truncation
     ){
+        ROS_INFO("Creating Clearpath-Samples");
         if (!isWithinAdditionalConstraints(additional_constraints, pref_vel)) {
             for(Line line: additional_constraints) {
                 VelocitySample pref_vel_sample;
@@ -788,6 +791,7 @@ namespace collvoid {
         for (int i = 0; i < (int) convex_hull.size(); i++) {
             result.push_back(convex_hull[i].point);
         }
+        // ROS_INFO("Returning Minkowski Sum"); // Debugging
         return result;
 
     }
@@ -806,6 +810,7 @@ namespace collvoid {
     // Note: the last point in the returned list is the same as the first one.
     //Wikipedia Monotone chain...
     std::vector<ConvexHullPoint> convexHull(std::vector<ConvexHullPoint> P, bool sorted) {
+        // ROS_INFO("Creating convex hull");
         int n = P.size(), k = 0;
         std::vector<ConvexHullPoint> result(2 * n);
 

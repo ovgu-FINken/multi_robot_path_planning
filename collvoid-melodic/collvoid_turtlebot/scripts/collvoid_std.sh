@@ -15,9 +15,34 @@ SESSION_NAME="collvoid"
 NUM=0
 MAPPING=${MAPPING:=amcl}
 WORLD=""
-# set the number of robots
-NUM_ROBOT=4
-NUM_ROBOT=$1
+NUM_ROBOT_DEFAULT=4
+
+## set the number of robots
+helpFunction() {
+  echo ""
+  echo "In case you want to change the number of robots, please specify the amount like shown below:"
+  echo "$0 -n <number of robots>"
+  echo -e "\t e.g. -n 3"
+  echo ""
+  # exit 1 # Exit script after printing help
+}
+
+while getopts "n:" opt; do
+  case "$opt" in
+  n) NUM_ROBOT="$OPTARG" ;;
+  ?) helpFunction ;; # Print helpFunction in case parameter is non-existent
+  esac
+done
+
+# Print helpFunction in case parameters are empty
+if [ -z "$NUM_ROBOT" ]; then
+  echo ""
+  echo "Warning: No parameter value specified. Will use default value of ${NUM_ROBOT_DEFAULT} robots."
+  helpFunction
+  NUM_ROBOT=$NUM_ROBOT_DEFAULT
+else
+  echo "Collvoid starts with ${NUM_ROBOT} robots."
+fi
 
 # start tmux
 tmux new-session -s $SESSION_NAME -d
@@ -36,6 +61,7 @@ tmux send-keys -t $SESSION_NAME:$NUM "roslaunch collvoid_turtlebot map_server.la
 #####
 X=0
 while [ $X -lt $NUM_ROBOT ]; do
+  X=$((X + 1))
   # localisation
   NUM=$((++NUM))
   tmux new-window -t $SESSION_NAME -n "amcl_${X}"
@@ -47,7 +73,6 @@ while [ $X -lt $NUM_ROBOT ]; do
   tmux send-keys -t $SESSION_NAME:$NUM "roslaunch collvoid_turtlebot move_base_dwa.launch robot_name:=tb3_${X}" C-m
   read -t 3
 
-  X=$((X + 1))
 done
 
 #### rviz

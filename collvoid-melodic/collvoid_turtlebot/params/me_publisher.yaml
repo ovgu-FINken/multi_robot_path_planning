@@ -3,3 +3,5 @@ collvoid:
   controlled: true
   eps: 0.7
   publish_me_frequency: 10
+  # robot_radius: 0.105 ??
+  # footprint: ??

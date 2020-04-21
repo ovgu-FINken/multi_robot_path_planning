@@ -151,7 +151,6 @@ namespace collvoid_local_planner {
         costmap_ros_->getLayeredCostmap()->updateMap(0, 0, 0);
         costmap_ros_->updateMap();
         //ros::Duration(0.5).sleep()/home/nele/DrivingSwarm/src/pathplanning/collvoid-melodic/collvoid_local_planner/src/ROSAgent.cpp: In member function ‘bool collvoid::ROSAgent::getTwistServiceCB(collvoid_local_planner::GetCollvoidTwist::Request&, collvoid_local_planner::GetCollvoidTwist::Response&)’:
-;
         return true;
     }
 

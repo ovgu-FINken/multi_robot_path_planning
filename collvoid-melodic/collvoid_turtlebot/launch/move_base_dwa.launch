@@ -4,9 +4,8 @@
     <arg name="robot_name" default="tb3_1" />
 
     <group ns="/$(arg robot_name)">
-
         <!-- move_base -->
-        <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen" >
+        <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">            <!--for debugging additionally append: launch-prefix="gdbserver :1234"-->
             <rosparam command="load" file="$(find collvoid_turtlebot)/params/costmap_common_params.yaml" ns="local_costmap" />
             <rosparam command="load" file="$(find collvoid_turtlebot)/params/costmap_common_params.yaml" ns="global_costmap" />
             <rosparam command="load" file="$(find collvoid_turtlebot)/params/local_costmap_params.yaml" />
@@ -17,11 +16,7 @@
             <!-- Overwrite robot specific paramters -->
             <!-- https://answers.ros.org/question/61377/local-planner-creation/ -->
             <param name="base_local_planner" value="collvoid_dwa_local_planner/DWAPlannerROS" />
-            <!-- <param name="base_local_planner" value="collvoid_local_planner/CollvoidLocalPlanner" /> -->
-            <!--<param name="base_global_planner" value="global_planner/GlobalPlanner" />-->
             <param name="base_global_planner" value="navfn/NavfnROS" />
-
-            <!-- <param name="use_polygon_footprint" value=true /> -->
 
             <!-- /from uncertainty grid move_base launch file-->
             <param name="global_costmap/obstacle_layer/scan/sensor_frame" value="$(arg robot_name)/base_scan" />
@@ -33,25 +28,21 @@
             <param name="local_costmap/robot_base_frame" value="$(arg robot_name)/base_footprint" />
             <param name="local_costmap/global_frame" value="$(arg robot_name)/odom" />
             <!-- from uncertainty grid move_base launch file/ -->
+
             <param name="CollvoidScoring/global_frame_id" value="map"/>
             <param name="DWAPlannerROS/global_frame_id" value="map"/>
 
-            <!-- <remap from="map" to="/map"/> -->
-            <!-- <remap from="cmd_vel" to="/$(arg robot_name)/navigation_velocity_smoother/raw_cmd_vel"/> -->
             <remap from="odom" to="/$(arg robot_name)/odom"/>
-            <!-- <remap from="scan" to="/$(arg robot_name)/scan_filtered"/> -->
-            <!--<param name="base_global_planner" value="collvoid_simple_global_planner/CollvoidSimpleGlobalPlanner" />-->
         </node>
 
-        <rosparam command="load" file="$(find collvoid_turtlebot)/params/me_publisher_turtle.yaml"/>
+        <rosparam command="load" file="$(find collvoid_turtlebot)/params/me_publisher.yaml"/>
         <rosparam command="load" file="$(find collvoid_turtlebot)/params/collvoid_common.yaml" ns="collvoid" />
         <param name="collvoid/base_frame" value="$(arg robot_name)/base_link"/>
         <param name="collvoid/global_frame_id" value="map"/>
-        <!-- <param name="collvoid/base_frame" value="base_link" /> -->
 
+        <!-- Position sharing -->
         <node pkg="collvoid_local_planner" type="MePublisher" name="me_publisher" output="screen" />
         <node pkg="collvoid_controller" type="position_share_controller.py" name="position_share_controller" output="screen" />
     </group>
-        <!-- <node pkg="collvoid_benchmark" type="goal_controller.py" name="goal_controller" output="screen" clear_params="true"/> -->
 </launch>
   

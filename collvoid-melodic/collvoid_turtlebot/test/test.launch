@@ -1,0 +1,13 @@
+<launch>
+    <!-- Arguments -->
+    <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
+    <arg name="robot_name" default="tb3_1" />
+
+    <group ns="/$(arg robot_name)">
+        <!-- waypoint controller -->
+        <node pkg="..." type="..." name="..." output="screen">
+        </node>
+    </group>
+    <node pkg="collvoid_benchmark" type="goal_controller.py" name="goal_controller" output="screen" clear_params="true"/>
+</launch>
+  

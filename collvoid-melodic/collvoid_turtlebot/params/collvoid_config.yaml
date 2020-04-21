@@ -1,10 +1,9 @@
-
 CollvoidLocalPlanner:
   use_obstacles: true
   use_dwa_scoring: true
   prune_plan: true
 
-  time_to_holo: 0.4
+  time_to_holo: 0.4 # holo = holonomic?
   min_error_holo: 0.02
   max_error_holo: 0.10
   left_pref: -0.05

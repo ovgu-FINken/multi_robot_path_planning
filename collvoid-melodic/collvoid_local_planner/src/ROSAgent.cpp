@@ -183,13 +183,19 @@ void ROSAgent::init(ros::NodeHandle private_nh, tf2_ros::Buffer *tf, base_local_
             sim_period_ = 0.05;
         }
     }
-    ROS_INFO("Sim period is set to %.2f", sim_period_);
+    ROS_INFO("[ROSAgent]Sim period is set to %.2f", sim_period_);
     //holo_robot
     getParam(private_nh, "holo_robot", &holo_robot_);
     if (!holo_robot_)
+    {
+        ROS_INFO("Non-holonomic robot");
         getParam(private_nh, "wheel_base", &wheel_base_);
+    }
     else
+    {
+        ROS_INFO("Holonomic robot");
         wheel_base_ = 0.0;
+    }
 
     getParam(private_nh, "robot_radius", &fixed_robot_radius_);
 
@@ -522,7 +528,7 @@ void ROSAgent::computeNewVelocity(Vector2 pref_velocity, geometry_msgs::Twist &c
                 base_local_planner::TrajectoryCostFunction *loop_critic_p = *loop_critic;
                 if (loop_critic_p->prepare() == false)
                 {
-                    ROS_WARN("A scoring function failed to prepare");
+                    ROS_ERROR("A scoring function failed to prepare");
                 }
             }
             geometry_msgs::PoseStamped goal_pose = global_plan_.back();
