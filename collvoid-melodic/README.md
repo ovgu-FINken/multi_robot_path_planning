@@ -15,6 +15,7 @@ This README helps you with the ***setup and usage*** of the code. If you are loo
     - [Installation](#installation)
     - [Launching and Testing](#launching-and-testing)
   - [Common Errors](#common-errors)
+    - [RVIZ crashes sometimes](#rviz-crashes-sometimes)
   - [Execution with Benchmark](#execution-with-benchmark)
   - [Authors](#authors)
   - [License](#license)
@@ -101,6 +102,13 @@ This README helps you with the ***setup and usage*** of the code. If you are loo
 There are some race conditions that can cause trouble. 
 That's why, killing and restarting the script can help in many cases.
 
+### RVIZ crashes sometimes
+rviz: /build/ogre-1.9-B6QkmW/ogre-1.9-1.9.0+dfsg1/OgreMain/include/OgreAxisAlignedBox.h:252: void Ogre::AxisAlignedBox::setExtents(const Ogre::Vector3&, const Ogre::Vector3&): Assertion `(min.x <= max.x && min.y <= max.y && min.z <= max.z) && "The minimum corner of the
+box must be less than or equal to maximum corner"' failed.
+[rviz-2] process has died [pid 12114, exit code -6, cmd /opt/ros/melodic/lib/rviz/rviz -d /home/nele/DrivingSwarm/src/turtlebot3_simulations/turtlebot3_gazebo/rviz/turtlebot3_gazebo_model.rviz __name:=rviz __log:=/home/nele/.ros/log/1d46e2a6-848e-11ea-92fe-1063c87c0687/rviz-2.log].
+log file: /home/nele/.ros/log/1d46e2a6-848e-11ea-92fe-1063c87c0687/rviz-2*.log
+
+
 ## Execution with Benchmark
 1. Set the number of robots in the settings file of the benchmark (`benchmark/settings/settings.json`, e.g. 5)
 
@@ -111,7 +119,7 @@ That's why, killing and restarting the script can help in many cases.
 
 3. Wait until the spawner has finished (robots should appear in Gazebo), otherwise kill the process with `./kill.sh` and return to 2.
 
-4. Start the collvoid_benchmark script. Set the flag "-n" with the correct number of robots (otherwise the number will be set to 3)
+4. Start the collvoid_benchmark script. Set the flag "-n" with the correct number of robots.
 
     *Note: The number of robots has to be **equivalent** to the number defined in the benchmark settings.* 
     ```

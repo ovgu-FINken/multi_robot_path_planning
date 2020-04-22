@@ -10,3 +10,10 @@ local_costmap:
   width: 4.0
   height: 4.0
   resolution: 0.02 # 0.05
+
+## layer for inflating the obstacles (as safety measure)
+# http://wiki.ros.org/costmap_2d/hydro/inflation
+inflation_layer:
+  enabled: true
+  cost_scaling_factor: 5.0 # exponential rate at which the obstacle cost drops off
+  inflation_radius: 0.25

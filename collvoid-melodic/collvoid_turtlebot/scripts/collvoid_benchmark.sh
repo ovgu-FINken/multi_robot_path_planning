@@ -20,11 +20,11 @@ NUM_ROBOT_DEFAULT=3
 ## set the number of robots
 helpFunction() {
   echo ""
-  echo "In case you want to change the number of robots, please specify the amount like shown below:"
-  echo "$0 -n <number of robots>"
-  echo -e "\t e.g. -n 3"
+  echo "Please specify the parameter like shown below:"
+  echo "$0 -n <same number of robots like in benchmark settings>"
+  echo -e "\t e.g. -n 4"
   echo ""
-  # exit 1 # Exit script after printing help
+  exit 1 # Exit script after printing help
 }
 
 while getopts "n:" opt; do
@@ -37,9 +37,11 @@ done
 # Print helpFunction in case parameters are empty
 if [ -z "$NUM_ROBOT" ]; then
   echo ""
-  echo "Warning: No parameter value specified. Will use default value of ${NUM_ROBOT_DEFAULT} robots."
+  echo "Warning: No parameter value specified."
   helpFunction
   NUM_ROBOT=$NUM_ROBOT_DEFAULT
+else
+  echo "Collvoid starts with ${NUM_ROBOT} robots."
 fi
 
 # start tmux
