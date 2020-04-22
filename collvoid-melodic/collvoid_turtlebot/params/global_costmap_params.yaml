@@ -3,7 +3,7 @@ global_costmap:
   robot_base_frame: base_footprint
   update_frequency: 3.0
   publish_frequency: 1.0
-  transform_tolerance: 0.3
+  # transform_tolerance: 0.3
 
 ## layer for inflating the obstacles (as safety measure)
 # http://wiki.ros.org/costmap_2d/hydro/inflation
