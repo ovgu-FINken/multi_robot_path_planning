@@ -4,7 +4,7 @@ local_costmap:
 
   update_frequency: 3.0
   publish_frequency: 2.0
-  transform_tolerance: 0.5  # 0.3
+  transform_tolerance: 0.3
 
   rolling_window: true
   width: 4.0

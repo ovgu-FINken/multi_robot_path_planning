@@ -83,13 +83,14 @@ This README helps you with the ***setup and usage*** of the code. If you are loo
    a. Add the **Tool Properties** to the panels (Menu -> Panels -> Tool Properties)
 
    b. In Tool Properties, change the Topic name of the 2D Nav Goal to **/tb3_x/move_base_simple/goal**
+   where x is the id of the robot **(0, 1, or 2)**
 
    c. Place the **2D Nav Goal arrow** at a point and direction of your choice.
    *(Attention: Do not place it on an obstacle or any other black area!)*
 
     ![Image](/collvoid-melodic/res/ScreenshotRVIZ_edited.png)
 
-3.  For a successful test, all robots should move to the defined goal.
+3.  For a successful test, the robot should move to the defined goal.
 
 4.  You can stop all the processes with:
     ```

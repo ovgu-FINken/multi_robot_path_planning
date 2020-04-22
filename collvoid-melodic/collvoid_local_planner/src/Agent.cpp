@@ -130,7 +130,7 @@ void Agent::computeAgentVOs()
         {
             // ROS_INFO("[computeAgentVOs] Using polygon footprint"); // debugging
             // ROS_INFO("[computeAgentVOs] Agent's velocity absolute (1): %f", abs(agent->velocity_)); //debugging
-            ROS_INFO("[computeAgentVOs1] EPSILON = %f", EPSILON); // always EPSILON = 0.00100 
+            // ROS_INFO("[computeAgentVOs1] EPSILON = %f", EPSILON); // always EPSILON = 0.00100 
 
             if (agent->controlled_ && abs(agent->velocity_) > EPSILON)
             {
@@ -163,7 +163,7 @@ void Agent::computeAgentVOs()
         {
             // ROS_INFO("[computeAgentVOs] Agent's velocity absolute (2): %f", abs(agent->velocity_)); //debugging
             // ROS_INFO("[computeAgentVOs] Using controlled and truncation"); //debugging
-            ROS_INFO("[computeAgentVOs2] EPSILON = %f", EPSILON); // always EPSILON = 0.00100 
+            // ROS_INFO("[computeAgentVOs2] EPSILON = %f", EPSILON); // always EPSILON = 0.00100 
 
             if (abs(agent->velocity_) < EPSILON)
             {
