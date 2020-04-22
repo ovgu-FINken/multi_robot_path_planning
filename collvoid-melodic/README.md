@@ -79,8 +79,6 @@ This README helps you with the ***setup and usage*** of the code. If you are loo
 
 2. After the collvoid_std.sh has finished its setup successfully, you can use the simple goal interface in **RVIZ** for testing it.
    Therefore,
-    [![ -----> see short video](https://github.com/ovgu-FINken/multi_robot_path_planning/collvoid-melodic/res/ScreenshotRVIZ.png)](https://github.com/ovgu-FINken/multi_robot_path_planning/collvoid-melodic/res/ScreencastRVIZ.webm)
-    showing the instructions below:
 
    a. Add the **Tool Properties** to the panels (Menu -> Panels -> Tool Properties)
 
@@ -89,8 +87,9 @@ This README helps you with the ***setup and usage*** of the code. If you are loo
    c. Place the **2D Nav Goal arrow** at a point and direction of your choice.
    *(Attention: Do not place it on an obstacle or any other black area!)*
 
+    [[/res/ScreenshotRVIZ.xcf]]
 
-3.  For a successful test, all robots should move like shown in the video above. 
+3.  For a successful test, all robots should move to the defined goal.
 
 4.  You can stop all the processes with:
     ```
