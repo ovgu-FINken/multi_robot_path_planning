@@ -87,7 +87,7 @@ This README helps you with the ***setup and usage*** of the code. If you are loo
    c. Place the **2D Nav Goal arrow** at a point and direction of your choice.
    *(Attention: Do not place it on an obstacle or any other black area!)*
 
-    [[/res/ScreenshotRVIZ_edited.png]]
+[[/res/ScreenshotRVIZ_edited.png]]
 
 3.  For a successful test, all robots should move to the defined goal.
 
