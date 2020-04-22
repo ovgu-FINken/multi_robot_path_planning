@@ -399,6 +399,7 @@ void MePublisher::getFootprint(ros::NodeHandle private_nh)
     std::vector<geometry_msgs::Point> footprint;
     if (private_nh.searchParam("footprint", full_param_name))
     {
+        ROS_INFO("Using footprint.");
         XmlRpc::XmlRpcValue footprint_xmlrpc;
         private_nh.getParam(full_param_name, footprint_xmlrpc);
         if (footprint_xmlrpc.getType() == XmlRpc::XmlRpcValue::TypeString &&
@@ -414,8 +415,10 @@ void MePublisher::getFootprint(ros::NodeHandle private_nh)
     }
     else
     {
+        ROS_INFO("Making footprint from radius.");
         footprint = costmap_2d::makeFootprintFromRadius(radius_);
     }
+
     for (size_t i = 0; i < footprint.size(); ++i)
     {
         geometry_msgs::Point32 pt;
