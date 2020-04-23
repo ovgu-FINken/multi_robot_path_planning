@@ -68,7 +68,12 @@ This README helps you with the ***setup and usage*** of the code. If you are loo
       ```
 
 ### Launching and Testing
-1. Start the standard collvoid script like shown below. Due to the simulation launcher the **number of robots** is set to 3 by default 
+1. Start the roscore
+   ```
+   ~$ roscore
+   ```
+
+2. Start the standard collvoid script like shown below. Due to the simulation launcher the **number of robots** is set to 3 by default 
 
     *Note: In the future, in case the simulation is enhanced such that an arbitrary amount of robots can be spawned, 
       you can speficy the number by using the flag "-n".*
@@ -78,7 +83,7 @@ This README helps you with the ***setup and usage*** of the code. If you are loo
     ~/DrivingSwarm/src/pathplanning/collvoid-melodic/collvoid_turtlebot/scripts$ ./collvoid_std.sh
     ```
 
-2. After the collvoid_std.sh has finished its setup successfully, you can use the simple goal interface in **RVIZ** for testing it.
+3. After the collvoid_std.sh has finished its setup successfully, you can use the simple goal interface in **RVIZ** for testing it.
    Therefore,
 
    a. Add the **Tool Properties** to the panels (Menu -> Panels -> Tool Properties)
@@ -91,9 +96,9 @@ This README helps you with the ***setup and usage*** of the code. If you are loo
 
     ![Image](/collvoid-melodic/res/ScreenshotRVIZ_edited.png)
 
-3.  For a successful test, the robot should move to the defined goal.
+4.  For a successful test, the robot should move to the defined goal.
 
-4.  You can stop all the processes with:
+5.  You can stop all the processes with:
     ```
     ~/DrivingSwarm/src/pathplanning/collvoid-melodic/collvoid_turtlebot/scripts$ ./kill.sh`
     ```
@@ -110,16 +115,21 @@ log file: /home/nele/.ros/log/1d46e2a6-848e-11ea-92fe-1063c87c0687/rviz-2*.log
 
 
 ## Execution with Benchmark
-1. Set the number of robots in the settings file of the benchmark (`benchmark/settings/settings.json`, e.g. 5)
+1. Start the **roscore**
+   ```
+   ~$ roscore
+   ```
 
-2. Start the benchmark script
+2. Set the number of robots in the **settings** file of the benchmark (`benchmark/settings/settings.json`, e.g. 5)
+
+3. Start the **benchmark** script
     ```
     ~/DrivingSwarm/src/pathplanning/benchmark/scripts$ ./benchmark.sh
     ```
 
-3. Wait until the spawner has finished (robots should appear in Gazebo), otherwise kill the process with `./kill.sh` and return to 2.
+4. **Wait** until the spawner has finished (robots should appear in Gazebo), otherwise kill the process with `./kill.sh` and return to 2.
 
-4. Start the collvoid_benchmark script. Set the flag "-n" with the correct number of robots.
+5. Start the **collvoid_benchmark** script. Set the flag "-n" with the correct number of robots.
 
     *Note: The number of robots has to be **equivalent** to the number defined in the benchmark settings.* 
     ```
