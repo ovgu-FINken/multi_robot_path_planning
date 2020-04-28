@@ -56,8 +56,8 @@
 
 #include <base_local_planner/odometry_helper_ros.h>
 
-#include <collvoid_dwa_local_planner/dwa_planner_ros.h>
-#include <dwa_local_planner/dwa_planner.h>
+// #include <collvoid_dwa_local_planner/dwa_planner_ros.h>
+#include <collvoid_dwa_local_planner/dwa_planner.h>
 
 namespace collvoid_dwa_local_planner
 {

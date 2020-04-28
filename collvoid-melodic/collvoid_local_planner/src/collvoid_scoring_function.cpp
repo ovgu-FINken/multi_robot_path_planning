@@ -185,7 +185,7 @@ double CollvoidScoringFunction::scoreTrajectory(Trajectory &traj)
     traj.getEndpoint(x, y, th);
     traj.getPoint(0, x_s, y_s, th_s);
 
-    //ROS_INFO("start orientation / end %f, %f", th_s,th);
+    // ROS_INFO("start orientation / end %f, %f", th_s,th);
 
     double time_diff = (int)traj.getPointsSize() * traj.time_delta_;
     double vel_x, vel_y, vel_theta;
@@ -236,8 +236,8 @@ double CollvoidScoringFunction::scoreTrajectory(Trajectory &traj)
     v.cost = cost;
     points.push_back(v);
 
-    //ROS_INFO("Collvoid Scoring costs: %f for vector %f, %f, speed %f, ang %f time dif %f", cost, test_vel.x(), test_vel.y(), vel_x, vel_theta, traj.time_delta_);
-
+    // ROS_INFO("Collvoid Scoring costs: %f for vector %f, %f, speed %f, ang %f time dif %f", cost, test_vel.x(), test_vel.y(), vel_x, vel_theta, traj.time_delta_);
+    
     //traj.x
 
     return cost;
