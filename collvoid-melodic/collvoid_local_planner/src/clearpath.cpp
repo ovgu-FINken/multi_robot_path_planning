@@ -176,7 +176,7 @@ namespace collvoid {
                   const std::vector<Vector2> &footprint2, Vector2 &vel2) {
         //std::vector<Vector2> mink_sum = minkowskiSum(footprint1, footprint2);
         //std::vector<Vector2> empty;
-        ROS_INFO("Creating HRVO by using footprints.");
+        // ROS_INFO("Creating HRVO by using footprints.");
         VO result = createRVO(position1, footprint1, vel1, position2, footprint2, vel2);
 
 
@@ -291,7 +291,7 @@ namespace collvoid {
     // with radius
     VO createHRVO(Vector2 &position1, double radius1, Vector2 &vel1, Vector2 &position2, double radius2,
                   Vector2 &vel2) {
-        ROS_INFO("Creating HRVO by using radius.");
+        // ROS_INFO("Creating HRVO by using radius.");
         VO result = createRVO(position1, radius1, vel1, position2, radius2, vel2);
 
         Vector2 rel_velocity = vel1 - vel2;
