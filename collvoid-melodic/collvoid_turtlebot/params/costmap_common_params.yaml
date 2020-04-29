@@ -5,13 +5,12 @@ footprint_padding: 0.0
 
 transform_tolerance: 0.3
 
-##### layers of local and global map
 plugins:
   - { name: static_layer, type: "costmap_2d::StaticLayer" }
   - { name: obstacle_layer, type: "costmap_2d::VoxelLayer" }
-  # - { name: stationary_robots, type: "costmap_2d::ObstacleLayer" }
+  - { name: stationary_robots, type: "costmap_2d::ObstacleLayer" }
   - { name: inflation_layer, type: "costmap_2d::InflationLayer" }
-
+  
 ## layer for static obstacles (derived from map published by map server)
 # http://wiki.ros.org/costmap_2d/hydro/staticmap
 static_layer:
@@ -46,3 +45,33 @@ obstacle_layer:
 
 ## layer for inflating the obstacles is defined map-wise
 # http://wiki.ros.org/costmap_2d/hydro/inflation
+
+stationary_robots:
+  enabled: true
+  max_obstacle_height:  2.0
+  obstacle_range: 2
+  raytrace_range: 4.0
+  publish_voxel_map: true
+
+  observation_sources: python_node python_node_clearing
+  python_node_clearing:
+    data_type: LaserScan
+    topic: clearing_scan
+    observation_persistence: 0.0
+    marking: false
+    clearing: true
+
+  python_node:
+    data_type: PointCloud2
+    topic: stationary_robots
+    observation_persistence: 0.0
+    marking: true
+    clearing: false
+
+
+## layer for inflating the obstacles (as safety measure)
+# http://wiki.ros.org/costmap_2d/hydro/inflation
+inflation_layer:
+  enabled: true
+  cost_scaling_factor: 10.0 #exponential rate at which the obstacle cost drops off
+  inflation_radius: 0.25    

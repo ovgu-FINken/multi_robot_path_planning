@@ -13,7 +13,7 @@ holonomic_robot: false
 DWAPlannerROS:
   # Robot Configuration Parameters
   max_vel_x: 0.22
-  min_vel_x: -0.06 #-0.22
+  min_vel_x: -0.22
 
   max_vel_y: 0.0
   min_vel_y: 0.0
@@ -22,7 +22,7 @@ DWAPlannerROS:
   max_vel_trans: 0.22
   min_vel_trans: 0.05 #0.11
 
-  max_vel_theta: 1.5 #2.75
+  max_vel_theta: 2.75 #1.5
   min_vel_theta: 0.2 #1.37
 
   acc_lim_x: 2.5
@@ -46,7 +46,7 @@ DWAPlannerROS:
   # Trajectory Scoring Parameters
   path_distance_bias: 24 #32.0 # weighting for how much it should stick to the global path plan
   goal_distance_bias: 32 #20.0 # weighting for how much it should attempt to reach its goal
-  occdist_scale: 0.12 #min. 0.1 set not too low !!! weighting for how much the controller should avoid obstacles
+  occdist_scale: 0.1 #min.0.1, don not set too low !!! weighting for how much the controller should avoid obstacles
   collvoid_scale: 48.0
   forward_point_distance: 0.1 #0.325 # how far along to place an additional scoring point
   stop_time_buffer: 0.2 # amount of time a robot must stop in before colliding for a valid traj.
@@ -54,7 +54,7 @@ DWAPlannerROS:
   max_scaling_factor: 0.2 # how much to scale the robot's footprint when at speed.
 
   # Oscillation Prevention Parameters
-  oscillation_reset_dist: 0.05
+  oscillation_reset_dist: 0.05 #0.15
 
   # Debugging
   publish_traj_pc: true
@@ -84,13 +84,13 @@ recovery_behaviors:
     }
 
 conservative_reset:
-  layer_names: ["obstacle_layer"]
+  layer_names: ["stationary _robots"]
   reset_distance: 2.0
 
 aggressive_reset:
-  layer_names: ["obstacle_layer"]
+  layer_names: ["stationary _robots"]
   reset_distance: 0.38
 
 really_aggressive_reset:
-  layer_names: ["obstacle_layer"]
+  layer_names: ["obstacle_layer", "stationary_robots"]
   reset_distance: 0.25
