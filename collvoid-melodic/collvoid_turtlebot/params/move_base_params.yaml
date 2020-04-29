@@ -13,7 +13,7 @@ holonomic_robot: false
 DWAPlannerROS:
   # Robot Configuration Parameters
   max_vel_x: 0.22
-  min_vel_x: -0.22
+  min_vel_x: 0.06 #-0.22
 
   max_vel_y: 0.0
   min_vel_y: 0.0
@@ -22,7 +22,7 @@ DWAPlannerROS:
   max_vel_trans: 0.22
   min_vel_trans: 0.05 #0.11
 
-  max_vel_theta: 1.5 #2.75
+  max_vel_theta: 2.0 #2.75
   min_vel_theta: 0.2 #1.37
 
   acc_lim_x: 2.5

@@ -285,7 +285,7 @@ bool DWAPlannerROS::dwaComputeVelocityCommands(geometry_msgs::PoseStamped &globa
   std::vector<geometry_msgs::PoseStamped> local_plan;
   if (path.cost_ < 0)
   {
-    ROS_DEBUG_NAMED("collvoid_dwa_local_planner",
+    ROS_WARN_THROTTLE_NAMED(5,"collvoid_dwa_local_planner",
                     "The dwa local planner failed to find a valid plan, cost functions discarded all candidates. This can mean there is an obstacle too close to the robot.");
     local_plan.clear();
     publishLocalPlan(local_plan);
