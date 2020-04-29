@@ -114,7 +114,7 @@ void MePublisher::amclPoseArrayWeightedCallback(const collvoid_msgs::PoseArrayWe
     pcl::PointCloud<pcl::PointXYZ> result;
     pcl::PointCloud<pcl::PointXYZ> pc;
     pc.header.frame_id = msg->header.frame_id;
-    pc.header.stamp = pcl_conversions::toPCL(ros::Time(0));
+    pc.header.stamp = pcl_conversions::toPCL(ros::Time::now()); //formerly: ros::Time(0) --> probably caused extrapolation errors
     for (int i = 0; i < (int)msg->poses.size(); i++)
     {
         pcl::PointXYZ p;

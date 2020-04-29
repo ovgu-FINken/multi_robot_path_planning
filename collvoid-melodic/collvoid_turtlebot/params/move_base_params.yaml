@@ -22,7 +22,7 @@ DWAPlannerROS:
   max_vel_trans: 0.22
   min_vel_trans: 0.05 #0.11
 
-  max_vel_theta: 2.75 #1.5
+  max_vel_theta: 1.5 #2.75
   min_vel_theta: 0.2 #1.37
 
   acc_lim_x: 2.5
@@ -36,16 +36,16 @@ DWAPlannerROS:
 
   # Forward Simulation Parameters
   sim_time: 1.7
-  vx_samples: 10 #20
+  vx_samples: 20
   vy_samples: 0
-  vth_samples: 30 #40
+  vth_samples: 40
   controller_frequency: 10.0
   prune_plan: true
 
 
   # Trajectory Scoring Parameters
-  path_distance_bias: 24 #32.0 # weighting for how much it should stick to the global path plan
-  goal_distance_bias: 32 #20.0 # weighting for how much it should attempt to reach its goal
+  path_distance_bias: 24.0 #32.0 # weighting for how much it should stick to the global path plan
+  goal_distance_bias: 20.0 #32.0 # weighting for how much it should attempt to reach its goal
   occdist_scale: 0.1 #min.0.1, don not set too low !!! weighting for how much the controller should avoid obstacles
   collvoid_scale: 48.0
   forward_point_distance: 0.1 #0.325 # how far along to place an additional scoring point
@@ -84,11 +84,11 @@ recovery_behaviors:
     }
 
 conservative_reset:
-  layer_names: ["stationary _robots"]
+  layer_names: ["stationary _robots"] #TODO why not obstacle, too?
   reset_distance: 2.0
 
 aggressive_reset:
-  layer_names: ["stationary _robots"]
+  layer_names: ["stationary _robots"] #TODO why not obstacle, too?
   reset_distance: 0.38
 
 really_aggressive_reset:

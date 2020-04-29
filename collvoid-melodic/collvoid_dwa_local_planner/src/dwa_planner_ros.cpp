@@ -266,7 +266,7 @@ bool DWAPlannerROS::dwaComputeVelocityCommands(geometry_msgs::PoseStamped &globa
 
   // call with updated footprint
   base_local_planner::Trajectory path = dp_->findBestPath(global_pose, robot_vel, drive_cmds, costmap_ros_->getRobotFootprint()); //COLLVOID
-  //ROS_ERROR("Best: %.2f, %.2f, %.2f, %.2f", path.xv_, path.yv_, path.thetav_, path.cost_);
+  ROS_INFO_THROTTLE(5,"Best: %.2f, %.2f, %.2f, %.2f", path.xv_, path.yv_, path.thetav_, path.cost_);
 
   /* For timing uncomment
     gettimeofday(&end, NULL);
@@ -330,7 +330,7 @@ bool DWAPlannerROS::computeVelocityCommands(geometry_msgs::Twist &cmd_vel)
   std::vector<geometry_msgs::PoseStamped> transformed_plan;
   if (!planner_util_.getLocalPlan(current_pose_, transformed_plan))
   {
-    ROS_ERROR("[DWA Local Planer] Could not get local plan");
+    ROS_ERROR("[DWA Local Planner] Could not get local plan");
     return false;
   }
 
@@ -407,7 +407,7 @@ bool DWAPlannerROS::freeOfObstacles(const geometry_msgs::PoseStamped &robot_pose
     geometry_msgs::PoseStamped robot_pose_msg;
     tf2::convert(robot_pose, robot_pose_msg);
     distance = distance2D(trajectory[i], robot_pose_msg);
-    if (distance < 0.2 || distance > obstacle_max_distance_) // TODO use footprint!
+    if (distance < 0.2 || distance > obstacle_max_distance_)
       continue;
 
     double x = trajectory[i].pose.position.x;
