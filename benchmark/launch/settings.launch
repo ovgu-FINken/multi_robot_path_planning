@@ -1,0 +1,15 @@
+<!--
+@author:    Johann Schmidt
+@date:      2019
+@brief:     Script used to handle the settings.
+@todo:
+-->
+
+<launch>
+    <node pkg="benchmark"
+          type="settings_publisher.py"
+          name="settings_publisher"
+          output="screen"
+          clear_params="true">
+    </node>
+</launch>

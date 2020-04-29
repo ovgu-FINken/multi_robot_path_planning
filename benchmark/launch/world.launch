@@ -1,0 +1,29 @@
+<!--
+@author:    Johann Schmidt
+@date:      November 2019
+@brief:     This will generate a gazebo world.
+@todo:
+-->
+
+<launch>
+    <arg name="world" default="turtlebot3_world.world"/>
+    <arg name="use_settings_file" default="False"/>
+
+    <include file="$(find gazebo_ros)/launch/empty_world.launch"
+             if="$(eval not arg('use_settings_file'))">
+        <arg name="world_name" value="$(find turtlebot3_gazebo)/worlds/$(arg world)"/>
+        <arg name="paused" value="false"/>
+        <arg name="use_sim_time" value="true"/>
+        <arg name="gui" value="true"/>
+        <arg name="headless" value="false"/>
+        <arg name="debug" value="false"/>
+    </include>
+
+    <node pkg="benchmark"
+          type="world_creator.py"
+          name="world_creator"
+          output="screen"
+          clear_params="true"
+          if="$(eval arg('use_settings_file'))">
+    </node>
+</launch>

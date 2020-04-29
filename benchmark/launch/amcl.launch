@@ -1,9 +1,14 @@
+<!--
+Starts the map server.
+-->
+
 <launch>
   <!-- Arguments -->
   <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
   <arg name="open_rviz" default="false"/>
   <arg name="move_forward_only" default="false"/>
   <arg name="robot_name" default="tb3_0"/>
+
   <group ns="/$(arg robot_name)">
     <node name="map_server" pkg="map_server" type="map_server" args="$(find tracking_certainty_grid)/maps/world.yaml">
         <remap from="/map" to="/$(arg robot_name)/map"/>
@@ -16,7 +21,7 @@
   <remap from="/scan"    to="/$(arg robot_name)/scan"/>
   <include file="$(find turtlebot3_navigation)/launch/amcl.launch">
   </include>
-  <param name="amcl/base_frame_id" value="$(arg robot_name)/base_footprint"/>
+  <param name="amcl/base_frame_id" value="$(arg robot_name)/base_link"/>
   <param name="amcl/odom_frame_id" value="$(arg robot_name)/odom"/>
   <param name="amcl/global_frame_id" value="$(arg robot_name)/map"/>
   <param name="/use_sim_time" value="true"/>

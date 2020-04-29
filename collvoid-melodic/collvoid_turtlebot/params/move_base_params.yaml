@@ -1,0 +1,94 @@
+#### general move base params
+shutdown_costmaps: false
+controller_frequency: 10.0
+planner_patience: 5.0
+controller_patience: 15.0
+conservative_reset_dist: 3.0
+# planner_frequency: 5.0
+oscillation_timeout: 10.0
+oscillation_distance: 0.2
+holonomic_robot: false
+
+#### DWA params
+DWAPlannerROS:
+  # Robot Configuration Parameters
+  max_vel_x: 0.22
+  min_vel_x: -0.06 #-0.22
+
+  max_vel_y: 0.0
+  min_vel_y: 0.0
+
+  # The velocity when robot is moving in a straight line
+  max_vel_trans: 0.22
+  min_vel_trans: 0.05 #0.11
+
+  max_vel_theta: 1.5 #2.75
+  min_vel_theta: 0.2 #1.37
+
+  acc_lim_x: 2.5
+  acc_lim_y: 0.0
+  acc_lim_theta: 3.2
+
+  # Goal Tolerance Parametes
+  xy_goal_tolerance: 0.08
+  yaw_goal_tolerance: 0.5
+  latch_xy_goal_tolerance: false
+
+  # Forward Simulation Parameters
+  sim_time: 1.5
+  vx_samples: 20
+  vy_samples: 0
+  vth_samples: 40
+  controller_frequency: 10.0
+
+  # Trajectory Scoring Parameters
+  path_distance_bias: 32.0 # weighting for how much it should stick to the global path plan
+  goal_distance_bias: 20.0 # wighting for how much it should attempt to reach its goal
+  occdist_scale: 0.15 #min. 0.1 set not too low !!! weighting for how much the controller should avoid obstacles
+  forward_point_distance: 0.325 # how far along to place an additional scoring point
+  stop_time_buffer: 0.2 # amount of time a robot must stop in before colliding for a valid traj.
+  scaling_speed: 0.25 # absolute velocity at which to start scaling the robot's footprint
+  max_scaling_factor: 0.2 # how much to scale the robot's footprint when at speed.
+
+  # Oscillation Prevention Parameters
+  oscillation_reset_dist: 0.05
+
+  # Debugging
+  publish_traj_pc: true
+  publish_cost_grid_pc: true
+
+  # Trajectory Scoring Parameters
+  collvoid_scale: 20.0
+
+#### global planner
+NavfnROS:
+  default_tolerance: 0.08
+
+#### Recovery
+recovery_behaviors:
+  - {
+      name: conservative_reset,
+      type: clear_costmap_recovery/ClearCostmapRecovery,
+    }
+  - { name: rotate_recovery, type: rotate_recovery/RotateRecovery }
+  - {
+      name: aggressive_reset,
+      type: clear_costmap_recovery/ClearCostmapRecovery,
+    }
+  - { name: rotate, type: rotate_recovery/RotateRecovery }
+  - {
+      name: really_aggressive_reset,
+      type: clear_costmap_recovery/ClearCostmapRecovery,
+    }
+
+conservative_reset:
+  layer_names: ["obstacle_layer"]
+  reset_distance: 2.0
+
+aggressive_reset:
+  layer_names: ["obstacle_layer"]
+  reset_distance: 0.38
+
+really_aggressive_reset:
+  layer_names: ["obstacle_layer"]
+  reset_distance: 0.25
