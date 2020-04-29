@@ -236,7 +236,7 @@ double CollvoidScoringFunction::scoreTrajectory(Trajectory &traj)
     v.cost = cost;
     points.push_back(v);
 
-    // ROS_INFO("Collvoid Scoring costs: %f for vector %f, %f, speed %f, ang %f time dif %f", cost, test_vel.x(), test_vel.y(), vel_x, vel_theta, traj.time_delta_);
+    ROS_INFO_THROTTLE(5,"Collvoid Scoring costs: %f for vector %f, %f, speed %f, ang %f time dif %f", cost, test_vel.x(), test_vel.y(), vel_x, vel_theta, traj.time_delta_);
     
     //traj.x
 

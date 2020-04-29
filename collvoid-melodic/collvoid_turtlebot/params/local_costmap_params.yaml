@@ -15,5 +15,5 @@ local_costmap:
 # http://wiki.ros.org/costmap_2d/hydro/inflation
 inflation_layer:
   enabled: true
-  cost_scaling_factor: 5.0 # exponential rate at which the obstacle cost drops off
+  cost_scaling_factor: 10.0 #exponential rate at which the obstacle cost drops off
   inflation_radius: 0.25
