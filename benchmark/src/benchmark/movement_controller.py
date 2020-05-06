@@ -53,7 +53,7 @@ def setup_move_controller(_namespace, _number_of_robots):
     """
     for robot_id in range(_number_of_robots):
         move_controller[robot_id] = movement.MovementController(
-            robot_name=str(robot_id), namespace=_namespace)
+            robot_name=str(robot_id), namespace=_namespace, waiting_time=0)
 
 
 def setup_subscribers(_namespace, _number_of_robots):
@@ -102,7 +102,7 @@ def _apply_end_procedure(_robot_id):
         # up to the user
         pass
     elif end_procedure == 'start':
-        move_controller[_robot_id].linear_move_to(
+        move_controller[_robot_id].move_to(
             start_pos[_robot_id], quiet=False)
 
 
@@ -116,7 +116,7 @@ def update_movement(_number_of_robots, frequency=0.5):
         for robot_id in range(_number_of_robots):
             if robot_id in robot_targets:
                 if not robot_finished[robot_id]:
-                    move_controller[robot_id].linear_move_to(
+                    move_controller[robot_id].move_to(
                         robot_targets[robot_id], quiet=False)
                 else:
                     _apply_end_procedure(robot_id)
