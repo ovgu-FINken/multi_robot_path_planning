@@ -110,3 +110,4 @@ class FormationHandler:
         """ Runs the computation process for a at way points formation
         and returns the positions and orientations.
         """
+        rospy.loginfo("There is no such formation specified!")

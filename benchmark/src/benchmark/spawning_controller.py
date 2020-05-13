@@ -107,6 +107,7 @@ namespace = rospy.get_param('namespace')
 position = rospy.get_param('position')
 orientation = rospy.get_param('orientation')
 formation = rospy.get_param('formation')
+distance = rospy.get_param('distance')
 end_procedure = rospy.get_param('end_procedure')
 rospy.loginfo("Spawn controller params finished.")
 
@@ -117,7 +118,7 @@ rospy.loginfo("Spawn controller subscriber init finished.")
 
 # calc formation (dense block etc.)
 positions, orientations = run_formation(
-    number_of_robots, position, orientation, formation)
+    number_of_robots, position, orientation, formation, distance)
 rospy.loginfo("Spawn controller calculating formation finished.")
 
 # publish starting positions and spawn

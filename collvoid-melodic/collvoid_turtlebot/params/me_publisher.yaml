@@ -1,5 +1,5 @@
 collvoid:
   holo_robot: false
-  controlled: true
+  controlled: true # for defining whether the truncation time is considered?
   eps: 0.7
   publish_me_frequency: 10
