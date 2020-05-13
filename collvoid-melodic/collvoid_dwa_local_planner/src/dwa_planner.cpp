@@ -391,7 +391,7 @@ base_local_planner::Trajectory DWAPlanner::findBestPath(
    * @param traj The container to write the result to
    * @param all_explored pass NULL or a container to collect all trajectories for debugging (has a penalty)
    */
-  scored_sampling_planner_.findBestTrajectory(result_traj_, &all_explored); // TODO display/print the trajectories and their costs
+  scored_sampling_planner_.findBestTrajectory(result_traj_, &all_explored);
 
   if (publish_traj_pc_)
   {

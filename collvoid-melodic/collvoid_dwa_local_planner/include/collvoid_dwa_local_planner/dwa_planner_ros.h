@@ -175,7 +175,7 @@ private:
   // << COLLVOID Trajectory free parameters
   double obstacle_max_distance_ = 1.0; //was 1.6
   size_t blocked_path_count_ = 0;
-  size_t max_blocked_paths_ = 20; // blocked_path_count_ can grow until this value before considering a path blocked
+  size_t max_blocked_paths_ = 15; // blocked_path_count_ can grow until this value before considering a path blocked
 
   inline double distance2D(const geometry_msgs::PoseStamped &p1, const geometry_msgs::PoseStamped &p2)
   {

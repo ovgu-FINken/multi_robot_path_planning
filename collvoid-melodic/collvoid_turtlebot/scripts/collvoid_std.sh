@@ -17,32 +17,9 @@ MAPPING=${MAPPING:=amcl}
 WORLD=""
 NUM_ROBOT_DEFAULT=3
 
-## set the number of robots
-helpFunction() {
-  echo ""
-  echo "In case you want to change the number of robots, please specify the amount like shown below:"
-  echo "$0 -n <number of robots>"
-  echo -e "\t e.g. -n 4"
-  echo ""
-  # exit 1 # Exit script after printing help
-}
-
-while getopts "n:" opt; do
-  case "$opt" in
-  n) NUM_ROBOT="$OPTARG" ;;
-  ?) helpFunction ;; # Print helpFunction in case parameter is non-existent
-  esac
-done
-
-# Print helpFunction in case parameters are empty
-if [ -z "$NUM_ROBOT" ]; then
-  echo ""
-  echo "No parameter value specified. Will use default value of ${NUM_ROBOT_DEFAULT} robots."
-  helpFunction
-  NUM_ROBOT=$NUM_ROBOT_DEFAULT
-else
-  echo "Collvoid starts with ${NUM_ROBOT} robots."
-fi
+## Note: there is no flag here because the number of robots cannot be increased in the simulation with the launch file this script is using.
+NUM_ROBOT=$NUM_ROBOT_DEFAULT
+echo "Collvoid starts with ${NUM_ROBOT} robots."
 
 # start tmux
 tmux new-session -s $SESSION_NAME -d
