@@ -84,13 +84,13 @@ recovery_behaviors:
     }
 
 conservative_reset:
-  layer_names: ["stationary _robots"] #TODO why not obstacle, too?
+  layer_names: ["obstacle_layer"] #"stationary_robots"
   reset_distance: 2.0
 
 aggressive_reset:
-  layer_names: ["stationary _robots"] #TODO why not obstacle, too?
+  layer_names: ["obstacle_layer"] #"stationary_robots"
   reset_distance: 0.38
 
-really_aggressive_reset:
-  layer_names: ["obstacle_layer", "stationary_robots"]
-  reset_distance: 0.25
+# really_aggressive_reset:
+#   layer_names: ["obstacle_layer", "stationary_robots"]
+#   reset_distance: 0.25
