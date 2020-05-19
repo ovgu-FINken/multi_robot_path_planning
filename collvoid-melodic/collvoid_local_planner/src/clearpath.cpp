@@ -680,9 +680,12 @@ namespace collvoid {
     double calculateVelCosts(const Vector2 &test_vel, const std::vector<VO> &truncated_vos, bool use_truncation) {
         double cost = 0.0;
         double COST_IN_VO = 2.0;
+        double truncVOsSize = truncated_vos.size();
+        // ROS_INFO("Number of truncated vos: %f", truncVOsSize); // DEBUGGING
         for (int j = 0; j < (int) truncated_vos.size(); j++) {
             if (isInsideVO(truncated_vos[j], test_vel, use_truncation)) {
-                cost += (truncated_vos.size() - j) * COST_IN_VO;
+                // ROS_INFO("Velocity is inside VO"); // DEBUGGING
+                cost += (truncated_vos.size() - j) * COST_IN_VO; // 6+
             }
         }
         return cost;
