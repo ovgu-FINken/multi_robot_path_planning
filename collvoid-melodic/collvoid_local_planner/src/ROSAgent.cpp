@@ -83,11 +83,11 @@ namespace collvoid
         double resolution = planner_util_->getCostmap()->getResolution();
         pdist_scale_ = config.path_distance_bias;
         // pdistscale used for both path and alignment, set  forward_point_distance to zero to discard alignment
-        path_costs_->setScale(resolution * pdist_scale_);
-        alignment_costs_->setScale(resolution * pdist_scale_);
+        path_costs_->setScale(resolution * pdist_scale_* 0.5);
+        alignment_costs_->setScale(resolution * pdist_scale_* 0.5);
 
-        goal_costs_->setScale(resolution * config.goal_distance_bias);
-        goal_front_costs_->setScale(resolution * config.goal_distance_bias);
+        goal_costs_->setScale(resolution * config.goal_distance_bias * 0.5);
+        goal_front_costs_->setScale(resolution * config.goal_distance_bias * 0.5);
 
         obstacle_costs_->setScale(resolution * config.occdist_scale);
 
@@ -149,18 +149,18 @@ namespace collvoid
 
         obstacle_costs_->setSumScores(sum_scores);
 
-        path_costs_->setScale(0);
+        // actually not necessary since the corresponding scoring functions are commented out
         goal_costs_->setScale(0);
         goal_front_costs_->setScale(0);
         alignment_costs_->setScale(0);
 
-        //obstacle check
+        // ****scoring functions****
         critics_.push_back((base_local_planner::TrajectoryCostFunction * &&) obstacle_costs_);   // discards trajectories that move into obstacles
-        critics_.push_back((base_local_planner::TrajectoryCostFunction * &&) goal_front_costs_); // prefers trajectories that make the nose go towards (local) nose goal
+        // critics_.push_back((base_local_planner::TrajectoryCostFunction * &&) goal_front_costs_); // prefers trajectories that make the nose go towards (local) nose goal
+        // critics_.push_back((base_local_planner::TrajectoryCostFunction * &&) alignment_costs_); // prefers trajectories that keep the robot nose on nose path
+        critics_.push_back((base_local_planner::TrajectoryCostFunction * &&) path_costs_);      // prefers trajectories on *global* path
+        // critics_.push_back((base_local_planner::TrajectoryCostFunction * &&) goal_costs_);      // prefers trajectories that go towards (local) goal, based on wave propagation
 
-        critics_.push_back((base_local_planner::TrajectoryCostFunction * &&) alignment_costs_); // prefers trajectories that keep the robot nose on nose path
-        critics_.push_back((base_local_planner::TrajectoryCostFunction * &&) path_costs_);      // prefers trajectories on global path
-        critics_.push_back((base_local_planner::TrajectoryCostFunction * &&) goal_costs_);      // prefers trajectories that go towards (local) goal, based on wave propagation
         std::vector<base_local_planner::TrajectorySampleGenerator *> generator_list;
         generator_list.push_back(&generator_);
         scored_sampling_planner_ = base_local_planner::SimpleScoredSamplingPlanner(generator_list, critics_);
@@ -1111,7 +1111,7 @@ namespace collvoid
         if (sq_dist > forward_point_distance_ * forward_point_distance_)
         {
             double resolution = planner_util_->getCostmap()->getResolution();
-            alignment_costs_->setScale(resolution * pdist_scale_);
+            alignment_costs_->setScale(resolution * pdist_scale_ * 0.5);
             // costs for robot being aligned with path (nose on path, not ju
             alignment_costs_->setTargetPoses(global_plan_);
         }

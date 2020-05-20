@@ -8,7 +8,7 @@ transform_tolerance: 0.3
 plugins:
   - { name: static_layer, type: "costmap_2d::StaticLayer" }
   - { name: obstacle_layer, type: "costmap_2d::VoxelLayer" }
-  # - { name: stationary_robots, type: "costmap_2d::ObstacleLayer" }
+  - { name: stationary_robots, type: "costmap_2d::ObstacleLayer" }
   - { name: inflation_layer, type: "costmap_2d::InflationLayer" }
   
 ## layer for static obstacles (derived from map published by map server)
@@ -46,27 +46,27 @@ obstacle_layer:
 ## layer for inflating the obstacles is defined map-wise
 # http://wiki.ros.org/costmap_2d/hydro/inflation
 
-# stationary_robots:
-#   enabled: true
-#   max_obstacle_height:  2.0
-#   obstacle_range: 2
-#   raytrace_range: 4.0
-#   publish_voxel_map: true
+stationary_robots:
+  enabled: true
+  max_obstacle_height:  2.0
+  obstacle_range: 3.0
+  raytrace_range: 3.5
+  publish_voxel_map: true
 
-#   observation_sources: python_node python_node_clearing
-#   python_node_clearing:
-#     data_type: LaserScan
-#     topic: clearing_scan
-#     observation_persistence: 0.0
-#     marking: false
-#     clearing: true
+  observation_sources: python_node python_node_clearing
+  python_node_clearing:
+    data_type: LaserScan
+    topic: clearing_scan
+    observation_persistence: 0.0
+    marking: false
+    clearing: true
 
-#   python_node:
-#     data_type: PointCloud2
-#     topic: stationary_robots
-#     observation_persistence: 0.0
-#     marking: true
-#     clearing: false
+  python_node:
+    data_type: PointCloud2
+    topic: stationary_robots
+    observation_persistence: 0.0
+    marking: true
+    clearing: false
 
 
 ## layer for inflating the obstacles (as safety measure)
