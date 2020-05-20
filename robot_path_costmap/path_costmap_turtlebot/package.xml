@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>RobotPathCostmap</name>
+  <name>path_costmap_turtlebot</name>
   <version>0.0.0</version>
-  <description>The RobotPathCostmap package</description>
+  <description>The path_costmap_turtlebot package</description>
 
   <maintainer email="patheplanning@todo.todo">patheplanning</maintainer>
   <!-- One license tag required, multiple allowed, one license per tag -->
@@ -14,18 +14,9 @@
 
   <!-- DEPENDENCIES -->
   <buildtool_depend>catkin</buildtool_depend>
-  <depend>angles</depend>
-  <depend>roscpp</depend>
-  <depend>geometry_msgs</depend>
-  <depend>nav_msgs</depend>
-  <depend>costmap_2d</depend>
-  <depend>string</depend>
-  <depend>list</depend>
-  <depend>cmath</depend>
-
 
   <!-- EXPORT -->
 <export>
-  <costmap_2d plugin="${prefix}/navigation_paths_plugin.xml" />
+ 
 </export>
 </package>

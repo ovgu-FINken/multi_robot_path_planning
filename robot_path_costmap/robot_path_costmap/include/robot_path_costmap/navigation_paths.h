@@ -32,7 +32,7 @@ private:
     int* inflation_size;
     int* filter_size;
     int* filter_strength;
-    virtual void NavigationPathLayer::resetCosts();
+    // virtual void NavigationPathLayer::resetCosts();
     virtual costmap_2d::Costmap2D* NavigationPathLayer::createCostHillChain(std::vector<std::vector<int>> positions, costmap_2d::Costmap2D* costmap);
     virtual void NavigationPathLayer::createFilter();
     virtual costmap_2d::Costmap2D* NavigationPathLayer::useFilter(std::vector<int> position, costmap_2d::Costmap2D* costmap);

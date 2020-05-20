@@ -7,9 +7,7 @@
 
 using namespace std;
 
-// ToDo: Libs einbinden
 // ToDo: launch-file
-// ToDo: Package.xml
 
 // http://docs.ros.org/api/nav_msgs/html/msg/Path.html
 
@@ -117,7 +115,7 @@ void NavigationPathLayer::updateCosts()
     costmap_2d::Costmap2D* costmap = layered_costmap_->getCostmap();
     // function call only if given path changed
     // reset costs to 0
-    resetCosts();
+    // resetCosts();
 
     for(nav_msgs::Path& path: navigation_path_layers::paths_list_)
     {
@@ -171,10 +169,10 @@ void NavigationPathLayer::inflate_side()
 	// create costs on other robots' right side to always pass them on the other
 }
 
-void NavigationPathLayer::resetCosts()
+/* void NavigationPathLayer::resetCosts()
 {
     // gesamte Layer auf 0 zurücksetzen
-}
+} */
 
 costmap_2d::Costmap2D* NavigationPathLayer::createCostHillChain(list<vector<int>> positions, costmap_2d::Costmap2D costmap) // Pfad übergeben
 {
