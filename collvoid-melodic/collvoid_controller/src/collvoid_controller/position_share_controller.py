@@ -242,7 +242,7 @@ if __name__ == '__main__':
     global_frame = rospy.get_param('~global_frame', '/map')
     last_seen_threshold = rospy.get_param('~last_seen_threshold', 2.)
     Z_HEIGHT = 0.
-    STATIC_SCALE = rospy.get_param("~static_scale", 0.6) #0.95
+    STATIC_SCALE = rospy.get_param("~static_scale", 0.95)
 
     controller = PositionShareController()
     rate = rospy.Rate(10)
