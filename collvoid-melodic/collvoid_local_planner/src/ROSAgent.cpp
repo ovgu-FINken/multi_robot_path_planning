@@ -475,6 +475,7 @@ geometry_msgs::Twist ROSAgent::computeVelocityCommand(Vector2 waypoint, double g
 
 void ROSAgent::computeNewVelocity(Vector2 pref_velocity, geometry_msgs::Twist &cmd_vel)
 {
+    ROS_INFO("[ROSAgent] Computing new velocity");
     if (!getMe())
     {
         ROS_WARN("Could not get me from service");
@@ -528,7 +529,7 @@ void ROSAgent::computeNewVelocity(Vector2 pref_velocity, geometry_msgs::Twist &c
                 base_local_planner::TrajectoryCostFunction *loop_critic_p = *loop_critic;
                 if (loop_critic_p->prepare() == false)
                 {
-                    ROS_ERROR("A scoring function failed to prepare");
+                    ROS_ERROR("[ROSAgent] A scoring function failed to prepare");
                 }
             }
             geometry_msgs::PoseStamped goal_pose = global_plan_.back();

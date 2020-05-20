@@ -173,8 +173,6 @@ private:
      boost::mutex configuration_mutex_;
      std::string frame_id_;
      ros::Publisher traj_cloud_pub_;
-     // pcl::PointCloud<base_local_planner::MapGridCostPoint> *traj_cloud_; //COLLVOID
-     // pcl_ros::Publisher<base_local_planner::MapGridCostPoint> traj_cloud_pub_; //COLLVOID
      bool publish_cost_grid_pc_; ///< @brief Whether or not to build and publish a PointCloud
      bool publish_traj_pc_;
 

@@ -37,7 +37,7 @@ done
 # Print helpFunction in case parameters are empty
 if [ -z "$NUM_ROBOT" ]; then
   echo ""
-  echo "Warning: No parameter value specified."
+  echo "Error: No parameter value specified."
   helpFunction
   NUM_ROBOT=$NUM_ROBOT_DEFAULT
 else

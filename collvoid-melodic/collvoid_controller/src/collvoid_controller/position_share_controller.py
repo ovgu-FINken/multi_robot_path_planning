@@ -53,17 +53,20 @@ class PositionShareController(object):
         self.name = rospy.get_param('~name', self.name)
         rospy.loginfo("Position Share started with name: %s", self.name)
 
-        self.neighbors = {} # empty dictionary
+        self.neighbors = {}  # empty dictionary
         self.neighbors_lock = Lock()
         self.me = None
 
-        self.sensor_link = rospy.get_param("~base_frame_id", rospy.get_namespace()[1:] + "base_link")
+        self.sensor_link = rospy.get_param(
+            "~base_frame_id", rospy.get_namespace()[1:] + "base_link")
 
         self.cloud_header = Header()
         self.cloud_header.frame_id = self.sensor_link
-        self.point_cloud_pub = rospy.Publisher('stationary_robots', PointCloud2, queue_size=2)
+        self.point_cloud_pub = rospy.Publisher(
+            'stationary_robots', PointCloud2, queue_size=2)
 
-        self.clearing_laser_pub = rospy.Publisher('clearing_scan', LaserScan, queue_size=1)
+        self.clearing_laser_pub = rospy.Publisher(
+            'clearing_scan', LaserScan, queue_size=1)
         self.clearing_laser_scan = LaserScan()
         self.clearing_laser_scan.header.frame_id = self.sensor_link
         self.clearing_laser_scan.angle_min = -np.math.pi
@@ -76,7 +79,8 @@ class PositionShareController(object):
 
         # self.reset_srv = rospy.ServiceProxy('move_base/DWAPlannerROS/clear_local_costmap', Empty, persistent=True)
         # rospy.wait_for_service('move_base/DWAPlannerROS/clear_local_costmap', timeout=10.)
-        rospy.Subscriber('/position_share', PoseTwistWithCovariance, self.position_share_cb, queue_size=1)
+        rospy.Subscriber('/position_share', PoseTwistWithCovariance,
+                         self.position_share_cb, queue_size=1)
         rospy.Service('get_neighbors', GetNeighbors, self.get_neighbors_cb)
 
     def position_share_cb(self, msg):
@@ -112,7 +116,8 @@ class PositionShareController(object):
             time = rospy.Time.now()
             for name in self.neighbors:
                 if (time - self.neighbors[name]['last_seen']).to_sec() < last_seen_threshold:
-                    response.neighbors.append(self.create_msg(self.neighbors[name], time))
+                    response.neighbors.append(
+                        self.create_msg(self.neighbors[name], time))
             return response
 
     def create_msg(self, robot, time):
@@ -123,7 +128,8 @@ class PositionShareController(object):
         msg.controlled = robot['controlled']
         msg.holo_robot = robot['holo_robot']
         msg.twist = robot['twist']
-        msg.pose.pose = robot['position'].pose  #self.predict_pose(robot, time)
+        msg.pose.pose = robot['position'].pose  
+        # msg.pose.pose = self.predict_pose(robot, time) ##causes errors
         msg.footprint = robot['footprint']
         msg.radius = robot['radius']
         msg.holo_robot = robot['holo_robot']
@@ -140,7 +146,8 @@ class PositionShareController(object):
                 return
 
             my_pose = self.me.pose.pose
-            _, _, my_theta = tf.transformations.euler_from_quaternion(quat_array_from_msg(my_pose.orientation)) 
+            _, _, my_theta = tf.transformations.euler_from_quaternion(
+                quat_array_from_msg(my_pose.orientation))
 
             change = False
             for name in self.neighbors:
@@ -153,17 +160,20 @@ class PositionShareController(object):
                         self.neighbors[name]['stationary'] = True
 
                     cur_pose = self.neighbors[name]['position'].pose
-                    _, _, cur_theta = tf.transformations.euler_from_quaternion(quat_array_from_msg(cur_pose.orientation))
+                    _, _, cur_theta = tf.transformations.euler_from_quaternion(
+                        quat_array_from_msg(cur_pose.orientation))
 
-                    #rospy.loginfo("Neighbors' name: %s, position x: %d, y: %d", name, cur_pose.position.x, cur_pose.position.y) # debugging
-                    #rospy.loginfo("My position x: %d, y: %d", my_pose.position.x, my_pose.position.y) # debugging
+                    # rospy.loginfo("Neighbors' name: %s, position x: %d, y: %d", name, cur_pose.position.x, cur_pose.position.y) # debugging
+                    # rospy.loginfo("My position x: %d, y: %d", my_pose.position.x, my_pose.position.y) # debugging
 
                     relative_pose_x = cur_pose.position.x - my_pose.position.x
                     relative_pose_y = cur_pose.position.y - my_pose.position.y
 
-                    xform_foot = make_rotation_transformation(cur_theta - my_theta)
+                    xform_foot = make_rotation_transformation(
+                        cur_theta - my_theta)
                     xform_to_baselink = make_rotation_transformation(-my_theta)
-                    pos_rel = xform_to_baselink((relative_pose_x, relative_pose_y))
+                    pos_rel = xform_to_baselink(
+                        (relative_pose_x, relative_pose_y))
 
                     for p in self.neighbors[name]['footprint'].polygon.points:
                         p_x = p.x
@@ -174,7 +184,8 @@ class PositionShareController(object):
                         cloud_points.append((p_x, p_y, Z_HEIGHT))
                         for _ in range(5):
                             scale = random.uniform(0.98, 1.02)
-                            cloud_points.append((scale*p_x, scale*p_y, Z_HEIGHT))
+                            cloud_points.append(
+                                (scale*p_x, scale*p_y, Z_HEIGHT))
                 else:
                     if self.neighbors[name]['stationary']:
                         self.neighbors[name]['stationary'] = False
@@ -186,7 +197,9 @@ class PositionShareController(object):
                 self.clearing_laser_pub.publish(self.clearing_laser_scan)
 
             # publish point cloud data to "stationary_robots"
-            static_robots_cloud = pcl2.create_cloud_xyz32(self.cloud_header, cloud_points)
+            # rospy.Duration(30)
+            static_robots_cloud = pcl2.create_cloud_xyz32(
+                self.cloud_header, cloud_points)
             static_robots_cloud.header.stamp = self.me.header.stamp
             self.point_cloud_pub.publish(static_robots_cloud)
 
@@ -196,12 +209,14 @@ class PositionShareController(object):
 
         cur_pose = robot['position'].pose
 
-        r, p, cur_theta = tf.transformations.euler_from_quaternion(quat_array_from_msg(cur_pose.orientation))
+        r, p, cur_theta = tf.transformations.euler_from_quaternion(
+            quat_array_from_msg(cur_pose.orientation))
         v_x = robot['twist'].twist.linear.x
         v_y = robot['twist'].twist.linear.y
         v_th = robot['twist'].twist.angular.z
         delta_theta = v_th * time_delta
-        q = tf.transformations.quaternion_from_euler(r, p, cur_theta + delta_theta)
+        q = tf.transformations.quaternion_from_euler(
+            r, p, cur_theta + delta_theta)
         pose.orientation = Quaternion(*q)
 
         if False:
@@ -209,8 +224,10 @@ class PositionShareController(object):
                 pose.position.x = cur_pose.position.x + v_x * time_delta
                 pose.position.y = cur_pose.position.y + v_y * time_delta
             else:
-                pose.position.x = cur_pose.position.x + v_x * np.cos(cur_theta + delta_theta / 2.)
-                pose.position.y = cur_pose.position.y + v_x * np.sin(cur_theta + delta_theta / 2.)
+                pose.position.x = cur_pose.position.x + \
+                    v_x * np.cos(cur_theta + delta_theta / 2.)
+                pose.position.y = cur_pose.position.y + \
+                    v_x * np.sin(cur_theta + delta_theta / 2.)
         else:
             pose.position.x = cur_pose.position.x
             pose.position.y = cur_pose.position.y
