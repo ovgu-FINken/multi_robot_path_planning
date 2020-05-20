@@ -82,21 +82,41 @@ CollvoidLocalPlanner:
   holo_robot: false
   delete_observations: true
 
-  max_vel_x: 0.5
-  max_vel_th: 1.5
-  min_vel_x: 0.1
-  min_vel_th: 0.1
-  min_vel_theta_inplace: 0.5
-  min_vel_y: 0.01
-  max_vel_y: 0.1
-  max_vel_with_obstacles: 0.5
-  acc_lim_x: 1.0
+  # Robot Configuration Parameters
+  max_vel_x: 0.22
+  min_vel_x: 0.1 #-0.22
+
+  max_vel_y: 0.0
+  min_vel_y: 0.0
+
+  # The velocity when robot is moving in a straight line
+  max_vel_trans: 0.22
+  min_vel_trans: 0.11 #0.05
+
+  max_vel_theta: 1.5 #2.75
+  min_vel_theta: 0.5 #1.37
+
+  acc_lim_x: 1.0 #2.5
   acc_lim_y: 0.0
-  acc_lim_th: 1.0
-  footprint_radius: 0.17
-  inscribed_radius: 0.16
+  acc_lim_theta: 1.0 #3.2
+
+  # occdist_scale: 0.03
+
+  # max_vel_x: 0.5
+  # min_vel_x: 0.1
+  # max_vel_th: 1.5
+  # min_vel_th: 0.1
+  # min_vel_theta_inplace: 0.5
+  # min_vel_y: 0.01
+  # max_vel_y: 0.1
+  # max_vel_with_obstacles: 0.5
+  # acc_lim_x: 1.0
+  # acc_lim_y: 0.0
+  # acc_lim_th: 1.0
+  # footprint_radius: 0.17
+  # inscribed_radius: 0.16
   footprint: [[-0.105, -0.08], [-0.105, 0.08], [0.041, 0.105], [0.041, -0.105]]
-  robot_radius: 0.106
+  robot_radius: 0.105
 
 TrajectoryPlannerROS:
   max_vel_x: 0.50
