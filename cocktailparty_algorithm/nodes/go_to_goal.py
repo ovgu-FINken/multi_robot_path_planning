@@ -9,8 +9,7 @@ from sensor_msgs.msg import LaserScan
 from tf.transformations import euler_from_quaternion
 from math import pow, atan2, sqrt, radians, fabs, pi
 
-#TODO: Adjust Parameter!! Make it work for multiple robots.
-class Move:
+class Bug2:
 
     state_dict = {
         0: 'facing the goal',
@@ -19,76 +18,47 @@ class Move:
         3: 'goal reached'
     }
 
-    # Important: Step size (step_size) of robot has to be smaller than the radius of vision (vision_radius)
-    # minus the step upper bound (step_max) of each robot.
-
-    # With: rate = 20Hz, max_linear_velocity = 0.25m/s, step_max = 0,0125m, vision_radius = 3.5m
-    # s <= 3.5 - 0,0125 at every cycle
-
     def __init__(self, rate = 20, vision_radius = 3.5):
 
         rospy.init_node('go_to_goal', anonymous=True)
 
         self.robot_name = rospy.get_param('~robot_name')
 
-        self.velocity_publisher = rospy.Publisher(self.robot_name +  '/cmd_vel',
+        self.velocity_publisher = rospy.Publisher('cmd_vel',
                                                   Twist, queue_size=10)
 
-        self.pos_subscriber = rospy.Subscriber(self.robot_name + '/odom',
+        self.pos_subscriber = rospy.Subscriber('odom',
                                                 Odometry, self.update_odom)
 
-        self.scan_subscriber = rospy.Subscriber(self.robot_name + '/scan', LaserScan, self.update_laser)
+        self.finished_subscriber = rospy.Subscriber('benchmark/finished',
+                                                Bool, self.callback_finished)
 
-        #### BENCHMARK ####
-        self.start_pos_subscriber = rospy.Subscriber(self.robot_name + '/benchmark/start_pos', Point, self.callback_start_pos)
-        self.goal_subscriber = rospy.Subscriber(self.robot_name + '/benchmark/waypoint', Point, self.callback_target)
-        self.finished_subscriber = rospy.Subscriber(self.robot_name + '/benchmark/finished', Bool, self.callback_finished)
+        self.scan_subscriber = rospy.Subscriber('scan', LaserScan, self.update_laser)
 
-        #### BENCHMARK ####
+        self.goal_subscriber = rospy.Subscriber('benchmark/waypoint', Point, self.callback_target)
 
-        self.rate = rospy.Rate(rate)
         self.vision_radius = vision_radius
+        self.rate = rospy.Rate(rate)
         self.position = Point()
         self.wall_hit_point = Point()
         self.orientation = 0
         self.state = 0
         self.goal_pos = Point()
+        self.new_goal_pos = Point()
         self.twist_msg = Twist()
         self.start_pos = Point()
-
-    ############ BENCHMARK ############
-
         self.finished = Bool()
-        self.flag_start = False
-        self.flag_goal = False
 
     def callback_target(self, data):
         self.goal_pos = data
-        self.flag_goal = True
-
-    def callback_start_pos(self, data):
-        self.start_pos = [data.x, data.y, data.z]
-        #self.flag_start = True
 
     def callback_finished(self, data):
         self.finished = data
 
-    # def wait_for_pos(self):
-    #     while self.flag_start == False:
-    #         rospy.Rate(0.5).sleep()
-    #     rospy.loginfo("["+self.robot_name+"]: Start positions received!")
-
-    def wait_for_targets(self):
-        while self.flag_goal == False:
-            rospy.loginfo("["+self.robot_name+"]: Waiting for target point")
-            rospy.Rate(0.5).sleep()
-
-    ############ BENCHMARK ############
-
     # Changes the robots state
     def change_state(self, state):
         if state is not self.state:
-            print ('[%s] - %s' % (state, self.state_dict[state]))
+            print ('[%s] - State %s: %s' % (self.robot_name, state, self.state_dict[state]))
             self.state = state
 
     # Updates the robots current position and orientation
@@ -102,7 +72,7 @@ class Move:
 
     # Angle error for the P-Controller
     def angle_error(self):
-        goal_angle = atan2(self.goal_pos.y - self.position.y, self.goal_pos.x - self.position.x)
+        goal_angle = atan2(self.new_goal_pos.y - self.position.y, self.new_goal_pos.x - self.position.x)
         return self.normalize(goal_angle - self.orientation)
 
     # Normalize given angle
@@ -121,14 +91,14 @@ class Move:
 		'fright' : min(min(data.ranges[252:324]),self.vision_radius)
     }
 
-    # The distance the robot has moved when it was following the wall of an abstacle
+    # The distance the robot has moved when it was following the wall of an obstacle
     def moved_distance(self):
         return sqrt(pow(self.position.y - self.wall_hit_point.y, 2) + pow(self.position.x - self.wall_hit_point.x, 2))
 
     # The robots distance to the MLine
     def line_distance(self):
         point_1 = self.start_pos
-        point_2 = self.goal_pos
+        point_2 = self.new_goal_pos
         point_x = self.position
 
         numerator = fabs((point_2.y - point_1.y) * point_x.x - (point_2.x - point_1.x) * point_x.y + (point_2.x * point_1.y) - (point_2.y * point_1.x))
@@ -138,8 +108,7 @@ class Move:
 
     # The robots distance to the goal
     def euclidean_distance(self):
-        return sqrt(pow((self.goal_pos.x - self.position.x), 2) + pow((self.goal_pos.y - self.position.y), 2))
-
+        return sqrt(pow((self.new_goal_pos.x - self.position.x), 2) + pow((self.new_goal_pos.y - self.position.y), 2))
 
     # State 0: Robot turns until it looks directly to the goal position
     def faceTheGoal(self, tolerance = 0.01):
@@ -245,11 +214,21 @@ class Move:
 
     # The path planning algorithm
     def bug2(self, tolerance = 0.1):
-        self.wait_for_pos()
         while not rospy.is_shutdown():
-            while self.finished == Bool(False):
-                self.wait_for_targets()
+            if self.finished == Bool(True):
+                self.velocity_publisher.publish(self.stop())
+                print('[%s] - Done! ' % (self.robot_name))
+
+            elif self.finished == Bool(False) and self.new_goal_pos == self.goal_pos:
+                self.velocity_publisher.publish(self.stop())
+                print('[%s] - Waiting for a new goal' % (self.robot_name))
+
+            elif self.finished == Bool(False) and self.new_goal_pos != self.goal_pos:
+                print('[%s] - Goal received' % (self.robot_name))
+                self.new_goal_pos = self.goal_pos
                 self.change_state(0)
+                self.start_pos =  self.position
+
                 while self.euclidean_distance() > tolerance:
                     if self.state == 0:
                         self.faceTheGoal()
@@ -257,13 +236,17 @@ class Move:
                         self.followMLine()
                     elif self.state == 2:
                         self.followWall()
-                        self.rate.sleep()
+                    self.rate.sleep()
 
-                self.change_state(3)
+                print('[%s] - Found the goal!' % (self.robot_name))
                 self.velocity_publisher.publish(self.stop())
-                self.flag_goal == false
-        self.velocity_publisher.publish(self.stop())
+
+            self.rate.sleep()
 
 if __name__ == "__main__" :
-        x = Move()
+
+    try:
+        x = Bug2()
         x.bug2()
+    except rospy.ROSInterruptException:
+        traceback.print_exc()

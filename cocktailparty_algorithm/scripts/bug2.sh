@@ -9,7 +9,7 @@
 PKG_NAME="cocktailparty_algorithm"
 SESSION_NAME="Bug2"
 NUM=0
-NUM_ROBOT=2
+NUM_ROBOT=4
 
 source ~/.bashrc
 
