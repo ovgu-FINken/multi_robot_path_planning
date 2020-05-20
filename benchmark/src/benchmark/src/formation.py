@@ -21,6 +21,7 @@ class Formation(Enum):
     """
     DENSE_BLOCK = "dense_block"
     AT_WAY_POINTS = "at_way_point"
+    RANDOM = "random"
 
 
 class FormationHandler:
@@ -54,6 +55,8 @@ class FormationHandler:
         elif self._formation == Formation.AT_WAY_POINTS \
                 or self._formation == Formation.AT_WAY_POINTS.value:
             self._estimate_at_way_points()
+        elif self._formation == Formation.RANDOM.value:
+            self._estimate_random()
         else:
             rospy.logerr(
                 "Invalid formation {} specified!".format(self._formation))
