@@ -1,9 +1,7 @@
 ##### robot's footprint
 footprint: [[-0.105, -0.08], [-0.105, 0.08], [0.041, 0.105], [0.041, -0.105]]
-robot_radius: 0.106
+robot_radius: 0.105
 footprint_padding: 0.0
-
-transform_tolerance: 0.3
 
 plugins:
   - { name: static_layer, type: "costmap_2d::StaticLayer" }
@@ -29,8 +27,8 @@ obstacle_layer:
   mark_threshold: 0
   combination_method: 1
   track_unknown_space: true
-  obstacle_range: 3.0 #2.5
-  raytrace_range: 3.5 #3.0
+  obstacle_range: 3.0
+  raytrace_range: 3.5
   publish_voxel_map: true
   observation_sources: scan
   # specify scan source
@@ -49,8 +47,8 @@ obstacle_layer:
 stationary_robots:
   enabled: true
   max_obstacle_height:  2.0
-  obstacle_range: 2
-  raytrace_range: 4.0
+  obstacle_range: 3.0
+  raytrace_range: 3.5
   publish_voxel_map: true
 
   observation_sources: python_node python_node_clearing

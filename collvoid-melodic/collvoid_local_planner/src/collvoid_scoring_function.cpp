@@ -188,8 +188,8 @@ namespace collvoid_scoring_function
 
         // creating a simplified velocity vector out of the start and end points of the trajectory
         double time_diff = (int)traj.getPointsSize() * traj.time_delta_;
-        ROS_INFO_THROTTLE(5, "Trajectory's point size: %i",traj.getPointsSize());
-        ROS_INFO_THROTTLE(5, "Trajectory's point size: %i",traj.time_delta_);
+        ROS_INFO_THROTTLE(5, "Trajectory's point size: %ui",traj.getPointsSize());
+        ROS_INFO_THROTTLE(5, "Trajectory's point size: %f",traj.time_delta_);
         double vel_x, vel_y, vel_theta;
         //vel_x = traj.xv_;
         //vel_y = traj.yv_;

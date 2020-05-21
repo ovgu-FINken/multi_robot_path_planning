@@ -444,7 +444,7 @@ namespace collvoid {
                                 const std::vector<Line> &additional_constraints, const Vector2 &pref_vel,  const Vector2 &cur_vel,
                                 double max_speed, bool use_truncation
     ){
-        ROS_INFO("Creating Clearpath-Samples");
+        ROS_DEBUG("Creating Clearpath-Samples");
         if (!isWithinAdditionalConstraints(additional_constraints, pref_vel)) {
             for(Line line: additional_constraints) {
                 VelocitySample pref_vel_sample;

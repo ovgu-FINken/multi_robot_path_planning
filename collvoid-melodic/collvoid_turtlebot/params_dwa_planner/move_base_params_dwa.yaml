@@ -19,7 +19,7 @@ DWAPlannerROS:
   acc_lim_theta: 3.2
 
   # Goal Tolerance Parametes
-  xy_goal_tolerance: 0.08
+  xy_goal_tolerance: 0.08 #TODO higher maybe possible?
   yaw_goal_tolerance: 0.8
   latch_xy_goal_tolerance: false
 
