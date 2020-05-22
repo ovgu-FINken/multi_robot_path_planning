@@ -70,8 +70,8 @@ CollvoidLocalPlanner:
 
   scale_radius_factor: 0.5
 
-  yaw_goal_tolerance: 0.3
-  xy_goal_tolerance: 0.10
+  yaw_goal_tolerance: 0.5
+  xy_goal_tolerance: 0.08
   # latch_xy_goal_tolerance: true
   global_frame: /map
   wheel_base: 0.25
