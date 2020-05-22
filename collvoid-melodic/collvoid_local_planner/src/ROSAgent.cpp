@@ -475,7 +475,7 @@ geometry_msgs::Twist ROSAgent::computeVelocityCommand(Vector2 waypoint, double g
 
 void ROSAgent::computeNewVelocity(Vector2 pref_velocity, geometry_msgs::Twist &cmd_vel)
 {
-    ROS_INFO("[ROSAgent] Computing new velocity");
+    ROS_DEBUG("[ROSAgent] Computing new velocity");
     if (!getMe())
     {
         ROS_WARN("Could not get me from service");
@@ -493,8 +493,10 @@ void ROSAgent::computeNewVelocity(Vector2 pref_velocity, geometry_msgs::Twist &c
     human_vos_.clear();
     agent_vos_.clear();
 
+    // get obstacles
     computeObstacles();
-    //get closest agent/obstacle
+
+    // determine closest agent/obstacle
     double min_dist_neigh = DBL_MAX;
     if (agent_neighbors_.size() > 0)
     {
@@ -508,6 +510,7 @@ void ROSAgent::computeNewVelocity(Vector2 pref_velocity, geometry_msgs::Twist &c
     }
     //add acceleration constraints
     base_local_planner::LocalPlannerLimits limits = planner_util_->getCurrentLimits();
+    // ROS_INFO_THROTTLE(5, "Data: %f, %f, %f, %f, %f, %f, %f, %f", limits.max_vel_x, limits.acc_lim_x, limits.max_vel_y, limits.acc_lim_y, velocity_.x(), velocity_.y(), heading_, sim_period_);
     addAccelerationConstraintsXY(limits.max_vel_x, limits.acc_lim_x, limits.max_vel_y, limits.acc_lim_y, velocity_, heading_, sim_period_,
                                  holo_robot_, additional_orca_lines_);
 
@@ -1413,7 +1416,7 @@ void ROSAgent::computeClearpathVelocity(Vector2 pref_vel)
                 return;
             }
 
-            ROS_WARN("Did not find safe velocity, chosing outside constraints, %f, %f", new_vel.x(), new_vel.y());
+            ROS_WARN("Did not find safe velocity, choosing outside constraints, %f, %f", new_vel.x(), new_vel.y());
         }
     }
     new_velocity_ = new_vel;

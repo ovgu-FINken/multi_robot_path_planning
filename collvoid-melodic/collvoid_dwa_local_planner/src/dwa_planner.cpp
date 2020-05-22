@@ -206,6 +206,7 @@ DWAPlanner::DWAPlanner(std::string name, base_local_planner::LocalPlannerUtil *p
   critics.push_back(&twirling_costs_);      // optionally prefer trajectories that don't spin
 
   // trajectory generators
+  // TODO Improvement: better sampler (see clearpath sampler)
   std::vector<base_local_planner::TrajectorySampleGenerator *> generator_list;
   generator_list.push_back(&generator_);
 
@@ -391,7 +392,7 @@ base_local_planner::Trajectory DWAPlanner::findBestPath(
    * @param traj The container to write the result to
    * @param all_explored pass NULL or a container to collect all trajectories for debugging (has a penalty)
    */
-  scored_sampling_planner_.findBestTrajectory(result_traj_, &all_explored); // TODO display/print the trajectories and their costs
+  scored_sampling_planner_.findBestTrajectory(result_traj_, &all_explored);
 
   if (publish_traj_pc_)
   {
