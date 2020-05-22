@@ -50,4 +50,3 @@
         <node pkg="collvoid_controller" type="position_share_controller.py" name="position_share_controller" output="screen" />
     </group>
 </launch>
-  
