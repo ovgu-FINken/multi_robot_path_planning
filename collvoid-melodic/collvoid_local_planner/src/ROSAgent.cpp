@@ -97,7 +97,7 @@ void ROSAgent::reconfigure(collvoid_local_planner::CollvoidConfig &config)
     goal_heading_sq_dist_ = config.goal_sq_dist;
 
     // obstacle costs can vary due to scaling footprint feature
-    obstacle_costs_->setParams(config.max_vel_trans, 0, 0);
+    obstacle_costs_->setParams(config.max_vel_trans, 0, 0); //WHAT?!
 
     //collvoid_
     orca_ = config.orca;
@@ -150,18 +150,18 @@ void ROSAgent::init(ros::NodeHandle private_nh, tf2_ros::Buffer *tf, base_local_
 
     obstacle_costs_->setSumScores(sum_scores);
 
-    //path_costs_->setScale(0);
-    goal_costs_->setScale(0);
-    goal_front_costs_->setScale(0);
-    alignment_costs_->setScale(0);
+    // path_costs_->setScale(0);
+    // goal_costs_->setScale(0);
+    // goal_front_costs_->setScale(0);
+    // alignment_costs_->setScale(0);
 
     //obstacle check
     critics_.push_back((base_local_planner::TrajectoryCostFunction * &&) obstacle_costs_); // discards trajectories that move into obstacles
-    //critics_.push_back((base_local_planner::TrajectoryCostFunction *&&) goal_front_costs_); // prefers trajectories that make the nose go towards (local) nose goal
+    critics_.push_back((base_local_planner::TrajectoryCostFunction *&&) goal_front_costs_); // prefers trajectories that make the nose go towards (local) nose goal
 
-    //critics_.push_back((base_local_planner::TrajectoryCostFunction *&&) alignment_costs_); // prefers trajectories that keep the robot nose on nose path
+    critics_.push_back((base_local_planner::TrajectoryCostFunction *&&) alignment_costs_); // prefers trajectories that keep the robot nose on nose path
     critics_.push_back((base_local_planner::TrajectoryCostFunction * &&) path_costs_); // prefers trajectories on global path
-    //critics_.push_back((base_local_planner::TrajectoryCostFunction *&&) goal_costs_); // prefers trajectories that go towards (local) goal, based on wave propagation
+    critics_.push_back((base_local_planner::TrajectoryCostFunction *&&) goal_costs_); // prefers trajectories that go towards (local) goal, based on wave propagation
     std::vector<base_local_planner::TrajectorySampleGenerator *> generator_list;
     generator_list.push_back(&generator_);
     scored_sampling_planner_ = base_local_planner::SimpleScoredSamplingPlanner(generator_list, critics_);

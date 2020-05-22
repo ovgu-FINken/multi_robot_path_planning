@@ -433,14 +433,17 @@ void MePublisher::getFootprint(ros::NodeHandle private_nh)
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "me_publisher");
-    //ros::NodeHandle nh;
     ros::NodeHandle nh;
+    
+    ros::Duration(0.4); // otherwise amcl is not finished yet
 
     std::shared_ptr<MePublisher> me(new MePublisher());
+    ROS_INFO("Me publisher part 1 initialized.");
     std::shared_ptr<tf2_ros::Buffer> buffer(new tf2_ros::Buffer());
+    ROS_INFO("Me publisher part 2 initialized.");
     std::shared_ptr<tf2_ros::TransformListener> tfl(new tf2_ros::TransformListener(*buffer));
-    //ROS_INFO("[ROS_INFO] ---- buffer value %x \n ----------", buffer.get());
+    ROS_INFO("Me publisher part 3 initialized.");
     me->init(nh, buffer);
-    ROS_INFO("ROS MePublisher initialized");
+    ROS_INFO("ROS MePublisher fully initialized");
     ros::spin();
 }
