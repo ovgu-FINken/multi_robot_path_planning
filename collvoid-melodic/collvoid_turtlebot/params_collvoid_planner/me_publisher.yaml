@@ -1,5 +1,0 @@
-collvoid:
-  holo_robot: false
-  controlled: true
-  eps: 0.7
-  publish_me_frequency: 15
