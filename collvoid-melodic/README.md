@@ -15,7 +15,6 @@ This README helps you with the ***setup and usage*** of the code. If you are loo
     - [Installation](#installation)
     - [Launching and Testing](#launching-and-testing)
   - [Common Errors](#common-errors)
-    - [RVIZ crashes sometimes](#rviz-crashes-sometimes)
   - [Execution with Benchmark](#execution-with-benchmark)
   - [Authors](#authors)
   - [License](#license)
@@ -73,14 +72,14 @@ This README helps you with the ***setup and usage*** of the code. If you are loo
    ~$ roscore
    ```
 
-2. Start the standard collvoid script like shown below. Due to the simulation launcher the **number of robots** is set to 3 by default 
+2. Start the standard collvoid script like shown below. Select the local planner (*dwa*, or *collvoid*) by using the "-p" flag. Due to the simulation launcher the **number of robots** is set to 3 by default 
 
     *Note: In the future, in case the simulation is enhanced such that an arbitrary amount of robots can be spawned, 
-      you can speficy the number by using the flag "-n".*
+      you can specify the number by using the flag "-n".*
 
     ```
     ~/DrivingSwarm/src/pathplanning$ cd collvoid-melodic/collvoid_turtlebot/scripts/
-    ~/DrivingSwarm/src/pathplanning/collvoid-melodic/collvoid_turtlebot/scripts$ ./collvoid_std.sh
+    ~/DrivingSwarm/src/pathplanning/collvoid-melodic/collvoid_turtlebot/scripts$ ./collvoid_std.sh -p dwa
     ```
 
 3. After the collvoid_std.sh has finished its setup successfully, you can use the simple goal interface in **RVIZ** for testing it.
@@ -104,15 +103,8 @@ This README helps you with the ***setup and usage*** of the code. If you are loo
     ```
 
 ## Common Errors
-There are some race conditions that can cause trouble. 
-That's why, killing and restarting the script can help in many cases.
-
-### RVIZ crashes sometimes
-rviz: /build/ogre-1.9-B6QkmW/ogre-1.9-1.9.0+dfsg1/OgreMain/include/OgreAxisAlignedBox.h:252: void Ogre::AxisAlignedBox::setExtents(const Ogre::Vector3&, const Ogre::Vector3&): Assertion `(min.x <= max.x && min.y <= max.y && min.z <= max.z) && "The minimum corner of the
-box must be less than or equal to maximum corner"' failed.
-[rviz-2] process has died [pid 12114, exit code -6, cmd /opt/ros/melodic/lib/rviz/rviz -d /home/nele/DrivingSwarm/src/turtlebot3_simulations/turtlebot3_gazebo/rviz/turtlebot3_gazebo_model.rviz __name:=rviz __log:=/home/nele/.ros/log/1d46e2a6-848e-11ea-92fe-1063c87c0687/rviz-2.log].
-log file: /home/nele/.ros/log/1d46e2a6-848e-11ea-92fe-1063c87c0687/rviz-2*.log
-
+There are some race conditions that can cause trouble. Especially, the error "could not get me" means, the node "me_publisher" has died and the robot won't move.
+That's why, killing and restarting the script helps in most cases.
 
 ## Execution with Benchmark
 1. Start the **roscore**
@@ -129,11 +121,12 @@ log file: /home/nele/.ros/log/1d46e2a6-848e-11ea-92fe-1063c87c0687/rviz-2*.log
 
 4. **Wait** until the spawner has finished (robots should appear in Gazebo), otherwise kill the process with `./kill.sh` and return to 2.
 
-5. Start the **collvoid_benchmark** script. Set the flag "-n" with the correct number of robots.
+5. Start the **collvoid_benchmark** script. Select the local planner that should be tested (*dwa*, or *collvoid*) by using the "-p" flag. 
+   Set the flag "-n" with the correct number of robots. Example shown below:
 
     *Note: The number of robots has to be **equivalent** to the number defined in the benchmark settings.* 
     ```
-    ~/DrivingSwarm/src/pathplanning/collvoid-melodic/collvoid_turtlebot/scripts$ ./collvoid_benchmark.sh -n 5
+    ~/DrivingSwarm/src/pathplanning/collvoid-melodic/collvoid_turtlebot/scripts$ ./collvoid_benchmark.sh -n 5 -p collvoid
     ```
 
 
