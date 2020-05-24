@@ -14,6 +14,7 @@ import src.utils.topic_handler as topic_handler
 from std_msgs.msg import Bool
 import json
 import os
+import copy
 import src.utils.naming_scheme as names
 
 
@@ -67,6 +68,13 @@ def setup_node():
     """
     rospy.init_node(names.NodeNames.WAYPOINT_CONTROLLER.value, anonymous=True)
 
+def point_in_square(point, cp, r):
+    if point.x > (cp[0] - r):
+        if point.x < (cp[0] + r):
+            if point.y > (cp[1] - r):
+                if point.y < (cp[1] + r):
+                    return True
+    return False
 
 class WayPointManager:
     """ Way point manager.
@@ -76,7 +84,7 @@ class WayPointManager:
     Therefore, each robot has its very own waypoint node.
     """
 
-    def __init__(self, namespace, number_of_robots, rounds,
+    def __init__(self, namespace, number_of_robots, rounds, start_positions,
                  waypoints=WayPointMap.TB3_EDGE,
                  node_update_frequency=DEFAULT_NODE_UPDATE_FREQUENCY,
                  wp_callback=None, finished_callback=None,
@@ -103,6 +111,11 @@ class WayPointManager:
         self._finished_callback = finished_callback
         self._rounds_completed = {}
         self._waypoint_map_name = waypoints
+        self.publish_start_positions = start_positions
+
+        if self._waypoint_map_name == "two_rooms":
+            self._two_room_maps = self.make_different_maps(start_positions)
+
         self._setup_publisher()
         self._init_wps()
 
@@ -118,7 +131,7 @@ class WayPointManager:
                     self._print_pos(robot_name, current_pos)
                 if self._wp_reached(current_pos[robot_name], self._get_target_point(robot_name)):
                     if self._waypoint_map_name == "two_rooms":
-                        map = self.rotate_waypoint_list(robot_name)
+                        map = self._two_room_maps[robot_name]
                     else:
                         map = self._waypoint_map
                     self.next(robot_name, map)
@@ -189,8 +202,8 @@ class WayPointManager:
         """
         for robot_name in range(self._number_of_robots):
             if self._waypoint_map_name == "two_rooms":
-                map = self.rotate_waypoint_list(robot_name)
-            else:
+                map = self._two_room_maps[robot_name]
+            else:#
                 map = self._waypoint_map
             self.next(robot_name, map)
 
@@ -277,11 +290,37 @@ class WayPointManager:
             target_point = map[current_target_idx + 1]
             self._set_target_point(robot_name, target_point)
 
-    def rotate_waypoint_list(self, number):
-        map = self._waypoint_map
 
-        for i in range(number):
-            item = map.pop(0)
-            map.append(item)
+##### JUST FOR TWO ROOM SCENARIO #####
 
-        return map
+    def make_different_maps(self, start_positions):
+
+        self.mapA = copy.deepcopy(self._waypoint_map)
+        self.mapB = copy.deepcopy(self.mapA)
+
+        for i in range(len(self.mapB)):
+            self.mapB[i][0] *= -1
+        self.mapB[0][1] *= -1
+        self.mapB[2][1] *= -1
+
+        self.mapC = copy.deepcopy(self.mapA)
+        self.mapC.reverse()
+
+        self.mapD = copy.deepcopy(self.mapB)
+        self.mapD.reverse()
+
+        maps = []
+        for i in range(self._number_of_robots):
+            if point_in_square(point=start_positions[i], cp=[-1.0,2.0], r=1.0):
+                maps.append(self.mapA)
+
+            if point_in_square(point=start_positions[i], cp=[1.0,2.0], r=1.0):
+                maps.append(self.mapB)
+
+            if point_in_square(point=start_positions[i], cp=[1.0,-1.0], r=1.0):
+                maps.append(self.mapC)
+
+            if point_in_square(point=start_positions[i], cp=[-1.0,-1.0], r=1.0):
+                maps.append(self.mapD)
+
+        return maps

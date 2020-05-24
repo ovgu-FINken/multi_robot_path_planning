@@ -126,35 +126,34 @@ class FormationHandler:
 
             distance = self._distance / 2
 
-            cp0 = [1.0 , 2.0]
-            cp1 = [1.0, -1.0]
-            cp2 = [-1.0, 2.0]
-            cp3 = [-1.0, -1.0]
+            cp0 = [1.0 , 2.0, 0.0]
+            cp1 = [1.0, -1.0, 0.0]
+            cp2 = [-1.0, 2.0, 0.0]
+            cp3 = [-1.0, -1.0, 0.0]
 
-            cp = [cp0, cp1, cp2, cp3]
-
-            points = []
+            cp = [cp0,cp1,cp2,cp3]
+            points = [0,0,0,0]
 
             for i in range(4):
+                points[i]= [[cp[i][0]+distance, cp[i][1]+distance, 0.0],
+                            [cp[i][0]-distance, cp[i][1]-distance, 0.0],
+                            [cp[i][0]+distance, cp[i][1]-distance, 0.0],
+                            [cp[i][0]-distance, cp[i][1]+distance, 0.0]]
 
-                 points.append([[cp[i][0]+distance, cp[i][1]+distance, 0.0],
-                               [cp[i][0]-distance, cp[i][1]-distance, 0.0],
-                               [cp[i][0]+distance, cp[i][1]-distance, 0.0],
-                               [cp[i][0]-distance, cp[i][1]+distance, 0.0]])
-
-            a=0
-            b=0
             for i in range(self._number_of_robots):
-
-                self._position.append(points[a][b])
-                self._orientation.append([0.0, 0.0, 0.0])
-
-                if a==3 :
-                    a = 0
-                else:
-                    a += 1
-
-                if b == 3:
-                    b = 0
-                else:
-                    b +=1
+                if i in set([0,4,8,12]):
+                    item = points[0].pop(0)
+                    self._position.append(item)
+                    self._orientation.append([0.0, 0.0, 0.0])
+                elif i in set([1,5,9,13]):
+                    item = points[1].pop(0)
+                    self._position.append(item)
+                    self._orientation.append([0.0, 0.0, 0.0])
+                elif i in set([2,6,10,14]):
+                    item = points[2].pop(0)
+                    self._position.append(item)
+                    self._orientation.append([0.0, 0.0, 0.0])
+                elif i in set([3,7,11,15]):
+                    item = points[3].pop(0)
+                    self._position.append(item)
+                    self._orientation.append([0.0, 0.0, 0.0])

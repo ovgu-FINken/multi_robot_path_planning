@@ -36,6 +36,12 @@ def callback_finished(name, finished):
     global finished_publisher
     finished_publisher[name].publish(finished, quiet=True)
 
+def wait_for_positions():
+    while (True):
+        if len(robot_current_positions) == number_of_robots:
+            break;
+        rospy.Rate(0.5).sleep()
+    return
 
 def callback_position(data, args):
     """ This callback method will save the current position of the robots.
@@ -90,10 +96,11 @@ def update_wps(_number_of_robots, _namespace, _rounds,
     :param frequency:
     :param _wp_threshold:
     """
+    wait_for_positions()
     wp_manager = wp.WayPointManager(
         namespace=_namespace, number_of_robots=_number_of_robots,
         wp_callback=callback_target, finished_callback=callback_finished,
-        waypoints= _wp_map, threshold=wp_threshold, rounds=_rounds)
+        waypoints= _wp_map, threshold=wp_threshold, rounds=_rounds, start_positions = robot_current_positions)
     while not rospy.is_shutdown():
         wp_manager.update(robot_current_positions)
         rospy.Rate(frequency).sleep()
