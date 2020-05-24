@@ -17,7 +17,7 @@ NUM=0
 ENABLE_RVIZ=False
 ENABLE_RQT=False
 USE_SETTINGS_FILE=True
-DEFAULT_MOVEMENT=True
+#DEFAULT_MOVEMENT=True
 
 # start tmux
 tmux new-session -s $SESSION_NAME -d
