@@ -6,15 +6,15 @@
     <group ns="/$(arg robot_name)">
         <!-- move_base -->
         <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">            <!--for debugging additionally append: launch-prefix="gdbserver :1234"-->
-            <rosparam command="load" file="$(find collvoid_turtlebot)/params_collvoid_planner_bm/costmap_common_params.yaml" ns="local_costmap" />
-            <rosparam command="load" file="$(find collvoid_turtlebot)/params_collvoid_planner_bm/costmap_common_params.yaml" ns="global_costmap" />
-            <rosparam command="load" file="$(find collvoid_turtlebot)/params_collvoid_planner_bm/local_costmap_params.yaml" />
-            <rosparam command="load" file="$(find collvoid_turtlebot)/params_collvoid_planner_bm/global_costmap_params.yaml" />
+            <rosparam command="load" file="$(find collvoid_turtlebot)/params_collvoid_planner/costmap_common_params.yaml" ns="local_costmap" />
+            <rosparam command="load" file="$(find collvoid_turtlebot)/params_collvoid_planner/costmap_common_params.yaml" ns="global_costmap" />
+            <rosparam command="load" file="$(find collvoid_turtlebot)/params_collvoid_planner/local_costmap_params.yaml" />
+            <rosparam command="load" file="$(find collvoid_turtlebot)/params_collvoid_planner/global_costmap_params.yaml" />
 
-            <rosparam command="load" file="$(find collvoid_turtlebot)/params_collvoid_planner_bm/collvoid_config.yaml" />
-            <rosparam command="load" file="$(find collvoid_turtlebot)/params_collvoid_planner_bm/move_base_params_collvoid.yaml" />
-            <rosparam command="load" file="$(find collvoid_turtlebot)/params_collvoid_planner_bm/collvoid_common.yaml" ns="CollvoidScoring" />
-            <rosparam command="load" file="$(find collvoid_turtlebot)/params_collvoid_planner_bm/collvoid_common.yaml" ns="CollvoidLocalPlanner" />
+            <rosparam command="load" file="$(find collvoid_turtlebot)/params_collvoid_planner/collvoid_config.yaml" />
+            <rosparam command="load" file="$(find collvoid_turtlebot)/params_collvoid_planner/move_base_params_collvoid.yaml" />
+            <rosparam command="load" file="$(find collvoid_turtlebot)/params_collvoid_planner/collvoid_common.yaml" ns="CollvoidScoring" />
+            <rosparam command="load" file="$(find collvoid_turtlebot)/params_collvoid_planner/collvoid_common.yaml" ns="CollvoidLocalPlanner" />
 
 
             <!-- Overwrite robot specific paramters -->
@@ -40,8 +40,8 @@
             <remap from="odom" to="/$(arg robot_name)/odom"/>
         </node>
 
-        <rosparam command="load" file="$(find collvoid_turtlebot)/params_collvoid_planner_bm/me_publisher.yaml"/>
-        <rosparam command="load" file="$(find collvoid_turtlebot)/params_collvoid_planner_bm/collvoid_common.yaml" ns="collvoid" />
+        <rosparam command="load" file="$(find collvoid_turtlebot)/params_collvoid_planner/me_publisher.yaml"/>
+        <rosparam command="load" file="$(find collvoid_turtlebot)/params_collvoid_planner/collvoid_common.yaml" ns="collvoid" />
         <param name="collvoid/base_frame" value="$(arg robot_name)/base_link"/>
         <param name="collvoid/global_frame_id" value="map"/>
 
