@@ -117,7 +117,11 @@ class WayPointManager:
                 if not quiet:
                     self._print_pos(robot_name, current_pos)
                 if self._wp_reached(current_pos[robot_name], self._get_target_point(robot_name)):
-                    self.next(robot_name)
+                    if self._waypoint_map_name == "two_rooms":
+                        map = self.rotate_waypoint_list(robot_name)
+                    else:
+                        map = self._waypoint_map
+                    self.next(robot_name, map)
                     if not quiet:
                         rospy.loginfo("UPDATE for {0} to {1}!".format(
                             robot_name, self._get_target_point(robot_name)))

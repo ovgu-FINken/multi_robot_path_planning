@@ -1,0 +1,1808 @@
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-06 17:23:20.669304
+==> Benchmark ID: 1588778600
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-06 17:33:07.017638
+==> Benchmark ID: 1588779187
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-06 17:34:11.999271
+==> Benchmark ID: 1588779251
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-06 17:38:09.772786
+==> Benchmark ID: 1588779489
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-06 17:50:59.054462
+==> Benchmark ID: 1588780259
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-08 14:51:27.921509
+==> Benchmark ID: 1588942287
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-08 15:13:20.250870
+==> Benchmark ID: 1588943600
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-08 15:14:24.976376
+==> Benchmark ID: 1588943664
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-08 15:15:53.351488
+==> Benchmark ID: 1588943753
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-08 15:40:46.924794
+==> Benchmark ID: 1588945246
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-11 16:16:58.023444
+==> Benchmark ID: 1589206618
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-11 16:19:32.995246
+==> Benchmark ID: 1589206772
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-11 16:21:07.407685
+==> Benchmark ID: 1589206867
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-11 16:22:22.795218
+==> Benchmark ID: 1589206942
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-11 16:26:41.158065
+==> Benchmark ID: 1589207201
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-11 17:14:22.110866
+==> Benchmark ID: 1589210062
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-11 17:59:21.914729
+==> Benchmark ID: 1589212761
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-11 18:24:59.506328
+==> Benchmark ID: 1589214299
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-11 18:29:18.167525
+==> Benchmark ID: 1589214558
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-11 18:39:54.938965
+==> Benchmark ID: 1589215194
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-11 18:50:32.682698
+==> Benchmark ID: 1589215832
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-11 20:17:42.775681
+==> Benchmark ID: 1589221062
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-11 20:43:47.794702
+==> Benchmark ID: 1589222627
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-11 21:05:53.799135
+==> Benchmark ID: 1589223953
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-11 21:26:22.379355
+==> Benchmark ID: 1589225182
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-11 21:31:27.511041
+==> Benchmark ID: 1589225487
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-11 21:43:36.046280
+==> Benchmark ID: 1589226216
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-11 21:50:07.280557
+==> Benchmark ID: 1589226607
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-11 22:09:03.809387
+==> Benchmark ID: 1589227743
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-11 22:16:06.677637
+==> Benchmark ID: 1589228166
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-11 22:56:38.965046
+==> Benchmark ID: 1589230598
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-12 08:17:20.945604
+==> Benchmark ID: 1589264240
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-12 08:34:14.179362
+==> Benchmark ID: 1589265254
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-12 09:22:50.678375
+==> Benchmark ID: 1589268170
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-12 09:34:27.310459
+==> Benchmark ID: 1589268867
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 1
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-12 09:38:48.905871
+==> Benchmark ID: 1589269128
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 2
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+[2020-05-12 10:00:16.722715] [WPTIME] tb3_0 from [-1.8, 0.0, 0.0] to [0.0, 1.8, 0.0] in 483.744s
+[2020-05-12 10:00:38.247375] [WPTIME] tb3_0 from [0.0, 1.8, 0.0] to [0.0, -1.8, 0.0] in 19.998s
+[2020-05-12 10:02:04.677511] [WPTIME] tb3_0 from [0.0, -1.8, 0.0] to [1.8, 0.0, 0.0] in 72.256s
+[2020-05-12 10:02:22.917765] [WPTIME] tb3_0 from [1.8, 0.0, 0.0] to [-1.8, 0.0, 0.0] in 16.08s
+[2020-05-12 10:02:22.925895] [MAKESPAN] tb3_0 finished in 1123.684s
+[2020-05-12 10:02:22.989537] [FLOWTIME] tb3_0: 280.921
+[2020-05-12 10:03:36.179392] [WPTIME] tb3_0 from [-1.8, 0.0, 0.0] to [0.0, 1.8, 0.0] in 66.23s
+[2020-05-12 10:04:02.814438] [WPTIME] tb3_0 from [0.0, 1.8, 0.0] to [0.0, -1.8, 0.0] in 24.104s
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-12 10:05:57.003719
+==> Benchmark ID: 1589270757
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 2
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+[2020-05-12 10:07:55.786390] [WPTIME] tb3_1 from [-1.8, 0.0, 0.0] to [0.0, 1.8, 0.0] in 60.198s
+[2020-05-12 10:08:14.277874] [WPTIME] tb3_0 from [-1.8, 0.0, 0.0] to [0.0, 1.8, 0.0] in 62.204s
+[2020-05-12 10:08:18.363769] [WPTIME] tb3_1 from [0.0, 1.8, 0.0] to [0.0, -1.8, 0.0] in 22.066s
+[2020-05-12 10:08:38.917531] [WPTIME] tb3_0 from [0.0, 1.8, 0.0] to [0.0, -1.8, 0.0] in 24.068s
+[2020-05-12 10:09:24.530666] [WPTIME] tb3_1 from [0.0, -1.8, 0.0] to [1.8, 0.0, 0.0] in 64.19s
+[2020-05-12 10:09:46.909240] [WPTIME] tb3_0 from [0.0, -1.8, 0.0] to [1.8, 0.0, 0.0] in 64.12s
+[2020-05-12 10:10:09.838989] [WPTIME] tb3_1 from [1.8, 0.0, 0.0] to [-1.8, 0.0, 0.0] in 40.132s
+[2020-05-12 10:10:09.843278] [MAKESPAN] tb3_1 finished in 228.75s
+[2020-05-12 10:10:09.963823] [FLOWTIME] tb3_1: 57.2015
+[2020-05-12 10:10:33.044459] [WPTIME] tb3_0 from [1.8, 0.0, 0.0] to [-1.8, 0.0, 0.0] in 40.15s
+[2020-05-12 10:10:33.046175] [MAKESPAN] tb3_0 finished in 248.82s
+[2020-05-12 10:10:33.059800] [FLOWTIME] tb3_0: 62.207
+[2020-05-12 10:10:33.065533] [MAKESPAN AVG] 248.834s
+[2020-05-12 10:10:33.078864] [FLOWTIME AVG] 62.2085
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-12 10:31:27.411322
+==> Benchmark ID: 1589272287
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 2
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+[2020-05-12 10:35:09.361281] [WPTIME] tb3_1 from [-1.8, 0.0, 0.0] to [0.0, 1.8, 0.0] in 60.242s
+[2020-05-12 10:35:34.159436] [WPTIME] tb3_1 from [0.0, 1.8, 0.0] to [0.0, -1.8, 0.0] in 22.03s
+[2020-05-12 10:35:36.421795] [WPTIME] tb3_0 from [-1.8, 0.0, 0.0] to [0.0, 1.8, 0.0] in 66.286s
+[2020-05-12 10:36:01.512534] [WPTIME] tb3_0 from [0.0, 1.8, 0.0] to [0.0, -1.8, 0.0] in 22.088s
+[2020-05-12 10:36:42.107113] [WPTIME] tb3_1 from [0.0, -1.8, 0.0] to [1.8, 0.0, 0.0] in 60.266s
+[2020-05-12 10:37:00.145315] [WPTIME] tb3_1 from [1.8, 0.0, 0.0] to [-1.8, 0.0, 0.0] in 16.054s
+[2020-05-12 10:37:00.148606] [MAKESPAN] tb3_1 finished in 293.068s
+[2020-05-12 10:37:00.197108] [FLOWTIME] tb3_1: 73.2775
+[2020-05-12 10:37:02.345932] [WPTIME] tb3_0 from [0.0, -1.8, 0.0] to [1.8, 0.0, 0.0] in 54.238s
+[2020-05-12 10:38:06.849969] [WPTIME] tb3_1 from [-1.8, 0.0, 0.0] to [0.0, 1.8, 0.0] in 60.24s
+[2020-05-12 10:38:33.695997] [WPTIME] tb3_1 from [0.0, 1.8, 0.0] to [0.0, -1.8, 0.0] in 24.086s
+[2020-05-12 10:39:39.592952] [WPTIME] tb3_1 from [0.0, -1.8, 0.0] to [1.8, 0.0, 0.0] in 60.196s
+[2020-05-12 10:40:29.314539] [WPTIME] tb3_1 from [1.8, 0.0, 0.0] to [-1.8, 0.0, 0.0] in 46.186s
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-12 11:08:59.465819
+==> Benchmark ID: 1589274539
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 2
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.2
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+[2020-05-12 11:21:11.420368] [WPTIME] tb3_1 from [-1.8, 0.0, 0.0] to [0.0, 1.8, 0.0] in 70.272s
+[2020-05-12 11:21:33.745266] [WPTIME] tb3_0 from [-1.8, 0.0, 0.0] to [0.0, 1.8, 0.0] in 90.342s
+[2020-05-12 11:21:58.653564] [WPTIME] tb3_0 from [0.0, 1.8, 0.0] to [0.0, -1.8, 0.0] in 22.076s
+[2020-05-12 11:22:24.114620] [WPTIME] tb3_1 from [0.0, 1.8, 0.0] to [0.0, -1.8, 0.0] in 64.208s
+[2020-05-12 11:23:03.803402] [WPTIME] tb3_0 from [0.0, -1.8, 0.0] to [1.8, 0.0, 0.0] in 58.242s
+[2020-05-12 11:23:32.618288] [WPTIME] tb3_1 from [0.0, -1.8, 0.0] to [1.8, 0.0, 0.0] in 62.226s
+[2020-05-12 11:23:50.279930] [WPTIME] tb3_0 from [1.8, 0.0, 0.0] to [-1.8, 0.0, 0.0] in 42.132s
+[2020-05-12 11:23:50.285109] [MAKESPAN] tb3_0 finished in 760.586s
+[2020-05-12 11:23:50.317074] [FLOWTIME] tb3_0: 190.1475
+[2020-05-12 11:24:41.503824] [MAKESPAN] tb3_1 finished in 806.754s
+[2020-05-12 11:24:41.505075] [WPTIME] tb3_1 from [1.8, 0.0, 0.0] to [-1.8, 0.0, 0.0] in 62.22s
+[2020-05-12 11:24:41.516563] [FLOWTIME] tb3_1: 201.6885
+[2020-05-12 11:24:41.518984] [MAKESPAN AVG] 806.768s
+[2020-05-12 11:24:41.534370] [FLOWTIME AVG] 201.692
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-13 09:04:31.449336
+==> Benchmark ID: 1589353471
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.1
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-13 09:28:21.138379
+==> Benchmark ID: 1589354901
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.1
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-13 09:31:49.340275
+==> Benchmark ID: 1589355109
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.1
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+[2020-05-13 09:35:56.758660] [WPTIME] tb3_3 from [-1.8, 0.0, 0.0] to [0.0, 1.8, 0.0] in 44.224s
+[2020-05-13 09:36:36.040871] [WPTIME] tb3_3 from [0.0, 1.8, 0.0] to [0.0, -1.8, 0.0] in 21.996s
+[2020-05-13 09:36:49.083100] [WPTIME] tb3_2 from [-1.8, 0.0, 0.0] to [0.0, 1.8, 0.0] in 88.446s
+[2020-05-13 09:37:34.257882] [WPTIME] tb3_2 from [0.0, 1.8, 0.0] to [0.0, -1.8, 0.0] in 22.11s
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-13 09:54:10.783074
+==> Benchmark ID: 1589356450
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.1
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: idle
+==> include_start_time: False
+--------------------------------------------------------
+
+[2020-05-13 10:08:47.475017] [WPTIME] tb3_2 from [-1.8, 0.0, 0.0] to [0.0, 1.8, 0.0] in 93.1196291447s
+[2020-05-13 10:09:19.869131] [WPTIME] tb3_2 from [0.0, 1.8, 0.0] to [0.0, -1.8, 0.0] in 32.3731820583s
+[2020-05-13 10:09:31.983597] [WPTIME] tb3_0 from [-1.8, 0.0, 0.0] to [0.0, 1.8, 0.0] in 87.0727958679s
+[2020-05-13 10:10:00.338345] [WPTIME] tb3_3 from [-1.8, 0.0, 0.0] to [0.0, 1.8, 0.0] in 87.0418291092s
+[2020-05-13 10:10:04.382244] [WPTIME] tb3_0 from [0.0, 1.8, 0.0] to [0.0, -1.8, 0.0] in 32.391644001s
+[2020-05-13 10:10:24.629765] [WPTIME] tb3_1 from [-1.8, 0.0, 0.0] to [0.0, 1.8, 0.0] in 204.434922934s
+[2020-05-13 10:10:38.795635] [WPTIME] tb3_2 from [0.0, -1.8, 0.0] to [1.8, 0.0, 0.0] in 78.923803091s
+[2020-05-13 10:10:59.033451] [WPTIME] tb3_1 from [0.0, 1.8, 0.0] to [0.0, -1.8, 0.0] in 34.399958849s
+[2020-05-13 10:11:25.329017] [WPTIME] tb3_0 from [0.0, -1.8, 0.0] to [1.8, 0.0, 0.0] in 80.9444479942s
+[2020-05-13 10:12:20.020309] [WPTIME] tb3_2 from [1.8, 0.0, 0.0] to [-1.8, 0.0, 0.0] in 101.21944809s
+[2020-05-13 10:12:20.024301] [MAKESPAN] tb3_2 finished in 1589357540.02s
+[2020-05-13 10:12:20.064234] [FLOWTIME] tb3_2: 397339385.006
+[2020-05-13 10:12:32.196814] [WPTIME] tb3_1 from [0.0, -1.8, 0.0] to [1.8, 0.0, 0.0] in 93.1572341919s
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-13 10:17:46.814202
+==> Benchmark ID: 1589357866
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.1
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+[2020-05-13 10:18:44.423319] [WPTIME] tb3_1 from [1.8, 0.0, 0.0] to [-1.8, 0.0, 0.0] in 42.154s
+[2020-05-13 10:19:01.972497] [WPTIME] tb3_3 from [1.8, 0.0, 0.0] to [-1.8, 0.0, 0.0] in 58.236s
+[2020-05-13 10:20:40.715620] [WPTIME] tb3_0 from [1.8, 0.0, 0.0] to [-1.8, 0.0, 0.0] in 120.562s
+[2020-05-13 10:20:47.393154] [WPTIME] tb3_3 from [-1.8, 0.0, 0.0] to [0.0, 1.8, 0.0] in 66.36s
+[2020-05-13 10:21:04.350537] [WPTIME] tb3_2 from [1.8, 0.0, 0.0] to [-1.8, 0.0, 0.0] in 134.646s
+[2020-05-13 10:21:22.807386] [WPTIME] tb3_3 from [0.0, 1.8, 0.0] to [0.0, -1.8, 0.0] in 22.124s
+[2020-05-13 10:21:28.785992] [WPTIME] tb3_1 from [-1.8, 0.0, 0.0] to [0.0, 1.8, 0.0] in 108.584s
+[2020-05-13 10:22:04.447861] [WPTIME] tb3_1 from [0.0, 1.8, 0.0] to [0.0, -1.8, 0.0] in 24.124s
+[2020-05-13 10:22:07.540127] [WPTIME] tb3_0 from [-1.8, 0.0, 0.0] to [0.0, 1.8, 0.0] in 56.314s
+[2020-05-13 10:22:38.065084] [WPTIME] tb3_2 from [-1.8, 0.0, 0.0] to [0.0, 1.8, 0.0] in 62.378s
+[2020-05-13 10:22:41.052404] [WPTIME] tb3_0 from [0.0, 1.8, 0.0] to [0.0, -1.8, 0.0] in 22.148s
+[2020-05-13 10:22:53.365812] [WPTIME] tb3_3 from [0.0, -1.8, 0.0] to [1.8, 0.0, 0.0] in 60.364s
+[2020-05-13 10:23:14.954930] [WPTIME] tb3_2 from [0.0, 1.8, 0.0] to [0.0, -1.8, 0.0] in 24.17s
+[2020-05-13 10:23:27.198607] [WPTIME] tb3_1 from [0.0, -1.8, 0.0] to [1.8, 0.0, 0.0] in 54.362s
+[2020-05-13 10:23:57.330946] [WPTIME] tb3_3 from [1.8, 0.0, 0.0] to [-1.8, 0.0, 0.0] in 42.26s
+[2020-05-13 10:23:57.339110] [MAKESPAN] tb3_3 finished in 249.36s
+[2020-05-13 10:23:57.365996] [FLOWTIME] tb3_3: 62.3405
+[2020-05-13 10:24:05.771840] [WPTIME] tb3_0 from [0.0, -1.8, 0.0] to [1.8, 0.0, 0.0] in 56.376s
+[2020-05-13 10:24:24.671702] [WPTIME] tb3_0 from [1.8, 0.0, 0.0] to [-1.8, 0.0, 0.0] in 14.114s
+[2020-05-13 10:24:24.675811] [MAKESPAN] tb3_0 finished in 269.524s
+[2020-05-13 10:24:24.717381] [FLOWTIME] tb3_0: 67.3815
+[2020-05-13 10:24:40.942671] [WPTIME] tb3_2 from [0.0, -1.8, 0.0] to [1.8, 0.0, 0.0] in 58.424s
+[2020-05-13 10:25:00.017312] [WPTIME] tb3_2 from [1.8, 0.0, 0.0] to [-1.8, 0.0, 0.0] in 16.12s
+[2020-05-13 10:25:00.020895] [MAKESPAN] tb3_2 finished in 295.744s
+[2020-05-13 10:25:00.034072] [FLOWTIME] tb3_2: 73.9375
+[2020-05-13 10:25:13.643485] [WPTIME] tb3_1 from [1.8, 0.0, 0.0] to [-1.8, 0.0, 0.0] in 78.626s
+[2020-05-13 10:25:13.646305] [MAKESPAN] tb3_1 finished in 307.858s
+[2020-05-13 10:25:13.662811] [FLOWTIME] tb3_1: 76.9655
+[2020-05-13 10:25:13.668378] [MAKESPAN AVG] 307.8715s
+[2020-05-13 10:25:13.672405] [MAKESPAN AVG] 307.8715s
+[2020-05-13 10:25:13.699797] [FLOWTIME AVG] 76.967875
+[2020-05-13 10:25:13.704899] [FLOWTIME AVG] 76.967875
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-13 16:13:12.912216
+==> Benchmark ID: 1589379192
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.1
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+[2020-05-13 16:17:00.189567] [WPTIME] tb3_0 from [1.8, 0.0, 0.0] to [-1.8, 0.0, 0.0] in 166.598s
+[2020-05-13 16:17:23.183707] [WPTIME] tb3_2 from [1.8, 0.0, 0.0] to [-1.8, 0.0, 0.0] in 186.68s
+[2020-05-13 16:18:03.942222] [WPTIME] tb3_1 from [1.8, 0.0, 0.0] to [-1.8, 0.0, 0.0] in 208.758s
+[2020-05-13 16:18:44.663475] [WPTIME] tb3_2 from [-1.8, 0.0, 0.0] to [0.0, 1.8, 0.0] in 60.3s
+[2020-05-13 16:19:06.833887] [WPTIME] tb3_1 from [-1.8, 0.0, 0.0] to [0.0, 1.8, 0.0] in 58.154s
+[2020-05-13 16:19:09.786989] [WPTIME] tb3_2 from [0.0, 1.8, 0.0] to [0.0, -1.8, 0.0] in 21.882s
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-13 16:20:27.232496
+==> Benchmark ID: 1589379627
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.1
+==> world: turtlebot3.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+[2020-05-13 16:23:57.809542] [WPTIME] tb3_1 from [-1.8, 0.0, 0.0] to [0.0, 1.8, 0.0] in 54.318s
+[2020-05-13 16:24:34.318754] [WPTIME] tb3_2 from [-1.8, 0.0, 0.0] to [0.0, 1.8, 0.0] in 68.364s
+[2020-05-13 16:24:51.643978] [WPTIME] tb3_3 from [-1.8, 0.0, 0.0] to [0.0, 1.8, 0.0] in 62.324s
+[2020-05-13 16:25:03.662815] [WPTIME] tb3_2 from [0.0, 1.8, 0.0] to [0.0, -1.8, 0.0] in 22.11s
+[2020-05-13 16:25:36.459226] [WPTIME] tb3_1 from [0.0, 1.8, 0.0] to [0.0, -1.8, 0.0] in 74.406s
+[2020-05-13 16:26:16.165277] [WPTIME] tb3_2 from [0.0, -1.8, 0.0] to [1.8, 0.0, 0.0] in 58.31s
+[2020-05-13 16:26:18.742101] [WPTIME] tb3_0 from [-1.8, 0.0, 0.0] to [0.0, 1.8, 0.0] in 64.362s
+[2020-05-13 16:26:37.555886] [WPTIME] tb3_2 from [1.8, 0.0, 0.0] to [-1.8, 0.0, 0.0] in 16.096s
+[2020-05-13 16:26:37.557984] [MAKESPAN] tb3_2 finished in 251.298s
+[2020-05-13 16:26:37.611367] [FLOWTIME] tb3_2: 62.835
+[2020-05-13 16:26:48.451089] [WPTIME] tb3_0 from [0.0, 1.8, 0.0] to [0.0, -1.8, 0.0] in 24.152s
+[2020-05-13 16:26:50.577485] [WPTIME] tb3_1 from [0.0, -1.8, 0.0] to [1.8, 0.0, 0.0] in 60.32s
+[2020-05-13 16:27:39.538617] [MAKESPAN] tb3_1 finished in 303.63s
+[2020-05-13 16:27:39.542445] [WPTIME] tb3_1 from [1.8, 0.0, 0.0] to [-1.8, 0.0, 0.0] in 40.246s
+[2020-05-13 16:27:39.556165] [FLOWTIME] tb3_1: 75.909
+[2020-05-13 16:28:11.673980] [WPTIME] tb3_0 from [0.0, -1.8, 0.0] to [1.8, 0.0, 0.0] in 72.462s
+[2020-05-13 16:28:26.576578] [WPTIME] tb3_0 from [1.8, 0.0, 0.0] to [-1.8, 0.0, 0.0] in 14.102s
+[2020-05-13 16:28:26.581198] [MAKESPAN] tb3_0 finished in 347.932s
+[2020-05-13 16:28:26.596447] [FLOWTIME] tb3_0: 86.984
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-20 13:46:36.512347
+==> Benchmark ID: 1589975196
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.1
+==> world: tworoom.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-20 13:50:52.734056
+==> Benchmark ID: 1589975452
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: dense_block
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-20 15:54:05.532193
+==> Benchmark ID: 1589982845
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-20 16:09:19.382127
+==> Benchmark ID: 1589983759
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-20 16:11:04.697012
+==> Benchmark ID: 1589983864
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-20 16:13:15.331738
+==> Benchmark ID: 1589983995
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-20 16:27:59.018478
+==> Benchmark ID: 1589984879
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-20 16:31:00.839411
+==> Benchmark ID: 1589985060
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-20 16:39:06.321547
+==> Benchmark ID: 1589985546
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-20 16:41:22.598999
+==> Benchmark ID: 1589985682
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-20 16:45:22.235972
+==> Benchmark ID: 1589985922
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-20 16:48:17.459613
+==> Benchmark ID: 1589986097
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-24 08:35:05.494211
+==> Benchmark ID: 1590302105
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 1
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-24 08:38:35.127022
+==> Benchmark ID: 1590302315
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 2
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-24 08:47:06.010819
+==> Benchmark ID: 1590302826
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 2
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: tb3_edge
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-24 08:52:07.661496
+==> Benchmark ID: 1590303127
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 2
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: two_rooms
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-24 08:58:51.330240
+==> Benchmark ID: 1590303531
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 2
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: two_rooms
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-24 09:02:06.181335
+==> Benchmark ID: 1590303726
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 2
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: two_rooms
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-24 09:04:16.126320
+==> Benchmark ID: 1590303856
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 2
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: two_rooms
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-24 09:05:14.145458
+==> Benchmark ID: 1590303914
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 2
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: two_rooms
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-24 09:10:35.007708
+==> Benchmark ID: 1590304235
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 2
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: two_rooms
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-24 09:15:11.356608
+==> Benchmark ID: 1590304511
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 3
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: two_rooms
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-24 10:31:49.056385
+==> Benchmark ID: 1590309109
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 3
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: two_rooms
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-24 10:36:18.371392
+==> Benchmark ID: 1590309378
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 3
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: two_rooms
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-24 10:41:08.635694
+==> Benchmark ID: 1590309668
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 3
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: two_rooms
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-24 10:46:50.504044
+==> Benchmark ID: 1590310010
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 3
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: two_rooms
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-24 10:52:56.281537
+==> Benchmark ID: 1590310376
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 3
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: two_rooms
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-24 10:59:00.478418
+==> Benchmark ID: 1590310740
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 3
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: two_rooms
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-24 11:00:30.191757
+==> Benchmark ID: 1590310830
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 3
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: two_rooms
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-24 11:01:38.569322
+==> Benchmark ID: 1590310898
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 3
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: two_rooms
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-24 11:03:19.701876
+==> Benchmark ID: 1590310999
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 3
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: two_rooms
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-24 11:05:35.145407
+==> Benchmark ID: 1590311135
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 3
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: two_rooms
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-24 11:07:43.976026
+==> Benchmark ID: 1590311263
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 3
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: two_rooms
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-24 11:08:45.893554
+==> Benchmark ID: 1590311325
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 3
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: two_rooms
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-24 11:20:05.545897
+==> Benchmark ID: 1590312005
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 3
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: two_rooms
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-24 11:23:39.042584
+==> Benchmark ID: 1590312219
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 3
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: two_rooms
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-24 11:36:44.166876
+==> Benchmark ID: 1590313004
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 3
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: two_rooms
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-24 11:40:27.962516
+==> Benchmark ID: 1590313227
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 3
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: two_rooms
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+[2020-05-24 11:41:11.662013] [WPTIME] tb3_0 from [1.0, 2.0, 0.0] to [1.0, -1.0, 0.0] in 154.942s
+[2020-05-24 11:41:15.894440] [WPTIME] tb3_2 from [-1.0, -1.0, 0.0] to [1.0, 2.0, 0.0] in 160.976s
+[2020-05-24 11:42:32.052858] [WPTIME] tb3_0 from [1.0, -1.0, 0.0] to [-1.0, 2.0, 0.0] in 70.202s
+[2020-05-24 11:43:01.882509] [WPTIME] tb3_1 from [1.0, -1.0, 0.0] to [-1.0, 2.0, 0.0] in 249.474s
+[2020-05-24 11:43:28.866620] [WPTIME] tb3_1 from [-1.0, 2.0, 0.0] to [-1.0, -1.0, 0.0] in 22.136s
