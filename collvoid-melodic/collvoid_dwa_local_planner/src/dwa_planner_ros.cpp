@@ -265,8 +265,8 @@ bool DWAPlannerROS::dwaComputeVelocityCommands(geometry_msgs::PoseStamped &globa
   drive_cmds.header.frame_id = costmap_ros_->getBaseFrameID();
 
   // call with updated footprint
-  base_local_planner::Trajectory path = dp_->findBestPath(global_pose, robot_vel, drive_cmds, costmap_ros_->getRobotFootprint()); //COLLVOID: + costmap_ros_->getRobotFootprint());
-  //ROS_ERROR("Best: %.2f, %.2f, %.2f, %.2f", path.xv_, path.yv_, path.thetav_, path.cost_);
+  base_local_planner::Trajectory path = dp_->findBestPath(global_pose, robot_vel, drive_cmds, costmap_ros_->getRobotFootprint()); //COLLVOID
+  ROS_INFO_THROTTLE(5,"Best: %.2f, %.2f, %.2f, %.2f", path.xv_, path.yv_, path.thetav_, path.cost_);
 
   /* For timing uncomment
     gettimeofday(&end, NULL);
@@ -285,7 +285,7 @@ bool DWAPlannerROS::dwaComputeVelocityCommands(geometry_msgs::PoseStamped &globa
   std::vector<geometry_msgs::PoseStamped> local_plan;
   if (path.cost_ < 0)
   {
-    ROS_DEBUG_NAMED("collvoid_dwa_local_planner",
+    ROS_WARN_THROTTLE_NAMED(5,"collvoid_dwa_local_planner",
                     "The dwa local planner failed to find a valid plan, cost functions discarded all candidates. This can mean there is an obstacle too close to the robot.");
     local_plan.clear();
     publishLocalPlan(local_plan);
@@ -330,7 +330,7 @@ bool DWAPlannerROS::computeVelocityCommands(geometry_msgs::Twist &cmd_vel)
   std::vector<geometry_msgs::PoseStamped> transformed_plan;
   if (!planner_util_.getLocalPlan(current_pose_, transformed_plan))
   {
-    ROS_ERROR("[DWA Local Planer] Could not get local plan");
+    ROS_ERROR("[DWA Local Planner] Could not get local plan");
     return false;
   }
 
@@ -407,7 +407,7 @@ bool DWAPlannerROS::freeOfObstacles(const geometry_msgs::PoseStamped &robot_pose
     geometry_msgs::PoseStamped robot_pose_msg;
     tf2::convert(robot_pose, robot_pose_msg);
     distance = distance2D(trajectory[i], robot_pose_msg);
-    if (distance < 0.2 || distance > obstacle_max_distance_) // TODO use footprint!
+    if (distance < 0.2 || distance > obstacle_max_distance_)
       continue;
 
     double x = trajectory[i].pose.position.x;

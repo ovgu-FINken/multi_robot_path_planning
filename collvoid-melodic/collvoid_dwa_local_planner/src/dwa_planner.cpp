@@ -269,9 +269,9 @@ bool DWAPlanner::checkTrajectory(
   generator_.generateTrajectory(pos, vel, vel_samples, traj);
 
   double collvoid_scale = collvoid_costs_.getScale(); //COLLVOID
-  collvoid_costs_.setScale(0);                        // TODO COLLVOID: why ist it set to zero ....
+  collvoid_costs_.setScale(0); //COLLVOID 
   double cost = scored_sampling_planner_.scoreTrajectory(traj, -1);
-  collvoid_costs_.setScale(collvoid_scale); // TODO COLLVOID: .... and then back to scale??
+  collvoid_costs_.setScale(collvoid_scale);  //COLLVOID
 
   //if the trajectory is a legal one... the check passes
   if (cost >= 0)
@@ -327,7 +327,7 @@ void DWAPlanner::updatePlanAndLocalCosts(
   goal_front_costs_.setTargetPoses(front_global_plan);
 
   // keeping the nose on the path
-  if (sq_dist > forward_point_distance_ * forward_point_distance_) //COLLVOID: * cheat_factor_
+  if (sq_dist > forward_point_distance_ * forward_point_distance_ * cheat_factor_) //COLLVOID
   {
     alignment_costs_.setScale(pdist_scale_);
     // costs for robot being aligned with path (nose on path, not ju
@@ -391,7 +391,7 @@ base_local_planner::Trajectory DWAPlanner::findBestPath(
    * @param traj The container to write the result to
    * @param all_explored pass NULL or a container to collect all trajectories for debugging (has a penalty)
    */
-  scored_sampling_planner_.findBestTrajectory(result_traj_, &all_explored); // TODO display/print the trajectories and their costs
+  scored_sampling_planner_.findBestTrajectory(result_traj_, &all_explored);
 
   if (publish_traj_pc_)
   {
