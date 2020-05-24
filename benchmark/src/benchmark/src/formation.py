@@ -21,7 +21,7 @@ class Formation(Enum):
     """
     DENSE_BLOCK = "dense_block"
     AT_WAY_POINTS = "at_way_point"
-    RANDOM = "random"
+    TWO_ROOMS = "two_rooms"
 
 
 class FormationHandler:
@@ -55,8 +55,8 @@ class FormationHandler:
         elif self._formation == Formation.AT_WAY_POINTS \
                 or self._formation == Formation.AT_WAY_POINTS.value:
             self._estimate_at_way_points()
-        elif self._formation == Formation.RANDOM.value:
-            self._estimate_random()
+        elif self._formation == Formation.TWO_ROOMS.value:
+            self._estimate_two_rooms()
         else:
             rospy.logerr(
                 "Invalid formation {} specified!".format(self._formation))
@@ -114,3 +114,47 @@ class FormationHandler:
         and returns the positions and orientations.
         """
         rospy.loginfo("There is no such formation specified!")
+
+    def _estimate_two_rooms(self):
+        """ Runs the computation process for two_rooms spawning
+        and returns the positions and orientations.
+        """
+        if self._number_of_robots > 16:
+            rospy.loginfo("Too many robots!!")
+        else:
+            rospy.loginfo("Calc. two_rooms formation")
+
+            distance = self._distance / 2
+
+            cp0 = [1.0 , 2.0]
+            cp1 = [1.0, -1.0]
+            cp2 = [-1.0, 2.0]
+            cp3 = [-1.0, -1.0]
+
+            cp = [cp0, cp1, cp2, cp3]
+
+            points = []
+
+            for i in range(4):
+
+                 points.append([[cp[i][0]+distance, cp[i][1]+distance, 0.0],
+                               [cp[i][0]-distance, cp[i][1]-distance, 0.0],
+                               [cp[i][0]+distance, cp[i][1]-distance, 0.0],
+                               [cp[i][0]-distance, cp[i][1]+distance, 0.0]])
+
+            a=0
+            b=0
+            for i in range(self._number_of_robots):
+
+                self._position.append(points[a][b])
+                self._orientation.append([0.0, 0.0, 0.0])
+
+                if a==3 :
+                    a = 0
+                else:
+                    a += 1
+
+                if b == 3:
+                    b = 0
+                else:
+                    b +=1

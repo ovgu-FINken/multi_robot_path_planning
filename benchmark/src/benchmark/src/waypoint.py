@@ -26,6 +26,7 @@ class WayPointMap(Enum):
     TB3_EDGE = "tb3_edge"
     MAZE = "maze"
     WAREHOUSE = "warehouse"
+    TWO_ROOMS = "two_rooms"
 
 
 def get_num_of_wps(waypoint_map_name):
@@ -101,8 +102,10 @@ class WayPointManager:
         self._wp_callback = wp_callback
         self._finished_callback = finished_callback
         self._rounds_completed = {}
+        self._waypoint_map_name = waypoints
         self._setup_publisher()
         self._init_wps()
+
 
     def update(self, current_pos, quiet=False):
         """ Updates waypoints.
@@ -160,8 +163,8 @@ class WayPointManager:
             return False
         if robot_name not in self._target_point.keys():
             return False
-        # The count() is a built-in function in Python. It will return you the count of a given element in the list. 
-        if self._target_point[robot_name].count(self._waypoint_map[1]) - 1 >= self._rounds: 
+        # The count() is a built-in function in Python. It will return you the count of a given element in the list.
+        if self._target_point[robot_name].count(self._waypoint_map[1]) - 1 >= self._rounds:
             return True
         return False
 
@@ -181,7 +184,11 @@ class WayPointManager:
         """ Sets the initial start wp for every robot.
         """
         for robot_name in range(self._number_of_robots):
-            self.next(robot_name)
+            if self._waypoint_map_name == "two_rooms":
+                map = self.rotate_waypoint_list(robot_name)
+            else:
+                map = self._waypoint_map
+            self.next(robot_name, map)
 
     def _publish(self, robot_name):
         """ Publishes the target point for the robot.
@@ -194,12 +201,12 @@ class WayPointManager:
             self._publish_target_points(robot_name)
             self._publish_rounds(robot_name)
 
-    def next(self, robot_name):
+    def next(self, robot_name, map):
         """ Returns the next waypoint for a given robot.
         :param robot_name:
         :return: waypoint
         """
-        self._update_target_points(robot_name)
+        self._update_target_points(robot_name, map)
         next_wp = self._get_target_point(robot_name)
         self._publish(robot_name)
         return next_wp
@@ -244,22 +251,33 @@ class WayPointManager:
                 target_point = self._get_target_point(robot_name)
                 self._publisher[names.TopicNames.FINISHED.value][robot_name].publish(target_point)
 
-    def _update_target_points(self, robot_name):
+    #change here
+    def _update_target_points(self, robot_name, map):
         """ Updates the target points for a robot.
         """
+
         # initial target point
         if robot_name not in self._target_point:
             rospy.loginfo("Setting intial target point")
-            self._set_target_point(robot_name, self._waypoint_map[0])
+            self._set_target_point(robot_name, map[0])
 
         # restart round
-        elif self._get_target_point(robot_name) == self._waypoint_map[-1]:
+        elif self._get_target_point(robot_name) == map[-1]:
             rospy.loginfo("Restarting round")
-            self._set_target_point(robot_name, self._waypoint_map[0])
+            self._set_target_point(robot_name, map[0])
 
         # set next in round
         else:
             rospy.loginfo("Setting next target in round")
-            current_target_idx = self._waypoint_map.index(self._get_target_point(robot_name))
-            target_point = self._waypoint_map[current_target_idx + 1]
+            current_target_idx = map.index(self._get_target_point(robot_name))
+            target_point = map[current_target_idx + 1]
             self._set_target_point(robot_name, target_point)
+
+    def rotate_waypoint_list(self, number):
+        map = self._waypoint_map
+
+        for i in range(number):
+            item = map.pop(0)
+            map.append(item)
+
+        return map

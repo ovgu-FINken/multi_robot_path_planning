@@ -93,7 +93,7 @@ def update_wps(_number_of_robots, _namespace, _rounds,
     wp_manager = wp.WayPointManager(
         namespace=_namespace, number_of_robots=_number_of_robots,
         wp_callback=callback_target, finished_callback=callback_finished,
-        waypoints=_wp_map, threshold=wp_threshold, rounds=_rounds)
+        waypoints= _wp_map, threshold=wp_threshold, rounds=_rounds)
     while not rospy.is_shutdown():
         wp_manager.update(robot_current_positions)
         rospy.Rate(frequency).sleep()
