@@ -300,13 +300,11 @@ class WayPointManager:
 
         for i in range(len(self.mapB)):
             self.mapB[i][0] *= -1
-        self.mapB[0][1] *= -1
-        self.mapB[2][1] *= -1
 
-        self.mapC = copy.deepcopy(self.mapA)
+        self.mapC = copy.deepcopy(self.mapB)
         self.mapC.reverse()
 
-        self.mapD = copy.deepcopy(self.mapB)
+        self.mapD = copy.deepcopy(self.mapA)
         self.mapD.reverse()
 
         maps = []

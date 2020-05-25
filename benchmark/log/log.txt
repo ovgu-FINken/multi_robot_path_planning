@@ -1806,3 +1806,65 @@
 [2020-05-24 11:42:32.052858] [WPTIME] tb3_0 from [1.0, -1.0, 0.0] to [-1.0, 2.0, 0.0] in 70.202s
 [2020-05-24 11:43:01.882509] [WPTIME] tb3_1 from [1.0, -1.0, 0.0] to [-1.0, 2.0, 0.0] in 249.474s
 [2020-05-24 11:43:28.866620] [WPTIME] tb3_1 from [-1.0, 2.0, 0.0] to [-1.0, -1.0, 0.0] in 22.136s
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-25 12:53:35.208527
+==> Benchmark ID: 1590404015
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 3
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: two_rooms
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-25 13:02:24.772135
+==> Benchmark ID: 1590404544
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: two_rooms
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-05-25 13:07:08.439514
+==> Benchmark ID: 1590404828
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: two_rooms
+==> wp_threshold: 0.1
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: True
+--------------------------------------------------------
+
+[2020-05-25 13:08:55.765707] [WPTIME] tb3_1 from [1.0, -1.0, 0.0] to [-1.0, 2.0, 0.0] in 92.708s
+[2020-05-25 13:09:35.045790] [WPTIME] tb3_1 from [-1.0, 2.0, 0.0] to [-1.0, -1.0, 0.0] in 24.162s

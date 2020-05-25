@@ -3,6 +3,6 @@ model: burger
 name: '2'
 namespace: tb3_
 pose_x: '-0.85'
-pose_y: '1.85'
+pose_y: '2.15'
 pose_z: '0.0'
 simulate: 'True'
