@@ -12,5 +12,5 @@
   "wp_map": "two_rooms",
   "rounds": 1,
   "end_procedure": "despawn",
-  "include_start_time": true
+  "include_start_time": false
 }
