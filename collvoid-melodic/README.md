@@ -81,7 +81,7 @@ This README helps you with the ***setup and usage*** of the code. If you are loo
 
     ```
     ~/DrivingSwarm/src/pathplanning$ roscd collvoid_turtlebot/scripts/
-    ~/DrivingSwarm/src/pathplanning/collvoid-melodic/collvoid_turtlebot/scripts$ ./collvoid_std.sh -p collvoid
+    ~/DrivingSwarm/src/pathplanning/collvoid-melodic/collvoid_turtlebot/scripts$ ./collvoid_std.sh -p collvoid                                                                                                                                  
     ```
 
 3. After the collvoid_std.sh has finished its setup successfully, you can use the simple goal interface in **RVIZ for testing** it.
@@ -170,7 +170,3 @@ Due to the usage of external code and libraries this project is (partially?) lic
 ## Acknowledgments
 - Daniel Claes (code base in ROS indigo distro: http://wiki.ros.org/multi_robot_collision_avoidance)
 - Johann Schmidt (goal_controller based on his movement_controller in benchmark-pkg)
-
-
-https://github.com/ovgu-FINken/multi_robot_path_planning/tree/82c0136821250e1d89e689461e17fdb8efa7387c/benchmark/log
-https://github.com/ovgu-FINken/multi_robot_path_planning/tree/dd8da5720e6ec36f51005fcbb4bc7bd723a08f5f/benchmark/log
