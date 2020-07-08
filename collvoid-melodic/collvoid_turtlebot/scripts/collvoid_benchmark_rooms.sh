@@ -49,7 +49,7 @@ fi
 
 if [ "$PLANNER" = "$COLLVOID" ] || [ "$PLANNER" = "$DWA" ]; then
   echo ""
-  echo "Move base is starting with ${PLANNER}_local_planner and ${NUM_ROBOT} robots in turtlebot-world..."
+  echo "Move base is starting with ${PLANNER}_local_planner and ${NUM_ROBOT} robots in 2-room-world..."
   echo ""
 else
   echo ""

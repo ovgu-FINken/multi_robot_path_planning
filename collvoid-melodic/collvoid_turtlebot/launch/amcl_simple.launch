@@ -1,7 +1,3 @@
-<!--
-Starts the map server.
--->
-
 <launch>
 
   <!-- Arguments -->
@@ -9,12 +5,6 @@ Starts the map server.
   <arg name="open_rviz" default="false"/>
   <arg name="move_forward_only" default="false"/>
   <arg name="robot" default="tb3_1"/>
-
-  <!-- Map server -->
-  <!-- <node name="map_server" pkg="map_server" type="map_server" args="$(find turtlebot3_navigation)/maps/map.yaml"> -->
-    <!-- <remap from="/map" to="/$(arg robot)/map"/> -->
-    <!-- <param name="~frame_id" value="$(arg robot)/map"/> -->
-  <!-- </node> -->
 
   <group ns="/$(arg robot)">
 
