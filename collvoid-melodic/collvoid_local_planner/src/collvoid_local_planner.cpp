@@ -206,7 +206,7 @@ namespace collvoid_local_planner {
         //when we get a new plan, we also want to clear any latch we may have on goal tolerances
         latchedStopRotateController_.resetLatching();
         current_waypoint_ = 0;
-        ROS_INFO("[COLLVOID] Got new plan");
+        ROS_DEBUG("[COLLVOID] Got new plan");
         return planner_util_.setPlan(orig_global_plan);
     }
 

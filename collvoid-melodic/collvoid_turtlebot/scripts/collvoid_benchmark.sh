@@ -16,33 +16,47 @@ NUM=0
 MAPPING=${MAPPING:=amcl}
 WORLD=""
 NUM_ROBOT_DEFAULT=3
+PLANNER_DEFAULT="dwa"
+COLLVOID="collvoid"
+DWA="dwa"
 
 ## set the number of robots
 helpFunction() {
   echo ""
-  echo "Please specify the parameter like shown below:"
-  echo "$0 -n <same number of robots like in benchmark settings>"
-  echo -e "\t e.g. -n 4"
+  echo "Please specify the parameters like shown below:"
+  echo "$0 -p <local_planner> -n <number_of_robots_like_in_benchmark_settings>"
+  echo -e "\t -p collvoid, or -p dwa"
+  echo -e "\t -n 2, or -n 3, ..."
   echo ""
   exit 1 # Exit script after printing help
 }
 
-while getopts "n:" opt; do
+while getopts "n:p:" opt; do
   case "$opt" in
+  p) PLANNER="$OPTARG" ;;
   n) NUM_ROBOT="$OPTARG" ;;
   ?) helpFunction ;; # Print helpFunction in case parameter is non-existent
   esac
 done
 
 # Print helpFunction in case parameters are empty
-if [ -z "$NUM_ROBOT" ]; then
+if [ -z "$PLANNER" ] || [ -z "$NUM_ROBOT" ]; then
   echo ""
-  echo "Error: No parameter value specified."
+  echo "Error: At least one parameter value is not specified."
   helpFunction
   NUM_ROBOT=$NUM_ROBOT_DEFAULT
-else
-  echo "Collvoid starts with ${NUM_ROBOT} robots."
 fi
+
+if [ "$PLANNER" = "$COLLVOID" ] || [ "$PLANNER" = "$DWA" ]; then
+  echo ""
+  echo "Move base is starting with ${PLANNER}_local_planner and ${NUM_ROBOT} robots ..."
+  echo ""
+else
+  echo ""
+  echo "There is no such planner. Please, check the spelling."
+  helpFunction
+fi
+
 
 # start tmux
 tmux new-session -s $SESSION_NAME -d
@@ -57,20 +71,35 @@ tmux send-keys -t $SESSION_NAME:$NUM "roslaunch collvoid_turtlebot map_server.la
 #####
 # benchmark starts counting from 0 for the robot's index
 X=0
-while [ $X -lt $NUM_ROBOT ]; do
-  # localisation
-  NUM=$((++NUM))
-  tmux new-window -t $SESSION_NAME -n "amcl_${X}"
-  tmux send-keys -t $SESSION_NAME:$NUM "roslaunch collvoid_turtlebot amcl_simple.launch robot:=tb3_${X}" C-m
+if [[ "$PLANNER" == "$COLLVOID" ]]; then
+  while [ $X -lt $NUM_ROBOT ]; do
+    # localisation
+    NUM=$((++NUM))
+    tmux new-window -t $SESSION_NAME -n "amcl_${X}"
+    tmux send-keys -t $SESSION_NAME:$NUM "roslaunch collvoid_turtlebot amcl_simple.launch robot:=tb3_${X}" C-m
 
-  # navigation
-  NUM=$((++NUM))
-  tmux new-window -t $SESSION_NAME -n "move_base_${X}"
-  tmux send-keys -t $SESSION_NAME:$NUM "roslaunch collvoid_turtlebot move_base.launch robot_name:=tb3_${X}" C-m
-  read -t 2
+    # navigation
+    NUM=$((++NUM))
+    tmux new-window -t $SESSION_NAME -n "move_base_${X}"
+    tmux send-keys -t $SESSION_NAME:$NUM "roslaunch collvoid_turtlebot move_base_collvoid.launch robot_name:=tb3_${X}" C-m
+    read -t 2
+    X=$((X + 1))
+  done
+elif [ "$PLANNER" = "$DWA" ]; then
+  while [ $X -lt $NUM_ROBOT ]; do
+    # localisation
+    NUM=$((++NUM))
+    tmux new-window -t $SESSION_NAME -n "amcl_${X}"
+    tmux send-keys -t $SESSION_NAME:$NUM "roslaunch collvoid_turtlebot amcl_simple.launch robot:=tb3_${X}" C-m
 
-  X=$((X + 1))
-done
+    # navigation
+    NUM=$((++NUM))
+    tmux new-window -t $SESSION_NAME -n "move_base_${X}"
+    tmux send-keys -t $SESSION_NAME:$NUM "roslaunch collvoid_turtlebot move_base_dwa.launch robot_name:=tb3_${X}" C-m
+    read -t 2
+    X=$((X + 1))
+  done
+fi
 
 # goal controller
 NUM=$((++NUM))
