@@ -66,7 +66,7 @@ tmux new-session -s $SESSION_NAME -d
 ##### map
 NUM=$((++NUM))
 tmux new-window -t $SESSION_NAME -n "map_server"
-tmux send-keys -t $SESSION_NAME:$NUM "roslaunch collvoid_turtlebot map_server.launch" C-m
+tmux send-keys -t $SESSION_NAME:$NUM "roslaunch collvoid_turtlebot map_server_tworooms.launch" C-m
 
 #####
 # benchmark starts counting from 0 for the robot's index
