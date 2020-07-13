@@ -181,8 +181,12 @@ class WayPointManager:
         if robot_name not in self._target_point.keys():
             return False
         # The count() is a built-in function in Python. It will return you the count of a given element in the list.
-        if self._target_point[robot_name].count(self._waypoint_map[1]) - 1 >= self._rounds:
-            return True
+        if self._waypoint_map_name == "two_rooms":
+            if self._target_point[robot_name].count(self._two_room_maps[robot_name][0]) - 1 >= self._rounds: #TODO why is the last waypoint-duration not published?!
+                return True
+        else:        
+            if self._target_point[robot_name].count(self._waypoint_map[1]) - 1 >= self._rounds:
+                return True
         return False
 
     def _wp_reached(self, current_pos, target_point):
