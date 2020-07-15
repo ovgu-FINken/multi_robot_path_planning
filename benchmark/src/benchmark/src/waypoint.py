@@ -115,7 +115,8 @@ class WayPointManager:
 
         if self._waypoint_map_name == "two_rooms":
             self._waypoint_map = self.make_different_maps(start_positions)
-
+            print(self._waypoint_map)
+            
         self._setup_publisher()
         self._init_wps()
 
@@ -178,7 +179,7 @@ class WayPointManager:
             return False
         # The count() is a built-in function in Python. It will return you the count of a given element in the list.
         if self._waypoint_map_name == "two_rooms":
-           if self._target_point[robot_name].count(self._waypoint_map[robot_name][0]) - 1 >= self._rounds:
+           if self._target_point[robot_name].count(self._waypoint_map[robot_name][1]) - 1 >= self._rounds:
                return True
         else:        
            if self._target_point[robot_name].count(self._waypoint_map[1]) - 1 >= self._rounds:
@@ -210,9 +211,11 @@ class WayPointManager:
         if self._wp_callback is not None:
             self._wp_callback(robot_name, self._get_target_point(robot_name))
             self._finished_callback(robot_name, self._finished(robot_name))
+            rospy.loginfo("wp_callback not None")
         else:
             self._publish_target_points(robot_name)
             self._publish_rounds(robot_name)
+            rospy.loginfo("wp_callback is None")
 
     def next(self, robot_name): 
         """ Returns the next waypoint for a given robot.
@@ -306,29 +309,39 @@ class WayPointManager:
     def make_different_maps(self, start_positions):
 
         self.mapA = copy.deepcopy(self._waypoint_map)
+
         self.mapB = copy.deepcopy(self.mapA)
+        self.mapB.reverse()
 
-        for i in range(len(self.mapB)):
-            self.mapB[i][0] *= -1
+        self.mapC = copy.deepcopy(self.mapA)
+        for i in range(len(self.mapC)):
+            self.mapC[i][0] *= -1
 
-        self.mapC = copy.deepcopy(self.mapB)
-        self.mapC.reverse()
-
-        self.mapD = copy.deepcopy(self.mapA)
+        self.mapD = copy.deepcopy(self.mapC)
         self.mapD.reverse()
 
+
         maps = []
+        cpA= [-1.0, -1.0]
+        cpB= [1.0, 2.0]
+        cpC= [1.0, -1.0]
+        cpD= [-1.0, 2.0]
+
         for i in range(self._number_of_robots):
-            if point_in_square(point=start_positions[i], cp=[-1.0,2.0], r=1.0):
+            if point_in_square(point=start_positions[i], cp=cpA, r=1.0):
+                # self.mapA = cpA + self.mapA
                 maps.append(self.mapA)
 
-            if point_in_square(point=start_positions[i], cp=[1.0,2.0], r=1.0):
+            if point_in_square(point=start_positions[i], cp=cpB, r=1.0):
+                # self.mapB = cpB + self.mapB
                 maps.append(self.mapB)
 
-            if point_in_square(point=start_positions[i], cp=[1.0,-1.0], r=1.0):
+            if point_in_square(point=start_positions[i], cp=cpC, r=1.0):
+                # self.mapC = cpC + self.mapC
                 maps.append(self.mapC)
 
-            if point_in_square(point=start_positions[i], cp=[-1.0,-1.0], r=1.0):
+            if point_in_square(point=start_positions[i], cp=cpD, r=1.0):
+                # self.mapD = cpD + self.mapD
                 maps.append(self.mapD)
 
         return maps
