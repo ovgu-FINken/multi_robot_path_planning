@@ -126,10 +126,16 @@ class FormationHandler:
 
             distance = self._distance / 2
 
-            cp0 = [1.0 , 2.0, 0.0]
-            cp1 = [1.0, -1.0, 0.0]
-            cp2 = [-1.0, 2.0, 0.0]
-            cp3 = [-1.0, -1.0, 0.0]
+            # cp0 = [1.0 , 2.0, 0.0]
+            # cp1 = [1.0, -1.0, 0.0]
+            # cp2 = [-1.0, 2.0, 0.0]
+            # cp3 = [-1.0, -1.0, 0.0]
+
+            ### alternatively starting closer to the center of each room
+            cp0 = [0.5 , 2.0, 0.0]
+            cp1 = [0.5, -1.0, 0.0]
+            cp2 = [-0.5, 2.0, 0.0]
+            cp3 = [-0.5, -1.0, 0.0]
 
             cp = [cp0,cp1,cp2,cp3]
             points = [0,0,0,0]

@@ -211,11 +211,9 @@ class WayPointManager:
         if self._wp_callback is not None:
             self._wp_callback(robot_name, self._get_target_point(robot_name))
             self._finished_callback(robot_name, self._finished(robot_name))
-            rospy.loginfo("wp_callback not None")
         else:
             self._publish_target_points(robot_name)
             self._publish_rounds(robot_name)
-            rospy.loginfo("wp_callback is None")
 
     def next(self, robot_name): 
         """ Returns the next waypoint for a given robot.

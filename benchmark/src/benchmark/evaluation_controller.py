@@ -22,24 +22,51 @@ import src.utils.naming_scheme as names
 def callback_target(data, args):
     """ Callback when a wp is set.
     :param data:
-    :param args:
+    :param args: 
     """
-    global timer, previous_wps, logger, makespan, end
+    global timer, previous_wps, logger, makespan, end, target_wps
+
     if not end:
-        if args[0] not in previous_wps:
-            previous_wps[args[0]] = data
-            if include_start_time:
+        if wp_map == "two_rooms":
+            if args[0] not in target_wps:
+                target_wps[args[0]] = data
+                print(args[0])
+                print(data)
+                # depends on settings
+                if include_start_time:
+                    timer.start_timer(args[0])
+                    makespan.start_timer(args[0])
+            elif target_wps[args[0]] != data:
+                print(data)
+                if timer.is_running(args[0]):
+                    duration = timer.get_time(args[0])
+                    logger.wptime(
+                        namespace + str(args[0]),
+                        [previous_wps[args[0]].x, previous_wps[args[0]].y, previous_wps[args[0]].z],
+                        [target_wps[args[0]].x, target_wps[args[0]].y, target_wps[args[0]].z], str(duration) + "s")
+                previous_wps[args[0]] = target_wps[args[0]]
+                target_wps[args[0]]  = data
                 timer.start_timer(args[0])
-                makespan.start_timer(args[0])
-        elif previous_wps[args[0]] != data:
-            if timer.is_running(args[0]):
-                duration = timer.get_time(args[0])
-                logger.wptime(
-                    namespace + str(args[0]),
-                    [previous_wps[args[0]].x, previous_wps[args[0]].y, previous_wps[args[0]].z],
-                    [data.x, data.y, data.z], str(duration) + "s")
-            previous_wps[args[0]] = data
-            timer.start_timer(args[0])
+
+        else:
+            if args[0] not in previous_wps:
+                previous_wps[args[0]] = data
+                print(args[0])
+                print(data)
+                # depends on settings
+                if include_start_time:
+                    timer.start_timer(args[0])
+                    makespan.start_timer(args[0])
+            elif previous_wps[args[0]] != data:
+                print(data)
+                if timer.is_running(args[0]):
+                    duration = timer.get_time(args[0])
+                    logger.wptime(
+                        namespace + str(args[0]),
+                        [previous_wps[args[0]].x, previous_wps[args[0]].y, previous_wps[args[0]].z],
+                        [data.x, data.y, data.z], str(duration) + "s")
+                previous_wps[args[0]] = data
+                timer.start_timer(args[0])
 
 
 def callback_finished(data, args):
@@ -81,6 +108,7 @@ def setup_subscriber(_number_of_robots, _namespace):
 
 logger = log.Logger()
 previous_wps = {}
+target_wps = {}
 finished = {}
 flowtime = {}
 end = False
