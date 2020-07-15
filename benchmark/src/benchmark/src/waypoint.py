@@ -114,7 +114,7 @@ class WayPointManager:
         self.publish_start_positions = start_positions
 
         if self._waypoint_map_name == "two_rooms":
-            self._two_room_maps = self.make_different_maps(start_positions)
+            self._waypoint_map = self.make_different_maps(start_positions)
 
         self._setup_publisher()
         self._init_wps()
@@ -130,11 +130,7 @@ class WayPointManager:
                 if not quiet:
                     self._print_pos(robot_name, current_pos)
                 if self._wp_reached(current_pos[robot_name], self._get_target_point(robot_name)):
-                    if self._waypoint_map_name == "two_rooms":
-                        map = self._two_room_maps[robot_name]
-                    else:
-                        map = self._waypoint_map
-                    self.next(robot_name, map)
+                    self.next(robot_name)
                     if not quiet:
                         rospy.loginfo("UPDATE for {0} to {1}!".format(
                             robot_name, self._get_target_point(robot_name)))
@@ -182,11 +178,11 @@ class WayPointManager:
             return False
         # The count() is a built-in function in Python. It will return you the count of a given element in the list.
         if self._waypoint_map_name == "two_rooms":
-            if self._target_point[robot_name].count(self._two_room_maps[robot_name][0]) - 1 >= self._rounds: #TODO why is the last waypoint-duration not published?!
-                return True
+           if self._target_point[robot_name].count(self._waypoint_map[robot_name][0]) - 1 >= self._rounds:
+               return True
         else:        
-            if self._target_point[robot_name].count(self._waypoint_map[1]) - 1 >= self._rounds:
-                return True
+           if self._target_point[robot_name].count(self._waypoint_map[1]) - 1 >= self._rounds:
+               return True
         return False
 
     def _wp_reached(self, current_pos, target_point):
@@ -205,11 +201,7 @@ class WayPointManager:
         """ Sets the initial start wp for every robot.
         """
         for robot_name in range(self._number_of_robots):
-            if self._waypoint_map_name == "two_rooms":
-                map = self._two_room_maps[robot_name]
-            else:#
-                map = self._waypoint_map
-            self.next(robot_name, map)
+            self.next(robot_name)
 
     def _publish(self, robot_name):
         """ Publishes the target point for the robot.
@@ -222,12 +214,12 @@ class WayPointManager:
             self._publish_target_points(robot_name)
             self._publish_rounds(robot_name)
 
-    def next(self, robot_name, map):
+    def next(self, robot_name): 
         """ Returns the next waypoint for a given robot.
         :param robot_name:
         :return: waypoint
         """
-        self._update_target_points(robot_name, map)
+        self._update_target_points(robot_name) 
         next_wp = self._get_target_point(robot_name)
         self._publish(robot_name)
         return next_wp
@@ -273,26 +265,40 @@ class WayPointManager:
                 self._publisher[names.TopicNames.FINISHED.value][robot_name].publish(target_point)
 
     #change here
-    def _update_target_points(self, robot_name, map):
+    def _update_target_points(self, robot_name):
         """ Updates the target points for a robot.
         """
 
         # initial target point
         if robot_name not in self._target_point:
-            rospy.loginfo("Setting intial target point")
-            self._set_target_point(robot_name, map[0])
+            rospy.loginfo("Setting intial target point...")
+            if self._waypoint_map_name == "two_rooms":
+                self._set_target_point(robot_name, self._waypoint_map[robot_name][0]) 
+            else:    
+                self._set_target_point(robot_name, self._waypoint_map[0]) 
+            rospy.loginfo("Intial target point is set.")
 
         # restart round
-        elif self._get_target_point(robot_name) == map[-1]:
-            rospy.loginfo("Restarting round")
-            self._set_target_point(robot_name, map[0])
+        elif (self._get_target_point(robot_name) == self._waypoint_map[-1] or self._get_target_point(robot_name) == self._waypoint_map[robot_name][-1]):
+            rospy.loginfo("Restarting round...")
+            if self._waypoint_map_name == "two_rooms":
+                self._set_target_point(robot_name, self._waypoint_map[robot_name][0]) 
+            else:    
+                self._set_target_point(robot_name, self._waypoint_map[0]) 
+            rospy.loginfo("Round restarted.")
 
         # set next in round
         else:
-            rospy.loginfo("Setting next target in round")
-            current_target_idx = map.index(self._get_target_point(robot_name))
-            target_point = map[current_target_idx + 1]
+            rospy.loginfo("Setting next target in round...")
+            if self._waypoint_map_name == "two_rooms":
+                current_target_idx = self._waypoint_map[robot_name].index(self._get_target_point(robot_name))
+                target_point = self._waypoint_map[robot_name][current_target_idx + 1]
+            else:    
+                current_target_idx = self._waypoint_map.index(self._get_target_point(robot_name))
+                target_point = self._waypoint_map[current_target_idx + 1]
             self._set_target_point(robot_name, target_point)
+            rospy.loginfo("Next target in round is set.")
+
 
 
 ##### JUST FOR TWO ROOM SCENARIO #####
