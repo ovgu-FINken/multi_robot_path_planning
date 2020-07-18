@@ -611,3 +611,23 @@
 [2020-07-18 10:04:38.677756] [FLOWTIME] tb3_0: 398764869.663
 [2020-07-18 10:04:38.684754] [MAKESPAN AVG] 1595059478.68s
 [2020-07-18 10:04:38.719405] [FLOWTIME AVG] 398764869.67
+
+
+---------------------- BENCHMARK ----------------------
+==> datetime: 2020-07-18 10:06:12.987690
+==> Benchmark ID: 1595059572
+==> model_name: turtlebot3
+==> model_type: burger
+==> namespace: tb3_
+==> number_of_robots: 4
+==> formation: two_rooms
+==> position: [1.5, 0.5, 0.5]
+==> orientation: [0.0, 0.0, 0.0]
+==> wp_map: two_rooms
+==> wp_threshold: 0.2
+==> world: tworooms.world
+==> rounds: 1
+==> end_procedure: despawn
+==> include_start_time: False
+--------------------------------------------------------
+
