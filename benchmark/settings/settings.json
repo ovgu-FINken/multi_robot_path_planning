@@ -2,7 +2,7 @@
   "model_name": "turtlebot3",
   "model_type": "burger",
   "namespace": "tb3_",
-  "number_of_robots": 4,
+  "number_of_robots": 8,
   "formation": "two_rooms",
   "distance": 0.3,
   "position": [1.5, 0.5, 0.5],
