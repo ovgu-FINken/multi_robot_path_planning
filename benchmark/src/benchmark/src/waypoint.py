@@ -280,7 +280,7 @@ class WayPointManager:
             rospy.loginfo("Intial target point is set.")
 
         # restart round
-        elif (self._get_target_point(robot_name) == self._waypoint_map[-1] or self._get_target_point(robot_name) == self._waypoint_map[robot_name][-1]):
+        elif (self._waypoint_map_name != "two_rooms" and self._get_target_point(robot_name) == self._waypoint_map[-1] or self._waypoint_map_name == "two_rooms" and  self._get_target_point(robot_name) == self._waypoint_map[robot_name][-1]):
             rospy.loginfo("Restarting round...")
             if self._waypoint_map_name == "two_rooms":
                 self._set_target_point(robot_name, self._waypoint_map[robot_name][0]) 
