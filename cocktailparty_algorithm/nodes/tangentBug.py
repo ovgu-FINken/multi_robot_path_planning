@@ -58,7 +58,7 @@ class TangentBug:
         self.frontScanner = []
         self.scannerRegions = []
         self.heuristicDistance = -1
-        self.robot_length = 0.2
+        self.robot_length = 0.3
         self.robotGap = self.calcRobotGap()
         self.region = ''
 
@@ -165,6 +165,7 @@ class TangentBug:
         flag = -99
         i = self.robotGap
 
+
         if scanner[i] >= (self.vision_radius):
             flag = 0 #no Obstacle
         else:
@@ -178,12 +179,12 @@ class TangentBug:
                 if tempFlag != flag:
                     flag = tempFlag
                     if min(scanner[i:i+self.robotGap]) >= self.vision_radius:
-                        alpha_deg = i - self.robotGap / 2.0
+                        alpha_deg = i - self.robotGap / 2.0 # i-self.robotGap + 0.5 * robotGap
                         if alpha_deg > 359.0:
                             alpha_deg = alpha_deg - 360.0
                         alpha_rad = self.normalize(radians(alpha_deg))
                         x = self.position.x + self.vision_radius * cos(self.orientation + alpha_rad)
-                        y = self.position.x + self.vision_radius * sin(self.orientation + alpha_rad)
+                        y = self.position.y + self.vision_radius * sin(self.orientation + alpha_rad)
                         points.append(Point(x, y, 0.0))
             else:
                 tempFlag = 1
@@ -191,7 +192,7 @@ class TangentBug:
                 if tempFlag != flag:
                     flag = tempFlag
                     if min(scanner[i-self.robotGap:i]) >= self.vision_radius:
-                        alpha_deg = i - self.robotGap * 1.5
+                        alpha_deg = i - self.robotGap * 1.5 #i -self.robotGap - 0.5 * self.robotGap
                         if alpha_deg < 0.0:
                             alpha_deg = alpha_deg + 360.0
                         alpha_rad = self.normalize(radians(alpha_deg))
@@ -264,7 +265,7 @@ class TangentBug:
 #####################STATE-METHODS##############################################
 
     # State 0:
-    def motionToGoal(self, tolerance = 0.1):
+    def motionToGoal(self):
         self.turnToPoint(self.goal_pos)
         nextPoint = Point()
         const = 0.0
@@ -272,22 +273,47 @@ class TangentBug:
         again = True
 
         while (again):
+            if self.euclidean_distance(self.position,  self.goal_pos) < self.vision_radius:
+                print('A')
+                self.waypoint = self.goal_pos
+                self.turnToPoint(self.goal_pos)
             if self.waypoint == self.goal_pos:
+                print('B')
                 if self.frontScanner > (self.vision_radius):
+                    print('B1')
                     if self.euclidean_distance(self.position, self.goal_pos) > self.vision_radius:
+                        print('B11')
                         const = sqrt(pow(self.vision_radius, 2) / (pow(self.goal_pos.x - self.position.x, 2) + pow(self.goal_pos.y - self.position.y, 2)))
                         self.waypoint.x =  self.position.x + const * (self.goal_pos.x - self.position.x)
                         self.waypoint.y =  self.position.y + const * (self.goal_pos.y - self.position.y)
                         self.waypoint.z = 0
-                    while(self.euclidean_distance(self.position, self.waypoint) > 0.5):
+                        while(self.euclidean_distance(self.position, self.waypoint) > 0.5):
+                            self.velocity_publisher.publish(self.moveToPoint(self.waypoint))
+                            self.rate.sleep()
+                        self.velocity_publisher.publish(self.stop())
+                        self.rate.sleep()
+                        self.waypoint = self.goal_pos
+                    else: 
+                        print('B12')
+                        while(self.euclidean_distance(self.position, self.waypoint) > 0.1):
+                            self.velocity_publisher.publish(self.moveToPoint(self.waypoint))
+                            self.rate.sleep()
+                        self.velocity_publisher.publish(self.stop())
+                        self.rate.sleep()
+                        again = False
+                elif self.frontScanner > self.euclidean_distance(self.position,  self.goal_pos):
+                    print('B2')
+                    while(self.euclidean_distance(self.position, self.waypoint) > 0.1):
                         self.velocity_publisher.publish(self.moveToPoint(self.waypoint))
                         self.rate.sleep()
                     self.velocity_publisher.publish(self.stop())
                     self.rate.sleep()
-                    self.waypoint = self.goal_pos
+                    again=False
                 else:
+                    print('B3')
                     nextPoint = self.calculateNextWaypoint()
                     if nextPoint is not None:
+                        print('B31')
                         self.waypoint = nextPoint
                         self.turnToPoint(self.waypoint)
                         while(self.euclidean_distance(self.position, self.waypoint) > 0.5):
@@ -295,14 +321,18 @@ class TangentBug:
                             self.rate.sleep()
                         self.velocity_publisher.publish(self.stop())
                         self.rate.sleep()
-                        if self.angle_error(self.position) <= tolerance:
-                            self.waypoint = self.goal_pos
+                       # if self.angle_error(self.position) <= 0.1:
+                          #  print('B311')
+                        #    self.waypoint = self.goal_pos
                     else:
+                        print('B32')
                         again = False
                         self.change_state(1)
             else:
+                print('C')
                 nextPoint = self.calculateNextWaypoint()
                 if nextPoint is not None:
+                    print('C1')
                     self.waypoint = nextPoint
                     self.turnToPoint(self.waypoint)
                     while(self.euclidean_distance(self.position, self.waypoint) > 0.5):
@@ -310,9 +340,11 @@ class TangentBug:
                         self.rate.sleep()
                     self.velocity_publisher.publish(self.stop())
                     self.rate.sleep()
-                    if self.angle_error(self.position) <= tolerance:
-                        self.waypoint = self.goal_pos
+                  #  if self.angle_error(self.position) <= 0.1:
+                  #      print('C11')
+                  #      self.waypoint = self.goal_pos
                 else:
+                    print('C2')
                     again = False
                     self.change_state(1)
 
@@ -330,9 +362,10 @@ class TangentBug:
         while (again):
             if self.scannerRegions['front'] > d and self.scannerRegions['fleft'] > d and self.scannerRegions['fright'] > d and self.scannerRegions[self.region] > d:
                 #state_description = 'case 1 - nothing'
-                print('Here!!!')
-                msg = self.stop()
-                self.change_state(3)
+                if self.region == 'right':
+                    msg = self.move_left()
+                else:
+                    msg = self.move_right()
             elif self.scannerRegions['front'] < d and self.scannerRegions['fleft'] > d and self.scannerRegions['fright'] > d:
                 #state_description = 'case 2 - front'
                 if self.region == 'right':
@@ -408,10 +441,37 @@ class TangentBug:
                 self.waypoint = self.goal_pos
                 again = False
 
-    #State 3: Goal reached
+    #State 4: Goal reached
     def goalReached(self):
+        self.heuristicDistance = -1
         self.velocity_publisher.publish(self.stop())
         self.rate.sleep()
+    
+    #State3: Collision
+    def robotCollision(self):
+      scanner= self.scanner[0:91]
+      beta_degree = 0
+      point = Point()
+      for i in range(len(scanner)):
+            if scanner[i] >= self.vision_radius:
+                alpha = int(ceil(degrees(((0.01+0.5*self.robot_legth) * 2 )/ self.vision_radius)))
+                beta_degree = i + alpha
+                beta_rad = self.normalize(radians(beta_degree))
+                x = self.position.x + self.vision_radius * cos(self.orientation + beta_rad)
+                y = self.position.y + self.vision_radius * sin(self.orientation + beta_rad)
+                point = Point(x, y, 0.0)
+                break
+        if beta_degree != 0 and (self.euclidean_distance(self.position, point) + 0.3) < scanner[beta_degree]:
+            while self.euclidean_distance(self.position, point) > 0.1:
+                self.velocity_publisher.publish(self.moveToPoint(point))
+                self.rate.sleep()
+            self.velocity_publisher.publish(self.stop())
+            self.rate.sleep()
+            self.change_state(0)
+        else:
+            self.rate.sleep()
+            self.change_state(0)
+ 
 
 ###########################THE ALGORITHM########################################
     def tangentBug(self, tolerance = 0.1):

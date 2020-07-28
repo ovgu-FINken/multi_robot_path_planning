@@ -1,13 +1,12 @@
 #!/usr/bin/env python
 import rospy
-import sys
 import traceback
-from geometry_msgs.msg import Point, Quaternion, Twist
+from geometry_msgs.msg import Point, Twist
 from nav_msgs.msg import Odometry
 from std_msgs.msg import Bool
 from sensor_msgs.msg import LaserScan
 from tf.transformations import euler_from_quaternion
-from math import pow, atan2, sqrt, radians, fabs, pi
+from math import pow, atan2, sqrt, fabs, pi,  isnan,  degrees,  ceil,  sin,  cos
 
 class Bug2:
 
@@ -18,7 +17,7 @@ class Bug2:
         3: 'goal reached'
     }
 
-    def __init__(self, rate = 20, vision_radius = 3.5):
+    def __init__(self, rate = 20, vision_radius = 3.5,  max_vel = 0.22,  robot_length = 0.2):
 
         rospy.init_node('go_to_goal', anonymous=True)
 
@@ -44,10 +43,13 @@ class Bug2:
         self.orientation = 0
         self.state = 0
         self.goal_pos = Point()
-        self.new_goal_pos = Point()
         self.twist_msg = Twist()
         self.start_pos = Point()
         self.finished = Bool()
+        self.max_vel = max_vel
+        self.max_step = self.max_vel * (1.0/rate)
+        self.scanner = []
+        self.robot_length = robot_length
 
     def callback_target(self, data):
         self.goal_pos = data
@@ -63,33 +65,33 @@ class Bug2:
 
     # Updates the robots current position and orientation
     def update_odom(self, data):
-
         self.position = data.pose.pose.position
-
         orientation = data.pose.pose.orientation
         (roll, pitch, theta) = euler_from_quaternion ([orientation.x, orientation.y, orientation.z, orientation.w])
         self.orientation = theta
 
-    # Angle error for the P-Controller
-    def angle_error(self):
-        goal_angle = atan2(self.new_goal_pos.y - self.position.y, self.new_goal_pos.x - self.position.x)
+    # Angle error for the P-Controller and other computations
+    def angle_error(self,  goal):
+        goal_angle = atan2(goal.y - self.position.y, goal.x - self.position.x)
         return self.normalize(goal_angle - self.orientation)
 
     # Normalize given angle
     def normalize(self, angle):
         if fabs(angle) > pi:
-            angle = angle - (2 * pi * angle) / (fabs(angle))
+            angle = atan2(sin(angle), cos(angle))
         return angle
 
-    # Callback for the laser scanner and defining different regions
+    # Callback for the laser scanner 
     def update_laser(self, data):
-        self.scanner = {
-        'front' : min(min(data.ranges[0:35]),min(data.ranges[325:359]),self.vision_radius),
-		'fleft' : min(min(data.ranges[36:107]),self.vision_radius),
-		'left' : min(min(data.ranges[108:179]),self.vision_radius),
-		'right' : min(min(data.ranges[180:251]),self.vision_radius),
-		'fright' : min(min(data.ranges[252:324]),self.vision_radius)
-    }
+        self.scanner = data.ranges[:]
+        self.regions ={
+            'front' : min(min(data.ranges[0:30]),min(data.ranges[330:360]),self.vision_radius),
+            'fleft' : min(min(data.ranges[30:90]),self.vision_radius),
+            'bleft' : min(min(data.ranges[90:150]),self.vision_radius),
+            'back' : min(min(data.ranges[150:210]),self.vision_radius),
+            'bright' : min(min(data.ranges[210:270]),self.vision_radius), 
+            'fright' : min(min(data.ranges[270:330]),self.vision_radius)
+            }
 
     # The distance the robot has moved when it was following the wall of an obstacle
     def moved_distance(self):
@@ -98,7 +100,7 @@ class Bug2:
     # The robots distance to the MLine
     def line_distance(self):
         point_1 = self.start_pos
-        point_2 = self.new_goal_pos
+        point_2 = self.goal_pos
         point_x = self.position
 
         numerator = fabs((point_2.y - point_1.y) * point_x.x - (point_2.x - point_1.x) * point_x.y + (point_2.x * point_1.y) - (point_2.y * point_1.x))
@@ -107,14 +109,13 @@ class Bug2:
         return numerator / denominator
 
     # The robots distance to the goal
-    def euclidean_distance(self):
-        return sqrt(pow((self.new_goal_pos.x - self.position.x), 2) + pow((self.new_goal_pos.y - self.position.y), 2))
+    def euclidean_distance(self,  pos,  goal):
+        return sqrt(pow((goal.x - pos.x), 2) + pow((goal.y - pos.y), 2))
 
     # State 0: Robot turns until it looks directly to the goal position
     def faceTheGoal(self, tolerance = 0.01):
-
-        if fabs(self.angle_error()) > tolerance:
-            if (self.angle_error() < 0):
+        if fabs(self.angle_error(self.goal_pos)) > tolerance:
+            if (self.angle_error(self.goal_pos) < 0):
                 self.twist_msg.linear.x = 0
                 self.twist_msg.angular.z = -0.5
             else:
@@ -131,13 +132,13 @@ class Bug2:
 
     def turn_right(self):
         msg = Twist()
-        msg.angular.z = -0.3
+        msg.angular.z = -0.5
         return msg
 
-    def move_left(self):
+    def move_left(self,  z):
         msg = Twist()
         msg.linear.x = 0.1
-        msg.angular.z = 0.3
+        msg.angular.z =  z
         return msg
 
     def move_forward(self):
@@ -151,85 +152,83 @@ class Bug2:
         msg.linear.x = 0
         msg.angular.z = 0
         return msg
-
+        
     # State 1: Robot follows the MLine until it reaches the goal or hits an obstacle
     def followMLine(self):
-        if self.scanner['front'] < 0.3:
-            self.twist_msg.angular.z = 0
-            self.twist_msg.linear.x = 0
-            self.wall_hit_point = self.position
-            self.change_state(2)
+        d_min = min(self.scanner[:]) - self.robot_length - 0.1
+        #Object Oi appears within the robot's range of sensing
+#        if  d_min  < self.vision_radius:
+            # The collision front is E = phi
+        if d_min > 2.0 * self.max_step:
+            self.twist_msg.angular.z = self.angle_error(self.goal_pos)
+            self.twist_msg.linear.x = self.max_vel
+            #Check if next intendet position of robot R is inside or outside of E
+        elif self.regions['front'] - self.robot_length - 0.1 > 2 * self.max_step:
+                self.twist_msg.angular.z = self.angle_error(self.goal_pos)
+                self.twist_msg.linear.x = self.max_vel
         else:
-            self.twist_msg.angular.z = 2 * self.angle_error()
-            self.twist_msg.linear.x = 0.25
-
+                self.twist_msg.angular.z = 0
+                self.twist_msg.linear.x = 0
+                self.wall_hit_point = self.position
+                self.change_state(2)
+        # No Object(s) Oi appears within the robot's range of sensing           
+#        else:
+#            self.twist_msg.angular.z = self.angle_error(self.goal_pos)
+#            self.twist_msg.linear.x = self.max_vel
+            
         self.velocity_publisher.publish(self.twist_msg)
-
+       
     # State 2: Robot follows the wall of an obstacle until it reaches the leaving point
     # d = collisionFront, Important: greater velocity needs higher collisionFront
-    def followWall(self, d = 0.3):
+    def followWall(self):
+        
+        d = self.robot_length + 2 * self.max_step + 0.1
 
-        if self.line_distance() < 0.1 and self.moved_distance() > 0.5:
+        if self.line_distance() < 0.1 and self.moved_distance() > self.robot_length and self.euclidean_distance(self.position,  self.goal_pos) < self.euclidean_distance(self.wall_hit_point,  self.goal_pos) :
+            self.twist_msg = self.stop()
             self.change_state(0)
 
-        elif self.scanner['front'] > d and self.scanner['fleft'] > d and self.scanner['fright'] > d and self.scanner['left'] > d:
-            #print('Follow Wall - Case1: Nothing')
-            self.twist_msg = self.move_left()
-        elif self.scanner['front'] < d and self.scanner['fleft'] > d and self.scanner['fright'] > d and self.scanner['left'] > d:
-            #print('Follow Wall - Case2: front')
+        elif self.regions['front'] > d and self.regions['fleft'] > d and self.regions['bleft'] > d :
+            print('Follow Wall - Case1: Nothing')
+            self.twist_msg = self.stop()
+            self.change_state(0)
+        elif self.regions['front'] < d:
+            print('Follow Wall - Case2: front')
             self.twist_msg = self.turn_right()
-        elif self.scanner['front'] > d and self.scanner['fleft'] < d and self.scanner['fright'] > d and self.scanner['left'] > d:
-            #print('Follow wall - Case3: fleft')
+        elif self.regions['front'] > d and self.regions['fleft'] < d and self.regions['bleft'] > d:
+            print('Follow wall - Case3: fleft')
+            self.twist_msg = self.move_left(0.1)
+        elif self.regions['front'] > d and self.regions['fleft'] > d and self.regions['bleft'] < d:
+            print('Follow wall - Case4: bleft ')
+            self.twist_msg = self.move_left(0.3)
+        elif self.regions['front'] > d and self.regions['fleft'] < d and self.regions['bleft'] < d:
+            print('Follow wall - Case5: fleft and bleft')
             self.twist_msg = self.move_forward()
-        elif self.scanner['front'] > d and self.scanner['fleft'] < d and self.scanner['fright'] > d and self.scanner['left'] < d:
-            #print('Follow wall - Case4: fleft and left')
-            self.twist_msg = self.move_left()
-        elif self.scanner['front'] > d and self.scanner['fleft'] > d and self.scanner['fright'] < d:
-            #print('Follow wall - Case5: fright')
-            self.twist_msg = self.move_left()
-        elif self.scanner['front'] < d and self.scanner['fleft'] < d and self.scanner['fright'] > d and self.scanner['left'] > d:
-            #print('Follow wall - Case6: front and fleft )
-            self.twist_msg = self.turn_right()
-        elif self.scanner['front'] < d and self.scanner['fleft'] < d and self.scanner['fright'] > d and self.scanner['left'] < d:
-            #print('Follow wall - Case7: front, fleft and left')
-            self.twist_msg = self.turn_right()
-        elif self.scanner['front'] < d and self.scanner['fleft'] > d and self.scanner['fright'] < d:
-            #print('Follow wall - Case8: front and fright')
-            self.twist_msg = self.turn_right()
-        elif self.scanner['front'] < d and self.scanner['fleft'] < d and self.scanner['fright'] < d and self.scanner['left'] < d:
-            #print('Follow wall - Case9: front, fleft, fright and left')
-            self.twist_msg = self.turn_right()
-        elif self.scanner['front'] < d and self.scanner['fleft'] < d and self.scanner['fright'] < d and self.scanner['left'] > d:
-            #print('Follow wall - Case10: front, fleft, fright')
-            self.twist_msg = self.turn_right()
-        elif self.scanner['front'] > d and self.scanner['fleft'] < d and self.scanner['fright'] < d:
-            #print('Follow wall - Case11: fleft, fright')
-            self.twist_msg = self.move_left()
         else:
-            self.twist_msg = self.stop
+            self.twist_msg = self.stop()
             print('unknown case')
-            rospy.loginf(scanner)
 
         self.velocity_publisher.publish(self.twist_msg)
 
     # The path planning algorithm
     def bug2(self, tolerance = 0.1):
+        new_goal_pos = Point()
         while not rospy.is_shutdown():
             if self.finished == Bool(True):
                 self.velocity_publisher.publish(self.stop())
                 print('[%s] - Done! ' % (self.robot_name))
 
-            elif self.finished == Bool(False) and self.new_goal_pos == self.goal_pos:
+            elif self.finished == Bool(False) and new_goal_pos == self.goal_pos:
                 self.velocity_publisher.publish(self.stop())
                 print('[%s] - Waiting for a new goal' % (self.robot_name))
 
-            elif self.finished == Bool(False) and self.new_goal_pos != self.goal_pos:
+            elif self.finished == Bool(False) and new_goal_pos != self.goal_pos:
                 print('[%s] - Goal received' % (self.robot_name))
-                self.new_goal_pos = self.goal_pos
+                new_goal_pos = self.goal_pos
                 self.change_state(0)
                 self.start_pos =  self.position
 
-                while self.euclidean_distance() > tolerance:
+                while self.euclidean_distance(self.position,  self.goal_pos) > tolerance:
                     if self.state == 0:
                         self.faceTheGoal()
                     elif self.state == 1:
@@ -244,7 +243,6 @@ class Bug2:
             self.rate.sleep()
 
 if __name__ == "__main__" :
-
     try:
         x = Bug2()
         x.bug2()
