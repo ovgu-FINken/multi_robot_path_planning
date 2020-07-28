@@ -19,7 +19,7 @@ DWAPlannerROS:
   acc_lim_theta: 3.2
 
   # Goal Tolerance Parametes
-  xy_goal_tolerance: 0.08
+  xy_goal_tolerance: 0.08 #TODO higher maybe possible?
   yaw_goal_tolerance: 0.8
   latch_xy_goal_tolerance: false
 
@@ -37,7 +37,7 @@ DWAPlannerROS:
   collvoid_scale: 24.0 #The weight for the collvoid part of the cost function
   twirling_scale: 0.2 #The weight for penalizing any changes in robot heading
 
-  forward_point_distance: 0.325 #how far along to place an additional scoring point
+  forward_point_distance: 0.2 #0.325? #how far along to place an additional scoring point
   stop_time_buffer: 0.2 # amount of time a robot must stop in before colliding for a valid traj.
   scaling_speed: 0.25 # absolute velocity at which to start scaling the robot's footprint
   max_scaling_factor: 0.2 # how much to scale the robot's footprint when at speed.
@@ -55,6 +55,26 @@ controller_frequency: 9.0
 max_planning_retries: 5
 # oscillation_timeout: 10.0
 # oscillation_distance: 0.2
+
+# TrajectoryPlannerROS:
+#   max_vel_x: 0.50
+#   min_vel_x: 0.10
+#   max_vel_theta: 1.5
+#   min_in_place_vel_theta: 0.1
+#   acc_lim_theta: 0.75
+#   acc_lim_x: 0.50
+#   acc_lim_y: 0.50
+#   holonomic_robot: false
+#   yaw_goal_tolerance: 0.05
+#   xy_goal_tolerance: 0.1
+#   goal_distance_bias: 0.8
+#   path_distance_bias: 0.6
+#   sim_time: 1.5
+#   heading_lookahead: 0.325
+#   oscillation_reset_dist: 0.05
+#   vx_samples: 6
+#   vtheta_samples: 20
+#   dwa: true
 
 #### global planner
 NavfnROS:

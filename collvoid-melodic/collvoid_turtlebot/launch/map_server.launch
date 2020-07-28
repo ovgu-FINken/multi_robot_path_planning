@@ -7,7 +7,7 @@ Starts the map server.
   <!-- Arguments -->
 
   <!-- Map server -->
-  <node name="map_server" pkg="map_server" type="map_server" args="$(find turtlebot3_navigation)/maps/map.yaml">
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find benchmark)/worlds/maps/turtlebot3World.yaml">
     <!-- <remap from="/map" to="/$(arg robot)/map"/> -->
     <param name="~frame_id" value="map"/>
   </node>
