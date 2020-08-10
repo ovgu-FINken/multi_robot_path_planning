@@ -26,8 +26,8 @@ void NavigationPathLayer::onInitialize()
     int inflation_size = 1;
     int filter_size = 9; // resolution: 0.050000 meters / pixel ; 4 pixel needed for robot itself
     first_time_ = true;
-    ros::NodeHandle nh("~/" + name_), g_nh; // ToDo: check cooperation with other Multi-robot-path-planning-files
-    paths_sub_ = nh.subscribe("/paths", 1, &NavigationPathLayer::pathCallback, this);
+    ros::NodeHandle nh("~/" + name_), g_nh;
+    paths_sub_ = nh.subscribe("/local_plan", 1, &NavigationPathLayer::pathCallback, this);
     list<Path> paths_list_;
     NavigationPathLayer::createFilter();
 
