@@ -139,7 +139,7 @@ void NavigationPathLayer::setSideInflation(bool inflate)
 void NavigationPathLayer::scaleSideInflation(double inflation_scale)
 {
     // maximal factor 1 of the costs of the normal path
-    navigation_path_layers::inflation_size = min(inflation_scale, 1);
+    navigation_path_layers::inflation_size = max(min(inflation_scale, 1), 0);
     navigation_path_layers::createFilter();
 }
 
@@ -147,11 +147,11 @@ void NavigationPathLayer::setFilterSize(int size)
 {
     if (size%2 == 1) 
     {
-    navigation_path_layers::filter_size = size;
+		navigation_path_layers::filter_size = min(size, 9);
     } else
     {
         // minimum size required
-        navigation_path_layers::filter_size = max(size-1, 9); // ~ 12.5 cm tolerance with degrading costs
+        navigation_path_layers::filter_size = min(size-1, 9); // ~ 12.5 cm tolerance with degrading costs
     }
     
     // navigation_path_layers::createFilter();
