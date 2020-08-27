@@ -22,14 +22,14 @@ class Turtlebot3_burger:
         # Creates a node with name of the agent
         #self.agent_name = agent_name
         #print(self.agent_name)
+        
+        rospy.init_node('Algo_Based_on_Velocity_Obstacle', anonymous=True)
         self.robot_name = rospy.get_param('~robot_name')
-        rospy.init_node(self.robot_name)
-
         self.k_linear = 0.1 #0.1 best so far by experimenting
         self.k_angular = 0.9 # 0.5 best so far by experimenting
         self.distance_tolerance = 0.1
  
-        self.sub = rospy.Subscriber('/'+self.robot_name+'/odom', Odometry, self.call_back_odom)
+        self.sub = rospy.Subscriber('odom', Odometry, self.call_back_odom)
 
         self.x = 0.0       
         self.y = 0.0
@@ -43,11 +43,11 @@ class Turtlebot3_burger:
         self.finished = Bool()
         #self.orientation_list_desired  = list()
 
-        self.pub = rospy.Publisher('/'+self.robot_name+'/cmd_vel', Twist, queue_size= 1)
+        self.pub = rospy.Publisher('cmd_vel', Twist, queue_size= 1)
 
         self.speed = Twist()
 
-        self.sub = rospy.Subscriber('/'+self.robot_name+'/scan', LaserScan, self.call_back_laser)
+        self.sub = rospy.Subscriber('scan', LaserScan, self.call_back_laser)
 
         self.laser_msg = LaserScan()
 
