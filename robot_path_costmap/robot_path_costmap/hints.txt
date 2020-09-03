@@ -12,3 +12,6 @@ http://wiki.ros.org/costmap_2d/Tutorials/Configuring%20Layered%20Costmaps
 // create layer tutorial
 
 http://wiki.ros.org/costmap_2d/Tutorials/Creating%20a%20New%20Layer
+
+
+// http://docs.ros.org/api/nav_msgs/html/msg/Path.html

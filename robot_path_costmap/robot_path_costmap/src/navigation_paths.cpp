@@ -7,29 +7,34 @@
 
 using namespace std;
 
-// ToDo: launch-file
 
-// http://docs.ros.org/api/nav_msgs/html/msg/Path.html
 
 
 namespace navigation_path_layers 
 {
 
-    static const double gauss_sigma = 1.0;
-	static const double  gauss_r, gauss_s = 2.0 * gauss_sigma * gauss_sigma;
+    /*
+	static const double gauss_sigma = 1.0;
+	static const double gauss_r, gauss_s = 2.0 * gauss_sigma * gauss_sigma;
+	*/
 
 void NavigationPathLayer::onInitialize()
 {
 
-    bool side_inflation = false;
-	int filter_strength = 1; 
-    int inflation_size = 1;
-    int filter_size = 9; // resolution: 0.050000 meters / pixel ; 4 pixel needed for robot itself
+    /* 
+    side_inflation = false;
+	filter_strength = 1; 
+    inflation_strength = 0.05;
+    filter_size = 9; // resolution: 0.050000 meters / pixel ; 4 pixel needed for robot itself
+	*/
     first_time_ = true;
     ros::NodeHandle nh("~/" + name_), g_nh;
+	server_ = new dynamic_reconfigure::Server<NavigationPathLayerConfig>(nh);
+	f_ = boost::bind(&NavigationPathLayer::configure, this, _1, _2);
+	server_->setCallback(f_);
     paths_sub_ = nh.subscribe("/local_plan", 1, &NavigationPathLayer::pathCallback, this);
     list<Path> paths_list_;
-    NavigationPathLayer::createFilter();
+	kernel = NavigationPathLayer::createFilter();
 
 }
 
@@ -112,6 +117,8 @@ void NavigationPathLayer::updateBounds( double* min_x, double* min_y, double* ma
 
 void NavigationPathLayer::updateCosts()
 {
+	if (!enabled_) return;
+
     costmap_2d::Costmap2D* costmap = layered_costmap_->getCostmap();
     // function call only if given path changed
     // reset costs to 0
@@ -133,14 +140,14 @@ void NavigationPathLayer::updateCosts()
 void NavigationPathLayer::setSideInflation(bool inflate)
 {
     navigation_path_layers::side_inflation = inflate;
-    navigation_path_layers::createFilter();
+    kernel = navigation_path_layers::createFilter();
 }
 
 void NavigationPathLayer::scaleSideInflation(double inflation_scale)
 {
     // maximal factor 1 of the costs of the normal path
-    navigation_path_layers::inflation_size = max(min(inflation_scale, 1), 0);
-    navigation_path_layers::createFilter();
+    navigation_path_layers::inflation_strength = max(min(inflation_scale, 1), 0);
+	kernel = navigation_path_layers::createFilter();
 }
 
 void NavigationPathLayer::setFilterSize(int size)
@@ -154,13 +161,13 @@ void NavigationPathLayer::setFilterSize(int size)
         navigation_path_layers::filter_size = min(size-1, 9); // ~ 12.5 cm tolerance with degrading costs
     }
     
-    // navigation_path_layers::createFilter();
+    kernel = navigation_path_layers::createFilter();
 }
 
 void NavigationPathLayer::setFilterStrength(int s)
 {
     navigation_path_layers::filter_strength = s;
-    // navigation_path_layers::createFilter();
+    kernel = navigation_path_layers::createFilter();
 }
 
 void NavigationPathLayer::inflate_side()
@@ -231,7 +238,7 @@ void NavigationPathLayer::createFilter() // Größe und side_inflation nutzen
 	return kernel;
 }
 
-costmap_2d::Costmap2D useFilter(vector<int> position, costmap_2d::Costmap2D costmap)
+costmap_2d::Costmap2D NavigationPathLayer::useFilter(vector<int> position, costmap_2d::Costmap2D costmap)
 {
 	int bound = int((filter_size - 1) / 2);
 	costmap_2d::Costmap2D _map = costmap; // ToDo prove
@@ -246,7 +253,46 @@ costmap_2d::Costmap2D useFilter(vector<int> position, costmap_2d::Costmap2D cost
 		}
 	}
 
+	if (side_inflation)
+	{/*
+		vector<int> side = position;
+		// orientation einarbeiten
+		side[0] = position[0] * x + position[1] * y;
+		side[1] = position[1] * x + position[0] * y;
+
+		_map = useSideFilter(side, _map);*/
+	}
+
     return _map;
+}
+
+costmap_2d::Costmap2D NavigationPathLayer::useSideFilter(vector<int> position, costmap_2d::Costmap2D costmap)
+{
+	int bound = int((filter_size - 1) / 2);
+	costmap_2d::Costmap2D _map = costmap;
+
+										  // for each pixel in the convolution take maximum value of current and calculated value of convolution at this pixel
+	for (unsigned int i = -bound; i <= bound; i++)
+	{
+		for (unsigned int j = -bound; j <= bound; j++)
+		{
+			double current = costmap[position[0] + i][position[1] + j];
+			_map[position[0] + i][position[1] + j] = max(current, kernel[i][j] * inflation_strength);
+		}
+	}
+
+	return _map;
+}
+
+void NavigationPathLayer::configure(NavigationPathLayerConfig &config, uint32_t level)
+{
+	filter_strength = config.filter_strength;
+	filter_size = config.filter_size;
+	side_inflation = config.side_inflation;
+	inflation_strength = config.inflation_strength;
+	gauss_sigma = config.gauss_sigma;
+	gauss_s = config.gauss_s * gauss_sigma * gauss_sigma;
+	enabled_ = config.enabled;
 }
 
 }

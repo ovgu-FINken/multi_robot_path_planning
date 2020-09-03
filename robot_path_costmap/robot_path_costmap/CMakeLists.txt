@@ -9,6 +9,11 @@ project(robot_path_costmap)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   roscpp
+  dynamic_reconfigure
+)
+
+generate_dynamic_reconfigure_options(
+  cfg/NavigationPathLayer.cfg
 )
 
 ## System dependencies are found with CMake's conventions
