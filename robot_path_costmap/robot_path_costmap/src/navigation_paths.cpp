@@ -257,8 +257,8 @@ costmap_2d::Costmap2D NavigationPathLayer::useFilter(vector<int> position, costm
 	{/*
 		vector<int> side = position;
 		// orientation einarbeiten
-		side[0] = position[0] * x + position[1] * y;
-		side[1] = position[1] * x + position[0] * y;
+		side[0] = position[0] + filter_size * x + position[1] + filter_size * y;
+		side[1] = position[1] + filter_size * x + position[0] + filter_size * y;
 
 		_map = useSideFilter(side, _map);*/
 	}
