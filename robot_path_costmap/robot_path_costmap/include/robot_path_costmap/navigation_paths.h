@@ -29,7 +29,6 @@ namespace navigation_path_layers {
 
 	protected:
 		bool first_time_;
-		virtual void NavigationPathLayer::inflate_side();
 
 	private:
 		int filter_strength;

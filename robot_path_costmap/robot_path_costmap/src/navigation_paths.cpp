@@ -170,11 +170,6 @@ void NavigationPathLayer::setFilterStrength(int s)
     kernel = navigation_path_layers::createFilter();
 }
 
-void NavigationPathLayer::inflate_side()
-{
-	// optional; done later
-	// create costs on other robots' right side to always pass them on the other
-}
 
 /* void NavigationPathLayer::resetCosts()
 {
@@ -219,13 +214,6 @@ void NavigationPathLayer::createFilter() // Größe und side_inflation nutzen
 		}
 	}
 
-	/*if (side_inflation)
-	{
-        // ToDo: add later
-		// add values to "right" side of robot
-		// sum += these values
-	}*/
-
 	// normalising the Kernel 
 	for (int i = 0; i < filter_size; ++i)
 	{
@@ -255,8 +243,10 @@ costmap_2d::Costmap2D NavigationPathLayer::useFilter(vector<int> position, costm
 
 	if (side_inflation)
 	{/*
+		// ToDo:
 		vector<int> side = position;
 		// orientation einarbeiten
+		// add values to "right" side of robot
 		side[0] = position[0] + filter_size * x + position[1] + filter_size * y;
 		side[1] = position[1] + filter_size * x + position[0] + filter_size * y;
 
@@ -271,7 +261,7 @@ costmap_2d::Costmap2D NavigationPathLayer::useSideFilter(vector<int> position, c
 	int bound = int((filter_size - 1) / 2);
 	costmap_2d::Costmap2D _map = costmap;
 
-										  // for each pixel in the convolution take maximum value of current and calculated value of convolution at this pixel
+	// for each pixel in the convolution take maximum value of current and calculated value of convolution at this pixel
 	for (unsigned int i = -bound; i <= bound; i++)
 	{
 		for (unsigned int j = -bound; j <= bound; j++)
