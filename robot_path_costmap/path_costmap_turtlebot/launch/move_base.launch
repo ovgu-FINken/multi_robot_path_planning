@@ -1,0 +1,41 @@
+<launch>
+    <!-- Arguments -->
+    <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
+    <arg name="robot_name" default="tb3_1" />
+
+    <group ns="/$(arg robot_name)">
+        <!-- move_base -->
+        <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">            <!--for debugging additionally append: launch-prefix="gdbserver :1234"-->
+            <rosparam command="load" file="$(find path_costmap_turtlebot)/params/costmap_common_params.yaml" ns="local_costmap" />
+            <rosparam command="load" file="$(find path_costmap_turtlebot)/params/costmap_common_params.yaml" ns="global_costmap" />
+            <rosparam command="load" file="$(find path_costmap_turtlebot)/params/local_costmap_params.yaml" />
+            <rosparam command="load" file="$(find path_costmap_turtlebot)/params/global_costmap_params.yaml" />
+
+            <rosparam command="load" file="$(find path_costmap_turtlebot)/params/move_base_params.yaml" />
+
+            <rosparam file="$(find path_costmap_turtlebot)/params/dwa_local_planner_params_$(arg model).yaml" command="load" />
+
+            <!-- Overwrite robot specific paramters -->
+            <!-- https://answers.ros.org/question/61377/local-planner-creation/ -->
+            <param name="base_local_planner" value="path_costmap_dwa_local_planner/DWAPlannerROS" />
+            <param name="base_global_planner" value="navfn/NavfnROS" />
+
+            <!-- /from uncertainty grid move_base launch file-->
+            <param name="global_costmap/obstacle_layer/scan/sensor_frame" value="$(arg robot_name)/base_scan" />
+            <param name="global_costmap/obstacle_layer/scan/topic" value="/$(arg robot_name)/scan" />
+            <param name="global_costmap/robot_base_frame" value="$(arg robot_name)/base_footprint" />
+            <param name="global_costmap/global_frame" value="map" />
+            <param name="local_costmap/obstacle_layer/scan/sensor_frame" value="$(arg robot_name)/base_scan" />
+            <param name="local_costmap/obstacle_layer/scan/topic" value="/$(arg robot_name)/scan" />
+            <param name="local_costmap/robot_base_frame" value="$(arg robot_name)/base_footprint" />
+            <param name="local_costmap/global_frame" value="$(arg robot_name)/odom" />
+            <!-- from uncertainty grid move_base launch file/ -->
+
+            <!-- param name="CollvoidScoring/global_frame_id" value="map"/> --> <TODO
+            <param name="DWAPlannerROS/global_frame_id" value="map"/>
+
+            <remap from="odom" to="/$(arg robot_name)/odom"/>
+        </node>
+
+    </group>
+</launch>

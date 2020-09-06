@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>path_costmap_turtlebot</name>
+  <version>0.0.0</version>
+  <description>The path_costmap_turtlebot package</description>
+
+  <maintainer email="patheplanning@todo.todo">patheplanning</maintainer>
+  <!-- One license tag required, multiple allowed, one license per tag -->
+  <!-- Commonly used license strings: -->
+  <!--   BSD, MIT, Boost Software License, GPLv2, GPLv3, LGPLv2.1, LGPLv3 -->
+  <license>TODO</license>
+  <author email="kilian.poessel@st.ovgu.de">Kilian Poessel</author>
+
+
+  <!-- DEPENDENCIES -->
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <!-- EXPORT -->
+<export>
+ 
+</export>
+</package>
