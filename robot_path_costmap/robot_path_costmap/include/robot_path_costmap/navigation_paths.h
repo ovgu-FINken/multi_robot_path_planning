@@ -31,10 +31,10 @@ namespace navigation_path_layers {
 		bool first_time_;
 
 	private:
-		int filter_strength;
+		double filter_strength;
 		int filter_size;
 		bool side_inflation;
-		int inflation_strength;
+		double inflation_strength;
 		double[][] kernel;
 		double gauss_sigma, gauss_s, gauss_r;
 		// virtual void NavigationPathLayer::resetCosts();
