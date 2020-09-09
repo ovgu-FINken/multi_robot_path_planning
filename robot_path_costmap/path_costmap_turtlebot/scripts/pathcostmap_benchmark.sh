@@ -14,7 +14,7 @@
 SESSION_NAME="pathcostmap"
 NUM=0
 MAPPING=${MAPPING:=amcl}
-WORLD=""
+WORLD="tworooms"
 NUM_ROBOT_DEFAULT=3
 
 ## set the number of robots
