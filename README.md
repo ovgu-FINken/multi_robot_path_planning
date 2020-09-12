@@ -1,1 +1,1 @@
-# A Multi-Agent Path Plannng Algo, Based on Velocity Obstacles
+# A Multi-Agent Path Planing Algo, Based on Velocity Obstacles
