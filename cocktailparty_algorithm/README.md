@@ -53,8 +53,8 @@ This README helps you with the ***setup and usage*** of the code. If you are loo
       ```
   5. Navigate into the pathplanning repo: 
       ```
-      ~/DrivingSwarm/src$ cd pathplanning      ```
-
+      ~/DrivingSwarm/src$ cd pathplanning      
+      ```
   6. (Checkout the cocktailparty_algorithm branch): 
       ```
        ~/DrivingSwarm/src/pathplanning$ git checkout origin/cocktailparty_algorithm
@@ -99,4 +99,4 @@ For a successful execution you need the lightweight and flexible command-line JS
    ```
                                                            
 ## Author
-Viviane Wolters
+Viviane Wolters (September 2020)
