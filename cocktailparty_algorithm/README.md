@@ -22,7 +22,6 @@ This README helps you with the ***setup and usage*** of the code. If you are loo
     - [Installation](#installation)
     - [Launching and Testing](#launching-and-testing)
   - [Execution with Benchmark](#execution-with-benchmark)
-  - [Common Errors and Unwanted Behavior](#common-errors-and-unwanted-behavior)
   - [Author](#author)
 
 
