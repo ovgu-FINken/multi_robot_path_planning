@@ -70,25 +70,23 @@ This README helps you with the ***setup and usage*** of the code. If you are loo
       ~/DrivingSwarm/src/pathplanning$ catkin build
       ```
 
-### Launching and Testing
-1. Start the roscore
+### Launching and Testing 
+Both algorithms (Bug2 and TangentBug) can only be tested by using the benchmark.
+
+1. Start the **roscore**
    ```
    ~$ roscore
    ```
+   
+2. Set parameters in the **settings** file of the benchmark (`benchmark/settings/settings.json`)
+   For detail information
 
-2. Start the **standard collvoid script** like shown below. Define the **local planner** (*dwa*, or *collvoid*) by using the **"-p" flag**, else "dwa" gets started by default.
-   The number of robots is set to 4 by default.
-
-    *Note: In the future, in case the simulation is enhanced such that an arbitrary amount of robots can be spawned, 
-      you can specify the number by using the flag "-n".*
-
+3. Start the **benchmark** script
     ```
-    ~/DrivingSwarm/src/pathplanning$ roscd collvoid_turtlebot/scripts/
-    ~/DrivingSwarm/src/pathplanning/collvoid-melodic/collvoid_turtlebot/scripts$ ./collvoid_std.sh -p collvoid                                                                                                                                  
+    ~/DrivingSwarm/src/pathplanning/benchmark/scripts$ ./benchmark.sh
     ```
+4. **Wait** until the spawner has finished (robots should appear in Gazebo), otherwise kill the process with `./kill.sh` and return to 2.
 
-3. After the collvoid_std.sh has finished its setup successfully, you can use the simple goal interface in **RVIZ for testing** it.
-   Therefore,
 
 4.  For a successful test, the robots should move to the defined goal.
 
