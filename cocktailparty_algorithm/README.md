@@ -3,12 +3,12 @@ Welcome to multi-robot path planning with the Cocktail-Party-Algorithms!
 
 Don't be confused by the name of the project, it's just a working title.
 
-Imagine a cocktail party. When a guest decides to talk to someone, he accomplishes this by maneuvering between tables,
+Imagine a cocktail party. A guest decides to talk to someone. He accomplishes this by maneuvering between tables,
 chairs, and other guests, planning his path “on the fly” and not consulting with other people about his or their intended motion.
 He assumes that other people mean well, and so as long as he somehow takes into account their movements, 
 it is safe to move at a minimal distance from them. 
 
-The goal of this project was to implement exactly this behaviour on multiple robots which want 
+The goal of this project was to implement exactly this behaviour on multiple robots. It was archieved by implementing a simple, for this purpose adapted, **Bug2** algorithm which was later transformed to a **TangentBug** algorithm.
 
 This README helps you with the ***setup and usage*** of the code. If you are looking for information on the algorithms itself (research, implementation, benchmark performance etc.), please refer to the respective [wiki page](https://github.com/ovgu-FINken/multi_robot_path_planning/wiki/Implemented-Algorithms:-Collvoid).
 
@@ -39,32 +39,26 @@ This README helps you with the ***setup and usage*** of the code. If you are loo
       ```
       ~$ git clone https://github.com/ovgu-FINken/DrivingSwarm.git
       ```
-
   2. Navigate into the workspace: 
       ```
       ~$ cd DrivingSwarm/src
       ```
-
   3. Checkout the pathplanning branch:
       ```
       ~/DrivingSwarm/src$ git checkout origin/pathplanning 
       ```
-
   4. Execute:
       ```
       ~/DrivingSwarm/src$ gitman update
       ```
-
   5. Navigate into the pathplanning repo: 
       ```
-      ~/DrivingSwarm/src$ cd pathplanning
-      ```
+      ~/DrivingSwarm/src$ cd pathplanning      ```
 
   6. (Checkout the cocktailparty_algorithm branch): 
       ```
        ~/DrivingSwarm/src/pathplanning$ git checkout origin/cocktailparty_algorithm
       ```
-
   7. Build your workspace with [Catkin Tools: ](https://catkin-tools.readthedocs.io/en/latest/verbs/catkin_build.html)
       ```
       ~/DrivingSwarm/src/pathplanning$ catkin build
