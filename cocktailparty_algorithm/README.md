@@ -72,23 +72,31 @@ This README helps you with the ***setup and usage*** of the code. If you are loo
 
 ### Launching and Testing 
 Both algorithms (Bug2 and TangentBug) can only be tested by using the benchmark.
-For a successful execution you need the lightweight and flexible command-line JSON processor jq. You can install it with **sudo apt install jq**.
-
+For a successful execution you need the lightweight and flexible command-line JSON processor jq. You can install it with:
+```
+~$ sudo apt install jq
+```
 1. Start the **roscore**
    ```
    ~$ roscore
    ```   
-2. Set parameters in the **settings** file of the benchmark (`benchmark/settings/settings.json`)
+2. Set the parameters in the **settings** file of the benchmark (`benchmark/settings/settings.json`)
    For detail information: [README Benchmark](https://github.com/ovgu-FINken/multi_robot_path_planning/blob/benchmark/benchmark/README.md)
 
 3. Start the **benchmark** script
    ```
    ~/DrivingSwarm/src/pathplanning/cocktailparty_algorithm/scripts$ ./benchmark.sh
    ```
-4. **Wait** until the spawner has finished (robots should appear in Gazebo), otherwise kill the process with `./kill.sh` and return to 2.
+4. **Wait** until the spawner has finished (robots should appear in Gazebo), otherwise kill the process with `./kill.sh` and return to 3.
 
 5. Start the **Bug2** or the **TangentBug** script.
-
+   ```
+   ~/DrivingSwarm/src/pathplanning/cocktailparty_algorithm/scripts$ ./bug2.sh
+   ```
+   **or**
+   ```
+   ~/DrivingSwarm/src/pathplanning/cocktailparty_algorithm/scripts$ ./tangentBug.sh
+   ```
 6. For a successful test, the robots should move to the defined goals and finish the benchmark.
 
 7. You can stop all the processes with:
