@@ -72,52 +72,29 @@ This README helps you with the ***setup and usage*** of the code. If you are loo
 
 ### Launching and Testing 
 Both algorithms (Bug2 and TangentBug) can only be tested by using the benchmark.
+For a successful execution you need the lightweight and flexible command-line JSON processor jq. You can install it with **sudo apt install jq**.
 
 1. Start the **roscore**
    ```
    ~$ roscore
-   ```
-   
+   ```   
 2. Set parameters in the **settings** file of the benchmark (`benchmark/settings/settings.json`)
-   For detail information
+   For detail information: [README Benchmark](https://github.com/ovgu-FINken/multi_robot_path_planning/blob/benchmark/benchmark/README.md)
 
 3. Start the **benchmark** script
-    ```
-    ~/DrivingSwarm/src/pathplanning/benchmark/scripts$ ./benchmark.sh
-    ```
+   ```
+   ~/DrivingSwarm/src/pathplanning/cocktailparty_algorithm/scripts$ ./benchmark.sh
+   ```
 4. **Wait** until the spawner has finished (robots should appear in Gazebo), otherwise kill the process with `./kill.sh` and return to 2.
 
+5. Start the **Bug2** or the **TangentBug** script.
 
-4.  For a successful test, the robots should move to the defined goal.
+6. For a successful test, the robots should move to the defined goals and finish the benchmark.
 
-5.  You can stop all the processes with:
-    ```
-    ~/DrivingSwarm/src/pathplanning/collvoid-melodic/collvoid_turtlebot/scripts$ ./kill.sh`
-    ```
-    
-
-## Execution with Benchmark
-1. Start the **roscore**
+7. You can stop all the processes with:
    ```
-   ~$ roscore
+   ~/DrivingSwarm/src/pathplanning/cocktailparty_algorithm/scripts$ ./kill.sh`
    ```
-
-2. Set the number of robots in the **settings** file of the benchmark (`benchmark/settings/settings.json`, e.g. 5)
-
-3. Start the **benchmark** script
-    ```
-    ~/DrivingSwarm/src/pathplanning/benchmark/scripts$ ./benchmark.sh
-    ```
-4. **Wait** until the spawner has finished (robots should appear in Gazebo), otherwise kill the process with `./kill.sh` and return to 2.
-
-5. Start the **collvoid_benchmark** script. Select the local planner that should be tested (*dwa*, or *collvoid*) by using the "-p" flag. 
-   Set the flag "-n" with the correct number of robots. Example shown below:
-
-    *Note: The number of robots has to be **equivalent** to the number defined in the benchmark settings.* 
-    ```
-    ~/DrivingSwarm/src/pathplanning/collvoid-melodic/collvoid_turtlebot/scripts$ ./collvoid_benchmark.sh -n 5 -p collvoid
-    ```
-    
-                                                          
+                                                           
 ## Author
 Viviane Wolters
