@@ -1,3 +1,0 @@
-<launch>
-    <node pkg="collvoid_benchmark" type="goal_controller.py" name="goal_controller" output="screen" clear_params="true"/>
-</launch>
