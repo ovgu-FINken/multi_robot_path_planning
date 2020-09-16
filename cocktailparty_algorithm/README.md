@@ -10,7 +10,7 @@ it is safe to move at a minimal distance from them.
 
 The goal of this project was to implement exactly this behaviour on multiple robots. It was archieved by implementing a simple, for this purpose adapted, **Bug2** algorithm which was later transformed to a **TangentBug** algorithm.
 
-This README helps you with the ***setup and usage*** of the code. If you are looking for information on the algorithms itself (research, implementation, benchmark performance etc.), please refer to the respective [wiki page](https://github.com/ovgu-FINken/multi_robot_path_planning/wiki/Implemented-Algorithms:-Collvoid).
+This README helps you with the ***setup and usage*** of the code. If you are looking for information on the algorithms itself (research, implementation, benchmark performance etc.), please refer to the respective [wiki page](https://github.com/ovgu-FINken/multi_robot_path_planning/wiki/Implemented-Algorithms:-Cocktailparty-(Bug2-&-TangentBug)).
 
 
 <!-- TOC START min:1 max:5 link:true asterisk:false update:true -->
