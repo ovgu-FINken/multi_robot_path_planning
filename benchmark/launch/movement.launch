@@ -1,0 +1,28 @@
+<!--
+@author:    Johann Schmidt
+@date:      November 2019
+@brief:     Starts the movement controller for the robots.
+@todo:
+-->
+
+<launch>
+    <arg name="namespace" default="tb3_"/>
+    <arg name="use_settings_file" default="False"/>
+
+    <node pkg="benchmark"
+          type="movement_controller.py"
+          name="movement_controller"
+          output="screen"
+          clear_params="true"
+          if="$(eval not arg('use_settings_file'))">
+        <param name="namespace" type="str" value="$(arg namespace)" />
+    </node>
+
+    <node pkg="benchmark"
+          type="movement_controller.py"
+          name="movement_controller"
+          output="screen"
+          clear_params="true"
+          if="$(eval arg('use_settings_file'))">
+    </node>
+</launch> 

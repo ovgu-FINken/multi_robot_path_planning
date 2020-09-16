@@ -1,0 +1,8 @@
+auto_drive: 'False'
+model: burger
+name: '1'
+namespace: tb3_
+pose_x: '0.65'
+pose_y: '-0.85'
+pose_z: '0.0'
+simulate: 'True'
