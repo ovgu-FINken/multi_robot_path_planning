@@ -9,7 +9,7 @@
 PKG_NAME="cocktailparty_algorithm"
 SESSION_NAME="TangentBug"
 NUM=0
-NUM_ROBOT=5
+NUM_ROBOT=$(jq '.number_of_robots' ../../benchmark/settings/settings.json)
 
 source ~/.bashrc
 

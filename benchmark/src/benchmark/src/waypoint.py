@@ -113,7 +113,7 @@ class WayPointManager:
         self._waypoint_map_name = waypoints
         self.publish_start_positions = start_positions
 
-        if self._waypoint_map_name == "two_rooms":
+        if self._waypoint_map_name == 'two_rooms':
             self._waypoint_map = self.make_different_maps(start_positions)
             print(self._waypoint_map)
             
@@ -178,7 +178,7 @@ class WayPointManager:
         if robot_name not in self._target_point.keys():
             return False
         # The count() is a built-in function in Python. It will return you the count of a given element in the list.
-        if self._waypoint_map_name == "two_rooms":
+        if self._waypoint_map_name == WayPointMap.TWO_ROOMS.value:
            if self._target_point[robot_name].count(self._waypoint_map[robot_name][1]) - 1 >= self._rounds:
                return True
         else:        
@@ -273,16 +273,16 @@ class WayPointManager:
         # initial target point
         if robot_name not in self._target_point:
             rospy.loginfo("Setting intial target point...")
-            if self._waypoint_map_name == "two_rooms":
+            if self._waypoint_map_name == 'two_rooms':
                 self._set_target_point(robot_name, self._waypoint_map[robot_name][0]) 
             else:    
                 self._set_target_point(robot_name, self._waypoint_map[0]) 
             rospy.loginfo("Intial target point is set.")
 
         # restart round
-        elif (self._waypoint_map_name != "two_rooms" and self._get_target_point(robot_name) == self._waypoint_map[-1] or self._waypoint_map_name == "two_rooms" and  self._get_target_point(robot_name) == self._waypoint_map[robot_name][-1]):
+        elif (self._waypoint_map_name != 'two_rooms' and self._get_target_point(robot_name) == self._waypoint_map[-1] or self._waypoint_map_name == 'two_rooms' and  self._get_target_point(robot_name) == self._waypoint_map[robot_name][-1]):
             rospy.loginfo("Restarting round...")
-            if self._waypoint_map_name == "two_rooms":
+            if self._waypoint_map_name == 'two_rooms':
                 self._set_target_point(robot_name, self._waypoint_map[robot_name][0]) 
             else:    
                 self._set_target_point(robot_name, self._waypoint_map[0]) 
@@ -291,7 +291,7 @@ class WayPointManager:
         # set next in round
         else:
             rospy.loginfo("Setting next target in round...")
-            if self._waypoint_map_name == "two_rooms":
+            if self._waypoint_map_name == 'two_rooms':
                 current_target_idx = self._waypoint_map[robot_name].index(self._get_target_point(robot_name))
                 target_point = self._waypoint_map[robot_name][current_target_idx + 1]
             else:    
