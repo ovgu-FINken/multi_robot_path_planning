@@ -32,7 +32,7 @@ class InitialPosePublisher:
         pwcs.pose.covariance[35] = math.pi/12.0 * math.pi/12.0
 
         pwcs.header.stamp = rospy.Time.now()
-        pwcs.header.frame_id = "%smap"%self._ns[1:]
+        pwcs.header.frame_id = "map"
         self.publisher.publish(pwcs)
 
 

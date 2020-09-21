@@ -16,8 +16,8 @@
       <arg name="use_map_topic" value="true"/>
       <arg name="odom_frame_id" value="$(arg robot)/odom"/>
       <arg name="base_frame_id" value="$(arg robot)/base_footprint"/>
-      <!-- <arg name="global_frame_id" value="/map"/> -->
       <arg name="global_frame_id" value="map"/>
+      <!-- <arg name="global_frame_id" value="/map"/> -->
     </include>
 
     <param name="/use_sim_time" value="true"/>
