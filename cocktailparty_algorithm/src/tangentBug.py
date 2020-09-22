@@ -20,7 +20,7 @@ class TangentBug:
     # max_step_size = max_vel * 1/rate = 0.22 * 0.05 = 0.011m
     # vision_radius has to be bigger than step_size + max_step_size + 2*robot_radius
     # vision radius shouldn't be smaller than 0.2 with the above parameters to avoid collisions between two robots
-    def __init__(self, rate = 20, vision_radius = 1.5, max_vel = 0.22,  robot_size = 0.2):
+    def __init__(self, rate = 20, vision_radius = 1, max_vel = 0.22,  robot_size = 0.2):
 
         #Initialize node
         rospy.init_node('tangentBug', anonymous=True)
