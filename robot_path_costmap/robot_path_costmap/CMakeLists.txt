@@ -10,6 +10,11 @@ project(robot_path_costmap)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   dynamic_reconfigure
+  pluginlib
+  angles
+  costmap_2d
+  nav_msgs
+  geometry_msgs
 )
 
 generate_dynamic_reconfigure_options(

@@ -9,7 +9,7 @@
   <group ns="/$(arg robot)">
 
     <!-- Localization (AMCL) -->
-    <node name="inital_pose_publisher" pkg="tracking_certainty_grid" type="inital_pose_publisher"/>
+    <node name="inital_pose_publisher" pkg="tracking_certainty_grid" type="inital_pose_publisher_without_ns"/>
 
     <include file="$(find collvoid_turtlebot)/launch/amcl_multi.launch">
       <arg name="robot" value="$(arg robot)"/>
