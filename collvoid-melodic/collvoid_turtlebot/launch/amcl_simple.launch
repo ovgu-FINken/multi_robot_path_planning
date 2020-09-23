@@ -9,15 +9,15 @@
   <group ns="/$(arg robot)">
 
     <!-- Localization (AMCL) -->
-    <node name="inital_pose_publisher" pkg="tracking_certainty_grid" type="inital_pose_publisher"/>
+    <node name="inital_pose_publisher" pkg="tracking_certainty_grid" type="inital_pose_publisher_without_ns"/>
 
     <include file="$(find collvoid_turtlebot)/launch/amcl_multi.launch">
       <arg name="robot" value="$(arg robot)"/>
       <arg name="use_map_topic" value="true"/>
       <arg name="odom_frame_id" value="$(arg robot)/odom"/>
       <arg name="base_frame_id" value="$(arg robot)/base_footprint"/>
-      <!-- <arg name="global_frame_id" value="/map"/> -->
       <arg name="global_frame_id" value="map"/>
+      <!-- <arg name="global_frame_id" value="/map"/> -->
     </include>
 
     <param name="/use_sim_time" value="true"/>
