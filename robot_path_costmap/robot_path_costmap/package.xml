@@ -26,6 +26,6 @@
 
   <!-- EXPORT -->
 <export>
-  <costmap_2d plugin="${prefix}/navigation_paths_plugin.xml" />
+  <costmap_2d plugin="${prefix}/costmap_plugins.xml" />
 </export>
 </package>
