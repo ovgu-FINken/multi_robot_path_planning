@@ -9,6 +9,7 @@
 #include <list>
 #include <vector>
 #include <cmath>
+#include <boost/thread.hpp>
 #include <robot_path_costmap/NavigationPathLayerConfig.h>
 
 namespace navigation_path_layers {
@@ -19,6 +20,8 @@ namespace navigation_path_layers {
 
 	class NavigationPathLayer : public costmap_2d::Layer
 	{
+		static const int MAX_FILTER_SIZE = 25;
+
 	public:
 		NavigationPathLayer()
 		{
@@ -26,8 +29,8 @@ namespace navigation_path_layers {
 		}
 		virtual void onInitialize();
 		virtual void pathCallback(const nav_msgs::Path& paths);
-		virtual void updateBounds(double min_x, double min_y,
-			double max_x, double max_y);
+		virtual void updateBounds(double* min_x, double* min_y,
+			double* max_x, double* max_y);
 		virtual void updateCosts();
 		virtual void setSideInflation(bool inflate);
 		virtual void setFilterSize(int size);
@@ -36,21 +39,22 @@ namespace navigation_path_layers {
 
 	protected:
 		bool first_time_;
+		ros::Subscriber paths_sub_;
+		boost::recursive_mutex lock_;
 		dynamic_reconfigure::Server<robot_path_costmap::NavigationPathLayerConfig>* server_;
 		dynamic_reconfigure::Server<robot_path_costmap::NavigationPathLayerConfig>::CallbackType f_;
-
-	private:
 		double filter_strength;
 		int filter_size;
 		bool side_inflation;
 		double inflation_strength;
-		double[][] kernel;
+		double[MAX_FILTER_SIZE][MAX_FILTER_SIZE] kernel;
 		double gauss_sigma, gauss_s, gauss_r;
+		list<nav_msgs::Path> paths_list_;
 		// virtual void NavigationPathLayer::resetCosts();
-		virtual costmap_2d::Costmap2D* createCostHillChain(std::vector<std::vector<int>> positions, costmap_2d::Costmap2D* costmap);
-		virtual double[][] createFilter();
-		virtual costmap_2d::Costmap2D* useFilter(std::vector<int> position, costmap_2d::Costmap2D* costmap);
-		virtual costmap_2d::Costmap2D* useSideFilter(std::vector<int> position, costmap_2d::Costmap2D* costmap);
+		virtual costmap_2d::Costmap2D createCostHillChain(list<vector<int>> positions, costmap_2d::Costmap2D& costmap);
+		virtual double[MAX_FILTER_SIZE][MAX_FILTER_SIZE] createFilter();
+		virtual costmap_2d::Costmap2D useFilter(std::vector<int> position, costmap_2d::Costmap2D& costmap);
+		virtual costmap_2d::Costmap2D useSideFilter(std::vector<int> position, costmap_2d::Costmap2D& costmap);
 		void configure(NavigationPathLayerConfig &config, uint32_t level);
 	};
 }
