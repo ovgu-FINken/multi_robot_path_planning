@@ -31,7 +31,7 @@ generate_dynamic_reconfigure_options(
 # catkin_python_setup()
 
 
-add_library(NavigationPathLayer src/navigation_paths.cpp)
+add_library(robot_path_costmap src/navigation_paths.cpp)
 
 ################################################
 ## Declare ROS messages, services and actions ##
