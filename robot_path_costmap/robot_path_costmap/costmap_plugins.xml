@@ -1,4 +1,4 @@
-<library path="lib/libsocial_layers">
+<library path="lib/libnavigation_layers">
   <class type="navigation_path_layers::NavigationPathLayer" base_class_type="costmap_2d::Layer">
     <description>Uses paths planned by communicating robots to change the costmap.</description>
   </class>
