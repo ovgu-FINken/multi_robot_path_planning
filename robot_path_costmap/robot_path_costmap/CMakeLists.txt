@@ -30,6 +30,9 @@ generate_dynamic_reconfigure_options(
 ## See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
 # catkin_python_setup()
 
+
+add_library(NavigationPathLayer src/navigation_paths.cpp)
+
 ################################################
 ## Declare ROS messages, services and actions ##
 ################################################
