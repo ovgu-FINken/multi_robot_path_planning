@@ -1,9 +1,5 @@
-#include <string>
-#include <nav_msgs>
-#include <list>
-#include <vector>
-#include <cmath>
-#include "./../include/RobotPathCostmap/navigation_paths.h">
+
+#include "./../include/robot_path_costmap/navigation_paths.h"
 
 using namespace std;
 
@@ -29,11 +25,11 @@ void NavigationPathLayer::onInitialize()
 	*/
     first_time_ = true;
     ros::NodeHandle nh("~/" + name_), g_nh;
-	server_ = new dynamic_reconfigure::Server<NavigationPathLayerConfig>(nh);
+	server_ = new dynamic_reconfigure::Server<robot_path_costmap::NavigationPathLayerConfig>(nh);
 	f_ = boost::bind(&NavigationPathLayer::configure, this, _1, _2);
 	server_->setCallback(f_);
     paths_sub_ = nh.subscribe("/local_plan", 1, &NavigationPathLayer::pathCallback, this);
-    list<Path> paths_list_;
+    list<nav_msgs::Path> paths_list_;
 	kernel = NavigationPathLayer::createFilter();
 
 }
@@ -197,7 +193,7 @@ costmap_2d::Costmap2D* NavigationPathLayer::createCostHillChain(list<vector<int>
     return costmap_;
 }
 
-void NavigationPathLayer::createFilter() // Größe und side_inflation nutzen
+double[][] NavigationPathLayer::createFilter() // Größe und side_inflation nutzen
 {
 	// sum is for normalization 
 	double sum = 0.0;
