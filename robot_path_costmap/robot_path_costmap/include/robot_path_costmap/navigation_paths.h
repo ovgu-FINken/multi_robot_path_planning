@@ -12,6 +12,8 @@
 #include <boost/thread.hpp>
 #include <robot_path_costmap/NavigationPathLayerConfig.h>
 
+using namespace std;
+
 namespace navigation_path_layers {
 
 	static double gauss_sigma; 
@@ -47,15 +49,26 @@ namespace navigation_path_layers {
 		int filter_size;
 		bool side_inflation;
 		double inflation_strength;
-		double[MAX_FILTER_SIZE][MAX_FILTER_SIZE] kernel;
+		double[25][25] kernel;
+		/*
+		In file included from /home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:2:0:
+/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/../include/robot_path_costmap/navigation_paths.h:52:9: error: expected unqualified-id before ‘[’ token
+   double[25][25] kernel;
+		*/
 		double gauss_sigma, gauss_s, gauss_r;
+  		double last_min_x_, last_min_y_, last_max_x_, last_max_y_;
 		list<nav_msgs::Path> paths_list_;
 		// virtual void NavigationPathLayer::resetCosts();
-		virtual costmap_2d::Costmap2D createCostHillChain(list<vector<int>> positions, costmap_2d::Costmap2D& costmap);
-		virtual double[MAX_FILTER_SIZE][MAX_FILTER_SIZE] createFilter();
-		virtual costmap_2d::Costmap2D useFilter(std::vector<int> position, costmap_2d::Costmap2D& costmap);
-		virtual costmap_2d::Costmap2D useSideFilter(std::vector<int> position, costmap_2d::Costmap2D& costmap);
+		virtual costmap_2d::Costmap2D createCostHillChain(list<vector<int>> positions, costmap_2d::Costmap2D costmap);
+		virtual void createFilter();
+		virtual costmap_2d::Costmap2D useFilter(std::vector<int> position, costmap_2d::Costmap2D costmap);
+		virtual costmap_2d::Costmap2D useSideFilter(std::vector<int> position, costmap_2d::Costmap2D costmap);
 		void configure(NavigationPathLayerConfig &config, uint32_t level);
+		/*
+		/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/../include/robot_path_costmap/navigation_paths.h:61:18: error: ‘NavigationPathLayerConfig’ has not been declared
+   void configure(NavigationPathLayerConfig &config, uint32_t level);
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~
+		*/
 	};
 }
 
