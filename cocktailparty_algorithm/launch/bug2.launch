@@ -2,6 +2,7 @@
 <launch>
 	<arg name="robot_name" />
 	<node name="Bug2" pkg="cocktailparty_algorithm" type="bug2.py" ns="$(arg robot_name)" output ="screen" respawn="true">
+		<rosparam file="$(find cocktailparty_algorithm)/config/settings_Bug2.yml" />
 		<param name= "robot_name" value="$(arg robot_name)" type="str"/>
 	</node>
 </launch>

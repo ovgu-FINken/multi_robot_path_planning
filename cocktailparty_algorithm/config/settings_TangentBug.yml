@@ -1,0 +1,7 @@
+robot_size: 0.2
+max_vel: 0.22
+rate: 20
+vision_radius: 1.5
+collision_scanner_size: 50
+safety_distance: 0.4
+wall_distance: 0.6

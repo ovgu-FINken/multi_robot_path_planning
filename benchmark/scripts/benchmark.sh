@@ -59,7 +59,8 @@ fi
 # evaluation
 NUM=$((++NUM))
 tmux new-window -t $SESSION_NAME -n "evaluation"
-tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark evaluation.launch" C-m
+tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark evaluation.launch use_settings_file:=$USE_SETTINGS_FILE" C-m
+
 
 # rviz
 if [ $ENABLE_RVIZ == True ]; then

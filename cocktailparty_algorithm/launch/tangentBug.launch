@@ -2,6 +2,7 @@
 <launch>
 	<arg name="robot_name" />
 	<node name="TangentBug" pkg="cocktailparty_algorithm" type="tangentBug.py" ns="$(arg robot_name)" output ="screen" respawn="true">
+		<rosparam file="$(find cocktailparty_algorithm)/config/settings_TangentBug.yml" />
 		<param name= "robot_name" value="$(arg robot_name)" type="str"/>
 	</node>
 </launch>
