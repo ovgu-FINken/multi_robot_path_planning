@@ -49,8 +49,8 @@ namespace navigation_path_layers {
 		int filter_size;
 		bool side_inflation;
 		double inflation_strength;
-		double[25][25] kernel;
-		/*
+		double kernel[MAX_FILTER_SIZE][MAX_FILTER_SIZE];
+		/* ----------------------------------------------------- edited ----------------------------------------------------------------------
 		In file included from /home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:2:0:
 /home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/../include/robot_path_costmap/navigation_paths.h:52:9: error: expected unqualified-id before ‘[’ token
    double[25][25] kernel;
