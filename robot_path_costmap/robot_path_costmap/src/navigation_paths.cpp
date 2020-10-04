@@ -88,9 +88,9 @@ void NavigationPathLayer::pathCallback(const nav_msgs::Path& path) // ToDo: CHEC
         }
 
         list<nav_msgs::Path>::iterator it = next(paths_list_.begin(), index_); 
-        paths_list_.remove(it);
+        paths_list_.remove(*it);
 
-        /*
+        /* ----------------------------------------------------- edited ----------------------------------------------------------------------
 /usr/include/c++/7/bits/basic_string.h:420:7: note:   candidate expects 0 arguments, 1 provided
 /home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:70:30: error: no matching function for call to ‘std::__cxx11::list<nav_msgs::Path_<std::allocator<void> > >::remove(std::__cxx11::list<nav_msgs::Path_<std::allocator<void> > >::iterator&)’
          paths_list_.remove(it);
@@ -259,7 +259,7 @@ void NavigationPathLayer::createFilter() // Größe und side_inflation nutzen
 			navigation_path_layers::gauss_r = sqrt(i * i + j * j);
 			kernel[i + bound + buffer][j + bound + buffer] = (exp(-(navigation_path_layers::gauss_r * navigation_path_layers::gauss_r) / navigation_path_layers::gauss_s)) / (M_PI * navigation_path_layers::gauss_s);
 			sum += kernel[i + bound + buffer][j + bound + buffer];
-            /*
+            /* ----------------------------------------------------- edited ----------------------------------------------------------------------
 /home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp: In member function ‘virtual void navigation_path_layers::NavigationPathLayer::createFilter()’:
 /home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:258:4: error: ‘kernel’ was not declared in this scope
     kernel[i + bound + buffer][j + bound + buffer] = (exp(-(navigation_path_layers::gauss_r * navigation_path_layers::gauss_r) / navigation_path_layers::gauss_s)) / (M_PI * navigation_path_layers::gauss_s);
@@ -314,6 +314,8 @@ costmap_2d::Costmap2D NavigationPathLayer::useFilter(vector<int> position, costm
             /home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:304:8: error: no match for ‘operator[]’ (operand types are ‘costmap_2d::Costmap2D’ and ‘__gnu_cxx::__alloc_traits<std::allocator<int> >::value_type {aka int}’)
     _map[position[0] + i][position[1] + j] = max(current, kernel[i + buffer][j + buffer] * filter_strength);
         ^
+	
+	----------------------------------------------------- edited ----------------------------------------------------------------------
 /home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:304:58: error: ‘kernel’ was not declared in this scope
     _map[position[0] + i][position[1] + j] = max(current, kernel[i + buffer][j + buffer] * filter_strength);
                                                           ^~~~~~
