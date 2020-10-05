@@ -89,6 +89,9 @@ void NavigationPathLayer::pathCallback(const nav_msgs::Path& path) // ToDo: CHEC
 
         list<nav_msgs::Path>::iterator it = next(paths_list_.begin(), index_); 
         paths_list_.remove(*it);
+	/* 
+	paths_list_.erase(index_);
+	*/
 
         /* ----------------------------------------------------- edited ----------------------------------------------------------------------
 /usr/include/c++/7/bits/basic_string.h:420:7: note:   candidate expects 0 arguments, 1 provided
@@ -302,14 +305,16 @@ costmap_2d::Costmap2D NavigationPathLayer::useFilter(vector<int> position, costm
 	{
 		for (int j = -bound; j <= bound; j++)
 		{
-			double current = costmap[position[0] + i][position[1] + j];
+			// double current = costmap[position[0] + i][position[1] + j];
+			double current = costmap->getCost(position[0] + i, position[1] + j);
             /*
 /home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp: In member function ‘virtual costmap_2d::Costmap2D navigation_path_layers::NavigationPathLayer::useFilter(std::vector<int>, costmap_2d::Costmap2D)’:
 /home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:303:28: error: no match for ‘operator[]’ (operand types are ‘costmap_2d::Costmap2D’ and ‘__gnu_cxx::__alloc_traits<std::allocator<int> >::value_type {aka int}’)
     double current = costmap[position[0] + i][position[1] + j];
                             ^
             */
-			_map[position[0] + i][position[1] + j] = max(current, kernel[i + buffer][j + buffer] * filter_strength);
+			// _map[position[0] + i][position[1] + j] = max(current, kernel[i + buffer][j + buffer] * filter_strength;
+			_map->setCost(position[0] + i, position[1] + j, max(current, kernel[i + buffer][j + buffer] * filter_strength));
             /*
             /home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:304:8: error: no match for ‘operator[]’ (operand types are ‘costmap_2d::Costmap2D’ and ‘__gnu_cxx::__alloc_traits<std::allocator<int> >::value_type {aka int}’)
     _map[position[0] + i][position[1] + j] = max(current, kernel[i + buffer][j + buffer] * filter_strength);
@@ -354,7 +359,8 @@ costmap_2d::Costmap2D NavigationPathLayer::useSideFilter(vector<int> position, c
 	{
 		for (int j = -bound; j <= bound; j++)
 		{
-			double current = costmap[position[0] + i][position[1] + j];
+			// double current = costmap[position[0] + i][position[1] + j];
+			double current = costmap->getCost(position[0] + i, position[1] + j);
             /*
             entsprechend useFilter
 /home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp: In member function ‘virtual costmap_2d::Costmap2D navigation_path_layers::NavigationPathLayer::useSideFilter(std::vector<int>, costmap_2d::Costmap2D)’:
@@ -362,7 +368,8 @@ costmap_2d::Costmap2D NavigationPathLayer::useSideFilter(vector<int> position, c
     double current = costmap[position[0] + i][position[1] + j];
                             ^
             */
-			_map[position[0] + i][position[1] + j] = max(current, kernel[i][j] * inflation_strength);
+			// _map[position[0] + i][position[1] + j] = max(current, kernel[i + buffer][j + buffer] * inflation_strength);
+			_map->setCost(position[0] + i, position[1] + j, max(current, kernel[i + buffer][j + buffer] * inflation_strength));
             /*
             entsprechend useFilter
 /home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:335:8: error: no match for ‘operator[]’ (operand types are ‘costmap_2d::Costmap2D’ and ‘__gnu_cxx::__alloc_traits<std::allocator<int> >::value_type {aka int}’)
