@@ -1,14 +1,15 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>robot_path_costmap</name>
-  <version>0.0.0</version>
-  <description>The robot_path_costmap package</description>
+  <version>0.1.0</version>
+  <description>The robot_path_costmap package: it lets the robots subscribe to the other robots' plans
+  and adapts the costmap accordingly to those paths.</description>
 
-  <maintainer email="patheplanning@todo.todo">patheplanning</maintainer>
+  <maintainer email="kilian.poessel@st.ovgu.de">Kilian Poessel</maintainer>
   <!-- One license tag required, multiple allowed, one license per tag -->
   <!-- Commonly used license strings: -->
   <!--   BSD, MIT, Boost Software License, GPLv2, GPLv3, LGPLv2.1, LGPLv3 -->
-  <license>TODO</license>
+  <license>BSD</license>
   <author email="kilian.poessel@st.ovgu.de">Kilian Poessel</author>
 
 
@@ -19,13 +20,14 @@
   <depend>geometry_msgs</depend>
   <depend>nav_msgs</depend>
   <depend>costmap_2d</depend>
-  <depend>string</depend>
-  <depend>list</depend>
-  <depend>cmath</depend>
+  <depend>pluginlib</depend>
+  <depend>dynamic_reconfigure</depend>
+  <test_depend>roslint</test_depend>
 
 
   <!-- EXPORT -->
 <export>
-  <costmap_2d plugin="${prefix}/navigation_paths_plugin.xml" />
+  <costmap_2d plugin="${prefix}/costmap_plugins.xml" />
 </export>
+  
 </package>

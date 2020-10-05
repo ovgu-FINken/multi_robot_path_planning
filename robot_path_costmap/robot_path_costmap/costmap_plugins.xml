@@ -1,0 +1,5 @@
+<library path="lib/librobot_path_costmap">
+  <class type="navigation_path_layers::NavigationPathLayer" base_class_type="costmap_2d::Layer">
+    <description>Uses paths planned by communicating robots to change the costmap.</description>
+  </class>
+</library>

@@ -3,6 +3,17 @@
 #include <ros/ros.h>
 #include <costmap_2d/layer.h>
 #include <costmap_2d/layered_costmap.h>
+#include <string>
+#include <nav_msgs/Path.h>
+#include <dynamic_reconfigure/server.h>
+#include <list>
+#include <vector>
+#include <cmath>
+#include <boost/thread.hpp>
+#include <stdint.h>
+#include <robot_path_costmap/NavigationPathLayerConfig.h>
+
+using namespace std;
 
 namespace navigation_path_layers {
 
@@ -12,37 +23,44 @@ namespace navigation_path_layers {
 
 	class NavigationPathLayer : public costmap_2d::Layer
 	{
+		static const int MAX_FILTER_SIZE = 25;
+
 	public:
 		NavigationPathLayer()
 		{
 			layered_costmap_ = NULL;
 		}
-		virtual void NavigationPathLayer::onInitialize();
-		virtual void NavigationPathLayer::pathCallback(const nav_msgs::& paths);
-		virtual void NavigationPathLayer::updateBounds(double min_x, double min_y,
-			double max_x, double max_y);
-		virtual void NavigationPathLayer::updateCosts();
-		virtual void NavigationPathLayer::setSideInflation(bool inflate);
-		virtual void NavigationPathLayer::setFilterSize(int size);
-		virtual void NavigationPathLayer::scaleSideInflation(double inflation_scale);
-		virtual void NavigationPathLayer::setFilterStrength(int s);
+		virtual void onInitialize();
+		virtual void pathCallback(const nav_msgs::Path& paths);
+		virtual void updateBounds(double* min_x, double* min_y,
+			double* max_x, double* max_y);
+		virtual void updateCosts();
+		virtual void setSideInflation(bool inflate);
+		virtual void setFilterSize(int size);
+		virtual void scaleSideInflation(double inflation_scale);
+		virtual void setFilterStrength(int s);
 
 	protected:
 		bool first_time_;
-
-	private:
+		ros::Subscriber paths_sub_;
+		boost::recursive_mutex lock_;
+		dynamic_reconfigure::Server<robot_path_costmap::NavigationPathLayerConfig>* server_;
+		dynamic_reconfigure::Server<robot_path_costmap::NavigationPathLayerConfig>::CallbackType f_;
 		double filter_strength;
 		int filter_size;
 		bool side_inflation;
 		double inflation_strength;
-		double[][] kernel;
+		double kernel[MAX_FILTER_SIZE][MAX_FILTER_SIZE];
 		double gauss_sigma, gauss_s, gauss_r;
+  		double last_min_x_, last_min_y_, last_max_x_, last_max_y_;
+		list<nav_msgs::Path> paths_list_;
 		// virtual void NavigationPathLayer::resetCosts();
-		virtual costmap_2d::Costmap2D* NavigationPathLayer::createCostHillChain(std::vector<std::vector<int>> positions, costmap_2d::Costmap2D* costmap);
-		virtual void NavigationPathLayer::createFilter();
-		virtual costmap_2d::Costmap2D* NavigationPathLayer::useFilter(std::vector<int> position, costmap_2d::Costmap2D* costmap);
-		virtual costmap_2d::Costmap2D* NavigationPathLayer::useSideFilter(std::vector<int> position, costmap_2d::Costmap2D* costmap);
-	}
+		virtual costmap_2d::Costmap2D createCostHillChain(list<vector<int>> positions, costmap_2d::Costmap2D costmap);
+		virtual void createFilter();
+		virtual costmap_2d::Costmap2D useFilter(std::vector<int> position, costmap_2d::Costmap2D costmap);
+		virtual costmap_2d::Costmap2D useSideFilter(std::vector<int> position, costmap_2d::Costmap2D costmap);
+		void configure(NavigationPathLayerConfig &config, uint32_t level);
+	};
 }
 
 #endif  // NAVIGATION_PATHS_LAYER_H

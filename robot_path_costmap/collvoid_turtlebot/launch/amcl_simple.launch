@@ -1,0 +1,33 @@
+<launch>
+
+  <!-- Arguments -->
+  <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
+  <arg name="open_rviz" default="false"/>
+  <arg name="move_forward_only" default="false"/>
+  <arg name="robot" default="tb3_1"/>
+
+  <group ns="/$(arg robot)">
+
+    <!-- Localization (AMCL) -->
+    <node name="inital_pose_publisher" pkg="tracking_certainty_grid" type="inital_pose_publisher_without_ns"/>
+
+    <include file="$(find collvoid_turtlebot)/launch/amcl_multi.launch">
+      <arg name="robot" value="$(arg robot)"/>
+      <arg name="use_map_topic" value="true"/>
+      <arg name="odom_frame_id" value="$(arg robot)/odom"/>
+      <arg name="base_frame_id" value="$(arg robot)/base_footprint"/>
+      <arg name="global_frame_id" value="map"/>
+      <!-- <arg name="global_frame_id" value="/map"/> -->
+    </include>
+
+    <param name="/use_sim_time" value="true"/>
+
+    <!-- rviz -->
+    <group if="$(arg open_rviz)">
+      <node pkg="rviz" type="rviz" name="rviz" required="true" args="-d $(find turtlebot3_navigation)/rviz/turtlebot3_navigation.rviz"/>
+    </group>
+
+
+  </group>
+
+</launch>
