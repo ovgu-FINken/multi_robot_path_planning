@@ -41,7 +41,7 @@ add_library(robot_path_costmap
 )
 
 
-add_dependencies(robot_path_costmap ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(robot_path_costmap ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS} ${PROJECT_NAME}_gencfg)
 target_link_libraries(
     robot_path_costmap ${catkin_LIBRARIES}
 )
