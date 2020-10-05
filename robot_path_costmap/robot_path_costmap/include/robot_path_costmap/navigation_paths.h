@@ -10,7 +10,9 @@
 #include <vector>
 #include <cmath>
 #include <boost/thread.hpp>
-#include <robot_path_costmap/NavigationPathLayerConfig.h>
+#include <stdint.h>
+#include <navigation_path_layers/NavigationPathLayerConfig.h>
+// #include <robot_path_costmap/NavigationPathLayerConfig.h>
 
 using namespace std;
 
