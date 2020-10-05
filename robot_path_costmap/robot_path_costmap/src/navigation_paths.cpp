@@ -10,7 +10,9 @@ using namespace std;
 
 /*
     TODOS:
-    - NavigationPathLayerConfig unbekannt
+    - NavigationPathLayerConfig Template Error
+    - Aufräumen
+    - Funktionen polishen
     - Funktion, um poses in String zu verwandeln / zu vergleichen
     - Listenwert updaten (pathCallback)
 
@@ -23,26 +25,7 @@ void NavigationPathLayer::onInitialize()
 {
     first_time_ = true;
     ros::NodeHandle nh("~/" + name_), g_nh;
-	server_ = new dynamic_reconfigure::Server<NavigationPathLayerConfig>(nh);
-
-
-    /*
-/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp: In member function ‘virtual void navigation_path_layers::NavigationPathLayer::onInitialize()’:
-/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:23:44: error: ‘NavigationPathLayerConfig’ was not declared in this scope
-  server_ = new dynamic_reconfigure::Server<NavigationPathLayerConfig>(nh);
-                                            ^~~~~~~~~~~~~~~~~~~~~~~~~
-/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:23:44: note: suggested alternative:
-In file included from /home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/../include/robot_path_costmap/navigation_paths.h:13:0,
-                 from /home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:2:
-/home/pathplanning/DrivingSwarm/devel/.private/robot_path_costmap/include/robot_path_costmap/NavigationPathLayerConfig.h:32:9: note:   ‘robot_path_costmap::NavigationPathLayerConfig’
-   class NavigationPathLayerConfig
-         ^~~~~~~~~~~~~~~~~~~~~~~~~
-/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:23:69: error: template argument 1 is invalid
-  server_ = new dynamic_reconfigure::Server<NavigationPathLayerConfig>(nh);
-                                                                     ^
-    */
-
-    
+	server_ = new dynamic_reconfigure::Server<NavigationPathLayerConfig>(nh);    
 	f_ = boost::bind(&NavigationPathLayer::configure, this, _1, _2);
 	server_->setCallback(f_);
     paths_sub_ = nh.subscribe("/local_plan", 1, &NavigationPathLayer::pathCallback, this);
@@ -90,27 +73,7 @@ void NavigationPathLayer::pathCallback(const nav_msgs::Path& path) // ToDo: CHEC
 
         list<nav_msgs::Path>::iterator it = next(paths_list_.begin(), index_); 
         paths_list_.remove(*it);
-	/* 
-	paths_list_.erase(index_);
-	*/
-
-        /* ----------------------------------------------------- edited ----------------------------------------------------------------------
-/usr/include/c++/7/bits/basic_string.h:420:7: note:   candidate expects 0 arguments, 1 provided
-/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:70:30: error: no matching function for call to ‘std::__cxx11::list<nav_msgs::Path_<std::allocator<void> > >::remove(std::__cxx11::list<nav_msgs::Path_<std::allocator<void> > >::iterator&)’
-         paths_list_.remove(it);
-                              ^
-In file included from /usr/include/c++/7/list:64:0,
-                 from /opt/ros/melodic/include/ros/forwards.h:35,
-                 from /opt/ros/melodic/include/ros/common.h:37,
-                 from /opt/ros/melodic/include/ros/ros.h:43,
-                 from /home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/../include/robot_path_costmap/navigation_paths.h:3,
-                 from /home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:2:
-/usr/include/c++/7/bits/list.tcc:324:5: note: candidate: void std::__cxx11::list<_Tp, _Alloc>::remove(const value_type&) [with _Tp = nav_msgs::Path_<std::allocator<void> >; _Alloc = std::allocator<nav_msgs::Path_<std::allocator<void> > >; std::__cxx11::list<_Tp, _Alloc>::value_type = nav_msgs::Path_<std::allocator<void> >]
-     list<_Tp, _Alloc>::
-     ^~~~~~~~~~~~~~~~~
-        */
-
-		paths_list_.push_back(path); // timestamp is newer
+	paths_list_.push_back(path); // timestamp is newer
     }
 
     if (changed ||!isOld)
@@ -208,27 +171,6 @@ void NavigationPathLayer::setFilterStrength(int s)
 } */
 
 costmap_2d::Costmap2D NavigationPathLayer::createCostHillChain(list<vector<int>> positions, costmap_2d::Costmap2D costmap) // Pfad übergeben
-/*
-/usr/include/c++/7/bits/list.tcc:324:5: note:   no known conversion for argument 1 from ‘std::__cxx11::list<nav_msgs::Path_<std::allocator<void> > >::iterator {aka std::_List_iterator<nav_msgs::Path_<std::allocator<void> > >}’ to ‘const value_type& {aka const nav_msgs::Path_<std::allocator<void> >&}’
-/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp: In member function ‘virtual void navigation_path_layers::NavigationPathLayer::updateCosts()’:
-/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:161:57: error: no matching function for call to ‘navigation_path_layers::NavigationPathLayer::createCostHillChain(std::__cxx11::list<std::vector<int> >&, costmap_2d::Costmap2D*&)’
-         costmap = createCostHillChain(positions, costmap);
-                                                         ^
-In file included from /home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:2:0:
-/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/../include/robot_path_costmap/navigation_paths.h:62:33: note: candidate: virtual costmap_2d::Costmap2D navigation_path_layers::NavigationPathLayer::createCostHillChain(std::__cxx11::list<std::vector<int> >, costmap_2d::Costmap2D&)
-   virtual costmap_2d::Costmap2D createCostHillChain(list<vector<int>> positions, costmap_2d::Costmap2D& costmap);
-                                 ^~~~~~~~~~~~~~~~~~~
-/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/../include/robot_path_costmap/navigation_paths.h:62:33: note:   no known conversion for argument 2 from ‘costmap_2d::Costmap2D*’ to ‘costmap_2d::Costmap2D&’
-/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp: At global scope:
-/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:204:23: error: prototype for ‘costmap_2d::Costmap2D navigation_path_layers::NavigationPathLayer::createCostHillChain(std::__cxx11::list<std::vector<int> >, costmap_2d::Costmap2D)’ does not match any in class ‘navigation_path_layers::NavigationPathLayer’
- costmap_2d::Costmap2D NavigationPathLayer::createCostHillChain(list<vector<int>> positions, costmap_2d::Costmap2D costmap) // Pfad übergeben
-                       ^~~~~~~~~~~~~~~~~~~
-In file included from /home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:2:0:
-/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/../include/robot_path_costmap/navigation_paths.h:62:33: error: candidate is: virtual costmap_2d::Costmap2D navigation_path_layers::NavigationPathLayer::createCostHillChain(std::__cxx11::list<std::vector<int> >, costmap_2d::Costmap2D&)
-   virtual costmap_2d::Costmap2D createCostHillChain(list<vector<int>> positions, costmap_2d::Costmap2D& costmap);
-                                 ^~~~~~~~~~~~~~~~~~~
-
-*/
 {
 	costmap_2d::Costmap2D costmap_ = costmap;
     // increase costs along the path
@@ -263,23 +205,6 @@ void NavigationPathLayer::createFilter() // Größe und side_inflation nutzen
 			navigation_path_layers::gauss_r = sqrt(i * i + j * j);
 			kernel[i + bound + buffer][j + bound + buffer] = (exp(-(navigation_path_layers::gauss_r * navigation_path_layers::gauss_r) / navigation_path_layers::gauss_s)) / (M_PI * navigation_path_layers::gauss_s);
 			sum += kernel[i + bound + buffer][j + bound + buffer];
-            /* ----------------------------------------------------- edited ----------------------------------------------------------------------
-/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp: In member function ‘virtual void navigation_path_layers::NavigationPathLayer::createFilter()’:
-/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:258:4: error: ‘kernel’ was not declared in this scope
-    kernel[i + bound + buffer][j + bound + buffer] = (exp(-(navigation_path_layers::gauss_r * navigation_path_layers::gauss_r) / navigation_path_layers::gauss_s)) / (M_PI * navigation_path_layers::gauss_s);
-    ^~~~~~
-/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:258:4: note: suggested alternative: ‘erfl’
-    kernel[i + bound + buffer][j + bound + buffer] = (exp(-(navigation_path_layers::gauss_r * navigation_path_layers::gauss_r) / navigation_path_layers::gauss_s)) / (M_PI * navigation_path_layers::gauss_s);
-    ^~~~~~
-    erfl
-/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:268:4: error: ‘kernel’ was not declared in this scope
-    kernel[i][j] /= sum;
-    ^~~~~~
-/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:268:4: note: suggested alternative: ‘erfl’
-    kernel[i][j] /= sum;
-    ^~~~~~
-    erfl
-            */
 		}
 	}
 
@@ -306,31 +231,8 @@ costmap_2d::Costmap2D NavigationPathLayer::useFilter(vector<int> position, costm
 	{
 		for (int j = -bound; j <= bound; j++)
 		{
-			// double current = costmap[position[0] + i][position[1] + j];
 			double current = costmap->getCost(position[0] + i, position[1] + j);
-            /*
-/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp: In member function ‘virtual costmap_2d::Costmap2D navigation_path_layers::NavigationPathLayer::useFilter(std::vector<int>, costmap_2d::Costmap2D)’:
-/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:303:28: error: no match for ‘operator[]’ (operand types are ‘costmap_2d::Costmap2D’ and ‘__gnu_cxx::__alloc_traits<std::allocator<int> >::value_type {aka int}’)
-    double current = costmap[position[0] + i][position[1] + j];
-                            ^
-            */
-			// _map[position[0] + i][position[1] + j] = max(current, kernel[i + buffer][j + buffer] * filter_strength;
 			_map->setCost(position[0] + i, position[1] + j, max(current, kernel[i + buffer][j + buffer] * filter_strength));
-            /*
-            /home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:304:8: error: no match for ‘operator[]’ (operand types are ‘costmap_2d::Costmap2D’ and ‘__gnu_cxx::__alloc_traits<std::allocator<int> >::value_type {aka int}’)
-    _map[position[0] + i][position[1] + j] = max(current, kernel[i + buffer][j + buffer] * filter_strength);
-        ^
-	
-	----------------------------------------------------- edited ----------------------------------------------------------------------
-/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:304:58: error: ‘kernel’ was not declared in this scope
-    _map[position[0] + i][position[1] + j] = max(current, kernel[i + buffer][j + buffer] * filter_strength);
-                                                          ^~~~~~
-/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:304:58: note: suggested alternative: ‘erfl’
-    _map[position[0] + i][position[1] + j] = max(current, kernel[i + buffer][j + buffer] * filter_strength);
-                                                          ^~~~~~
-                                                          erfl
-
-            */
 		}
 	}
 
@@ -360,30 +262,8 @@ costmap_2d::Costmap2D NavigationPathLayer::useSideFilter(vector<int> position, c
 	{
 		for (int j = -bound; j <= bound; j++)
 		{
-			// double current = costmap[position[0] + i][position[1] + j];
 			double current = costmap->getCost(position[0] + i, position[1] + j);
-            /*
-            entsprechend useFilter
-/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp: In member function ‘virtual costmap_2d::Costmap2D navigation_path_layers::NavigationPathLayer::useSideFilter(std::vector<int>, costmap_2d::Costmap2D)’:
-/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:334:28: error: no match for ‘operator[]’ (operand types are ‘costmap_2d::Costmap2D’ and ‘__gnu_cxx::__alloc_traits<std::allocator<int> >::value_type {aka int}’)
-    double current = costmap[position[0] + i][position[1] + j];
-                            ^
-            */
-			// _map[position[0] + i][position[1] + j] = max(current, kernel[i + buffer][j + buffer] * inflation_strength);
 			_map->setCost(position[0] + i, position[1] + j, max(current, kernel[i + buffer][j + buffer] * inflation_strength));
-            /*
-            entsprechend useFilter
-/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:335:8: error: no match for ‘operator[]’ (operand types are ‘costmap_2d::Costmap2D’ and ‘__gnu_cxx::__alloc_traits<std::allocator<int> >::value_type {aka int}’)
-    _map[position[0] + i][position[1] + j] = max(current, kernel[i][j] * inflation_strength);
-        ^
-/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:335:58: error: ‘kernel’ was not declared in this scope
-    _map[position[0] + i][position[1] + j] = max(current, kernel[i][j] * inflation_strength);
-                                                          ^~~~~~
-/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:335:58: note: suggested alternative: ‘erfl’
-    _map[position[0] + i][position[1] + j] = max(current, kernel[i][j] * inflation_strength);
-                                                          ^~~~~~
-                                                          erfl
-            */
 		}
 	}
 
@@ -391,29 +271,6 @@ costmap_2d::Costmap2D NavigationPathLayer::useSideFilter(vector<int> position, c
 }
 
 void NavigationPathLayer::configure(NavigationPathLayerConfig &config, uint32_t level)
-/*
-/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp: At global scope:
-/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:342:37: error: variable or field ‘configure’ declared void
- void NavigationPathLayer::configure(NavigationPathLayerConfig &config, uint32_t level)
-                                     ^~~~~~~~~~~~~~~~~~~~~~~~~
-/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:342:37: error: ‘NavigationPathLayerConfig’ was not declared in this scope
-/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:342:37: note: suggested alternative:
-In file included from /home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/../include/robot_path_costmap/navigation_paths.h:13:0,
-                 from /home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:2:
-/home/pathplanning/DrivingSwarm/devel/.private/robot_path_costmap/include/robot_path_costmap/NavigationPathLayerConfig.h:32:9: note:   ‘robot_path_costmap::NavigationPathLayerConfig’
-   class NavigationPathLayerConfig
-         ^~~~~~~~~~~~~~~~~~~~~~~~~
-/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:342:64: error: ‘config’ was not declared in this scope
- void NavigationPathLayer::configure(NavigationPathLayerConfig &config, uint32_t level)
-                                                                ^~~~~~
-/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:342:64: note: suggested alternative: ‘conjq’
- void NavigationPathLayer::configure(NavigationPathLayerConfig &config, uint32_t level)
-                                                                ^~~~~~
-                                                                conjq
-/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/robot_path_costmap/src/navigation_paths.cpp:342:81: error: expected primary-expression before ‘level’
- void NavigationPathLayer::configure(NavigationPathLayerConfig &config, uint32_t level)
-                                                                                 ^~~~~
-*/
 {
 	filter_strength = config.filter_strength;
 	filter_size = config.filter_size;
