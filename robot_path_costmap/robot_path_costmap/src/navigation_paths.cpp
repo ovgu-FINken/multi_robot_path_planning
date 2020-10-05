@@ -1,7 +1,8 @@
 
 #include "../include/robot_path_costmap/navigation_paths.h"
 #include <iterator>
-
+#include <pluginlib/class_list_macros.h>
+ 
 PLUGINLIB_EXPORT_CLASS(navigation_path_layers::NavigationPathLayer, costmap_2d::Layer)
 
 using namespace std;
