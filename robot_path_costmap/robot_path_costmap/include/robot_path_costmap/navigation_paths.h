@@ -54,6 +54,7 @@ namespace navigation_path_layers {
 		double gauss_sigma, gauss_s, gauss_r;
   		double last_min_x_, last_min_y_, last_max_x_, last_max_y_;
 		list<nav_msgs::Path> paths_list_;
+		nav_msgs::Path path_;
 		// virtual void NavigationPathLayer::resetCosts();
 		virtual costmap_2d::Costmap2D createCostHillChain(list<vector<int>> positions, costmap_2d::Costmap2D costmap);
 		virtual void createFilter();

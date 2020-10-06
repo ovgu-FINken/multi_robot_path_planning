@@ -49,7 +49,7 @@ void NavigationPathLayer::pathCallback(const nav_msgs::Path& path) // ToDo: CHEC
     for (int i = 0; i < paths_list_.size(); i++)
     {   
         list<nav_msgs::Path>::iterator it = next(paths_list_.begin(), i); 
-        nav_msgs::Path& path_ = *it;
+        path_ = *it;
         if (path_.header.frame_id.compare(path.header.frame_id) == 0)
         {
             isOld = true;
@@ -63,16 +63,16 @@ void NavigationPathLayer::pathCallback(const nav_msgs::Path& path) // ToDo: CHEC
 		paths_list_.push_back(path);
     } else
     {
-     /*   string oldPath = string(next(paths_list_.begin(), index_).poses);
-        string newPath = string(path.poses);
+        string oldPath = path_.poses[0].header.frame_id;
+        string newPath = path.poses[0].header.frame_id;
         if (oldPath.compare(newPath) != 0)
         {
             changed = true;
         }
 
         list<nav_msgs::Path>::iterator it = next(paths_list_.begin(), index_); 
-        paths_list_.remove(*it);
-	paths_list_.push_back(path); // timestamp is newer*/
+        paths_list_.erase(it);
+	paths_list_.push_back(path); // timestamp is newer
     }
 
     if (changed ||!isOld)
@@ -225,6 +225,8 @@ void NavigationPathLayer::configure(robot_path_costmap::NavigationPathLayerConfi
 	gauss_s = config.gauss_s * gauss_sigma * gauss_sigma;
 	enabled_ = config.enabled;
 }
+
+// string NavigationPathLayer::getStringsFromPose()
 
 /*
 void NavigationPathLayer::setSideInflation(bool inflate)
