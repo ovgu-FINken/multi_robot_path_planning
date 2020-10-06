@@ -7,7 +7,7 @@ plugins:
   - { name: static_layer, type: "costmap_2d::StaticLayer" }
   - { name: obstacle_layer, type: "costmap_2d::VoxelLayer" }
   # - { name: stationary_robots, type: "costmap_2d::ObstacleLayer" }
-  - { name: path_layer, type: "navigation_path_layers::NavigationPathLayer" } # TO_TEST
+  # - { name: path_layer, type: "navigation_path_layers::NavigationPathLayer" } # TO_TEST
   - { name: inflation_layer, type: "costmap_2d::InflationLayer" }
   
 ## layer for static obstacles (derived from map published by map server)
@@ -74,11 +74,11 @@ inflation_layer:
 
 
 ## layer for robots' paths
-path_layer:
-  enabled: true
-  filter_strength: 1.0
-  filter_size: 9
-  side_inflation: false
-  inflation_strength: 0.05
-  gauss_sigma: 1
-  gauss_s: 2
+#path_layer:
+#  enabled: true
+#  filter_strength: 1.0
+#  filter_size: 9
+#  side_inflation: false
+#  inflation_strength: 0.05
+#  gauss_sigma: 1
+#  gauss_s: 2
