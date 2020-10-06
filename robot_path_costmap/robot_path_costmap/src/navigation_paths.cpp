@@ -10,7 +10,6 @@ using namespace std;
 
 /*
     TODOS:
-    - NavigationPathLayerConfig Template Error
     - Aufräumen
     - Funktionen polishen
     - Funktion, um poses in String zu verwandeln / zu vergleichen
@@ -25,7 +24,7 @@ void NavigationPathLayer::onInitialize()
 {
     first_time_ = true;
     ros::NodeHandle nh("~/" + name_), g_nh;
-	server_ = new dynamic_reconfigure::Server<NavigationPathLayerConfig>(nh);    
+	server_ = new dynamic_reconfigure::Server<robot_path_costmap::NavigationPathLayerConfig>(nh);    
 	f_ = boost::bind(&NavigationPathLayer::configure, this, _1, _2);
 	server_->setCallback(f_);
     paths_sub_ = nh.subscribe("/local_plan", 1, &NavigationPathLayer::pathCallback, this);
@@ -64,7 +63,7 @@ void NavigationPathLayer::pathCallback(const nav_msgs::Path& path) // ToDo: CHEC
 		paths_list_.push_back(path);
     } else
     {
-        string oldPath = string(next(paths_list_.begin(), index_).poses);
+     /*   string oldPath = string(next(paths_list_.begin(), index_).poses);
         string newPath = string(path.poses);
         if (oldPath.compare(newPath) != 0)
         {
@@ -73,7 +72,7 @@ void NavigationPathLayer::pathCallback(const nav_msgs::Path& path) // ToDo: CHEC
 
         list<nav_msgs::Path>::iterator it = next(paths_list_.begin(), index_); 
         paths_list_.remove(*it);
-	paths_list_.push_back(path); // timestamp is newer
+	paths_list_.push_back(path); // timestamp is newer*/
     }
 
     if (changed ||!isOld)
@@ -113,7 +112,7 @@ void NavigationPathLayer::updateCosts()
 {
 	if (!enabled_) return;
 
-    costmap_2d::Costmap2D* costmap = layered_costmap_->getCostmap();
+    costmap_2d::Costmap2D costmap = *layered_costmap_->getCostmap();
     // function call only if given path changed
     // reset costs to 0
     // resetCosts();
@@ -131,46 +130,10 @@ void NavigationPathLayer::updateCosts()
     }
 }
 
-void NavigationPathLayer::setSideInflation(bool inflate)
-{
-	side_inflation = inflate;
-    NavigationPathLayer::createFilter();
-}
-
-void NavigationPathLayer::scaleSideInflation(double inflation_scale)
-{
-    // maximal factor 1 of the costs of the normal path
-    inflation_strength = max(min(inflation_scale, 1.0), 0.0);
-	NavigationPathLayer::createFilter();
-}
-
-void NavigationPathLayer::setFilterSize(int size)
-{
-    if (size%2 == 1) 
-    {
-		filter_size = min(size, 9);
-    } else
-    {
-        // minimum size required
-        filter_size = min(size-1, 9); // ~ 12.5 cm tolerance with degrading costs
-    }
-    
-    NavigationPathLayer::createFilter();
-}
-
-void NavigationPathLayer::setFilterStrength(int s)
-{
-    filter_strength = s;
-    NavigationPathLayer::createFilter();
-}
 
 
-/* void NavigationPathLayer::resetCosts()
-{
-    // gesamte Layer auf 0 zurücksetzen
-} */
 
-costmap_2d::Costmap2D NavigationPathLayer::createCostHillChain(list<vector<int>> positions, costmap_2d::Costmap2D costmap) // Pfad übergeben
+costmap_2d::Costmap2D NavigationPathLayer::createCostHillChain(list<vector<int>> positions, costmap_2d::Costmap2D costmap)
 {
 	costmap_2d::Costmap2D costmap_ = costmap;
     // increase costs along the path
@@ -231,8 +194,8 @@ costmap_2d::Costmap2D NavigationPathLayer::useFilter(vector<int> position, costm
 	{
 		for (int j = -bound; j <= bound; j++)
 		{
-			double current = costmap->getCost(position[0] + i, position[1] + j);
-			_map->setCost(position[0] + i, position[1] + j, max(current, kernel[i + buffer][j + buffer] * filter_strength));
+			double current = costmap.getCost(position[0] + i, position[1] + j);
+			_map.setCost(position[0] + i, position[1] + j, max(current, kernel[i + buffer][j + buffer] * filter_strength));
 		}
 	}
 
@@ -252,6 +215,58 @@ costmap_2d::Costmap2D NavigationPathLayer::useFilter(vector<int> position, costm
     return _map;
 }
 
+void NavigationPathLayer::configure(robot_path_costmap::NavigationPathLayerConfig &config, uint32_t level)
+{
+	filter_strength = config.filter_strength;
+	filter_size = config.filter_size;
+	side_inflation = config.side_inflation;
+	inflation_strength = config.inflation_strength;
+	gauss_sigma = config.gauss_sigma;
+	gauss_s = config.gauss_s * gauss_sigma * gauss_sigma;
+	enabled_ = config.enabled;
+}
+
+/*
+void NavigationPathLayer::setSideInflation(bool inflate)
+{
+	side_inflation = inflate;
+    NavigationPathLayer::createFilter();
+}
+
+void NavigationPathLayer::scaleSideInflation(double inflation_scale)
+{
+    // maximal factor 1 of the costs of the normal path
+    inflation_strength = max(min(inflation_scale, 1.0), 0.0);
+	NavigationPathLayer::createFilter();
+}
+
+void NavigationPathLayer::setFilterSize(int size)
+{
+    if (size%2 == 1) 
+    {
+		filter_size = min(size, 9);
+    } else
+    {
+        // minimum size required
+        filter_size = min(size-1, 9); // ~ 12.5 cm tolerance with degrading costs
+    }
+    
+    NavigationPathLayer::createFilter();
+}
+
+void NavigationPathLayer::setFilterStrength(int s)
+{
+    filter_strength = s;
+    NavigationPathLayer::createFilter();
+}
+
+
+void NavigationPathLayer::resetCosts()
+{
+    // gesamte Layer auf 0 zurücksetzen
+} 
+
+
 costmap_2d::Costmap2D NavigationPathLayer::useSideFilter(vector<int> position, costmap_2d::Costmap2D costmap)
 {
 	int bound = int((filter_size - 1) / 2);
@@ -262,23 +277,15 @@ costmap_2d::Costmap2D NavigationPathLayer::useSideFilter(vector<int> position, c
 	{
 		for (int j = -bound; j <= bound; j++)
 		{
-			double current = costmap->getCost(position[0] + i, position[1] + j);
-			_map->setCost(position[0] + i, position[1] + j, max(current, kernel[i + buffer][j + buffer] * inflation_strength));
+			double current = costmap.getCost(position[0] + i, position[1] + j);
+			_map.setCost(position[0] + i, position[1] + j, max(current, kernel[i + buffer][j + buffer] * inflation_strength));
 		}
 	}
 
 	return _map;
 }
 
-void NavigationPathLayer::configure(NavigationPathLayerConfig &config, uint32_t level)
-{
-	filter_strength = config.filter_strength;
-	filter_size = config.filter_size;
-	side_inflation = config.side_inflation;
-	inflation_strength = config.inflation_strength;
-	gauss_sigma = config.gauss_sigma;
-	gauss_s = config.gauss_s * gauss_sigma * gauss_sigma;
-	enabled_ = config.enabled;
-}
+
+*/
 
 }

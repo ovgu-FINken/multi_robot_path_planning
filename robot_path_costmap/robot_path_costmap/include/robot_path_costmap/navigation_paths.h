@@ -35,10 +35,10 @@ namespace navigation_path_layers {
 		virtual void updateBounds(double* min_x, double* min_y,
 			double* max_x, double* max_y);
 		virtual void updateCosts();
-		virtual void setSideInflation(bool inflate);
-		virtual void setFilterSize(int size);
-		virtual void scaleSideInflation(double inflation_scale);
-		virtual void setFilterStrength(int s);
+		// virtual void setSideInflation(bool inflate);
+		// virtual void setFilterSize(int size);
+		// virtual void scaleSideInflation(double inflation_scale);
+		// virtual void setFilterStrength(int s);
 
 	protected:
 		bool first_time_;
@@ -58,8 +58,8 @@ namespace navigation_path_layers {
 		virtual costmap_2d::Costmap2D createCostHillChain(list<vector<int>> positions, costmap_2d::Costmap2D costmap);
 		virtual void createFilter();
 		virtual costmap_2d::Costmap2D useFilter(std::vector<int> position, costmap_2d::Costmap2D costmap);
-		virtual costmap_2d::Costmap2D useSideFilter(std::vector<int> position, costmap_2d::Costmap2D costmap);
-		void configure(NavigationPathLayerConfig &config, uint32_t level);
+		// virtual costmap_2d::Costmap2D useSideFilter(std::vector<int> position, costmap_2d::Costmap2D costmap);
+		void configure(robot_path_costmap::NavigationPathLayerConfig &config, uint32_t level);
 	};
 }
 
