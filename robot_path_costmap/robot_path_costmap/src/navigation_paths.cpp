@@ -27,7 +27,8 @@ void NavigationPathLayer::onInitialize()
 	server_ = new dynamic_reconfigure::Server<robot_path_costmap::NavigationPathLayerConfig>(nh);    
 	f_ = boost::bind(&NavigationPathLayer::configure, this, _1, _2);
 	server_->setCallback(f_);
-    paths_sub_ = nh.subscribe("/local_plan", 1, &NavigationPathLayer::pathCallback, this);
+    paths_sub_l = nh.subscribe("/local_plan", 1, &NavigationPathLayer::pathCallback, this);
+    paths_sub_g = nh.subscribe("/global_plan", 1, &NavigationPathLayer::pathCallback, this);
 
 	NavigationPathLayer::createFilter();
 

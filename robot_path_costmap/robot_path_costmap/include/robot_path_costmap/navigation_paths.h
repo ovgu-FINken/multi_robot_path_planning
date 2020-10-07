@@ -42,7 +42,8 @@ namespace navigation_path_layers {
 
 	protected:
 		bool first_time_;
-		ros::Subscriber paths_sub_;
+		ros::Subscriber paths_sub_l;
+		ros::Subscriber paths_sub_g;
 		boost::recursive_mutex lock_;
 		dynamic_reconfigure::Server<robot_path_costmap::NavigationPathLayerConfig>* server_;
 		dynamic_reconfigure::Server<robot_path_costmap::NavigationPathLayerConfig>::CallbackType f_;
