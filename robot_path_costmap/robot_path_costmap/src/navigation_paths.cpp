@@ -14,7 +14,7 @@ namespace navigation_path_layers
 
     void NavigationPathLayer::onInitialize()
     {
-        cerr << "Im Initialize-Bereich";
+        cerr << "Im Initialize-Bereich \n";
         // for updateBounds
         first_time_ = true;
 
@@ -29,11 +29,17 @@ namespace navigation_path_layers
         paths_sub_l = nh.subscribe("/local_plan", 1, &NavigationPathLayer::pathCallback, this);
         paths_sub_g = nh.subscribe("/global_plan", 1, &NavigationPathLayer::pathCallback, this);
 
+        cerr << "create Filter \n";
+
         NavigationPathLayer::createFilter();
+
+        cerr << "created Filter \n";
     }
 
     void NavigationPathLayer::pathCallback(const nav_msgs::Path& path) // ToDo: CHECK!!!!!!!!!!
     {    
+        cerr << "CALLBACK ENTRY POINT \n";
+
         /* 
             list handling: if new path or update of existing robots path 
             --> if existing delete old costmap manipulation and add new at same position
@@ -42,12 +48,7 @@ namespace navigation_path_layers
 
         boost::recursive_mutex::scoped_lock lock(lock_);
         ros::Time begin = ros::Time::now();
-        ROS_DEBUG_STREAM("-----------------------------------------------------------------------------------------------Starttime" << begin);
-
-        ofstream myfile;
-        myfile.open ("marker.txt");
-        myfile << "I'm here.\n";
-        myfile.close();
+        cerr << "Einstiegszeit: " << begin << "\n";
         
         bool isOld = false;
         bool changed = false;
@@ -86,7 +87,7 @@ namespace navigation_path_layers
 
         }
         ros::Time mid = ros::Time::now();
-        ROS_DEBUG_STREAM("-----------------------------------------------------------------------------------------------Midtime" << mid);
+        cerr << "Vor updatecosts: " << mid << "\n";
 
         // if path-list has been edited then update costmap
         if (changed ||!isOld)
@@ -94,11 +95,13 @@ namespace navigation_path_layers
             NavigationPathLayer::updateCosts();
         }
         ros::Time end = ros::Time::now();
-        ROS_DEBUG_STREAM("-----------------------------------------------------------------------------------------------Endtime" << end);
+        cerr << "Ausstiegszeit: " << end << "\n";
     }
 
     void NavigationPathLayer::updateBounds( double* min_x, double* min_y, double* max_x, double* max_y)
     {
+        cerr << "Update bounds \n";
+
         // set area bounds of costmap again that is manipulated by updateCosts
         if (first_time_)
     {

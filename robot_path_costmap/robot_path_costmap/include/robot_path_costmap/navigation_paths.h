@@ -30,7 +30,7 @@ namespace navigation_path_layers {
 		NavigationPathLayer()
 		{
 			layered_costmap_ = NULL;
-			cerr << "Markierung fuer Einstieg";
+			cerr << "Markierung fuer Einstieg \n";
 		}
 		virtual void onInitialize();
 		virtual void pathCallback(const nav_msgs::Path& paths);
