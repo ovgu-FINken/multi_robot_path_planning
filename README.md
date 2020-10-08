@@ -7,7 +7,7 @@ For details please click [here]().
 - [Multi-Agent Algorithim Based on VO](#Multi-Agent-Algorithim-Based-on-VO)
   - [System](#system)
   - [Implementation](#implementation)
-    - [Pyhon Scripts, Nodes and Topics](#python-scripts-,-nodes-and-topics)
+    - [Pyhon Scripts Nodes and Topics](#python-scripts-nodes-and-topics)
       - [PlainGround_Formation](#PlainGround_Formation)
       - [Run_Algo_Multiprocessing](#Run_Algo_Multiprocessing)
       - [VO_Based_Algo_Version2](#VO_Based_Algo_Version2)
