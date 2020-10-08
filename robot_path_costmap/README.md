@@ -31,7 +31,7 @@ Note: Because it is necessary for the integration of this conception to have a m
 - Python 2.7 *
 - [PyYAML](https://pypi.org/project/PyYAML/): with `pip install PyYAML` (alternatively, see [here](https://pyyaml.org/wiki/PyYAML)) *
 
-* - needed for collvoid
+&ast;needed for collvoid
 
 ### Installation
 
@@ -143,7 +143,7 @@ In the following the procedure with the collvoid-dwa-planner from the collvoid-p
 
 - "Goal Controller"-Node is NoneType and crashes, when trying to send a goal. All processes die and roslaunch will exit. Start again, let about 8-10 seconds between spawning of robots and starting the collvoid-script.
   
-- Error with currently unknown cause:  [ WARN] Control loop missed its desired rate of 9.0000Hz... the loop actually took x seconds (usually 100+ seconds)
+- Error with currently unknown cause:  [ WARN] Control loop missed its desired rate of 9.0000Hz... the loop actually took *x* seconds (usually 100+ seconds)
   
 ## Authors
 Kilian Pößel
