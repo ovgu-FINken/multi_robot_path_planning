@@ -28,7 +28,7 @@ The Algorithm is being tested on turtlebot3(BURGER) in Gazebo simulation.
 The following Figure illustrates the node graph for one robot
 (captured in RQT). 
 
-![alt text](res/imgs/graphs/node_graph.png "node_graph")
+![alt text](rvo_turtlebot3/res/Circle_formation_rqt_graph.png "node_graph")
 
 ### Python Scripts, Nodes and Topics
 
