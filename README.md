@@ -53,9 +53,9 @@ The following sequence is crucial and must be followed as given;
 ```
 roslaunch vo_based_algo_without_benchmark turtlebot3_empty_world_4agents.launch 
  or
-roslaunch vo_based_algo_without_benchmark turtlebot3_empty_world_8agents.launch 
+roslaunch vo_based_algo_without_benchmark turtlebot3_empty_world_8robots.launch 
  or
-roslaunch vo_based_algo_without_benchmark turtlebot3_empty_world_16agents.launch 
+roslaunch vo_based_algo_without_benchmark turtlebot3_empty_world_16robots.launch 
 ```
 2. After the successful spawing of the robots, use the following command to create circle formation for testing;
    (The programm will ask for the number of robots, depending on how many robots have been spawned in the simulation kindly choose from 4,8 or 16)
