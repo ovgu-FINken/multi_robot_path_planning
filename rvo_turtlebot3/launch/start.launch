@@ -1,0 +1,22 @@
+<launch>
+  
+
+  <include file="$(find turtlebot3_bringup)/launch/turtlebot3_remote.launch" />
+    
+  <!-- Map server -->
+
+  <arg name="map_file" default="$(find rvo_turtlebot3)/maps/empty_world.yaml"/>
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+
+  <!-- AMCL -->
+  <include file="$(find rvo_turtlebot3)/launch/amcl.launch"/>
+
+</launch>
+
+#####################
+<launch>
+	<arg name="agent_name" />
+	<node name="Algo_based_on_vo" pkg="rvo_turtlebot3" type="vo_based_algo_version2.py" ns="$(arg agent_name)" output ="screen" respawn="true">
+		<param name= "agent_name" value="$(arg agent_name)" type="str"/>
+	</node>
+</launch>

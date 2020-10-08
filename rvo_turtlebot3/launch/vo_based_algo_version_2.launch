@@ -1,0 +1,7 @@
+<launch>
+	
+	<node name="circleformationgoals" pkg="rvo_turtlebot3" type="plainGround_formation.py" output ="screen" respawn="true">
+		
+	</node>
+</launch>
+

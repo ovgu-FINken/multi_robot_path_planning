@@ -1,0 +1,48 @@
+<launch>
+	
+	<node name="algorithm_0" pkg="rvo_turtlebot3" type="run_algo.py"  output ="screen">
+		<param name= "agent_name" value="tb3_0" type="str"/>
+        </node>
+	
+
+	
+	<node name="algorithm_1" pkg="rvo_turtlebot3" type="run_algo.py" output ="screen">
+		<param name= "agent_name" value="tb3_1" type="str"/>
+	</node>
+	
+
+	
+	<node name="algorithm_2" pkg="rvo_turtlebot3" type="run_algo.py" output ="screen">
+		<param name= "agent_name" value="tb3_2" type="str"/>
+	</node>	
+
+	
+	<node name="algorithm_3" pkg="rvo_turtlebot3" type="run_algo.py" output ="screen">
+		<param name= "agent_name" value="tb3_3" type="str"/>
+	</node>	
+
+	
+	<node name="algorithm_4" pkg="rvo_turtlebot3" type="run_algo.py" output ="screen">
+		<param name= "agent_name" value="tb3_4" type="str"/>
+	</node>	
+
+	
+	<node name="algorithm_5" pkg="rvo_turtlebot3" type="run_algo.py" output ="screen">
+		<param name= "agent_name" value="tb3_5" type="str"/>
+	</node>	
+
+	
+	<node name="algorithm_6" pkg="rvo_turtlebot3" type="run_algo.py" output ="screen">
+		<param name= "agent_name" value="tb3_6" type="str"/>
+	</node>	
+	
+	<node name="algorithm_7" pkg="rvo_turtlebot3" type="run_algo.py" output ="screen">
+		<param name= "agent_name" value="tb3_7" type="str"/>
+	
+	</node>
+	
+	<node name="algorithm_8" pkg="rvo_turtlebot3" type="run_algo.py" output ="screen">
+		<param name= "agent_name" value="tb3_8" type="str"/>
+	</node>
+	
+</launch>

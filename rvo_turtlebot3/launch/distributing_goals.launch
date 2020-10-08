@@ -1,0 +1,6 @@
+<launch>
+	<arg name="agent_name" />
+	<node name="algorithm" pkg="rvo_turtlebot3" type="run_algo.py" ns="$(arg agent_name)" output ="screen" respawn="true">
+		<param name= "agent_name" value="$(arg agent_name)" type="str"/>
+	</node>
+</launch>
