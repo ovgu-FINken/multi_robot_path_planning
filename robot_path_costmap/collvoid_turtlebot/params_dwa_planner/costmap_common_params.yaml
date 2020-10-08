@@ -76,7 +76,7 @@ inflation_layer:
 ## layer for robots' paths
 path_layer:
   enabled: true
-  filter_strength: 1.0
+  filter_strength: 10.0
   filter_size: 9
   side_inflation: false
   inflation_strength: 0.05
