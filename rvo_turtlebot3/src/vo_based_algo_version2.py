@@ -36,7 +36,6 @@ class Turtlebot3_burger:
         self.roll = 0.0
         self.pitch = 0.0
         self.orientation_list = [0.0,0.0,0.0,0.0]
-        #self.orientation_list_desired  = list()
 
         self.pub = rospy.Publisher('/'+self.agent_name+'/cmd_vel', Twist, queue_size= 1)
 
@@ -58,8 +57,6 @@ class Turtlebot3_burger:
         self.current_heading_1 = 0.0
         self.inf = itertools.repeat(numpy.inf, 360)
         self.full_laser_ranges = list(self.inf)
-        #self.inf1 = itertools.repeat(numpy.inf, 80)  #why 80? because 0.0875(0.0175*5)
-        #self.full_laser_ranges_filtered = list(self.inf1)
         self.array_final_angle_list = []
         self.array_final_angle_list_1 = []
         self.full_laser_ranges_array= []
@@ -111,16 +108,12 @@ class Turtlebot3_burger:
         self.laser_msg = data
         self.full_laser_ranges = self.laser_msg.ranges
         self.full_laser_ranges_array = numpy.asarray(self.full_laser_ranges)
-        #self.full_laser_ranges_filtered = self.full_laser_ranges[0::5]
-        #self.full_laser_ranges_filtered_array = numpy.asarray(self.full_laser_ranges_filtered)
 
         ######################################################################################
 
     def set_heading (self,angle_to_goal):
 
         self.desired_heading = angle_to_goal
-
-        #self.orientation_list_euler = [self.roll, self.pitch, self.desired_heading]
 
         (self.quaternion_x, self.quaternion_y, self.quaternion_z, self.quaternion_w) = quaternion_from_euler(self.roll, self.pitch, self.desired_heading)
 
@@ -157,7 +150,6 @@ class Turtlebot3_burger:
 
         #Rotate the self.array_final_angle_list in a way that current.yaw conicides with the 0 of self.full_laser_ranges_filtered_array
 
-        #Do I have to initialize self.array_final_angle_list every time????
         self.array_final_angle_list_temp = self.array_final_angle_list
 
         self.index_rotate = (numpy.abs(self.array_final_angle_list_temp - self.yaw)).argmin()
@@ -169,9 +161,8 @@ class Turtlebot3_burger:
         #Making ordered dictionary
 
         self.angles_and_ranges_dict = OrderedDict(zip(self.array_final_angle_list_temp, self.full_laser_ranges_array))
-        #self.array_angles_and_ranges_dict = numpy.asarray(self.angles_and_ranges_dict)
 
-        #Filter vo and outside_vo
+        #Filter vo
         
         self.newDict = self.filterTheDict(self.angles_and_ranges_dict, lambda elem: elem[1] == numpy.inf)
         self.outside_vo = list(self.newDict.keys())
@@ -190,8 +181,7 @@ class Turtlebot3_burger:
 
     #################################################################################
 
-    #return if there will be collision or not and also return the distance to that obstacle
-   
+
     def check_for_collision(self,current_heading): 
 
         current_heading = round(current_heading, 4)  
@@ -202,15 +192,12 @@ class Turtlebot3_burger:
         self.index_vo_min = 0.0
         self.index_vo_max = 0.0
 
-        #self.index_vo = (numpy.abs(self.array_vo - current_heading).argmin()
-        #self.close_heading = self.array_vo[self.index_vo]
-
         if len(self.array_vo) != 0:
 
             self.index_vo_min = (numpy.abs(self.array_vo - current_heading)).argmin()
             self.index_vo_max = (numpy.abs(self.array_vo - current_heading)).argmax()
 
-            c1 = abs(self.array_vo[self.index_vo_min] - current_heading) <= 0.805#0.7#0.525#0.35
+            c1 = abs(self.array_vo[self.index_vo_min] - current_heading) <= 0.805
             #c2 = abs(self.array_vo[self.index_vo_max] - current_heading) >= 6.00 #6.1945
             c2 = False
           
@@ -229,9 +216,6 @@ class Turtlebot3_burger:
                     self.temp4 = (self.array_vo[self.index_vo_max])
                     self.distance_to_obstacle = self.angles_and_ranges_dict[self.temp4]
             
-                #Velocity proportional to the distance to the obstacle
-
-                #self.distance_to_obstacle = self.distance_to_obstacle/1.5
 
         return self.temp3, self.distance_to_obstacle
 
@@ -249,14 +233,13 @@ class Turtlebot3_burger:
 
             self.angle_to_goal = math.atan2(self.diff_y,self.diff_x)
 
-            self.angle_to_goal +=0.5 #0.4 #0.175
+            self.angle_to_goal +=0.5 
 
             self.angle_to_goal = round(self.angle_to_goal,4)
 
             self.index_outside_vo_min = (numpy.abs(self.array_outside_vo - self.angle_to_goal)).argmin()
             self.index_outside_vo_max = (numpy.abs(self.array_outside_vo - self.angle_to_goal)).argmax()
 
-            #c3 = numpy.abs(self.array_outside_vo[self.index_outside_vo_min] - self.angle_to_goal) <= 0.175
             c4 = numpy.abs(self.array_outside_vo[self.index_outside_vo_max] - self.angle_to_goal) >= 6.1945
 
             self.angle_to_goal = self.array_outside_vo[self.index_outside_vo_min] 
@@ -266,10 +249,6 @@ class Turtlebot3_burger:
                 self.angle_to_goal = self.array_outside_vo[self.index_outside_vo_max] 
             
             self.set_heading(self.angle_to_goal)
-
-        #if len(self.array_outside_vo) == 0:
-
-            #choose penality velocity heading
 
         print ('the selected_legal_velocity is ', self.angle_to_goal)
         print ('The current heading', self.yaw)
@@ -341,14 +320,6 @@ class Turtlebot3_burger:
                 self.angle_to_goal = math.atan2(self.diff_y,self.diff_x)
 
                 self.angle_to_goal = round(self.angle_to_goal,3)
-
-                '''self.collision, self.distance_to_obstacle = self.check_for_collision(self.angle_to_goal)
-
-                if self.collision:
-                    
-                    self.speed.linear.x = self.k_linear * self.distance_to_obstacle    
-                    self.pub.publish(self.speed)  
-                    self.angle_to_goal = self.yaw'''
                 
                 self.set_heading(self.angle_to_goal)
 
@@ -361,15 +332,4 @@ class Turtlebot3_burger:
         print ('goal_x coordinate',self.x)
         print ('goal_y coordinate',self.y)
 
-    
-'''if __name__ == '__main__':
-    
-    while not rospy.is_shutdown():
-
-        class_instance = Turtlebot3_burger()
-        class_instance.move_towards_goal(1.0,0.0)
-        rospy.spin()'''
-
-   
-    
-        
+       
