@@ -1,10 +1,10 @@
 # A Multi-Agent Path Planing Algorithm Based on Velocity Obstacles
 Welcome!
-This multi-agent path planning algorithim is based on a reactive approch to avoid collisions with other robots in the run time. This is an attempt to implement 'Velocity Obstacles' or 'VO' without the information of other agents' velocity or position.
+This multi-agent path planning algorithm is based on a reactive approch to avoid collisions with other robots in the run time. This algorithm is an attempt to implement 'Velocity Obstacles' or 'VO' without the information of other agents' velocity or position.
 For details please click [here](). 
 
 <!-- TOC START min:1 max:5 link:true asterisk:false update:true -->
-- [Multi-Agent Algorithim Based on VO](#Multi-Agent-Algorithim-Based-on-VO)
+- [Multi-Agent Algorithm Based on VO](#A-Multi-Agent-Path-Planing-Algorithm-Based-on-Velocity-Obstacles)
   - [System](#system)
   - [Implementation](#implementation)
     - [Python Scripts Nodes and Topics](#python-scripts-nodes-and-topics)
@@ -62,7 +62,7 @@ roslaunch vo_based_algo_without_bencchmark turtlebot3_empty_world_16agents.launc
 ```
 roslaunch vo_based_algo_without_bencchmark circle_formation.launch 
 ```
-3. Once the robots are aligned, run the algorithim using following command :
+3. Once the robots are aligned, run the algorithm using following command :
 ```
 ~/driving_swarm/DrivingSwarm/src/pathplanning/vo_based_algo_without_benchmark/src$ python run_algo_multiprocessing
 ```
