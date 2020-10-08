@@ -11,7 +11,6 @@ from gazebo_msgs.msg import ModelState
 from gazebo_msgs.srv import SetModelState
 from vo_based_algo_version2 import Turtlebot3_burger
 from rvo_turtlebot3.msg import Information
-#from std_msgs.msg import Float32
 
 
 class circle_formation():
@@ -51,7 +50,7 @@ class circle_formation():
     def circle_calculations(self):
 
         self.user_input = int(input("Type no. of agents : "))
-        ###################################################### ##################### ############ ######## #### ## #
+        ###################################################### 
         #self.user_input = 8
         #Initializing lists
 
@@ -75,8 +74,6 @@ class circle_formation():
             self.goal_x[i] = self.center_x - np.cos(2*np.pi/self.user_input*i)*self.radius
             self.goal_y[i] = self.center_y - np.sin(2*np.pi/self.user_input*i)*self.radius
 
-            #print (sp_x[i], sp_y[i],goal_x[i], goal_y[i])
-
             self.x_component = self.center_x - self.sp_x[i]
             self.y_component = self.center_y - self.sp_y[i]
 
@@ -90,8 +87,6 @@ class circle_formation():
 
     def publish_goals(self, agent_name,class_obj,goal_x, goal_y):
 
-        #self.goal_x_y = [goal_x, goal_y]
-        #self.goal_xy_array = np.array(self.goal_x_y)
         print('Now starting the circleformation')
 
         rospy.init_node('circleformationgoals')
@@ -104,7 +99,6 @@ class circle_formation():
 
             while not rospy.is_shutdown():
                 self.msg = Information()
-                #self.msg.data = self.goal_xy_array
                 self.msg.x = goal_x
                 self.msg.y = goal_y
                 self.msg.agent_name = agent_name
@@ -116,7 +110,6 @@ class circle_formation():
                 self.r.sleep() 
 
             rospy.loginfo('Goal Node stopped')
-            #self.multi_agents(self.agent_names[i], self.class_obj[i], self.goal_x[i], self.goal_y[i])
 
         rospy.spin()
 
