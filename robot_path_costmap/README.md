@@ -84,6 +84,24 @@ x. Additionally you can start rqt for monitoring
 ## Common Errors and Unwanted Behavior
 
 - "Goal Controller"-Node crashes and terminates the turtlebot's processes: start again, let about 8-10 seconds between spawning of robots and starting the collvoid-script
+
+(Traceback (most recent call last):                                              
+  File "/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/coll
+void_benchmark/src/collvoid_benchmark/goal_controller.py", line 191, in <module>
+    update_movement(number_of_robots)
+  File "/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/col$void_benchmark/src/collvoid_benchmark/goal_controller.py", line 154, in update_$ovement
+    robot_targets[robot_id], quiet = False)
+  File "/home/pathplanning/DrivingSwarm/src/pathplanning/benchmark/src/benchmar$/src/movement.py", line 86, in move_to
+    self._client.send_goal(goal)
+AttributeError: 'NoneType' object has no attribute 'send_goal'
+[goal_controller-1] process has died [pid 30149, exit code 1, cmd /home/pathpla$ning/DrivingSwarm/src/pathplanning/robot_path_costmap/collvoid_benchmark/src/co$lvoid_benchmark/goal_controller.py __name:=goal_controller __log:=/home/pathpla$ning/.ros/log/d1555ca4-0969-11eb-a948-302432b6e39c/goal_controller-1.log].
+log file: /home/pathplanning/.ros/log/d1555ca4-0969-11eb-a948-302432b6e39c/goal_
+controller-1*.log
+all processes on machine have died, roslaunch will exit
+shutting down processing monitor...
+... shutting down processing monitor complete
+done
+)
   
 ## Authors
 Kilian Pößel
