@@ -11,6 +11,8 @@
     <!-- Localization (AMCL) -->
     <node name="inital_pose_publisher" pkg="tracking_certainty_grid" type="inital_pose_publisher_without_ns"/>
 
+    <param name="/use_sim_time" value="true"/>
+
     <include file="$(find collvoid_turtlebot)/launch/amcl_multi.launch">
       <arg name="robot" value="$(arg robot)"/>
       <arg name="use_map_topic" value="true"/>
@@ -20,7 +22,7 @@
       <!-- <arg name="global_frame_id" value="/map"/> -->
     </include>
 
-    <param name="/use_sim_time" value="true"/>
+ 
 
     <!-- rviz -->
     <group if="$(arg open_rviz)">

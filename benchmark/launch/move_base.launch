@@ -14,12 +14,12 @@
         <param name="base_global_planner" value="carrot_planner/NavfnROS"/>
           -->
         <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
-        <rosparam file="$(find pheromone_map)/param/costmap_common_params_$(arg model).yaml" command="load" ns="global_costmap" />
-        <rosparam file="$(find pheromone_map)/param/costmap_common_params_$(arg model).yaml" command="load" ns="local_costmap" />
-        <rosparam file="$(find pheromone_map)/param/local_costmap_params.yaml" command="load" />
-        <rosparam file="$(find pheromone_map)/param/global_costmap_params.yaml" command="load" />
-        <rosparam file="$(find pheromone_map)/param/move_base_params.yaml" command="load" />
-        <rosparam file="$(find pheromone_map)/param/dwa_local_planner_params_$(arg model).yaml" command="load" />
+        <rosparam file="$(find collvoid_turtlebot)/params_dwa_planner/costmap_common_params_$(arg model).yaml" command="load" ns="global_costmap" />
+        <rosparam file="$(find collvoid_turtlebot)/params_dwa_planner/costmap_common_params_$(arg model).yaml" command="load" ns="local_costmap" />
+        <rosparam file="$(findcollvoid_turtlebot)/params_dwa_planner/local_costmap_params.yaml" command="load" />
+        <rosparam file="$(find collvoid_turtlebot)/params_dwa_planner/global_costmap_params.yaml" command="load" />
+        <rosparam file="$(find collvoid_turtlebot)/params_dwa_planner/move_base_params.yaml" command="load" />
+        <rosparam file="$(find collvoid_turtlebot)/params_dwa_planner/dwa_local_planner_params_$(arg model).yaml" command="load" />
 
         <!-- Overwrite robot specific paramters -->
         <remap from="/map" to="/$(arg robot_name)/map"/>

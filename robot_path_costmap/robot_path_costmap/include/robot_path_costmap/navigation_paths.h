@@ -12,6 +12,7 @@
 #include <boost/thread.hpp>
 #include <stdint.h>
 #include <robot_path_costmap/NavigationPathLayerConfig.h>
+#include <iostream>
 
 using namespace std;
 
@@ -29,11 +30,11 @@ namespace navigation_path_layers {
 		NavigationPathLayer()
 		{
 			layered_costmap_ = NULL;
+			cerr << "Markierung fuer Einstieg";
 		}
 		virtual void onInitialize();
 		virtual void pathCallback(const nav_msgs::Path& paths);
-		virtual void updateBounds(double* min_x, double* min_y,
-			double* max_x, double* max_y);
+		virtual void updateBounds(double* min_x, double* min_y,	double* max_x, double* max_y);
 		virtual void updateCosts();
 		// virtual void setSideInflation(bool inflate);
 		// virtual void setFilterSize(int size);
@@ -42,26 +43,32 @@ namespace navigation_path_layers {
 
 	protected:
 		bool first_time_;
+
 		ros::Subscriber paths_sub_l;
 		ros::Subscriber paths_sub_g;
+
 		boost::recursive_mutex lock_;
 		dynamic_reconfigure::Server<robot_path_costmap::NavigationPathLayerConfig>* server_;
 		dynamic_reconfigure::Server<robot_path_costmap::NavigationPathLayerConfig>::CallbackType f_;
+
 		double filter_strength;
 		int filter_size;
 		bool side_inflation;
 		double inflation_strength;
 		double kernel[MAX_FILTER_SIZE][MAX_FILTER_SIZE];
 		double gauss_sigma, gauss_s, gauss_r;
+
   		double last_min_x_, last_min_y_, last_max_x_, last_max_y_;
+
 		list<nav_msgs::Path> paths_list_;
 		nav_msgs::Path path_;
-		// virtual void NavigationPathLayer::resetCosts();
+
 		virtual costmap_2d::Costmap2D createCostHillChain(list<vector<int>> positions, costmap_2d::Costmap2D costmap);
 		virtual void createFilter();
 		virtual costmap_2d::Costmap2D useFilter(std::vector<int> position, costmap_2d::Costmap2D costmap);
-		// virtual costmap_2d::Costmap2D useSideFilter(std::vector<int> position, costmap_2d::Costmap2D costmap);
 		void configure(robot_path_costmap::NavigationPathLayerConfig &config, uint32_t level);
+		// virtual costmap_2d::Costmap2D useSideFilter(std::vector<int> position, costmap_2d::Costmap2D costmap);
+		// virtual void NavigationPathLayer::resetCosts();
 	};
 }
 
