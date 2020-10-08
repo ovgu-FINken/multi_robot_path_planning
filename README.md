@@ -7,7 +7,7 @@ For details please click [here]().
 - [Multi-Agent Algorithim Based on VO](#Multi-Agent-Algorithim-Based-on-VO)
   - [System](#system)
   - [Implementation](#implementation)
-    - [Pyhon Scripts Nodes and Topics](#python-scripts-nodes-and-topics)
+    - [Python Scripts Nodes and Topics](#python-scripts-nodes-and-topics)
       - [PlainGround_Formation](#PlainGround_Formation)
       - [Run_Algo_Multiprocessing](#Run_Algo_Multiprocessing)
       - [VO_Based_Algo_Version2](#VO_Based_Algo_Version2)
@@ -30,7 +30,7 @@ The following Figure illustrates the node graph for one robot
 
 ![alt text](res/imgs/graphs/node_graph.png "node_graph")
 
-### Pyhon Scripts, Nodes and Topics
+### Python Scripts, Nodes and Topics
 
 #### PlainGround_Formation
 This python program will be resposible to run 'CircleFormationGoals' node and will publish this information using the topic(/goal), through a custom msg(Information).
