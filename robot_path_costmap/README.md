@@ -85,7 +85,7 @@ In the following the procedure with the collvoid-dwa-planner from the collvoid-p
 
     ```
     ~/DrivingSwarm/src/pathplanning$ roscd collvoid_turtlebot/scripts/
-    ~/DrivingSwarm/src/pathplanning/collvoid-melodic/collvoid_turtlebot/scripts$ ./collvoid_std.sh -n 5 -p dwa                                                                                                                                  
+    ~/DrivingSwarm/src/pathplanning/collvoid-melodic/collvoid_turtlebot/scripts$ ./collvoid_std.sh -n 5 -p dwa
     ```
 
 3. After the collvoid_std.sh has finished its setup successfully, you can use the simple goal interface in **RVIZ for testing** it.
