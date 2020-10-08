@@ -71,11 +71,11 @@ roslaunch rvo_turtlebot3 turtlebot3_empty_world_16robots.launch
 
 ![alt text](rvo_turtlebot3/res/image1.png "starting")
 
-![alt text](rvo_turtlebot3/res/image3.png "in_progress")
-
 ![alt text](rvo_turtlebot3/res/image2.png "in_progress")
 
-![alt text](rvo_turtlebot3/res/image4.pngg "end_result")
+![alt text](rvo_turtlebot3/res/image3.png "in_progress")
+
+![alt text](rvo_turtlebot3/res/image4.png "end_result")
 
 
 ```
