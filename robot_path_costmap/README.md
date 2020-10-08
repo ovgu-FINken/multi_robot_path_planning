@@ -72,7 +72,14 @@ Note: Because it is necessary for the integration of this conception to have a m
 
 ### Launching and Testing
 
+
+
 ## Execution with Benchmark
+
+x. Additionally you can start rqt for monitoring
+      ```
+      ~/DrivingSwarm/src/pathplanning$ rqt
+      ```
 
 ## Common Errors and Unwanted Behavior
   
