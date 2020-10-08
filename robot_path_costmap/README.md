@@ -82,6 +82,8 @@ x. Additionally you can start rqt for monitoring
       ```
 
 ## Common Errors and Unwanted Behavior
+
+- "Goal Controller"-Node crashes and terminates the turtlebot's processes: start again, let about 8-10 seconds between spawning of robots and starting the collvoid-script
   
 ## Authors
 Kilian Pößel
