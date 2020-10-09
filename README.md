@@ -7,7 +7,7 @@ For details please click [here](https://github.com/ovgu-FINken/multi_robot_path_
 - [Multi-Agent Algorithm Based on VO](#A-Multi-Agent-Path-Planning-Algorithm-Based-on-Velocity-Obstacles)
   - [System](#system)
   - [Implementation](#implementation)
-      - [Python Scripts Nodes and Topics](#python-scripts-nodes-and-topics)
+      - [Python Scripts, Nodes and Topics](#python-scripts,-nodes-and-topics)
       - [PlainGround_Formation](#PlainGround_Formation)
       - [Run_Algo_Multiprocessing](#Run_Algo_Multiprocessing)
       - [VO_Based_Algo_Version2](#VO_Based_Algo_Version2)
