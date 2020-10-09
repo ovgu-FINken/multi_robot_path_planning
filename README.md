@@ -14,6 +14,7 @@ For details please click [here](https://github.com/ovgu-FINken/multi_robot_path_
   - [Execution](#execution)
   - [Results](#results)
   - [Benchmark Implementation](#benchmark-implementation)
+    - [Execution with Benchmark](#execution-with-benchmark)
     - [Benchmark Result](#benchmark-result)
   - [Acknowledgement](#Acknowledgement)
       
@@ -89,6 +90,18 @@ roslaunch rvo_turtlebot3 turtlebot3_empty_world_16robots.launch
 The following Figure illustrates the node graph when using algorithm with benchmark.
 
 ![alt text](rvo_turtlebot3/res/With_Johann_Benchmark.png "Benchmark_Implementation")
+
+#### Execution with Benchmark
+To execute the algorithm with the benchmark, kindly follow the below instructions;
+NOTE: Make sure tmux is installed in your sytem
+´´´
+roscore
+´´´
+After roscore, just run the benchmark script from the **VO_based_algo** package.
+´´´
+~/driving_swarm/DrivingSwarm/src/pathplanning/vo_based_algo/scripts$ ./benchmark
+´´´
+To know about **benchmark's settings**, kindly refer to this [readme](https://github.com/ovgu-FINken/multi_robot_path_planning/blob/benchmark/benchmark/README.md)
 
 #### Benchmark Result
 The algorithm failed to pass the benchmark as the robots were not able to avoid static obstacles and continuously get stuck. The reason for this is discussed [here](https://github.com/ovgu-FINken/multi_robot_path_planning/wiki/Implemented-Algorithm:-Based_on_VO) under the **Remarks** section.
