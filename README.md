@@ -39,7 +39,7 @@ This python program will be responsible to run 'CircleFormationGoals' node and w
 (The Purpose of aligning robots in a circle formation and to make them swap positions with the robots on the opposite side, is to make sure maximum interaction among the moving robots and hence to see the efficiency of the algorithm )
 
 #### Run_Algo_Multiprocessing
-The **/run_algo_multiprocessing** is responsible for running the main algorithm as many times as the number of robots given by the user, using **/Python_Multiprocessing** feature. Moreover, this program will subscribe to the topic(/goal) and distribute it among the robots.
+The **run_algo_multiprocessing** is responsible for running the main algorithm as many times as the number of robots given by the user, using **Python_Multiprocessing** feature. Moreover, this program will subscribe to the topic(/goal) and distribute it among the robots.
 
 #### VO_Based_Algo_Version2
 This is the main program with the algorithm. This will initiate the node with the name of the agent and subscribes to the topics **/tb3_x/odom** and **/tb3_x/scan**. After the processing, the node is responsible for controlling the robots through publishing **/tb3_x/cmd_vel**.
@@ -87,7 +87,7 @@ roslaunch rvo_turtlebot3 turtlebot3_empty_world_16robots.launch
 
 
 ### Acknowledgement
-**/Viviane Wolter** <br>
-**/Suraj Bonagiri**
+**Viviane Wolter** <br>
+**Suraj Bonagiri**
 
 THANK YOU!
