@@ -1,7 +1,7 @@
 # A Multi-Agent Path Planning Algorithm Based on Velocity Obstacles
 Welcome!
 This multi-agent path planning algorithm is based on a reactive approach to avoid collisions with other robots in the run time. This algorithm is an attempt to implement 'Velocity Obstacles' or 'VO' without the information of other agents' velocity or position.
-For details please click [here](#https://github.com/ovgu-FINken/multi_robot_path_planning/wiki/Implemented-Algorithm:-Based_on_VO). 
+For details please click [here](https://github.com/ovgu-FINken/multi_robot_path_planning/wiki/Implemented-Algorithm:-Based_on_VO). 
 
 <!-- TOC START min:1 max:5 link:true asterisk:false update:true -->
 - [Multi-Agent Algorithm Based on VO](#A-Multi-Agent-Path-Planing-Algorithm-Based-on-Velocity-Obstacles)
