@@ -4,7 +4,7 @@ This multi-agent path planning algorithm is based on a reactive approach to avoi
 For details please click [here](https://github.com/ovgu-FINken/multi_robot_path_planning/wiki/Implemented-Algorithm:-Based_on_VO). 
 
 <!-- TOC START min:1 max:5 link:true asterisk:false update:true -->
-- [Multi-Agent Algorithm Based on VO](#A-Multi-Agent-Path-Planing-Algorithm-Based-on-Velocity-Obstacles)
+- [Multi-Agent Algorithm Based on VO](#A-Multi-Agent-Path-Planning-Algorithm-Based-on-Velocity-Obstacles)
   - [System](#system)
   - [Implementation](#implementation)
       - [Python Scripts Nodes and Topics](#python-scripts-nodes-and-topics)
