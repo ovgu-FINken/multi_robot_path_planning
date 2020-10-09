@@ -105,6 +105,8 @@ To know about **benchmark's settings**, kindly refer to this [readme](https://gi
 
 #### Benchmark Result
 
+![alt text](rvo_turtlebot3/res/Benchmark_1.png "Benchmark_1")
+
 ![alt text](rvo_turtlebot3/res/Benchmark.png "Benchmark")
 
 The algorithm failed to pass the benchmark as the robots were not able to avoid static obstacles and continuously get stuck. The reason for this is discussed [here](https://github.com/ovgu-FINken/multi_robot_path_planning/wiki/Implemented-Algorithm:-Based_on_VO) under the **Remarks** section.
