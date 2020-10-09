@@ -14,6 +14,7 @@ For details please click [here](https://github.com/ovgu-FINken/multi_robot_path_
   - [Execution](#execution)
   - [Results](#results)
   - [Benchmark Implementation](#benchmark-implementation)
+    - [Benchmark Result](#benchmark-result)
   - [Acknowledgement](#Acknowledgement)
       
 <!-- TOC END -->
@@ -85,6 +86,11 @@ roslaunch rvo_turtlebot3 turtlebot3_empty_world_16robots.launch
 
 ### Benchmark Implementation 
 
+The following Figure illustrates the node graph when using algorithm with benchmark.
+
+![alt text](rvo_turtlebot3/res/With_Johann_Benchmark.png "Benchmark_Implementation")
+
+#### Benchmark Result
 
 ### Acknowledgement
 **Viviane Wolter** <br>
