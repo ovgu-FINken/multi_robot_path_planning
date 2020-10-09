@@ -25,9 +25,9 @@ namespace navigation_path_layers
         server_->setCallback(f_);
 
         // subscribe to plans 
-        // subsribe to own plan or to other robots plans right now???
-        paths_sub_l = nh.subscribe("/local_plan", 1, &NavigationPathLayer::pathCallback, this);
-        paths_sub_g = nh.subscribe("/global_plan", 1, &NavigationPathLayer::pathCallback, this);
+        // subsribe to own plan or to other robots plans right now??? // TODO check topics and add other robots
+        paths_sub_l = nh.subscribe("/DWAPlannerROS/local_plan", 1, &NavigationPathLayer::pathCallback, this);
+        paths_sub_g = nh.subscribe("/DWAPlannerROS/global_plan", 1, &NavigationPathLayer::pathCallback, this);
 
         cerr << "create Filter \n";
 
