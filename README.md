@@ -91,7 +91,7 @@ The following Figure illustrates the node graph when using algorithm with benchm
 ![alt text](rvo_turtlebot3/res/With_Johann_Benchmark.png "Benchmark_Implementation")
 
 #### Benchmark Result
-The algorithm failed to pass the benchmark as the robots were not able to avoid static obstacles and continuously get stuck. The reason for this is discussed [here](https://github.com/ovgu-FINken/multi_robot_path_planning/wiki/Implemented-Algorithm:-Based_on_VO)
+The algorithm failed to pass the benchmark as the robots were not able to avoid static obstacles and continuously get stuck. The reason for this is discussed [here](https://github.com/ovgu-FINken/multi_robot_path_planning/wiki/Implemented-Algorithm:-Based_on_VO) underthe **Remarks** section.
 
 ### Acknowledgement
 **Viviane Wolter** <br>
