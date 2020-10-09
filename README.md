@@ -94,13 +94,13 @@ The following Figure illustrates the node graph when using algorithm with benchm
 #### Execution with Benchmark
 To execute the algorithm with the benchmark, kindly follow the below instructions;
 NOTE: Make sure tmux is installed in your sytem
-´´´
+```
 roscore
-´´´
+```
 After roscore, just run the benchmark script from the **VO_based_algo** package.
-´´´
+```
 ~/driving_swarm/DrivingSwarm/src/pathplanning/vo_based_algo/scripts$ ./benchmark
-´´´
+```
 To know about **benchmark's settings**, kindly refer to this [readme](https://github.com/ovgu-FINken/multi_robot_path_planning/blob/benchmark/benchmark/README.md)
 
 #### Benchmark Result
