@@ -31,7 +31,7 @@ Note: Because it is necessary for the integration of this conception to have a m
 - Python 2.7 *
 - [PyYAML](https://pypi.org/project/PyYAML/): with `pip install PyYAML` (alternatively, see [here](https://pyyaml.org/wiki/PyYAML)) *
 
-* - needed for collvoid
+&ast;needed for collvoid
 
 ### Installation
 
@@ -72,40 +72,78 @@ Note: Because it is necessary for the integration of this conception to have a m
 
 ### Launching and Testing
 
+To start with the extended costmap you just need to normally start an algorithm that uses a move_base for its pathplanning. Make sure that the costmap_common_params.yaml contains the layer as a plugin ( arbitrary name, type: "navigation_path_layers::NavigationPathLayer") and the parameters below it. Also enabled must be set to "true". 
 
+In the following the procedure with the collvoid-dwa-planner from the collvoid-packages is shown.
+
+1. Start the roscore
+   ```
+   ~$ roscore
+   ```
+
+2. Start the standard collvoid script like shown below. **"dwa"** gets started as default planner, otherwise you can also set it specifically by using the **"-p" flag**. The number of robots is set to 3 by default. You can specify the number by using the flag "-n".
+
+    ```
+    ~/DrivingSwarm/src/pathplanning$ roscd collvoid_turtlebot/scripts/
+    ~/DrivingSwarm/src/pathplanning/collvoid-melodic/collvoid_turtlebot/scripts$ ./collvoid_std.sh -n 5 -p dwa
+    ```
+
+3. After the collvoid_std.sh has finished its setup successfully, you can use the simple goal interface in **RVIZ for testing** it.
+   Therefore,
+
+   a. Add the **Tool Properties** to the panels (Menu -> Panels -> Tool Properties)
+
+   b. In Tool Properties, change the Topic name of the 2D Nav Goal to **/tb3_x/move_base_simple/goal**
+   where x is the id of the robot.
+
+   c. Place the **2D Nav Goal arrow** at a point and direction of your choice.
+   *(Attention: Do not place it on an obstacle or any other area marked black!)*
+
+    ![Image](/collvoid-melodic/res/ScreenshotRVIZ_edited.png)
+
+4.  For a successful test, the robot should move to the defined goal.
+
+5.  You can stop all the processes with:
+    ```
+    ~/DrivingSwarm/src/pathplanning/collvoid-melodic/collvoid_turtlebot/scripts$ ./kill.sh`
+    ```
 
 ## Execution with Benchmark
 
-x. Additionally you can start rqt for monitoring
+1. Start the **roscore**
+   ```
+   ~$ roscore
+   ```
+
+2. Set the number of robots in the **settings** file of the benchmark (`benchmark/settings/settings.json`, e.g. 5)
+
+3. Start the **benchmark** script
+    ```
+    ~/DrivingSwarm/src/pathplanning/benchmark/scripts$ ./benchmark.sh
+    ```
+
+4. **Wait** until the spawner has finished (robots should appear in Gazebo), otherwise kill the process with `./kill.sh` and return to 2.
+
+5. Start the **collvoid_benchmark** script. Select the local planner that should be tested (*dwa* in this case) by using the "-p" flag. 
+   Set the flag "-n" with the correct number of robots. Example shown below:
+    *Note: The number of robots has to be **equivalent** to the number defined in the benchmark settings.* 
+    
+    ```
+    ~/DrivingSwarm/src/pathplanning/collvoid-melodic/collvoid_turtlebot/scripts$ ./collvoid_benchmark.sh -n 5 -p collvoid
+    ```
+    
+6. Additionally you can start rqt for monitoring at any point.
       ```
       ~/DrivingSwarm/src/pathplanning$ rqt
       ```
+      
+*Note: Some useful properties to change are located in the settings folder of the benchmark package. First of all, as mentioned above, the "number_of_robots can be set (keep in mind: this value has to be equal to the number of robots) in the collvoid_benchmark.sh command. The world can be changed there, too (maze.world, square.world, tworooms.world) - Caution: in case of "tworooms.world" you have to execute the collvoid_benchmark_tworooms.sh shell script. A third useful setting it the "formation" parameter for the spawning formation. This can either be "dense_block" or "at_way_point". For further information see the [README.md](https://github.com/ovgu-FINken/multi_robot_path_planning/blob/layer_injection/benchmark/README.md) of the benchmark package.*
 
 ## Common Errors and Unwanted Behavior
 
-- "Goal Controller"-Node crashes and terminates the turtlebot's processes: start again, let about 8-10 seconds between spawning of robots and starting the collvoid-script
-
-(Traceback (most recent call last):                                              
-  File "/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/coll
-void_benchmark/src/collvoid_benchmark/goal_controller.py", line 191, in <module>
-    update_movement(number_of_robots)
-  File "/home/pathplanning/DrivingSwarm/src/pathplanning/robot_path_costmap/col$void_benchmark/src/collvoid_benchmark/goal_controller.py", line 154, in update_$ovement
-    robot_targets[robot_id], quiet = False)
-  File "/home/pathplanning/DrivingSwarm/src/pathplanning/benchmark/src/benchmar$/src/movement.py", line 86, in move_to
-    self._client.send_goal(goal)
-AttributeError: 'NoneType' object has no attribute 'send_goal'
-[goal_controller-1] process has died [pid 30149, exit code 1, cmd /home/pathpla$ning/DrivingSwarm/src/pathplanning/robot_path_costmap/collvoid_benchmark/src/co$lvoid_benchmark/goal_controller.py __name:=goal_controller __log:=/home/pathpla$ning/.ros/log/d1555ca4-0969-11eb-a948-302432b6e39c/goal_controller-1.log].
-log file: /home/pathplanning/.ros/log/d1555ca4-0969-11eb-a948-302432b6e39c/goal_
-controller-1*.log
-all processes on machine have died, roslaunch will exit
-shutting down processing monitor...
-... shutting down processing monitor complete
-done
-)
+- "Goal Controller"-Node is NoneType and crashes, when trying to send a goal. All processes die and roslaunch will exit. Start again, let about 8-10 seconds between spawning of robots and starting the collvoid-script.
   
-  
-  
-  [ WARN] [1602167378.848890472, 161.862000000]: Control loop missed its desired rate of 9.0000Hz... the loop actually took 100.1631 seconds 
+- Error with currently unknown cause:  [ WARN] Control loop missed its desired rate of 9.0000Hz... the loop actually took *x* seconds (usually 100+ seconds)
   
 ## Authors
 Kilian Pößel
