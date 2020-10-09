@@ -19,10 +19,7 @@ import time
 class Turtlebot3_burger:
 
     def __init__(self): # Constructor of the Class
-    	
-        #Creates a node with name of the agent
-        #self.agent_name = agent_name
-        #print(self.agent_name)
+
         
         rospy.init_node('Algo_Based_on_Velocity_Obstacle', anonymous=True)
         self.robot_name = rospy.get_param('~robot_name')
@@ -189,8 +186,6 @@ class Turtlebot3_burger:
         self.array_vo = numpy.asarray(self.vo)
 
     #################################################################################
-
-    #return if there will be collision or not and also return the distance to that obstacle
    
     def check_for_collision(self,current_heading): 
 
@@ -207,7 +202,7 @@ class Turtlebot3_burger:
             self.index_vo_min = (numpy.abs(self.array_vo - current_heading)).argmin()
             self.index_vo_max = (numpy.abs(self.array_vo - current_heading)).argmax()
 
-            c1 = abs(self.array_vo[self.index_vo_min] - current_heading) <= 1.575#0.805#0.35#0.525#0.805#0.7#0.525#0.35
+            c1 = abs(self.array_vo[self.index_vo_min] - current_heading) <= 1.575
             #c2 = abs(self.array_vo[self.index_vo_max] - current_heading) >= 6.00 #6.1945
             c2 = False
           
@@ -226,10 +221,6 @@ class Turtlebot3_burger:
                     self.temp4 = (self.array_vo[self.index_vo_max])
                     self.distance_to_obstacle = self.angles_and_ranges_dict[self.temp4]
             
-                #Velocity proportional to the distance to the obstacle
-
-                #self.distance_to_obstacle = self.distance_to_obstacle/1.5
-
         return self.temp3, self.distance_to_obstacle
 
     ##############################################################################
@@ -241,22 +232,17 @@ class Turtlebot3_burger:
 
         if len(self.array_outside_vo) != 0:
 
-            #self.speed.linear.x = 0.01
-            #self.pub.publish(self.speed)
-
             self.diff_x = self.goal.x - self.x
             self.diff_y = self.goal.y - self.y
 
             self.angle_to_goal = atan2(self.diff_y,self.diff_x)
 
-            self.angle_to_goal += 0.5 #0.4 #0.175
-
+            self.angle_to_goal += 0.5
             self.angle_to_goal = round(self.angle_to_goal,4)
 
             self.index_outside_vo_min = (numpy.abs(self.array_outside_vo - self.angle_to_goal)).argmin()
             self.index_outside_vo_max = (numpy.abs(self.array_outside_vo - self.angle_to_goal)).argmax()
 
-            #c3 = numpy.abs(self.array_outside_vo[self.index_outside_vo_min] - self.angle_to_goal) <= 0.175
             c4 = numpy.abs(self.array_outside_vo[self.index_outside_vo_max] - self.angle_to_goal) >= 6.1945
 
             self.angle_to_goal = self.array_outside_vo[self.index_outside_vo_min] 
@@ -280,7 +266,6 @@ class Turtlebot3_burger:
             self.angle_to_goal = atan2(self.diff_y,self.diff_x)
             self.angle_to_goal += 0.5 
             self.set_heading(self.angle_to_goal)
-            #self.angle_to_goal = self.yaw + 0.0175
             print('running on penality Velocity')
             self.speed.linear.x = 0.01
             self.pub.publish(self.speed)
@@ -352,11 +337,7 @@ class Turtlebot3_burger:
     ######## STARTING METHOD ##############################################
 
     def move_towards_goal (self):
-
-        #self.goal = Point()
-        #self.goal.x = goal_x
-        #self.goal.y = goal_y
-    
+        
         #Initializing the velocities and the heading towards goal location
         while not rospy.is_shutdown():
 
@@ -376,8 +357,6 @@ class Turtlebot3_burger:
             self.angle_to_goal = round(self.angle_to_goal,4)
 
             self.set_heading(self.angle_to_goal)
-
-            #time.sleep(0.5)
 
             if self.finished == Bool(True):
 
@@ -409,17 +388,6 @@ class Turtlebot3_burger:
 
                 while (self.euclidean_distance(self.goal) > self.distance_tolerance):
 
-                    #self.diff_x = self.goal.x - self.x
-                    #self.diff_y = self.goal.y - self.y
-
-                    #self.angle_to_goal = atan2(self.diff_y,self.diff_x)
-            
-                    #self.angle_to_goal = round(self.angle_to_goal,4)
-
-                    #self.set_heading(self.angle_to_goal)
-
-                    #time.sleep(1)
-
                     #what are illegal and legal velocity heading
 
                     self.legal_velocities()
@@ -433,22 +401,15 @@ class Turtlebot3_burger:
                         self.previous_yaw = self.yaw
                         self.speed.linear.x = self.k_linear * self.distance_to_obstacle
                         self.pub.publish(self.speed)
-                        #self.speed.linear.x = 0.00
-                        #self.pub.publish(self.speed)
                         self.choose_new_velocity(self.distance_to_obstacle)
-                        #time.sleep(3) 
-                        #self.speed.linear.x = self.k_linear * self.distance_to_obstacle
-                        #self.pub.publish(self.speed)
-                        #time.sleep(1.5)
 
                     else:
 
                         self.distance_to_goal = self.euclidean_distance(self.goal)
 
                         self.speed.linear.x = self.k_linear * self.distance_to_goal
-                        #self.speed.linear.x = 0.05
-                        #if self.speed.linear.x > 0.22:
-                        #self.speed.linear.x = 0.1
+                        if self.speed.linear.x > 0.22:
+                            self.speed.linear.x = 0.5
 
                         self.pub.publish(self.speed)
 
@@ -461,7 +422,7 @@ class Turtlebot3_burger:
                         
                         self.set_heading(self.angle_to_goal)
 
-                        if abs(self.yaw - self.previous_yaw) < 0.175:#0.0875:
+                        if abs(self.yaw - self.previous_yaw) < 0.175:
                             
                             pass
 
