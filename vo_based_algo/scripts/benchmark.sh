@@ -35,7 +35,7 @@ if [ $USE_SETTINGS_FILE == True ]; then
   tmux new-window -t $SESSION_NAME -n "world"
   tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark world.launch use_settings_file:=$USE_SETTINGS_FILE" C-m
 else
-  tmux rename-window -t $SESSION_NAME "world"
+  tmux rename-window -t $SESSION_NAME -n "world"
   tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark world.launch use_settings_file:=$USE_SETTINGS_FILE" C-m
 fi
 
@@ -44,17 +44,26 @@ NUM=$((++NUM))
 tmux new-window -t $SESSION_NAME -n "spawner"
 tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark spawner.launch use_settings_file:=$USE_SETTINGS_FILE" C-m
 
+sleep 15
+
 # waypoints
 NUM=$((++NUM))
 tmux new-window -t $SESSION_NAME -n "waypoints"
 tmux send-keys -t $SESSION_NAME:$NUM "roslaunch benchmark waypoints.launch use_settings_file:=$USE_SETTINGS_FILE" C-m
 
-# # movement
-# if [ $DEFAULT_MOVEMENT == True ]; then
-#   NUM=$((++NUM))
-#   tmux new-window -t $SESSION_NAME -n "movement"
-#   tmux send-keys -t $SESSION_NAME:$NUM "roslaunch cocktailparty_algorithm movement.launch" C-m
-# fi
+# movement
+
+X=0
+while [ $X -lt 5 ]; do
+
+  # navigation
+  NUM=$((++NUM))
+  tmux new-window -a -t $SESSION_NAME -n "vo_based_${X}"
+  tmux send-keys -t $SESSION_NAME:$NUM "roslaunch vo_based_algo vo_based.launch robot_name:=tb3_${X}" C-m
+
+  X=$((X + 1))
+done
+
 
 # evaluation
 NUM=$((++NUM))
