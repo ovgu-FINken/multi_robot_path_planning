@@ -7,14 +7,14 @@ For details please click [here](https://github.com/ovgu-FINken/multi_robot_path_
 - [Multi-Agent Algorithm Based on VO](#A-Multi-Agent-Path-Planing-Algorithm-Based-on-Velocity-Obstacles)
   - [System](#system)
   - [Implementation](#implementation)
-    - [Python Scripts Nodes and Topics](#python-scripts-nodes-and-topics)
+      - [Python Scripts Nodes and Topics](#python-scripts-nodes-and-topics)
       - [PlainGround_Formation](#PlainGround_Formation)
       - [Run_Algo_Multiprocessing](#Run_Algo_Multiprocessing)
       - [VO_Based_Algo_Version2](#VO_Based_Algo_Version2)
   - [Execution](#execution)
   - [Results](#results)
-  - [Remarks](#remarks)
   - [Benchmark Implementation](#benchmark-implementation)
+  - [Acknowledgement](#Acknowledgement)
       
 <!-- TOC END -->
 
@@ -70,9 +70,9 @@ roslaunch rvo_turtlebot3 turtlebot3_empty_world_16robots.launch
 ```
 
 ### Results
--This algorithm has been tested on 4, 8 and 16 robots(turtlebot3, Burger) in an empty world(without any static obstacles).
+-This algorithm has been tested on 4, 8 and 16 robots(turtlebot3, Burger) in an empty world(without any static obstacles). <br>
 
--This algorithm works very well with up to 8 robots. with the increase in the number of robots, the number of collisions increases too (with 16 robots there were ~3 collisions)
+-This algorithm works well with up to 6 robots. with the increase in the number of robots, the number of collisions increases too (with 16 robots there were ~3 collisions)
 
 ![alt text](rvo_turtlebot3/res/image1.png "starting")
 
@@ -83,6 +83,11 @@ roslaunch rvo_turtlebot3 turtlebot3_empty_world_16robots.launch
 ![alt text](rvo_turtlebot3/res/image4.png "end_result")
 
 
-### Remarks
 ### Benchmark Implementation 
+
+
+### Acknowledgement
+**/Viviane Wolter** <br>
+**/Suraj Bonagiri**
+
 THANK YOU!
