@@ -155,10 +155,11 @@ namespace navigation_path_layers
     {
         costmap_2d::Costmap2D costmap_ = costmap;
         // increase costs along the path
-        for (int pos = 0; pos < positions.size(); pos++)
+	number_of_future_steps = min(positions.size(), max_number_of_future_steps);
+        for (int pos = 0; pos < number_of_future_steps; pos++)
         {
             vector<int> position = *next(positions.begin(), pos);
-            costmap_ = useFilter(position, costmap_);
+            costmap_ = useFilter(position, costmap_, pos);
         }
 
         return costmap_;
@@ -196,11 +197,12 @@ namespace navigation_path_layers
         return;
     }
 
-    costmap_2d::Costmap2D NavigationPathLayer::useFilter(vector<int> position, costmap_2d::Costmap2D costmap)
+    costmap_2d::Costmap2D NavigationPathLayer::useFilter(vector<int> position, costmap_2d::Costmap2D costmap, int pos)
     {
         int bound = int((filter_size - 1) / 2);
         int buffer = int((MAX_FILTER_SIZE - 1) / 2);
         costmap_2d::Costmap2D _map = costmap;
+	double downward_scale = (number_of_future_steps - pos) / number_of_future_steps;
 
         // for each pixel in the convolution take maximum value of current and calculated value of convolution at this pixel
         for (int i = -bound; i <= bound; i++)
@@ -208,7 +210,7 @@ namespace navigation_path_layers
             for (int j = -bound; j <= bound; j++)
             {
                 double current = costmap.getCost(position[0] + i, position[1] + j);
-                _map.setCost(position[0] + i, position[1] + j, max(current, kernel[i + buffer][j + buffer] * filter_strength));
+                _map.setCost(position[0] + i, position[1] + j, max(current, kernel[i + buffer][j + buffer] * filter_strength * downward_scale));
             }
         }
 
@@ -222,7 +224,7 @@ namespace navigation_path_layers
             side[0] = position[0] + filter_size * x + position[1] + filter_size * y;
             side[1] = position[1] + filter_size * x + position[0] + filter_size * y;
 
-            _map = NavigationPathLayer::useSideFilter(side, _map);
+            _map = NavigationPathLayer::useSideFilter(side, _map, downward_scale);
         }*/
 
         return _map;
@@ -232,6 +234,7 @@ namespace navigation_path_layers
     {
         filter_strength = config.filter_strength;
         filter_size = config.filter_size;
+	max_number_of_future_steps = config.max_number_of_future_steps;
         side_inflation = config.side_inflation;
         inflation_strength = config.inflation_strength;
         gauss_sigma = config.gauss_sigma;
@@ -280,7 +283,7 @@ void NavigationPathLayer::resetCosts()
 } 
 
 
-costmap_2d::Costmap2D NavigationPathLayer::useSideFilter(vector<int> position, costmap_2d::Costmap2D costmap)
+costmap_2d::Costmap2D NavigationPathLayer::useSideFilter(vector<int> position, costmap_2d::Costmap2D costmap, double downward_scale)
 {
 	int bound = int((filter_size - 1) / 2);
 	costmap_2d::Costmap2D _map = costmap;
@@ -291,7 +294,7 @@ costmap_2d::Costmap2D NavigationPathLayer::useSideFilter(vector<int> position, c
 		for (int j = -bound; j <= bound; j++)
 		{
 			double current = costmap.getCost(position[0] + i, position[1] + j);
-			_map.setCost(position[0] + i, position[1] + j, max(current, kernel[i + buffer][j + buffer] * inflation_strength));
+			_map.setCost(position[0] + i, position[1] + j, max(current, kernel[i + buffer][j + buffer] * inflation_strength * downward_scale));
 		}
 	}
 
