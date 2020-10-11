@@ -34,8 +34,10 @@ namespace navigation_path_layers {
 		}
 		virtual void onInitialize();
 		virtual void pathCallback(const nav_msgs::Path& paths);
-		virtual void updateBounds(double* min_x, double* min_y,	double* max_x, double* max_y);
-		virtual void updateCosts();
+		virtual void updateBounds(double origin_x, double origin_y, double origin_z, double* min_x, double* min_y, double* max_x, double* max_y);
+		virtual void updateCosts_();
+		// https://github.com/ros-planning/navigation/blob/noetic-devel/costmap_2d/include/costmap_2d/obstacle_layer.h
+		virtual void updateCosts(costmap_2d::Costmap2D& master_grid, int min_i, int min_j, int max_i, int max_j);
 		// virtual void setSideInflation(bool inflate);
 		// virtual void setFilterSize(int size);
 		// virtual void scaleSideInflation(double inflation_scale);
