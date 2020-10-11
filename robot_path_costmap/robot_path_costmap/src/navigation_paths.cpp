@@ -23,11 +23,21 @@ namespace navigation_path_layers
         server_ = new dynamic_reconfigure::Server<robot_path_costmap::NavigationPathLayerConfig>(nh);    
         f_ = boost::bind(&NavigationPathLayer::configure, this, _1, _2);
         server_->setCallback(f_);
-
-        // subscribe to plans 
-        // subsribe to own plan or to other robots plans right now??? // TODO check topics and add other robots
-        paths_sub_l = nh.subscribe("/DWAPlannerROS/local_plan", 1, &NavigationPathLayer::pathCallback, this);
-        paths_sub_g = nh.subscribe("/DWAPlannerROS/global_plan", 1, &NavigationPathLayer::pathCallback, this);
+	    
+	std::string ns = ros::this_node::getNamespace();
+	cerr << ns;
+	    
+	for (int i = 0; i < 8; i++)
+	{
+		// tb3_x --> x is cast to int and compared to iterator
+		// if it's its own namespace, do nothing
+		if (stoi(ns[4]) != i)
+		{       
+			// subscribe to plans 
+			paths_sub[2*i] = nh.subscribe("tb3_" + string(i) + "/move_base/DWAPlannerROS/local_plan", 1, &NavigationPathLayer::pathCallback, this);
+        		paths_sub[2*i + 1]  = nh.subscribe("tb3_" + string(i) + "/move_base/DWAPlannerROS/global_plan", 1, &NavigationPathLayer::pathCallback, this);
+		}
+	}
 
         cerr << "create Filter \n";
 
