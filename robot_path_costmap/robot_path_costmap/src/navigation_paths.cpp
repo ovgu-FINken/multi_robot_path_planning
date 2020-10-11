@@ -102,13 +102,13 @@ namespace navigation_path_layers
         // if path-list has been edited then update costmap
         if (changed ||!isOld)
         {
-            NavigationPathLayer::updateCosts();
+            NavigationPathLayer::updateCosts_();
         }
         ros::Time end = ros::Time::now();
         cerr << "Ausstiegszeit: " << end << "\n";
     }
 
-    void NavigationPathLayer::updateBounds( double* min_x, double* min_y, double* max_x, double* max_y)
+    void NavigationPathLayer::updateBounds(double origin_x, double origin_y, double origin_z, double* min_x, double* min_y, double* max_x, double* max_y)
     {
         cerr << "Update bounds \n";
 
@@ -135,7 +135,7 @@ namespace navigation_path_layers
     }
     }
 
-    void NavigationPathLayer::updateCosts()
+    void NavigationPathLayer::updateCosts_()
     {
         // function call only if given path changed
 
@@ -261,6 +261,11 @@ namespace navigation_path_layers
         gauss_sigma = config.gauss_sigma;
         gauss_s = config.gauss_s * gauss_sigma * gauss_sigma;
         enabled_ = config.enabled;
+    }
+
+    // https://github.com/ros-planning/navigation/blob/noetic-devel/costmap_2d/plugins/obstacle_layer.cpp
+    void NavigationPathLayer::updateCosts(costmap_2d::Costmap2D& master_grid, int min_i, int min_j, int max_i, int max_j)
+    { 
     }
 
 /*
