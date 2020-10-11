@@ -145,7 +145,7 @@ namespace navigation_path_layers
         costmap_2d::Costmap2D costmap = *layered_costmap_->getCostmap();
 
         // reset costs to 0
-        // resetCosts();
+        NavigationPathLayer::resetCosts(costmap);
 
         // iterate all paths
         for(nav_msgs::Path& path: paths_list_)
@@ -239,6 +239,17 @@ namespace navigation_path_layers
 
         return _map;
     }
+	
+	
+    void NavigationPathLayer::resetCosts(costmap_2d::Costmap2D costmap)
+    {
+    	// reset layer to 0 costs
+	unsigned int x_size = costmap.getSizeInCellsX();
+	unsigned int y_size = costmap.getSizeInCellsY();
+	    
+	// from cell 0 to x_size's cell in x-direction and cell 0 to y_size's cell in y-direction
+	costmap.resetMap(0, 0, x_size, y_size);
+    } 
 
     void NavigationPathLayer::configure(robot_path_costmap::NavigationPathLayerConfig &config, uint32_t level)
     {
@@ -285,13 +296,6 @@ void NavigationPathLayer::setFilterStrength(int s)
     filter_strength = s;
     NavigationPathLayer::createFilter();
 }
-
-
-void NavigationPathLayer::resetCosts()
-{
-    // gesamte Layer auf 0 zurücksetzen
-} 
-
 
 costmap_2d::Costmap2D NavigationPathLayer::useSideFilter(vector<int> position, costmap_2d::Costmap2D costmap, double downward_scale)
 {
