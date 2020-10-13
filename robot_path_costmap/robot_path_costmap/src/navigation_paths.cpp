@@ -31,11 +31,11 @@ namespace navigation_path_layers
 	{
 		// tb3_x --> x is cast to int and compared to iterator
 		// if it's its own namespace, do nothing
-		if (stoi(ns[4]) != i)
+		if (atoi(&ns[4]) != i)
 		{       
 			// subscribe to plans 
-			paths_sub[2*i] = nh.subscribe("tb3_" + string(i) + "/move_base/DWAPlannerROS/local_plan", 1, &NavigationPathLayer::pathCallback, this);
-        		paths_sub[2*i + 1]  = nh.subscribe("tb3_" + string(i) + "/move_base/DWAPlannerROS/global_plan", 1, &NavigationPathLayer::pathCallback, this);
+			paths_sub[2*i] = nh.subscribe("tb3_" + to_string(i) + "/move_base/DWAPlannerROS/local_plan", 1, &NavigationPathLayer::pathCallback, this);
+        		paths_sub[2*i + 1]  = nh.subscribe("tb3_" + to_string(i) + "/move_base/DWAPlannerROS/global_plan", 1, &NavigationPathLayer::pathCallback, this);
 		}
 	}
 
@@ -165,7 +165,7 @@ namespace navigation_path_layers
     {
         costmap_2d::Costmap2D costmap_ = costmap;
         // increase costs along the path
-	number_of_future_steps = min(positions.size(), max_number_of_future_steps);
+	number_of_future_steps = min(int(positions.size()), max_number_of_future_steps);
         for (int pos = 0; pos < number_of_future_steps; pos++)
         {
             vector<int> position = *next(positions.begin(), pos);
