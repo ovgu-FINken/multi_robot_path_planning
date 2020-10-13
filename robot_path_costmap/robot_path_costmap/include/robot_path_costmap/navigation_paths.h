@@ -30,7 +30,6 @@ namespace navigation_path_layers {
 		NavigationPathLayer()
 		{
 			layered_costmap_ = NULL;
-			cerr << "Markierung fuer Einstieg \n";
 		}
 		virtual void onInitialize();
 		virtual void pathCallback(const nav_msgs::Path& paths);
@@ -46,7 +45,7 @@ namespace navigation_path_layers {
 	protected:
 		bool first_time_;
 
-		ros::Subscriber paths_sub[16];
+		ros::Subscriber paths_sub[16]; // ToDo
 
 		boost::recursive_mutex lock_;
 		dynamic_reconfigure::Server<robot_path_costmap::NavigationPathLayerConfig>* server_;

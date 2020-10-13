@@ -14,9 +14,9 @@ namespace navigation_path_layers
 
     void NavigationPathLayer::onInitialize()
     {
-        cerr << "Im Initialize-Bereich \n";
         // for updateBounds
         first_time_ = true;
+        current_ = true;
 
         // initialize dynamic reconfigure
         ros::NodeHandle nh("~/" + name_), g_nh;
@@ -24,31 +24,24 @@ namespace navigation_path_layers
         f_ = boost::bind(&NavigationPathLayer::configure, this, _1, _2);
         server_->setCallback(f_);
 	    
-	std::string ns = ros::this_node::getNamespace();
-	cerr << ns;
-	    
+	std::string ns = ros::this_node::getNamespace(); // Regex verwenden
 	for (int i = 0; i < 8; i++)
 	{
 		// tb3_x --> x is cast to int and compared to iterator
 		// if it's its own namespace, do nothing
-		if (atoi(&ns[4]) != i)
+		if (boost::lexical_cast<int>(ns[5]) != i) // ToDo: regex
 		{       
 			// subscribe to plans 
-			paths_sub[2*i] = nh.subscribe("tb3_" + to_string(i) + "/move_base/DWAPlannerROS/local_plan", 1, &NavigationPathLayer::pathCallback, this);
-        		paths_sub[2*i + 1]  = nh.subscribe("tb3_" + to_string(i) + "/move_base/DWAPlannerROS/global_plan", 1, &NavigationPathLayer::pathCallback, this);
+			paths_sub[2*i] = g_nh.subscribe("/tb3_" + to_string(i) + "/move_base/DWAPlannerROS/local_plan", 10, &NavigationPathLayer::pathCallback, this);
+        	paths_sub[2*i + 1]  = g_nh.subscribe("/tb3_" + to_string(i) + "/move_base/DWAPlannerROS/global_plan", 10, &NavigationPathLayer::pathCallback, this);
 		}
 	}
 
-        cerr << "create Filter \n";
-
         NavigationPathLayer::createFilter();
-
-        cerr << "created Filter \n";
     }
 
-    void NavigationPathLayer::pathCallback(const nav_msgs::Path& path) // ToDo: CHECK!!!!!!!!!!
+    void NavigationPathLayer::pathCallback(const nav_msgs::Path& path)
     {    
-        cerr << "CALLBACK ENTRY POINT \n";
 
         /* 
             list handling: if new path or update of existing robots path 
@@ -57,8 +50,6 @@ namespace navigation_path_layers
         */
 
         boost::recursive_mutex::scoped_lock lock(lock_);
-        ros::Time begin = ros::Time::now();
-        cerr << "Einstiegszeit: " << begin << "\n";
         
         bool isOld = false;
         bool changed = false;
@@ -96,22 +87,15 @@ namespace navigation_path_layers
             }
 
         }
-        ros::Time mid = ros::Time::now();
-        cerr << "Vor updatecosts: " << mid << "\n";
-
         // if path-list has been edited then update costmap
         if (changed ||!isOld)
         {
             NavigationPathLayer::updateCosts_();
         }
-        ros::Time end = ros::Time::now();
-        cerr << "Ausstiegszeit: " << end << "\n";
     }
 
     void NavigationPathLayer::updateBounds(double origin_x, double origin_y, double origin_z, double* min_x, double* min_y, double* max_x, double* max_y)
     {
-        cerr << "Update bounds \n";
-
         // set area bounds of costmap again that is manipulated by updateCosts
         if (first_time_)
     {
@@ -141,7 +125,6 @@ namespace navigation_path_layers
 
         // only, if plugin is activated
         if (!enabled_) return;
-
         costmap_2d::Costmap2D costmap = *layered_costmap_->getCostmap();
 
         // reset costs to 0
@@ -165,7 +148,18 @@ namespace navigation_path_layers
     {
         costmap_2d::Costmap2D costmap_ = costmap;
         // increase costs along the path
-	number_of_future_steps = min(int(positions.size()), max_number_of_future_steps);
+	    number_of_future_steps = min(int(positions.size()), max_number_of_future_steps);
+
+        cerr << "steps: " << to_string(number_of_future_steps) << "\n";
+
+        for (int pos = 0; pos < number_of_future_steps; pos++)
+        {
+            vector<int> position_ = *next(positions.begin(), pos);
+            cerr << "x: " << to_string(position_[0]) << "y: " << to_string(position_[1]);
+        }
+
+        cerr << "\n";
+
         for (int pos = 0; pos < number_of_future_steps; pos++)
         {
             vector<int> position = *next(positions.begin(), pos);
@@ -212,15 +206,18 @@ namespace navigation_path_layers
         int bound = int((filter_size - 1) / 2);
         int buffer = int((MAX_FILTER_SIZE - 1) / 2);
         costmap_2d::Costmap2D _map = costmap;
-	double downward_scale = (number_of_future_steps - pos) / number_of_future_steps;
+	    double downward_scale = (number_of_future_steps - pos) / number_of_future_steps;
 
         // for each pixel in the convolution take maximum value of current and calculated value of convolution at this pixel
         for (int i = -bound; i <= bound; i++)
         {
             for (int j = -bound; j <= bound; j++)
             {
-                double current = costmap.getCost(position[0] + i, position[1] + j);
-                _map.setCost(position[0] + i, position[1] + j, max(current, kernel[i + buffer][j + buffer] * filter_strength * downward_scale));
+                if(position[0] + i >= 0 &&  position[1] + j >= 0)
+                {
+                    double current = costmap.getCost(position[0] + i, position[1] + j);
+                    _map.setCost(position[0] + i, position[1] + j, max(current, kernel[i + buffer][j + buffer] * filter_strength * downward_scale));
+                }
             }
         }
 

@@ -21,7 +21,7 @@ local_costmap:
     enabled: true
     filter_strength: 1.0
     filter_size: 9
-    max_number_of_future_steps: 10
+    max_number_of_future_steps: 60
     side_inflation: false
     inflation_strength: 0.05
     gauss_sigma: 1
