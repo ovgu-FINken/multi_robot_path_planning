@@ -13,6 +13,7 @@
 #include <stdint.h>
 #include <robot_path_costmap/NavigationPathLayerConfig.h>
 #include <iostream>
+#include <tf/transform_broadcaster.h>
 
 using namespace std;
 
@@ -25,6 +26,7 @@ namespace navigation_path_layers {
 	class NavigationPathLayer : public costmap_2d::Layer
 	{
 		static const int MAX_FILTER_SIZE = 25;
+		static tf::TransformBroadcaster br;
 
 	public:
 		NavigationPathLayer()
@@ -71,6 +73,8 @@ namespace navigation_path_layers {
 		void configure(robot_path_costmap::NavigationPathLayerConfig &config, uint32_t level);
 		// virtual costmap_2d::Costmap2D useSideFilter(std::vector<int> position, costmap_2d::Costmap2D costmap, double downward_scale);
 		virtual void resetCosts(costmap_2d::Costmap2D costmap);
+		vector<int> position transform(geometry_msgs::PoseStamped pose_);
+		 vector<int> position NavigationPathLayer::getTransform();
 	};
 }
 
