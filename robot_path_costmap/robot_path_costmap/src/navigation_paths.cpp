@@ -93,6 +93,20 @@ namespace navigation_path_layers
             NavigationPathLayer::updateCosts_();
         }
     }
+	
+    vector<int> position NavigationPathLayer::transform(geometry_msgs::PoseStamped pose_)
+    {
+	  tf::Transform transform;
+	  transform.setOrigin( tf::Vector3(pose_.position.x, pose_.position.y, pose_.position.z) );
+	  tf::Quaternion q = new tf::Quaternion(pose_.orientation.x, pose_.orientation.y, pose_.orientation.z, pose_.orientation.w);
+	  transform.setRotation(q);
+	  NavigationPathLayer::br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "path_transform", name_));
+	  return NavigationPathLayer::getTransform();
+    }
+	
+    vector<int> position NavigationPathLayer::getTransform(){
+    }
+
 
     void NavigationPathLayer::updateBounds(double origin_x, double origin_y, double origin_z, double* min_x, double* min_y, double* max_x, double* max_y)
     {
@@ -136,7 +150,7 @@ namespace navigation_path_layers
             list <vector<int>> positions;
             for(geometry_msgs::PoseStamped pose_ : path.poses)
             {
-                vector<int> position = {int(pose_.pose.position.x), int(pose_.pose.position.y)};
+                vector<int> position = NavigationPathLayer::transform(pose_); // {int(pose.pose.position.x), int(pose.pose.position.y)};
                 positions.push_back(position);
             }
             // add cost hills per path
