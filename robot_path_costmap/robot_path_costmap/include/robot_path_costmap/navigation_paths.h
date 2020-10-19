@@ -14,6 +14,7 @@
 #include <robot_path_costmap/NavigationPathLayerConfig.h>
 #include <iostream>
 #include <tf/transform_broadcaster.h>
+#include <tf/transform_listener.h>
 
 using namespace std;
 
@@ -74,7 +75,7 @@ namespace navigation_path_layers {
 		// virtual costmap_2d::Costmap2D useSideFilter(std::vector<int> position, costmap_2d::Costmap2D costmap, double downward_scale);
 		virtual void resetCosts(costmap_2d::Costmap2D costmap);
 		vector<int> position transform(geometry_msgs::PoseStamped pose_);
-		 vector<int> position NavigationPathLayer::getTransform();
+		vector<int> position NavigationPathLayer::getTransform();
 	};
 }
 
