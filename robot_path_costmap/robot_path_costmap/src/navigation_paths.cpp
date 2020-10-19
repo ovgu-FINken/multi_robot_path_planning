@@ -118,7 +118,7 @@ namespace navigation_path_layers
 	      continue;
 	    }
 	    
-	    return new vector<int>(transformOdom.getOrigin().x(), transformOdom.getOrigin().y());
+	    return new vector<int>(int(transformOdom.getOrigin().x()/NavigationPathLayer::res), int(transformOdom.getOrigin().y()/NavigationPathLayer::res));
     }
 
 
