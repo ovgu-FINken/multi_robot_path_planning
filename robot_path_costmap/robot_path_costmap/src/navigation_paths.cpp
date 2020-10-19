@@ -104,7 +104,21 @@ namespace navigation_path_layers
 	  return NavigationPathLayer::getTransform();
     }
 	
-    vector<int> position NavigationPathLayer::getTransform(){
+    vector<int> position NavigationPathLayer::getTransform()
+    {
+	    tf::TransformListener listener;
+	    tf::StampedTransform transform;
+	    try{
+	      listener.lookupTransform( "map","base_footprint",
+				       ros::Time(0), transform);
+	    }
+	    catch (tf::TransformException &ex) {
+	      ROS_ERROR("%s",ex.what());
+	      ros::Duration(1.0).sleep();
+	      continue;
+	    }
+	    
+	    return new vector<int>(transformOdom.getOrigin().x(), transformOdom.getOrigin().y());
     }
 
 
