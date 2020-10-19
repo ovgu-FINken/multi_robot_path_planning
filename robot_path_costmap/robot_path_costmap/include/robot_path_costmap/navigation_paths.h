@@ -28,6 +28,7 @@ namespace navigation_path_layers {
 	{
 		static const int MAX_FILTER_SIZE = 25;
 		static tf::TransformBroadcaster br;
+		static const double res = 0.05;
 
 	public:
 		NavigationPathLayer()
