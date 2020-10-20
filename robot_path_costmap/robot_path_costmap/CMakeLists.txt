@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(robot_path_costmap)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
-# add_compile_options(-std=c++11)
+add_compile_options(-g)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -15,6 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
   costmap_2d
   nav_msgs
   geometry_msgs
+  tf
 )
 
 generate_dynamic_reconfigure_options(
@@ -23,7 +24,7 @@ generate_dynamic_reconfigure_options(
 
 
 catkin_package(
-    CATKIN_DEPENDS angles costmap_2d dynamic_reconfigure geometry_msgs nav_msgs pluginlib roscpp
+    CATKIN_DEPENDS angles costmap_2d dynamic_reconfigure geometry_msgs nav_msgs pluginlib roscpp tf
     INCLUDE_DIRS include
     LIBRARIES social_layers
 )

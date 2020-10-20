@@ -5,6 +5,7 @@
 #include <costmap_2d/layered_costmap.h>
 #include <string>
 #include <nav_msgs/Path.h>
+#include <geometry_msgs/PoseStamped.h>
 #include <dynamic_reconfigure/server.h>
 #include <list>
 #include <vector>
@@ -28,7 +29,7 @@ namespace navigation_path_layers {
 	{
 		static const int MAX_FILTER_SIZE = 25;
 		static tf::TransformBroadcaster br;
-		static const double res = 0.05;
+		static constexpr double res = 0.05;
 
 	public:
 		NavigationPathLayer()
@@ -75,8 +76,8 @@ namespace navigation_path_layers {
 		void configure(robot_path_costmap::NavigationPathLayerConfig &config, uint32_t level);
 		// virtual costmap_2d::Costmap2D useSideFilter(std::vector<int> position, costmap_2d::Costmap2D costmap, double downward_scale);
 		virtual void resetCosts(costmap_2d::Costmap2D costmap);
-		vector<int> position transform(geometry_msgs::PoseStamped pose_);
-		vector<int> position NavigationPathLayer::getTransform();
+		vector<int> transform(geometry_msgs::PoseStamped pose_);
+		vector<int> getTransform();
 	};
 }
 
