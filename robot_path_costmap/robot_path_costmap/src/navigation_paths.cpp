@@ -96,23 +96,23 @@ namespace navigation_path_layers
 	
     vector<int> NavigationPathLayer::transform(geometry_msgs::PoseStamped pose_)
     {
-	  tf::Transform transform;
-	  transform.setOrigin( tf::Vector3(pose_.pose.position.x, pose_.pose.position.y, pose_.pose.position.z) );
-	  tf::Quaternion q = *new tf::Quaternion(pose_.pose.orientation.x, pose_.pose.orientation.y, pose_.pose.orientation.z, pose_.pose.orientation.w);
+	  tf2::Transform transform;
+	  transform.setOrigin( tf2::Vector3(pose_.pose.position.x, pose_.pose.position.y, pose_.pose.position.z) );
+	  tf2::Quaternion q = *new tf2::Quaternion(pose_.pose.orientation.x, pose_.pose.orientation.y, pose_.pose.orientation.z, pose_.pose.orientation.w);
 	  transform.setRotation(q);
-	  NavigationPathLayer::br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "path_transform", name_));
+	  NavigationPathLayer::br.sendTransform(geometry_msgs::TransformStamped(transform, ros::Time::now(), "path_transform", name_));
 	  return NavigationPathLayer::getTransform();
     }
 	
     vector<int> NavigationPathLayer::getTransform()
     {
-	    tf::TransformListener listener;
-	    tf::StampedTransform transform;
+	    tf2_ros::TransformListener::TransformListener listener;
+	    geometry_msgs::TransformStamped transform;
 	    try{
 	      listener.lookupTransform( "map","base_footprint",
 				       ros::Time(0), transform);
 	    }
-	    catch (tf::TransformException &ex) {
+	    catch (tf2::TransformException &ex) {
 	      ROS_ERROR("%s",ex.what());
 	      ros::Duration(1.0).sleep();
           return *new vector<int>{-1, -1};

@@ -22,7 +22,9 @@
   <depend>costmap_2d</depend>
   <depend>pluginlib</depend>
   <depend>dynamic_reconfigure</depend>
-  <depend>tf</depend>
+  <depend>tf2</depend>
+  <depend>tf2_ros</depend>
+  <depend>tf2_geometry_msgs</depend>
   <test_depend>roslint</test_depend>
 
 

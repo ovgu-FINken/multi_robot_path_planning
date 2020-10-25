@@ -15,7 +15,9 @@ find_package(catkin REQUIRED COMPONENTS
   costmap_2d
   nav_msgs
   geometry_msgs
-  tf
+  tf2
+  tf2_ros
+  tf2_geometry_msgs
 )
 
 generate_dynamic_reconfigure_options(
@@ -24,7 +26,7 @@ generate_dynamic_reconfigure_options(
 
 
 catkin_package(
-    CATKIN_DEPENDS angles costmap_2d dynamic_reconfigure geometry_msgs nav_msgs pluginlib roscpp tf
+    CATKIN_DEPENDS angles costmap_2d dynamic_reconfigure geometry_msgs nav_msgs pluginlib roscpp tf2 tf2_ros tf2_geometry_msgs
     INCLUDE_DIRS include
     LIBRARIES social_layers
 )
