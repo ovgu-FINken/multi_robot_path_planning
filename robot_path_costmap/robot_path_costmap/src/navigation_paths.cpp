@@ -96,29 +96,43 @@ namespace navigation_path_layers
 	
     vector<int> NavigationPathLayer::transform(geometry_msgs::PoseStamped pose_)
     {
-	  tf2::Transform transform;
-	  transform.setOrigin( tf2::Vector3(pose_.pose.position.x, pose_.pose.position.y, pose_.pose.position.z) );
+	  geometry_msgs::TransformStamped transformStamped;
+	  transformStamped.header.stamp = ros::Time::now();
+  	  transformStamped.header.frame_id = "world";
+  	  transformStamped.child_frame_id = name_;
+	    
+	  transformStamped.transform.translation.x = pose_.pose.position.x;
+  	  transformStamped.transform.translation.y = pose_.pose.position.y;
+  	  transformStamped.transform.translation.z = 0.0;
+	    
 	  tf2::Quaternion q = *new tf2::Quaternion(pose_.pose.orientation.x, pose_.pose.orientation.y, pose_.pose.orientation.z, pose_.pose.orientation.w);
-	  transform.setRotation(q);
-	  NavigationPathLayer::br.sendTransform(geometry_msgs::TransformStamped(transform, ros::Time::now(), "path_transform", name_));
+	    
+	  transformStamped.transform.rotation.x = q.x();
+  	  transformStamped.transform.rotation.y = q.y();
+  	  transformStamped.transform.rotation.z = q.z();
+  	  transformStamped.transform.rotation.w = q.w();
+	    
+	  NavigationPathLayer::br.sendTransform(transformStamped);
+	    
 	  return NavigationPathLayer::getTransform();
     }
 	
     vector<int> NavigationPathLayer::getTransform()
     {
-	    tf2_ros::TransformListener::TransformListener listener;
+	    tf2_ros::Buffer tfBuffer;
+ 	    tf2_ros::TransformListener tfListener(tfBuffer);
 	    geometry_msgs::TransformStamped transform;
 	    try{
-	      listener.lookupTransform( "map","base_footprint",
+	      transformStamped = tfBuffer.lookupTransform( "map","base_footprint",
 				       ros::Time(0), transform);
 	    }
 	    catch (tf2::TransformException &ex) {
-	      ROS_ERROR("%s",ex.what());
-	      ros::Duration(1.0).sleep();
-          return *new vector<int>{-1, -1};
+      		ROS_WARN("%s",ex.what());
+      		ros::Duration(1.0).sleep();
+              	return *new vector<int>{-1, -1};
 	    }
 	    
-	    return *new vector<int>{int(transform.getOrigin().x()/NavigationPathLayer::res), int(transform.getOrigin().y()/NavigationPathLayer::res)};
+	    return *new vector<int>{int(transformStamped.transform.translation.x / NavigationPathLayer::res), int(transformStamped.transform.translation.y / NavigationPathLayer::res)};
     }
 
 
