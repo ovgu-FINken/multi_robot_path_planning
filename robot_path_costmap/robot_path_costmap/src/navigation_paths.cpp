@@ -1,4 +1,3 @@
-
 #include "../include/robot_path_costmap/navigation_paths.h"
 #include <iterator>
 #include <pluginlib/class_list_macros.h>
@@ -11,6 +10,8 @@ using namespace std;
 
 namespace navigation_path_layers 
 {
+     tf2_ros::TransformBroadcaster NavigationPathLayer::br;
+
 
     void NavigationPathLayer::onInitialize()
     {
@@ -121,10 +122,10 @@ namespace navigation_path_layers
     {
 	    tf2_ros::Buffer tfBuffer;
  	    tf2_ros::TransformListener tfListener(tfBuffer);
-	    geometry_msgs::TransformStamped transform;
+	    geometry_msgs::TransformStamped transformStamped;
 	    try{
-	      transformStamped = tfBuffer.lookupTransform( "map","base_footprint",
-				       ros::Time(0), transform);
+	      transformStamped = tfBuffer.lookupTransform( "","",
+				       ros::Time(0));
 	    }
 	    catch (tf2::TransformException &ex) {
       		ROS_WARN("%s",ex.what());
@@ -294,7 +295,7 @@ namespace navigation_path_layers
     {
         filter_strength = config.filter_strength;
         filter_size = config.filter_size;
-	max_number_of_future_steps = config.max_number_of_future_steps;
+	    max_number_of_future_steps = config.max_number_of_future_steps;
         side_inflation = config.side_inflation;
         inflation_strength = config.inflation_strength;
         gauss_sigma = config.gauss_sigma;
