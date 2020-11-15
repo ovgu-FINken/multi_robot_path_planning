@@ -11,7 +11,7 @@
 #include <vector>
 #include <cmath>
 #include <boost/thread.hpp>
-#include <boost/algorithm.hpp>
+#include <boost/algorithm/string.hpp>
 #include <stdint.h>
 #include <robot_path_costmap/NavigationPathLayerConfig.h>
 #include <iostream>
@@ -78,14 +78,14 @@ namespace navigation_path_layers {
 		list<nav_msgs::Path> paths_list_l;
 		nav_msgs::Path path_;
 
-		virtual costmap_2d::Costmap2D createCostHillChain(list<vector<int>> positions, costmap_2d::Costmap2D costmap, const string frame);
+		virtual costmap_2d::Costmap2D createCostHillChain(list<vector<double>> positions, costmap_2d::Costmap2D costmap, const string frame);
 		virtual void createFilter();
-		virtual costmap_2d::Costmap2D useFilter(std::vector<int> position, costmap_2d::Costmap2D costmap, int pos);
+		virtual costmap_2d::Costmap2D useFilter(std::vector<double> position, costmap_2d::Costmap2D costmap, int pos);
 		void configure(robot_path_costmap::NavigationPathLayerConfig &config, uint32_t level);
 		// virtual costmap_2d::Costmap2D useSideFilter(std::vector<int> position, costmap_2d::Costmap2D costmap, double downward_scale);
 		virtual void resetCosts(costmap_2d::Costmap2D costmap);
-		vector<int> transform(geometry_msgs::PoseStamped pose_, const string frame);
-		vector<int> getTransform(const string frame);
+		vector<double> transform(geometry_msgs::PoseStamped pose_, const string frame);
+		vector<double> getTransform(const string frame, const string origin);
 	};
 }
 
