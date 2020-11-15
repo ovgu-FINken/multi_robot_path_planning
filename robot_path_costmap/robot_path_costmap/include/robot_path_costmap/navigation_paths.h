@@ -11,6 +11,7 @@
 #include <vector>
 #include <cmath>
 #include <boost/thread.hpp>
+#include <boost/algorithm.hpp>
 #include <stdint.h>
 #include <robot_path_costmap/NavigationPathLayerConfig.h>
 #include <iostream>
@@ -33,7 +34,7 @@ namespace navigation_path_layers {
 	{
 		static const int MAX_FILTER_SIZE = 25;
 		static tf2_ros::TransformBroadcaster br;
-		static constexpr double res = 0.05;
+		static constexpr double res = 0.05; // ToDo: read from file
 
 	public:
 		NavigationPathLayer()
@@ -41,7 +42,9 @@ namespace navigation_path_layers {
 			layered_costmap_ = NULL;
 		}
 		virtual void onInitialize();
-		virtual void pathCallback(const nav_msgs::Path& paths);
+		virtual void pathCallback_l(const nav_msgs::Path& paths);
+		virtual void pathCallback_g(const nav_msgs::Path& paths);
+		virtual void pathCallback(const nav_msgs::Path& paths, const bool isGlobal);
 		virtual void updateBounds(double origin_x, double origin_y, double origin_z, double* min_x, double* min_y, double* max_x, double* max_y);
 		virtual void updateCosts_();
 		// https://github.com/ros-planning/navigation/blob/noetic-devel/costmap_2d/include/costmap_2d/obstacle_layer.h
@@ -54,7 +57,7 @@ namespace navigation_path_layers {
 	protected:
 		bool first_time_;
 
-		ros::Subscriber paths_sub[16]; // ToDo
+		ros::Subscriber paths_sub[16]; // ToDo: set double of number of robots
 
 		boost::recursive_mutex lock_;
 		dynamic_reconfigure::Server<robot_path_costmap::NavigationPathLayerConfig>* server_;
@@ -71,17 +74,18 @@ namespace navigation_path_layers {
 
   		double last_min_x_, last_min_y_, last_max_x_, last_max_y_;
 
-		list<nav_msgs::Path> paths_list_;
+		list<nav_msgs::Path> paths_list_g;
+		list<nav_msgs::Path> paths_list_l;
 		nav_msgs::Path path_;
 
-		virtual costmap_2d::Costmap2D createCostHillChain(list<vector<int>> positions, costmap_2d::Costmap2D costmap);
+		virtual costmap_2d::Costmap2D createCostHillChain(list<vector<int>> positions, costmap_2d::Costmap2D costmap, const string frame);
 		virtual void createFilter();
 		virtual costmap_2d::Costmap2D useFilter(std::vector<int> position, costmap_2d::Costmap2D costmap, int pos);
 		void configure(robot_path_costmap::NavigationPathLayerConfig &config, uint32_t level);
 		// virtual costmap_2d::Costmap2D useSideFilter(std::vector<int> position, costmap_2d::Costmap2D costmap, double downward_scale);
 		virtual void resetCosts(costmap_2d::Costmap2D costmap);
-		vector<int> transform(geometry_msgs::PoseStamped pose_);
-		vector<int> getTransform();
+		vector<int> transform(geometry_msgs::PoseStamped pose_, const string frame);
+		vector<int> getTransform(const string frame);
 	};
 }
 

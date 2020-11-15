@@ -25,23 +25,33 @@ namespace navigation_path_layers
         f_ = boost::bind(&NavigationPathLayer::configure, this, _1, _2);
         server_->setCallback(f_);
 	    
-	std::string ns = ros::this_node::getNamespace(); // Regex verwenden
-	for (int i = 0; i < 8; i++)
-	{
-		// tb3_x --> x is cast to int and compared to iterator
-		// if it's its own namespace, do nothing
-		if (boost::lexical_cast<int>(ns[5]) != i) // ToDo: regex
-		{       
-			// subscribe to plans 
-			paths_sub[2*i] = g_nh.subscribe("/tb3_" + to_string(i) + "/move_base/DWAPlannerROS/local_plan", 10, &NavigationPathLayer::pathCallback, this);
-        	paths_sub[2*i + 1]  = g_nh.subscribe("/tb3_" + to_string(i) + "/move_base/DWAPlannerROS/global_plan", 10, &NavigationPathLayer::pathCallback, this);
+		std::string ns = ros::this_node::getNamespace(); // Regex verwenden
+		for (int i = 0; i < 8; i++)
+		{
+			// tb3_x --> x is cast to int and compared to iterator
+			// if it's its own namespace, do nothing
+			if (boost::lexical_cast<int>(ns[5]) != i) // ToDo: regex
+			{       
+				// subscribe to plans 
+				paths_sub[2*i] = g_nh.subscribe("/tb3_" + to_string(i) + "/move_base/DWAPlannerROS/local_plan", 10, &NavigationPathLayer::pathCallback_l, this);
+        		paths_sub[2*i + 1]  = g_nh.subscribe("/tb3_" + to_string(i) + "/move_base/DWAPlannerROS/global_plan", 10, &NavigationPathLayer::pathCallback_g, this);
+			}
 		}
-	}
 
         NavigationPathLayer::createFilter();
     }
 
-    void NavigationPathLayer::pathCallback(const nav_msgs::Path& path)
+	void NavigationPathLayer::pathCallback_g(const nav_msgs::Path& path)
+	{
+		NavigationPathLayer::pathCallback(path, true);
+	}
+
+	void NavigationPathLayer::pathCallback_l(const nav_msgs::Path& path)
+	{
+		NavigationPathLayer::pathCallback(path, false);
+	}
+
+    void NavigationPathLayer::pathCallback(const nav_msgs::Path& path, const bool isGlobal)
     {    
 
         /* 
@@ -52,6 +62,10 @@ namespace navigation_path_layers
 
         boost::recursive_mutex::scoped_lock lock(lock_);
         
+		// which list is used (global or local plans)
+		list<nav_msgs::Path> paths_list_ = isGlobal ? paths_list_g : paths_list_l;
+
+
         bool isOld = false;
         bool changed = false;
         int index_;
@@ -88,6 +102,17 @@ namespace navigation_path_layers
             }
 
         }
+
+		// overwrite original list with updated version
+		if (isGlobal)
+		{
+			paths_list_g = paths_list_;
+		}
+		else
+		{
+			paths_list_l = paths_list_;
+		}
+
         // if path-list has been edited then update costmap
         if (changed ||!isOld)
         {
@@ -95,7 +120,8 @@ namespace navigation_path_layers
         }
     }
 	
-    vector<int> NavigationPathLayer::transform(geometry_msgs::PoseStamped pose_)
+    // vector<int> NavigationPathLayer::transform(geometry_msgs::PoseStamped pose_, const string frame)
+	vector<double> NavigationPathLayer::transform(geometry_msgs::PoseStamped pose_, const string frame)
     {
 	  geometry_msgs::TransformStamped transformStamped;
 	  transformStamped.header.stamp = ros::Time::now();
@@ -115,25 +141,26 @@ namespace navigation_path_layers
 	    
 	  NavigationPathLayer::br.sendTransform(transformStamped);
 	    
-	  return NavigationPathLayer::getTransform();
+	  return NavigationPathLayer::getTransform(frame);
     }
 	
-    vector<int> NavigationPathLayer::getTransform()
+    // vector<int> NavigationPathLayer::getTransform(const string frame)
+	vector<double> NavigationPathLayer::getTransform(const string frame)
     {
 	    tf2_ros::Buffer tfBuffer;
  	    tf2_ros::TransformListener tfListener(tfBuffer);
 	    geometry_msgs::TransformStamped transformStamped;
 	    try{
-	      transformStamped = tfBuffer.lookupTransform( "","",
-				       ros::Time(0));
+			string origin = frame + "/odom";
+			transformStamped = tfBuffer.lookupTransform("map", origin, ros::Time(0));
 	    }
 	    catch (tf2::TransformException &ex) {
       		ROS_WARN("%s",ex.what());
       		ros::Duration(1.0).sleep();
               	return *new vector<int>{-1, -1};
 	    }
-	    
-	    return *new vector<int>{int(transformStamped.transform.translation.x / NavigationPathLayer::res), int(transformStamped.transform.translation.y / NavigationPathLayer::res)};
+	    return *new vector<double>{transformStamped.transform.translation.x, transformStamped.transform.translation.y };
+	    // return *new vector<int>{int(transformStamped.transform.translation.x / NavigationPathLayer::res), int(transformStamped.transform.translation.y / NavigationPathLayer::res)};
     }
 
 
@@ -173,39 +200,65 @@ namespace navigation_path_layers
         // reset costs to 0
         NavigationPathLayer::resetCosts(costmap);
 
+		// join both lists into one for further actions
+		list<nav_msgs::Path> paths_list_ = paths_list_g;
+		for (int index = 0; index < paths_list_l.size(); index++)
+		{
+			paths_list_.push_back(*next(paths_list_l.begin(), index);
+		}
+
         // iterate all paths
-        for(nav_msgs::Path& path: paths_list_)
+        for(int index = 0; index < paths_list_.size(); index++)
         {
-            list <vector<int>> positions;
-            for(geometry_msgs::PoseStamped pose_ : path.poses)
+			nav_msgs::Path& path = *next(paths_list_.begin(), index);
+            list <vector<double>> positions;
+
+			// first entries are global plans' paths
+			bool isGlobal = index < paths_list_g.size() ? true : false;
+			string frame = path.header.frame_id;
+
+			number_of_future_steps = min(int(path.poses.size()), max_number_of_future_steps);
+
+            //for(geometry_msgs::PoseStamped pose_ : path.poses)
+			for (int pos = 0; pos < number_of_future_steps; pos++)
             {
-                vector<int> position = NavigationPathLayer::transform(pose_); // {int(pose.pose.position.x), int(pose.pose.position.y)};
+				geometry_msgs::PoseStamped pose_ = path.poses[pos];
+                vector<double> position = isGlobal ? 
+													*new vector<double>{ pose_.pose.position.x, pose_.pose.position.y } :
+													NavigationPathLayer::transform(pose_, frame); // {int(pose.pose.position.x), int(pose.pose.position.y)};
                 positions.push_back(position);
-            }
-            // add cost hills per path
-            costmap = createCostHillChain(positions, costmap);
+            }		
+
+			// add cost hills per path
+			costmap = createCostHillChain(positions, costmap, frame);
         }
     }
 
-    costmap_2d::Costmap2D NavigationPathLayer::createCostHillChain(list<vector<int>> positions, costmap_2d::Costmap2D costmap)
+    costmap_2d::Costmap2D NavigationPathLayer::createCostHillChain(list<vector<double>> positions, costmap_2d::Costmap2D costmap, const string frame)
     {
         costmap_2d::Costmap2D costmap_ = costmap;
-        // increase costs along the path
-	    number_of_future_steps = min(int(positions.size()), max_number_of_future_steps);
 
-        cerr << "steps: " << to_string(number_of_future_steps) << "\n";
+
+
+//region error_analysis
+		if (boost::algorithm::contains(frame, "tb3_2/odom"))
+		{
+			cerr << "steps: " << to_string(number_of_future_steps) << "\n";
+
+			for (int pos = 0; pos < number_of_future_steps; pos++)
+			{
+				vector<double> position_ = *next(positions.begin(), pos);
+				cerr << "x: " << to_string(position_[0]) << "y: " << to_string(position_[1]);
+			}
+
+			cerr << "\n";
+		}
+       
+//endregion error_analysis
 
         for (int pos = 0; pos < number_of_future_steps; pos++)
         {
-            vector<int> position_ = *next(positions.begin(), pos);
-            cerr << "x: " << to_string(position_[0]) << "y: " << to_string(position_[1]);
-        }
-
-        cerr << "\n";
-
-        for (int pos = 0; pos < number_of_future_steps; pos++)
-        {
-            vector<int> position = *next(positions.begin(), pos);
+            vector<double> position = *next(positions.begin(), pos);
             costmap_ = useFilter(position, costmap_, pos);
         }
 
@@ -244,7 +297,7 @@ namespace navigation_path_layers
         return;
     }
 
-    costmap_2d::Costmap2D NavigationPathLayer::useFilter(vector<int> position, costmap_2d::Costmap2D costmap, int pos)
+    costmap_2d::Costmap2D NavigationPathLayer::useFilter(vector<double> position, costmap_2d::Costmap2D costmap, int pos)
     {
         int bound = int((filter_size - 1) / 2);
         int buffer = int((MAX_FILTER_SIZE - 1) / 2);
@@ -252,18 +305,20 @@ namespace navigation_path_layers
 	    double downward_scale = (number_of_future_steps - pos) / number_of_future_steps;
 
         // for each pixel in the convolution take maximum value of current and calculated value of convolution at this pixel
-        for (int i = -bound; i <= bound; i++)
-        {
-            for (int j = -bound; j <= bound; j++)
-            {
-                if(position[0] + i >= 0 &&  position[1] + j >= 0)
-                {
-                    double current = costmap.getCost(position[0] + i, position[1] + j);
-                    _map.setCost(position[0] + i, position[1] + j, max(current, kernel[i + buffer][j + buffer] * filter_strength * downward_scale));
-                }
-            }
-        }
-
+		unsigned int mx;
+		unsigned int my;
+		if (_map.worldToMap(position[0], position[1], mx, my)) 
+		{
+			for (int i = -bound; i <= bound; i++)
+			{
+				for (int j = -bound; j <= bound; j++)
+				{
+					double current = costmap.getCost(mx + i, my + j);
+					_map.setCost(mx + i, my + j, max(current, kernel[i + buffer][j + buffer] * filter_strength * downward_scale));
+						
+				}
+			}
+		}
     /*
         if (side_inflation)
         {
@@ -271,8 +326,8 @@ namespace navigation_path_layers
             vector<int> side = position;
             // use orientation of robot
             // add values to "right" side of robot
-            side[0] = position[0] + filter_size * x + position[1] + filter_size * y;
-            side[1] = position[1] + filter_size * x + position[0] + filter_size * y;
+            side[0] = mx + filter_size * x + my + filter_size * y;
+            side[1] = my + filter_size * x + mx + filter_size * y;
 
             _map = NavigationPathLayer::useSideFilter(side, _map, downward_scale);
         }*/
