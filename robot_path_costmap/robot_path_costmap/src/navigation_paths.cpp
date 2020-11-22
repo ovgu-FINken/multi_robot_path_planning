@@ -123,9 +123,12 @@ namespace navigation_path_layers
     // vector<int> NavigationPathLayer::transform(geometry_msgs::PoseStamped pose_, const string frame)
 	vector<double> NavigationPathLayer::transform(geometry_msgs::PoseStamped pose_, const string frame)
     {
+      std::vector<std::string> results;
+      boost::split(results, frame, [](char c){return c == '/';});
+      const string origin_frame = results[0] + "/base_footprint";
 	  geometry_msgs::TransformStamped transformStamped;
 	  transformStamped.header.stamp = ros::Time::now();
-  	  transformStamped.header.frame_id = "world";
+  	  transformStamped.header.frame_id = origin_frame;
   	  transformStamped.child_frame_id = name_;
 	    
 	  transformStamped.transform.translation.x = pose_.pose.position.x;
@@ -141,23 +144,22 @@ namespace navigation_path_layers
 	    
 	  NavigationPathLayer::br.sendTransform(transformStamped);
 	    
-	  return NavigationPathLayer::getTransform(frame);
+	  return NavigationPathLayer::getTransform(frame, origin_frame);
     }
 	
     // vector<int> NavigationPathLayer::getTransform(const string frame)
-	vector<double> NavigationPathLayer::getTransform(const string frame)
+	vector<double> NavigationPathLayer::getTransform(const string frame, const string origin)
     {
 	    tf2_ros::Buffer tfBuffer;
  	    tf2_ros::TransformListener tfListener(tfBuffer);
 	    geometry_msgs::TransformStamped transformStamped;
 	    try{
-			string origin = frame + "/odom";
-			transformStamped = tfBuffer.lookupTransform("map", origin, ros::Time(0));
+			transformStamped = tfBuffer.lookupTransform(frame, origin, ros::Time(0));
 	    }
 	    catch (tf2::TransformException &ex) {
       		ROS_WARN("%s",ex.what());
       		ros::Duration(1.0).sleep();
-              	return *new vector<int>{-1, -1};
+              	return *new vector<double>{-100, -100};
 	    }
 	    return *new vector<double>{transformStamped.transform.translation.x, transformStamped.transform.translation.y };
 	    // return *new vector<int>{int(transformStamped.transform.translation.x / NavigationPathLayer::res), int(transformStamped.transform.translation.y / NavigationPathLayer::res)};
@@ -204,7 +206,7 @@ namespace navigation_path_layers
 		list<nav_msgs::Path> paths_list_ = paths_list_g;
 		for (int index = 0; index < paths_list_l.size(); index++)
 		{
-			paths_list_.push_back(*next(paths_list_l.begin(), index);
+			paths_list_.push_back(*next(paths_list_l.begin(), index));
 		}
 
         // iterate all paths
@@ -215,7 +217,7 @@ namespace navigation_path_layers
 
 			// first entries are global plans' paths
 			bool isGlobal = index < paths_list_g.size() ? true : false;
-			string frame = path.header.frame_id;
+			const string frame = path.header.frame_id;
 
 			number_of_future_steps = min(int(path.poses.size()), max_number_of_future_steps);
 
