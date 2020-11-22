@@ -34,7 +34,8 @@ namespace navigation_path_layers {
 	{
 		static const int MAX_FILTER_SIZE = 25;
 		static tf2_ros::TransformBroadcaster br;
-		static constexpr double res = 0.05; // ToDo: read from file
+		// ToEnhance: Read from file (avoid hard code)
+		static constexpr double res = 0.05; 
 
 	public:
 		NavigationPathLayer()
@@ -47,8 +48,8 @@ namespace navigation_path_layers {
 		virtual void pathCallback(const nav_msgs::Path& paths, const bool isGlobal);
 		virtual void updateBounds(double origin_x, double origin_y, double origin_z, double* min_x, double* min_y, double* max_x, double* max_y);
 		virtual void updateCosts_();
-		// https://github.com/ros-planning/navigation/blob/noetic-devel/costmap_2d/include/costmap_2d/obstacle_layer.h
 		virtual void updateCosts(costmap_2d::Costmap2D& master_grid, int min_i, int min_j, int max_i, int max_j);
+		// ******** NOT IMPLEMENTED YET ***************************
 		// virtual void setSideInflation(bool inflate);
 		// virtual void setFilterSize(int size);
 		// virtual void scaleSideInflation(double inflation_scale);
@@ -57,7 +58,8 @@ namespace navigation_path_layers {
 	protected:
 		bool first_time_;
 
-		ros::Subscriber paths_sub[16]; // ToDo: set double of number of robots
+		// ToEnhance: set the number of subscribers to the double of robots used (avoid hard code)
+		ros::Subscriber paths_sub[16];
 
 		boost::recursive_mutex lock_;
 		dynamic_reconfigure::Server<robot_path_costmap::NavigationPathLayerConfig>* server_;
@@ -82,10 +84,11 @@ namespace navigation_path_layers {
 		virtual void createFilter();
 		virtual costmap_2d::Costmap2D useFilter(std::vector<double> position, costmap_2d::Costmap2D costmap, int pos);
 		void configure(robot_path_costmap::NavigationPathLayerConfig &config, uint32_t level);
-		// virtual costmap_2d::Costmap2D useSideFilter(std::vector<int> position, costmap_2d::Costmap2D costmap, double downward_scale);
 		virtual void resetCosts(costmap_2d::Costmap2D costmap);
 		vector<double> transform(geometry_msgs::PoseStamped pose_, const string frame);
 		vector<double> getTransform(const string frame, const string origin);
+		// ******** NOT IMPLEMENTED YET ***************************
+		// virtual costmap_2d::Costmap2D useSideFilter(std::vector<int> position, costmap_2d::Costmap2D costmap, double downward_scale);
 	};
 }
 

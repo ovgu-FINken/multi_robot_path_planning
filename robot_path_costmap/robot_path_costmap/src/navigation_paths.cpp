@@ -25,12 +25,14 @@ namespace navigation_path_layers
         f_ = boost::bind(&NavigationPathLayer::configure, this, _1, _2);
         server_->setCallback(f_);
 	    
-		std::string ns = ros::this_node::getNamespace(); // Regex verwenden
+		// ToEnhance: Regex verwenden (avoid hard code)
+		std::string ns = ros::this_node::getNamespace();
 		for (int i = 0; i < 8; i++)
 		{
 			// tb3_x --> x is cast to int and compared to iterator
 			// if it's its own namespace, do nothing
-			if (boost::lexical_cast<int>(ns[5]) != i) // ToDo: regex
+			// ToEnhance: Regex verwenden (avoid hard code)
+			if (boost::lexical_cast<int>(ns[5]) != i)
 			{       
 				// subscribe to plans 
 				paths_sub[2*i] = g_nh.subscribe("/tb3_" + to_string(i) + "/move_base/DWAPlannerROS/local_plan", 10, &NavigationPathLayer::pathCallback_l, this);
@@ -162,7 +164,6 @@ namespace navigation_path_layers
               	return *new vector<double>{-100, -100};
 	    }
 	    return *new vector<double>{transformStamped.transform.translation.x, transformStamped.transform.translation.y };
-	    // return *new vector<int>{int(transformStamped.transform.translation.x / NavigationPathLayer::res), int(transformStamped.transform.translation.y / NavigationPathLayer::res)};
     }
 
 
@@ -221,13 +222,12 @@ namespace navigation_path_layers
 
 			number_of_future_steps = min(int(path.poses.size()), max_number_of_future_steps);
 
-            //for(geometry_msgs::PoseStamped pose_ : path.poses)
 			for (int pos = 0; pos < number_of_future_steps; pos++)
             {
 				geometry_msgs::PoseStamped pose_ = path.poses[pos];
                 vector<double> position = isGlobal ? 
 													*new vector<double>{ pose_.pose.position.x, pose_.pose.position.y } :
-													NavigationPathLayer::transform(pose_, frame); // {int(pose.pose.position.x), int(pose.pose.position.y)};
+													NavigationPathLayer::transform(pose_, frame);
                 positions.push_back(position);
             }		
 
@@ -240,24 +240,6 @@ namespace navigation_path_layers
     {
         costmap_2d::Costmap2D costmap_ = costmap;
 
-
-
-//region error_analysis
-		if (boost::algorithm::contains(frame, "tb3_2/odom"))
-		{
-			cerr << "steps: " << to_string(number_of_future_steps) << "\n";
-
-			for (int pos = 0; pos < number_of_future_steps; pos++)
-			{
-				vector<double> position_ = *next(positions.begin(), pos);
-				cerr << "x: " << to_string(position_[0]) << "y: " << to_string(position_[1]);
-			}
-
-			cerr << "\n";
-		}
-       
-//endregion error_analysis
-
         for (int pos = 0; pos < number_of_future_steps; pos++)
         {
             vector<double> position = *next(positions.begin(), pos);
@@ -267,7 +249,7 @@ namespace navigation_path_layers
         return costmap_;
     }
 
-    void NavigationPathLayer::createFilter() // Größe und side_inflation nutzen
+    void NavigationPathLayer::createFilter() // use size and side_inflation
     {
         // sum used for normalization 
         double sum = 0.0;
@@ -322,9 +304,10 @@ namespace navigation_path_layers
 			}
 		}
     /*
+
+	********************************************* NOT IMPLEMENTED YET ************************************************************
         if (side_inflation)
         {
-            // ToDo:
             vector<int> side = position;
             // use orientation of robot
             // add values to "right" side of robot
@@ -340,7 +323,7 @@ namespace navigation_path_layers
 	
     void NavigationPathLayer::resetCosts(costmap_2d::Costmap2D costmap)
     {
-    	// reset layer to 0 costs
+    // reset layer to 0 costs
 	unsigned int x_size = costmap.getSizeInCellsX();
 	unsigned int y_size = costmap.getSizeInCellsY();
 	    
@@ -364,6 +347,10 @@ namespace navigation_path_layers
     void NavigationPathLayer::updateCosts(costmap_2d::Costmap2D& master_grid, int min_i, int min_j, int max_i, int max_j)
     { 
     }
+
+
+//	********************************************* NOT IMPLEMENTED YET ************************************************************
+// respectively some methods can be achieved with dynamic reconfigure
 
 /*
 void NavigationPathLayer::setSideInflation(bool inflate)
